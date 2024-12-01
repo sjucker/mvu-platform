@@ -1,13 +1,17 @@
-package org.vaadin.example;
+package ch.mvurdorf.platform.views;
 
+import ch.mvurdorf.platform.service.GreetService;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 /**
  * A sample Vaadin view class.
@@ -21,7 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * The main view contains a text field for getting the user name and a button
  * that shows a greeting message in a notification.
  */
+@PageTitle("Main View")
 @Route
+@Menu(order = 1, icon = LineAwesomeIconUrl.MAP)
 public class MainView extends VerticalLayout {
 
     /**

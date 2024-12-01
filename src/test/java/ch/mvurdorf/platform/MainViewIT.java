@@ -1,4 +1,4 @@
-package org.vaadin.example;
+package ch.mvurdorf.platform;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.flow.component.html.testbench.ParagraphElement;
