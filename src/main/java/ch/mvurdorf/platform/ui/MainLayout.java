@@ -1,23 +1,25 @@
 package ch.mvurdorf.platform.ui;
 
+import ch.mvurdorf.platform.security.AuthenticatedUser;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Header;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.SvgIcon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.server.menu.MenuConfiguration;
-import com.vaadin.flow.server.menu.MenuEntry;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.springframework.boot.info.BuildProperties;
-
-import java.util.List;
 
 @Layout
 @AnonymousAllowed
@@ -27,8 +29,12 @@ public class MainLayout extends AppLayout {
 
     private H1 viewTitle;
 
-    public MainLayout(BuildProperties buildProperties) {
+    private final AuthenticatedUser authenticatedUser;
+
+    public MainLayout(AuthenticatedUser authenticatedUser, BuildProperties buildProperties) {
+        this.authenticatedUser = authenticatedUser;
         this.buildProperties = buildProperties;
+
         setPrimarySection(Section.DRAWER);
         addDrawerContent();
         addHeaderContent();
@@ -58,7 +64,7 @@ public class MainLayout extends AppLayout {
     private SideNav createNavigation() {
         var nav = new SideNav();
 
-        List<MenuEntry> menuEntries = MenuConfiguration.getMenuEntries();
+        var menuEntries = MenuConfiguration.getMenuEntries();
         menuEntries.forEach(entry -> {
             if (entry.icon() != null) {
                 nav.addItem(new SideNavItem(entry.title(), entry.path(), new SvgIcon(entry.icon())));
@@ -72,8 +78,24 @@ public class MainLayout extends AppLayout {
 
     private Footer createFooter() {
         var footer = new Footer();
-        footer.addClassNames(LumoUtility.Padding.SMALL, LumoUtility.FontSize.XXSMALL);
-        footer.add(new Span(buildProperties.getVersion()));
+        var layout = new VerticalLayout();
+        layout.setSpacing(false);
+
+        var maybeUser = authenticatedUser.get();
+        if (maybeUser.isPresent()) {
+            var user = maybeUser.get();
+            var logoutButton = new Button("Logout %s".formatted(user.getName()),
+                                          e -> authenticatedUser.logout());
+            logoutButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+            logoutButton.setIcon(VaadinIcon.EXIT_O.create());
+            logoutButton.setWidthFull();
+            layout.add(logoutButton);
+        }
+
+        var version = new Span("Version: %s".formatted(buildProperties.getVersion()));
+        version.addClassNames(LumoUtility.FontSize.XXSMALL);
+        layout.add(version);
+        footer.add(layout);
         return footer;
     }
 

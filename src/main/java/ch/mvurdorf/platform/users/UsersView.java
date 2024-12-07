@@ -6,7 +6,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
+import jakarta.annotation.security.PermitAll;
 
 import static com.vaadin.flow.component.grid.Grid.SelectionMode.MULTI;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_COLUMN_BORDERS;
@@ -15,8 +15,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.USER;
 
 @PageTitle("Users")
 @Route("users")
-// TODO remove once there is another root view
-@RouteAlias("")
+@PermitAll
 @Menu(order = 1, icon = USER)
 class UsersView extends VerticalLayout {
 
