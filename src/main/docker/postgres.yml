@@ -1,0 +1,11 @@
+version: '3.8s'
+
+services:
+  mvu-platform-db:
+    image: postgres:16.4
+    environment:
+      - POSTGRES_USER=mvu
+      - POSTGRES_PASSWORD=mvu
+      - POSTGRES_DB=mvu
+    ports:
+      - "5432:5432"

@@ -1,4 +1,4 @@
-package ch.mvurdorf.platform.views;
+package ch.mvurdorf.platform.ui;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -15,18 +15,20 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.server.menu.MenuConfiguration;
 import com.vaadin.flow.server.menu.MenuEntry;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import org.springframework.boot.info.BuildProperties;
+
 import java.util.List;
 
-/**
- * The main view is a top-level placeholder for other views.
- */
 @Layout
 @AnonymousAllowed
 public class MainLayout extends AppLayout {
 
+    private final BuildProperties buildProperties;
+
     private H1 viewTitle;
 
-    public MainLayout() {
+    public MainLayout(BuildProperties buildProperties) {
+        this.buildProperties = buildProperties;
         setPrimarySection(Section.DRAWER);
         addDrawerContent();
         addHeaderContent();
@@ -43,17 +45,18 @@ public class MainLayout extends AppLayout {
     }
 
     private void addDrawerContent() {
-        Span appName = new Span("My App");
+        var appName = new Span("MVU");
         appName.addClassNames(LumoUtility.FontWeight.SEMIBOLD, LumoUtility.FontSize.LARGE);
-        Header header = new Header(appName);
+        var header = new Header(appName);
+        header.addClassNames(LumoUtility.Padding.SMALL);
 
-        Scroller scroller = new Scroller(createNavigation());
+        var scroller = new Scroller(createNavigation());
 
         addToDrawer(header, scroller, createFooter());
     }
 
     private SideNav createNavigation() {
-        SideNav nav = new SideNav();
+        var nav = new SideNav();
 
         List<MenuEntry> menuEntries = MenuConfiguration.getMenuEntries();
         menuEntries.forEach(entry -> {
@@ -68,9 +71,10 @@ public class MainLayout extends AppLayout {
     }
 
     private Footer createFooter() {
-        Footer layout = new Footer();
-
-        return layout;
+        var footer = new Footer();
+        footer.addClassNames(LumoUtility.Padding.SMALL, LumoUtility.FontSize.XXSMALL);
+        footer.add(new Span(buildProperties.getVersion()));
+        return footer;
     }
 
     @Override

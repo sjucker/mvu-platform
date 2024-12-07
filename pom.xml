@@ -9,17 +9,28 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <properties>
-        <java.version>23</java.version>
-        <vaadin.version>24.5.6</vaadin.version>
-        <line-awesome.version>2.1.0</line-awesome.version>
-    </properties>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.0</version>
     </parent>
+
+    <properties>
+        <java.version>23</java.version>
+        <vaadin.version>24.5.6</vaadin.version>
+        <line-awesome.version>2.1.0</line-awesome.version>
+        <!-- spring boot is behind, older version does not support postgres 16.4 -->
+        <flyway.version>11.0.1</flyway.version>
+
+        <testcontainers-jooq-codegen-maven-plugin.version>0.0.4</testcontainers-jooq-codegen-maven-plugin.version>
+
+        <!-- start local DB using src/main/docker/postgres.yml  -->
+        <db.url>jdbc:postgresql://localhost:5432/mvu</db.url>
+        <db.user>mvu</db.user>
+        <db.password>mvu</db.password>
+
+        <jooq-codegen-skip>true</jooq-codegen-skip>
+    </properties>
 
     <repositories>
         <repository>
@@ -71,9 +82,29 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-testbench-junit5</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jooq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -84,6 +115,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.vaadin</groupId>
@@ -94,6 +132,76 @@
                         <goals>
                             <goal>prepare-frontend</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway.version}</version>
+                <configuration>
+                    <url>${db.url}</url>
+                    <user>${db.user}</user>
+                    <password>${db.password}</password>
+                    <cleanDisabled>false</cleanDisabled>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-jooq-codegen-maven-plugin</artifactId>
+                <version>${testcontainers-jooq-codegen-maven-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jooq</groupId>
+                        <artifactId>jooq-codegen</artifactId>
+                        <version>${jooq.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.testcontainers</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${testcontainers.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>generate-jooq-sources</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <skip>${jooq-codegen-skip}</skip>
+                            <database>
+                                <type>POSTGRES</type>
+                                <containerImage>postgres:16.4</containerImage>
+                            </database>
+                            <flyway/>
+                            <jooq>
+                                <generator>
+                                    <database>
+                                        <excludes>flyway_schema_history</excludes>
+                                        <inputSchema>public</inputSchema>
+                                    </database>
+                                    <generate>
+                                        <daos>true</daos>
+                                        <springAnnotations>true</springAnnotations>
+                                        <springDao>true</springDao>
+                                        <javaTimeTypes>true</javaTimeTypes>
+                                    </generate>
+                                    <target>
+                                        <packageName>ch.mvurdorf.platform.jooq</packageName>
+                                        <directory>src/main/java</directory>
+                                    </target>
+                                </generator>
+                            </jooq>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -135,52 +243,5 @@
                 </plugins>
             </build>
         </profile>
-
-        <profile>
-            <id>it</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>start-spring-boot</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop-spring-boot</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <!-- Runs the integration tests (*IT) after the server is started -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <trimStackTrace>false</trimStackTrace>
-                            <enableAssertions>true</enableAssertions>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
     </profiles>
 </project>
