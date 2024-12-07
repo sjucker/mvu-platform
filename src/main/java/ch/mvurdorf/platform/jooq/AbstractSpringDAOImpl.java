@@ -3,6 +3,11 @@
  */
 package ch.mvurdorf.platform.jooq;
 
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
 import org.jooq.Configuration;
 import org.jooq.Field;
 import org.jooq.Table;
@@ -10,14 +15,11 @@ import org.jooq.UpdatableRecord;
 import org.jooq.impl.DAOImpl;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Spring specific {@link DAOImpl} override.
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes", "this-escape"})
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 @Transactional(readOnly = true)
 public abstract class AbstractSpringDAOImpl<R extends UpdatableRecord<R>, P, T> extends DAOImpl<R, P, T> {
 
