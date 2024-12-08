@@ -8,6 +8,7 @@ import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.records.LoginRecord;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.jooq.Condition;
@@ -68,6 +69,16 @@ public class Login extends TableImpl<LoginRecord> {
      * The column <code>public.login.active</code>.
      */
     public final TableField<LoginRecord, Boolean> ACTIVE = createField(DSL.name("active"), SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column <code>public.login.last_login</code>.
+     */
+    public final TableField<LoginRecord, LocalDateTime> LAST_LOGIN = createField(DSL.name("last_login"), SQLDataType.LOCALDATETIME(6), this, "");
+
+    /**
+     * The column <code>public.login.users_permission</code>.
+     */
+    public final TableField<LoginRecord, String> USERS_PERMISSION = createField(DSL.name("users_permission"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::character varying"), SQLDataType.VARCHAR)), this, "");
 
     private Login(Name alias, Table<LoginRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

@@ -5,6 +5,7 @@ package ch.mvurdorf.platform.jooq.tables.pojos;
 
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 /**
@@ -19,6 +20,8 @@ public class Login implements Serializable {
     private String name;
     private String password;
     private Boolean active;
+    private LocalDateTime lastLogin;
+    private String usersPermission;
 
     public Login() {}
 
@@ -27,18 +30,24 @@ public class Login implements Serializable {
         this.name = value.name;
         this.password = value.password;
         this.active = value.active;
+        this.lastLogin = value.lastLogin;
+        this.usersPermission = value.usersPermission;
     }
 
     public Login(
         String email,
         String name,
         String password,
-        Boolean active
+        Boolean active,
+        LocalDateTime lastLogin,
+        String usersPermission
     ) {
         this.email = email;
         this.name = name;
         this.password = password;
         this.active = active;
+        this.lastLogin = lastLogin;
+        this.usersPermission = usersPermission;
     }
 
     /**
@@ -97,6 +106,34 @@ public class Login implements Serializable {
         this.active = active;
     }
 
+    /**
+     * Getter for <code>public.login.last_login</code>.
+     */
+    public LocalDateTime getLastLogin() {
+        return this.lastLogin;
+    }
+
+    /**
+     * Setter for <code>public.login.last_login</code>.
+     */
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    /**
+     * Getter for <code>public.login.users_permission</code>.
+     */
+    public String getUsersPermission() {
+        return this.usersPermission;
+    }
+
+    /**
+     * Setter for <code>public.login.users_permission</code>.
+     */
+    public void setUsersPermission(String usersPermission) {
+        this.usersPermission = usersPermission;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -130,6 +167,18 @@ public class Login implements Serializable {
         }
         else if (!this.active.equals(other.active))
             return false;
+        if (this.lastLogin == null) {
+            if (other.lastLogin != null)
+                return false;
+        }
+        else if (!this.lastLogin.equals(other.lastLogin))
+            return false;
+        if (this.usersPermission == null) {
+            if (other.usersPermission != null)
+                return false;
+        }
+        else if (!this.usersPermission.equals(other.usersPermission))
+            return false;
         return true;
     }
 
@@ -141,6 +190,8 @@ public class Login implements Serializable {
         result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
         result = prime * result + ((this.password == null) ? 0 : this.password.hashCode());
         result = prime * result + ((this.active == null) ? 0 : this.active.hashCode());
+        result = prime * result + ((this.lastLogin == null) ? 0 : this.lastLogin.hashCode());
+        result = prime * result + ((this.usersPermission == null) ? 0 : this.usersPermission.hashCode());
         return result;
     }
 
@@ -152,6 +203,8 @@ public class Login implements Serializable {
         sb.append(", ").append(name);
         sb.append(", ").append(password);
         sb.append(", ").append(active);
+        sb.append(", ").append(lastLogin);
+        sb.append(", ").append(usersPermission);
 
         sb.append(")");
         return sb.toString();

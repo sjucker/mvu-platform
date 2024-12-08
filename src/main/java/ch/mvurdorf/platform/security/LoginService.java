@@ -1,0 +1,68 @@
+package ch.mvurdorf.platform.security;
+
+import ch.mvurdorf.platform.jooq.tables.daos.LoginDao;
+import ch.mvurdorf.platform.jooq.tables.pojos.Login;
+import ch.mvurdorf.platform.utils.DateUtil;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class LoginService implements UserDetailsService {
+
+    public static final String USERS_GROUP = "USERS";
+
+    private final LoginDao loginDao;
+
+    public LoginService(LoginDao loginDao) {
+        this.loginDao = loginDao;
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        var login = loginDao.findOptionalById(email).orElse(null);
+        if (login == null) {
+            throw new UsernameNotFoundException("no user present with username: " + email);
+        } else {
+            login.setLastLogin(DateUtil.now());
+            loginDao.update(login);
+
+            var active = login.getActive();
+            return new User(login.getEmail(), login.getPassword(), active, active, active, active, getAuthorities(login));
+        }
+    }
+
+    private static List<GrantedAuthority> getAuthorities(Login login) {
+        var roles = new ArrayList<GrantedAuthority>();
+
+        Permission.of(login.getUsersPermission(), USERS_GROUP).ifPresent(roles::addAll);
+
+        return roles;
+    }
+
+    public enum Permission {
+        NONE,
+        READ,
+        WRITE;
+
+        public static Optional<List<GrantedAuthority>> of(String permission, String group) {
+            return switch (Permission.valueOf(permission)) {
+                case NONE -> Optional.empty();
+                case READ -> Optional.of(List.of(new SimpleGrantedAuthority(group)));
+                case WRITE -> Optional.of(List.of(new SimpleGrantedAuthority("ROLE_" + group),
+                                                  new SimpleGrantedAuthority("ROLE_" + group + "_WRITE")));
+            };
+        }
+    }
+
+}

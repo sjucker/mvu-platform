@@ -8,6 +8,7 @@ import ch.mvurdorf.platform.jooq.AbstractSpringDAOImpl;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.records.LoginRecord;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,5 +116,35 @@ public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.pla
      */
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByActive(Boolean... values) {
         return fetch(Login.LOGIN.ACTIVE, values);
+    }
+
+    /**
+     * Fetch records that have <code>last_login BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfLastLogin(LocalDateTime lowerInclusive, LocalDateTime upperInclusive) {
+        return fetchRange(Login.LOGIN.LAST_LOGIN, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>last_login IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByLastLogin(LocalDateTime... values) {
+        return fetch(Login.LOGIN.LAST_LOGIN, values);
+    }
+
+    /**
+     * Fetch records that have <code>users_permission BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfUsersPermission(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Login.LOGIN.USERS_PERMISSION, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>users_permission IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByUsersPermission(String... values) {
+        return fetch(Login.LOGIN.USERS_PERMISSION, values);
     }
 }

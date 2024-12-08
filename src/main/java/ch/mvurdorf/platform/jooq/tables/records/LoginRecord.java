@@ -6,6 +6,8 @@ package ch.mvurdorf.platform.jooq.tables.records;
 
 import ch.mvurdorf.platform.jooq.tables.Login;
 
+import java.time.LocalDateTime;
+
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
 
@@ -74,6 +76,34 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         return (Boolean) get(3);
     }
 
+    /**
+     * Setter for <code>public.login.last_login</code>.
+     */
+    public void setLastLogin(LocalDateTime value) {
+        set(4, value);
+    }
+
+    /**
+     * Getter for <code>public.login.last_login</code>.
+     */
+    public LocalDateTime getLastLogin() {
+        return (LocalDateTime) get(4);
+    }
+
+    /**
+     * Setter for <code>public.login.users_permission</code>.
+     */
+    public void setUsersPermission(String value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>public.login.users_permission</code>.
+     */
+    public String getUsersPermission() {
+        return (String) get(5);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -97,13 +127,15 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(String email, String name, String password, Boolean active) {
+    public LoginRecord(String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission) {
         super(Login.LOGIN);
 
         setEmail(email);
         setName(name);
         setPassword(password);
         setActive(active);
+        setLastLogin(lastLogin);
+        setUsersPermission(usersPermission);
         resetChangedOnNotNull();
     }
 
@@ -118,6 +150,8 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setName(value.getName());
             setPassword(value.getPassword());
             setActive(value.getActive());
+            setLastLogin(value.getLastLogin());
+            setUsersPermission(value.getUsersPermission());
             resetChangedOnNotNull();
         }
     }
