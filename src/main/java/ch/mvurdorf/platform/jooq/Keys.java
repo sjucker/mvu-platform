@@ -24,5 +24,6 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<LoginRecord> PK__LOGIN = Internal.createUniqueKey(Login.LOGIN, DSL.name("pk__login"), new TableField[] { Login.LOGIN.EMAIL }, true);
+    public static final UniqueKey<LoginRecord> PK__LOGIN = Internal.createUniqueKey(Login.LOGIN, DSL.name("pk__login"), new TableField[] { Login.LOGIN.ID }, true);
+    public static final UniqueKey<LoginRecord> UQ__LOGIN_EMAIL = Internal.createUniqueKey(Login.LOGIN, DSL.name("uq__login_email"), new TableField[] { Login.LOGIN.EMAIL }, true);
 }

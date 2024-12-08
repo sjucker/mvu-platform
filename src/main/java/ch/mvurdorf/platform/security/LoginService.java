@@ -30,7 +30,7 @@ public class LoginService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        var login = loginDao.findOptionalById(email).orElse(null);
+        var login = loginDao.fetchOptionalByEmail(email).orElse(null);
         if (login == null) {
             throw new UsernameNotFoundException("no user present with username: " + email);
         } else {
@@ -45,7 +45,7 @@ public class LoginService implements UserDetailsService {
     private static List<GrantedAuthority> getAuthorities(Login login) {
         var roles = new ArrayList<GrantedAuthority>();
 
-        Permission.of(login.getUsersPermission(), USERS_GROUP).ifPresent(roles::addAll);
+        Permission.of(USERS_GROUP, login.getUsersPermission()).ifPresent(roles::addAll);
 
         return roles;
     }
@@ -55,13 +55,17 @@ public class LoginService implements UserDetailsService {
         READ,
         WRITE;
 
-        public static Optional<List<GrantedAuthority>> of(String permission, String group) {
+        public static Optional<List<GrantedAuthority>> of(String group, String permission) {
             return switch (Permission.valueOf(permission)) {
                 case NONE -> Optional.empty();
-                case READ -> Optional.of(List.of(new SimpleGrantedAuthority(group)));
-                case WRITE -> Optional.of(List.of(new SimpleGrantedAuthority("ROLE_" + group),
-                                                  new SimpleGrantedAuthority("ROLE_" + group + "_WRITE")));
+                case READ -> Optional.of(List.of(new SimpleGrantedAuthority(getRole(group, READ))));
+                case WRITE -> Optional.of(List.of(new SimpleGrantedAuthority(getRole(group, READ)),
+                                                  new SimpleGrantedAuthority(getRole(group, WRITE))));
             };
+        }
+
+        public static String getRole(String group, Permission permission) {
+            return "ROLE_" + group + (permission == WRITE ? "_WRITE" : "");
         }
     }
 

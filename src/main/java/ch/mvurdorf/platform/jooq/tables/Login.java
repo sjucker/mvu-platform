@@ -9,10 +9,13 @@ import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.records.LoginRecord;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
@@ -51,9 +54,14 @@ public class Login extends TableImpl<LoginRecord> {
     }
 
     /**
+     * The column <code>public.login.id</code>.
+     */
+    public final TableField<LoginRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+
+    /**
      * The column <code>public.login.email</code>.
      */
-    public final TableField<LoginRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<LoginRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>public.login.name</code>.
@@ -115,8 +123,18 @@ public class Login extends TableImpl<LoginRecord> {
     }
 
     @Override
+    public Identity<LoginRecord, Long> getIdentity() {
+        return (Identity<LoginRecord, Long>) super.getIdentity();
+    }
+
+    @Override
     public UniqueKey<LoginRecord> getPrimaryKey() {
         return Keys.PK__LOGIN;
+    }
+
+    @Override
+    public List<UniqueKey<LoginRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UQ__LOGIN_EMAIL);
     }
 
     @Override

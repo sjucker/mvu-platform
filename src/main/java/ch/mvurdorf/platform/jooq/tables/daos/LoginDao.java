@@ -22,7 +22,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 @Repository
-public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.platform.jooq.tables.pojos.Login, String> {
+public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.platform.jooq.tables.pojos.Login, Long> {
 
     /**
      * Create a new LoginDao without any configuration
@@ -40,8 +40,37 @@ public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.pla
     }
 
     @Override
-    public String getId(ch.mvurdorf.platform.jooq.tables.pojos.Login object) {
-        return object.getEmail();
+    public Long getId(ch.mvurdorf.platform.jooq.tables.pojos.Login object) {
+        return object.getId();
+    }
+
+    /**
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
+        return fetchRange(Login.LOGIN.ID, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>id IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchById(Long... values) {
+        return fetch(Login.LOGIN.ID, values);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public ch.mvurdorf.platform.jooq.tables.pojos.Login fetchOneById(Long value) {
+        return fetchOne(Login.LOGIN.ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchOptionalById(Long value) {
+        return fetchOptional(Login.LOGIN.ID, value);
     }
 
     /**

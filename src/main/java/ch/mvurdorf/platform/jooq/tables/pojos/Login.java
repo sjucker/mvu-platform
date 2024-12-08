@@ -16,6 +16,7 @@ public class Login implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Long id;
     private String email;
     private String name;
     private String password;
@@ -26,6 +27,7 @@ public class Login implements Serializable {
     public Login() {}
 
     public Login(Login value) {
+        this.id = value.id;
         this.email = value.email;
         this.name = value.name;
         this.password = value.password;
@@ -35,6 +37,7 @@ public class Login implements Serializable {
     }
 
     public Login(
+        Long id,
         String email,
         String name,
         String password,
@@ -42,12 +45,27 @@ public class Login implements Serializable {
         LocalDateTime lastLogin,
         String usersPermission
     ) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.password = password;
         this.active = active;
         this.lastLogin = lastLogin;
         this.usersPermission = usersPermission;
+    }
+
+    /**
+     * Getter for <code>public.login.id</code>.
+     */
+    public Long getId() {
+        return this.id;
+    }
+
+    /**
+     * Setter for <code>public.login.id</code>.
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**
@@ -143,6 +161,12 @@ public class Login implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         final Login other = (Login) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
         if (this.email == null) {
             if (other.email != null)
                 return false;
@@ -186,6 +210,7 @@ public class Login implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.email == null) ? 0 : this.email.hashCode());
         result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
         result = prime * result + ((this.password == null) ? 0 : this.password.hashCode());
@@ -199,7 +224,8 @@ public class Login implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("Login (");
 
-        sb.append(email);
+        sb.append(id);
+        sb.append(", ").append(email);
         sb.append(", ").append(name);
         sb.append(", ").append(password);
         sb.append(", ").append(active);

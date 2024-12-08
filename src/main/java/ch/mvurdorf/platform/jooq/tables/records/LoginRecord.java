@@ -21,87 +21,101 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
+     * Setter for <code>public.login.id</code>.
+     */
+    public void setId(Long value) {
+        set(0, value);
+    }
+
+    /**
+     * Getter for <code>public.login.id</code>.
+     */
+    public Long getId() {
+        return (Long) get(0);
+    }
+
+    /**
      * Setter for <code>public.login.email</code>.
      */
     public void setEmail(String value) {
-        set(0, value);
+        set(1, value);
     }
 
     /**
      * Getter for <code>public.login.email</code>.
      */
     public String getEmail() {
-        return (String) get(0);
+        return (String) get(1);
     }
 
     /**
      * Setter for <code>public.login.name</code>.
      */
     public void setName(String value) {
-        set(1, value);
+        set(2, value);
     }
 
     /**
      * Getter for <code>public.login.name</code>.
      */
     public String getName() {
-        return (String) get(1);
+        return (String) get(2);
     }
 
     /**
      * Setter for <code>public.login.password</code>.
      */
     public void setPassword(String value) {
-        set(2, value);
+        set(3, value);
     }
 
     /**
      * Getter for <code>public.login.password</code>.
      */
     public String getPassword() {
-        return (String) get(2);
+        return (String) get(3);
     }
 
     /**
      * Setter for <code>public.login.active</code>.
      */
     public void setActive(Boolean value) {
-        set(3, value);
+        set(4, value);
     }
 
     /**
      * Getter for <code>public.login.active</code>.
      */
     public Boolean getActive() {
-        return (Boolean) get(3);
+        return (Boolean) get(4);
     }
 
     /**
      * Setter for <code>public.login.last_login</code>.
      */
     public void setLastLogin(LocalDateTime value) {
-        set(4, value);
+        set(5, value);
     }
 
     /**
      * Getter for <code>public.login.last_login</code>.
      */
     public LocalDateTime getLastLogin() {
-        return (LocalDateTime) get(4);
+        return (LocalDateTime) get(5);
     }
 
     /**
      * Setter for <code>public.login.users_permission</code>.
      */
     public void setUsersPermission(String value) {
-        set(5, value);
+        set(6, value);
     }
 
     /**
      * Getter for <code>public.login.users_permission</code>.
      */
     public String getUsersPermission() {
-        return (String) get(5);
+        return (String) get(6);
     }
 
     // -------------------------------------------------------------------------
@@ -109,7 +123,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Record1<String> key() {
+    public Record1<Long> key() {
         return (Record1) super.key();
     }
 
@@ -127,9 +141,10 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission) {
+    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission) {
         super(Login.LOGIN);
 
+        setId(id);
         setEmail(email);
         setName(name);
         setPassword(password);
@@ -146,6 +161,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         super(Login.LOGIN);
 
         if (value != null) {
+            setId(value.getId());
             setEmail(value.getEmail());
             setName(value.getName());
             setPassword(value.getPassword());
