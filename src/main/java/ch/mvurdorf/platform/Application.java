@@ -1,8 +1,12 @@
 package ch.mvurdorf.platform;
 
+import com.google.cloud.storage.Bucket;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,12 +16,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Use the @PWA annotation make the application installable on phones, tablets
  * and some desktop browsers.
  */
+@Slf4j
 @SpringBootApplication
 @PWA(name = "Musikverein Harmonie Urdorf Platform", shortName = "MVU Platform")
 @Theme("my-theme")
-public class Application implements AppShellConfigurator {
+public class Application implements AppShellConfigurator, CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+    }
+
+    @Autowired
+    Bucket bucket;
+
+    @Override
+    public void run(String... args) throws Exception {
+        log.info(bucket.list() + "");
     }
 }
