@@ -17,8 +17,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Theme("my-theme")
 public class Application implements AppShellConfigurator {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Application.class);
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
