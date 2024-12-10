@@ -19,7 +19,7 @@ public class Komposition implements Serializable {
     private String titel;
     private String komponist;
     private String arrangeur;
-    private Integer durationinseconds;
+    private Integer durationInSeconds;
 
     public Komposition() {}
 
@@ -28,7 +28,7 @@ public class Komposition implements Serializable {
         this.titel = value.titel;
         this.komponist = value.komponist;
         this.arrangeur = value.arrangeur;
-        this.durationinseconds = value.durationinseconds;
+        this.durationInSeconds = value.durationInSeconds;
     }
 
     public Komposition(
@@ -36,13 +36,13 @@ public class Komposition implements Serializable {
         String titel,
         String komponist,
         String arrangeur,
-        Integer durationinseconds
+        Integer durationInSeconds
     ) {
         this.id = id;
         this.titel = titel;
         this.komponist = komponist;
         this.arrangeur = arrangeur;
-        this.durationinseconds = durationinseconds;
+        this.durationInSeconds = durationInSeconds;
     }
 
     /**
@@ -102,17 +102,17 @@ public class Komposition implements Serializable {
     }
 
     /**
-     * Getter for <code>public.komposition.durationinseconds</code>.
+     * Getter for <code>public.komposition.duration_in_seconds</code>.
      */
-    public Integer getDurationinseconds() {
-        return this.durationinseconds;
+    public Integer getDurationInSeconds() {
+        return this.durationInSeconds;
     }
 
     /**
-     * Setter for <code>public.komposition.durationinseconds</code>.
+     * Setter for <code>public.komposition.duration_in_seconds</code>.
      */
-    public void setDurationinseconds(Integer durationinseconds) {
-        this.durationinseconds = durationinseconds;
+    public void setDurationInSeconds(Integer durationInSeconds) {
+        this.durationInSeconds = durationInSeconds;
     }
 
     @Override
@@ -148,11 +148,11 @@ public class Komposition implements Serializable {
         }
         else if (!this.arrangeur.equals(other.arrangeur))
             return false;
-        if (this.durationinseconds == null) {
-            if (other.durationinseconds != null)
+        if (this.durationInSeconds == null) {
+            if (other.durationInSeconds != null)
                 return false;
         }
-        else if (!this.durationinseconds.equals(other.durationinseconds))
+        else if (!this.durationInSeconds.equals(other.durationInSeconds))
             return false;
         return true;
     }
@@ -165,7 +165,7 @@ public class Komposition implements Serializable {
         result = prime * result + ((this.titel == null) ? 0 : this.titel.hashCode());
         result = prime * result + ((this.komponist == null) ? 0 : this.komponist.hashCode());
         result = prime * result + ((this.arrangeur == null) ? 0 : this.arrangeur.hashCode());
-        result = prime * result + ((this.durationinseconds == null) ? 0 : this.durationinseconds.hashCode());
+        result = prime * result + ((this.durationInSeconds == null) ? 0 : this.durationInSeconds.hashCode());
         return result;
     }
 
@@ -177,7 +177,7 @@ public class Komposition implements Serializable {
         sb.append(", ").append(titel);
         sb.append(", ").append(komponist);
         sb.append(", ").append(arrangeur);
-        sb.append(", ").append(durationinseconds);
+        sb.append(", ").append(durationInSeconds);
 
         sb.append(")");
         return sb.toString();

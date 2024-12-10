@@ -118,17 +118,17 @@ public class KompositionDao extends AbstractSpringDAOImpl<KompositionRecord, ch.
     }
 
     /**
-     * Fetch records that have <code>durationinseconds BETWEEN lowerInclusive
+     * Fetch records that have <code>duration_in_seconds BETWEEN lowerInclusive
      * AND upperInclusive</code>
      */
-    public List<ch.mvurdorf.platform.jooq.tables.pojos.Komposition> fetchRangeOfDurationinseconds(Integer lowerInclusive, Integer upperInclusive) {
-        return fetchRange(Komposition.KOMPOSITION.DURATIONINSECONDS, lowerInclusive, upperInclusive);
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Komposition> fetchRangeOfDurationInSeconds(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(Komposition.KOMPOSITION.DURATION_IN_SECONDS, lowerInclusive, upperInclusive);
     }
 
     /**
-     * Fetch records that have <code>durationinseconds IN (values)</code>
+     * Fetch records that have <code>duration_in_seconds IN (values)</code>
      */
-    public List<ch.mvurdorf.platform.jooq.tables.pojos.Komposition> fetchByDurationinseconds(Integer... values) {
-        return fetch(Komposition.KOMPOSITION.DURATIONINSECONDS, values);
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Komposition> fetchByDurationInSeconds(Integer... values) {
+        return fetch(Komposition.KOMPOSITION.DURATION_IN_SECONDS, values);
     }
 }

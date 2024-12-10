@@ -76,9 +76,9 @@ public class Komposition extends TableImpl<KompositionRecord> {
     public final TableField<KompositionRecord, String> ARRANGEUR = createField(DSL.name("arrangeur"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>public.komposition.durationinseconds</code>.
+     * The column <code>public.komposition.duration_in_seconds</code>.
      */
-    public final TableField<KompositionRecord, Integer> DURATIONINSECONDS = createField(DSL.name("durationinseconds"), SQLDataType.INTEGER, this, "");
+    public final TableField<KompositionRecord, Integer> DURATION_IN_SECONDS = createField(DSL.name("duration_in_seconds"), SQLDataType.INTEGER, this, "");
 
     private Komposition(Name alias, Table<KompositionRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

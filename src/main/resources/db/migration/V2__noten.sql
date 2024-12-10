@@ -1,15 +1,14 @@
 alter table login
     add column noten_permission varchar(255) not null default 'NONE';
 
-
 create table komposition
 (
-    id                bigserial
+    id                  bigserial
         constraint pk__komposition primary key,
-    titel             varchar(255) not null,
-    komponist         varchar(255),
-    arrangeur         varchar(255),
-    durationInSeconds int
+    titel               varchar(255) not null,
+    komponist           varchar(255),
+    arrangeur           varchar(255),
+    duration_in_seconds int
 );
 
 create table noten
