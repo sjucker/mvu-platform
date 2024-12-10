@@ -20,6 +20,7 @@ import java.util.Optional;
 public class LoginService implements UserDetailsService {
 
     public static final String USERS_GROUP = "USERS";
+    public static final String NOTEN_GROUP = "NOTEN";
 
     private final LoginDao loginDao;
 
@@ -46,6 +47,7 @@ public class LoginService implements UserDetailsService {
         var roles = new ArrayList<GrantedAuthority>();
 
         Permission.of(USERS_GROUP, login.getUsersPermission()).ifPresent(roles::addAll);
+        Permission.of(NOTEN_GROUP, login.getNotenPermission()).ifPresent(roles::addAll);
 
         return roles;
     }

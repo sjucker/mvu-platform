@@ -23,6 +23,7 @@ public class Login implements Serializable {
     private Boolean active;
     private LocalDateTime lastLogin;
     private String usersPermission;
+    private String notenPermission;
 
     public Login() {}
 
@@ -34,6 +35,7 @@ public class Login implements Serializable {
         this.active = value.active;
         this.lastLogin = value.lastLogin;
         this.usersPermission = value.usersPermission;
+        this.notenPermission = value.notenPermission;
     }
 
     public Login(
@@ -43,7 +45,8 @@ public class Login implements Serializable {
         String password,
         Boolean active,
         LocalDateTime lastLogin,
-        String usersPermission
+        String usersPermission,
+        String notenPermission
     ) {
         this.id = id;
         this.email = email;
@@ -52,6 +55,7 @@ public class Login implements Serializable {
         this.active = active;
         this.lastLogin = lastLogin;
         this.usersPermission = usersPermission;
+        this.notenPermission = notenPermission;
     }
 
     /**
@@ -152,6 +156,20 @@ public class Login implements Serializable {
         this.usersPermission = usersPermission;
     }
 
+    /**
+     * Getter for <code>public.login.noten_permission</code>.
+     */
+    public String getNotenPermission() {
+        return this.notenPermission;
+    }
+
+    /**
+     * Setter for <code>public.login.noten_permission</code>.
+     */
+    public void setNotenPermission(String notenPermission) {
+        this.notenPermission = notenPermission;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -203,6 +221,12 @@ public class Login implements Serializable {
         }
         else if (!this.usersPermission.equals(other.usersPermission))
             return false;
+        if (this.notenPermission == null) {
+            if (other.notenPermission != null)
+                return false;
+        }
+        else if (!this.notenPermission.equals(other.notenPermission))
+            return false;
         return true;
     }
 
@@ -217,6 +241,7 @@ public class Login implements Serializable {
         result = prime * result + ((this.active == null) ? 0 : this.active.hashCode());
         result = prime * result + ((this.lastLogin == null) ? 0 : this.lastLogin.hashCode());
         result = prime * result + ((this.usersPermission == null) ? 0 : this.usersPermission.hashCode());
+        result = prime * result + ((this.notenPermission == null) ? 0 : this.notenPermission.hashCode());
         return result;
     }
 
@@ -231,6 +256,7 @@ public class Login implements Serializable {
         sb.append(", ").append(active);
         sb.append(", ").append(lastLogin);
         sb.append(", ").append(usersPermission);
+        sb.append(", ").append(notenPermission);
 
         sb.append(")");
         return sb.toString();

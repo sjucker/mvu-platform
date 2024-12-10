@@ -4,7 +4,9 @@
 package ch.mvurdorf.platform.jooq;
 
 
+import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Login;
+import ch.mvurdorf.platform.jooq.tables.Noten;
 
 
 /**
@@ -14,7 +16,17 @@ import ch.mvurdorf.platform.jooq.tables.Login;
 public class Tables {
 
     /**
+     * The table <code>public.komposition</code>.
+     */
+    public static final Komposition KOMPOSITION = Komposition.KOMPOSITION;
+
+    /**
      * The table <code>public.login</code>.
      */
     public static final Login LOGIN = Login.LOGIN;
+
+    /**
+     * The table <code>public.noten</code>.
+     */
+    public static final Noten NOTEN = Noten.NOTEN;
 }

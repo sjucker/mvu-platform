@@ -44,6 +44,7 @@ class UsersService {
                                   passwordEncoder.encode(password),
                                   true,
                                   null,
+                                  NONE.name(),
                                   NONE.name()));
         return password;
     }

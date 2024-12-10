@@ -176,4 +176,19 @@ public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.pla
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByUsersPermission(String... values) {
         return fetch(Login.LOGIN.USERS_PERMISSION, values);
     }
+
+    /**
+     * Fetch records that have <code>noten_permission BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfNotenPermission(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Login.LOGIN.NOTEN_PERMISSION, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>noten_permission IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByNotenPermission(String... values) {
+        return fetch(Login.LOGIN.NOTEN_PERMISSION, values);
+    }
 }

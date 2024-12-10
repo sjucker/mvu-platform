@@ -118,6 +118,20 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         return (String) get(6);
     }
 
+    /**
+     * Setter for <code>public.login.noten_permission</code>.
+     */
+    public void setNotenPermission(String value) {
+        set(7, value);
+    }
+
+    /**
+     * Getter for <code>public.login.noten_permission</code>.
+     */
+    public String getNotenPermission() {
+        return (String) get(7);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -141,7 +155,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission) {
+    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission) {
         super(Login.LOGIN);
 
         setId(id);
@@ -151,6 +165,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         setActive(active);
         setLastLogin(lastLogin);
         setUsersPermission(usersPermission);
+        setNotenPermission(notenPermission);
         resetChangedOnNotNull();
     }
 
@@ -168,6 +183,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setActive(value.getActive());
             setLastLogin(value.getLastLogin());
             setUsersPermission(value.getUsersPermission());
+            setNotenPermission(value.getNotenPermission());
             resetChangedOnNotNull();
         }
     }

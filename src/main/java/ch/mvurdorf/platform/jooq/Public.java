@@ -4,7 +4,9 @@
 package ch.mvurdorf.platform.jooq;
 
 
+import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Login;
+import ch.mvurdorf.platform.jooq.tables.Noten;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,9 +30,19 @@ public class Public extends SchemaImpl {
     public static final Public PUBLIC = new Public();
 
     /**
+     * The table <code>public.komposition</code>.
+     */
+    public final Komposition KOMPOSITION = Komposition.KOMPOSITION;
+
+    /**
      * The table <code>public.login</code>.
      */
     public final Login LOGIN = Login.LOGIN;
+
+    /**
+     * The table <code>public.noten</code>.
+     */
+    public final Noten NOTEN = Noten.NOTEN;
 
     /**
      * No further instances allowed
@@ -48,7 +60,9 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
-            Login.LOGIN
+            Komposition.KOMPOSITION,
+            Login.LOGIN,
+            Noten.NOTEN
         );
     }
 }

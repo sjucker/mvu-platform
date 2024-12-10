@@ -11,7 +11,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.LIST_ALT;
 @PageTitle("Repertoire")
 @Route("repertoire")
 @RolesAllowed({"ADMIN"})
-@Menu(order = 2, icon = LIST_ALT)
+@Menu(order = 3, icon = LIST_ALT)
 public class RepertoireView extends VerticalLayout {
 
     public RepertoireView() {

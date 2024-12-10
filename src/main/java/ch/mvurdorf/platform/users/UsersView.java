@@ -18,6 +18,7 @@ import jakarta.annotation.security.RolesAllowed;
 import static ch.mvurdorf.platform.security.LoginService.USERS_GROUP;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_COLUMN_BORDERS;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_COMPACT;
+import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.USER;
 
 @PageTitle("Users")
@@ -49,7 +50,7 @@ class UsersView extends VerticalLayout {
             controls.add(new Button("Neuer User",
                                     event -> UserDialog.create(newUser -> {
                                         var password = usersService.create(newUser);
-                                        Notification.show("User erstellt mit Passwort: " + password);
+                                        Notification.show("User erstellt mit Passwort: " + password, 0, TOP_CENTER);
                                         grid.setItems(usersService.findAll());
                                     })));
         }

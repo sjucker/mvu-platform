@@ -17,7 +17,6 @@ public class LocalStorageService implements StorageService {
 
     public LocalStorageService(String path) {
         this.root = new FileSystemResource(path);
-        this.root.isWritable();
     }
 
     @Override
