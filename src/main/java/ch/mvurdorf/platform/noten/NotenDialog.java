@@ -40,6 +40,7 @@ public class NotenDialog extends Dialog {
 
         var buffer = new MemoryBuffer();
         var upload = new Upload(buffer);
+        upload.setAcceptedFileTypes(".pdf");
         upload.addSucceededListener(event -> save.setEnabled(true));
 
         right.add(upload);
