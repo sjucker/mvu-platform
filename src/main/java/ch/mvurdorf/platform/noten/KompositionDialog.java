@@ -12,7 +12,7 @@ public class KompositionDialog extends Dialog {
 
     private final Consumer<KompositionDto> callback;
 
-    public KompositionDialog(Consumer<KompositionDto> callback) {
+    private KompositionDialog(Consumer<KompositionDto> callback) {
         this.callback = callback;
     }
 

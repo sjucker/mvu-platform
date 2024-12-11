@@ -20,7 +20,7 @@ public class UserDialog extends Dialog {
     private TextField name;
     private Long userId = null;
 
-    UserDialog(Mode mode, Consumer<UserDto> callback) {
+    private UserDialog(Mode mode, Consumer<UserDto> callback) {
         this.mode = mode;
         this.callback = callback;
     }
