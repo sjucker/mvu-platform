@@ -7,9 +7,13 @@ package ch.mvurdorf.platform.jooq;
 import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.Noten;
+import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
+import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
 import ch.mvurdorf.platform.jooq.tables.records.KompositionRecord;
 import ch.mvurdorf.platform.jooq.tables.records.LoginRecord;
 import ch.mvurdorf.platform.jooq.tables.records.NotenRecord;
+import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedPaymentRecord;
+import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -33,10 +37,14 @@ public class Keys {
     public static final UniqueKey<LoginRecord> PK__LOGIN = Internal.createUniqueKey(Login.LOGIN, DSL.name("pk__login"), new TableField[] { Login.LOGIN.ID }, true);
     public static final UniqueKey<LoginRecord> UQ__LOGIN_EMAIL = Internal.createUniqueKey(Login.LOGIN, DSL.name("uq__login_email"), new TableField[] { Login.LOGIN.EMAIL }, true);
     public static final UniqueKey<NotenRecord> PK__NOTEN = Internal.createUniqueKey(Noten.NOTEN, DSL.name("pk__noten"), new TableField[] { Noten.NOTEN.ID }, true);
+    public static final UniqueKey<PassivmitgliedRecord> PASSIVMITGLIED_EMAIL_KEY = Internal.createUniqueKey(Passivmitglied.PASSIVMITGLIED, DSL.name("passivmitglied_email_key"), new TableField[] { Passivmitglied.PASSIVMITGLIED.EMAIL }, true);
+    public static final UniqueKey<PassivmitgliedRecord> PK__PASSIVMITGLIED = Internal.createUniqueKey(Passivmitglied.PASSIVMITGLIED, DSL.name("pk__passivmitglied"), new TableField[] { Passivmitglied.PASSIVMITGLIED.ID }, true);
+    public static final UniqueKey<PassivmitgliedPaymentRecord> PK__PASSIVMITGLIED_PAYMENT = Internal.createUniqueKey(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT, DSL.name("pk__passivmitglied_payment"), new TableField[] { PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT.ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
     public static final ForeignKey<NotenRecord, KompositionRecord> NOTEN__NOTEN_FK_KOMPOSITION_FKEY = Internal.createForeignKey(Noten.NOTEN, DSL.name("noten_fk_komposition_fkey"), new TableField[] { Noten.NOTEN.FK_KOMPOSITION }, Keys.PK__KOMPOSITION, new TableField[] { Komposition.KOMPOSITION.ID }, true);
+    public static final ForeignKey<PassivmitgliedPaymentRecord, PassivmitgliedRecord> PASSIVMITGLIED_PAYMENT__PASSIVMITGLIED_PAYMENT_FK_PASSIVMITGLIED_FKEY = Internal.createForeignKey(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT, DSL.name("passivmitglied_payment_fk_passivmitglied_fkey"), new TableField[] { PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT.FK_PASSIVMITGLIED }, Keys.PK__PASSIVMITGLIED, new TableField[] { Passivmitglied.PASSIVMITGLIED.ID }, true);
 }

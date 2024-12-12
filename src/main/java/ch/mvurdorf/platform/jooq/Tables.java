@@ -7,6 +7,8 @@ package ch.mvurdorf.platform.jooq;
 import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.Noten;
+import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
+import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
 
 
 /**
@@ -29,4 +31,14 @@ public class Tables {
      * The table <code>public.noten</code>.
      */
     public static final Noten NOTEN = Noten.NOTEN;
+
+    /**
+     * The table <code>public.passivmitglied</code>.
+     */
+    public static final Passivmitglied PASSIVMITGLIED = Passivmitglied.PASSIVMITGLIED;
+
+    /**
+     * The table <code>public.passivmitglied_payment</code>.
+     */
+    public static final PassivmitgliedPayment PASSIVMITGLIED_PAYMENT = PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT;
 }

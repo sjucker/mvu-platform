@@ -7,6 +7,8 @@ package ch.mvurdorf.platform.jooq;
 import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.Noten;
+import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
+import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +47,16 @@ public class Public extends SchemaImpl {
     public final Noten NOTEN = Noten.NOTEN;
 
     /**
+     * The table <code>public.passivmitglied</code>.
+     */
+    public final Passivmitglied PASSIVMITGLIED = Passivmitglied.PASSIVMITGLIED;
+
+    /**
+     * The table <code>public.passivmitglied_payment</code>.
+     */
+    public final PassivmitgliedPayment PASSIVMITGLIED_PAYMENT = PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -62,7 +74,9 @@ public class Public extends SchemaImpl {
         return Arrays.asList(
             Komposition.KOMPOSITION,
             Login.LOGIN,
-            Noten.NOTEN
+            Noten.NOTEN,
+            Passivmitglied.PASSIVMITGLIED,
+            PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT
         );
     }
 }
