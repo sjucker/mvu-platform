@@ -2,13 +2,18 @@ package ch.mvurdorf.platform.passivmitglied;
 
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedDao;
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedPaymentDao;
+import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED;
 import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED_PAYMENT;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
@@ -27,7 +32,15 @@ public class PassivmitgliedService {
         this.passivmitgliedPaymentDao = passivmitgliedPaymentDao;
     }
 
-    public List<PassivmitgliedDto> findAll() {
+    public ConfigurableFilterDataProvider<PassivmitgliedDto, Void, String> dataProvider() {
+        var dataProvider = DataProvider.<PassivmitgliedDto, String>fromFilteringCallbacks(
+                query -> fetch(query.getFilter().orElse(null), query.getOffset(), query.getLimit()),
+                query -> count(query.getFilter().orElse(null))
+        );
+        return dataProvider.withConfigurableFilter();
+    }
+
+    private Stream<PassivmitgliedDto> fetch(String filter, int offset, int limit) {
         return jooqDsl.select(
                               PASSIVMITGLIED,
                               multiset(
@@ -39,6 +52,9 @@ public class PassivmitgliedService {
                               ).convertFrom(it -> it.map(mapping(PassivmitgliedPaymentDto::new)))
                       )
                       .from(PASSIVMITGLIED)
+                      .where(filterCondition(filter))
+                      .offset(offset)
+                      .limit(limit)
                       .fetch(it -> {
                           var passivmitgliedRecord = it.value1();
                           return new PassivmitgliedDto(
@@ -52,7 +68,24 @@ public class PassivmitgliedService {
                                   passivmitgliedRecord.getKommunikationEmail(),
                                   it.value2()
                           );
-                      });
+                      })
+                      .stream();
+    }
+
+    private int count(String filter) {
+        return jooqDsl.fetchCount(PASSIVMITGLIED, filterCondition(filter));
+
+    }
+
+    private static Condition filterCondition(String filter) {
+        if (isBlank(filter)) {
+            return DSL.trueCondition();
+        }
+        return DSL.or(
+                PASSIVMITGLIED.VORNAME.containsIgnoreCase(filter),
+                PASSIVMITGLIED.NACHNAME.containsIgnoreCase(filter),
+                PASSIVMITGLIED.EMAIL.containsIgnoreCase(filter)
+        );
     }
 
 }

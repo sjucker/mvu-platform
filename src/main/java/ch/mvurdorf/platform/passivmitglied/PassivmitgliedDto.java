@@ -16,10 +16,14 @@ public record PassivmitgliedDto(String vorname,
                                 boolean kommunikationEmail,
                                 List<PassivmitgliedPaymentDto> payments) {
 
-    public Optional<LocalDate> getLastPayment() {
+    public Optional<LocalDate> lastPayment() {
         return payments.stream()
                        .sorted(comparing(PassivmitgliedPaymentDto::datum).reversed())
                        .map(PassivmitgliedPaymentDto::datum)
                        .findFirst();
+    }
+
+    public int numberOfPayments() {
+        return payments.size();
     }
 }
