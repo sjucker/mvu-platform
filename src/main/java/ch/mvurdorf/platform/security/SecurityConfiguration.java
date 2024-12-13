@@ -31,6 +31,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
                 .requestMatchers(new AntPathRequestMatcher("/images/*.png")).permitAll());
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(new AntPathRequestMatcher("/line-awesome/**/*.svg")).permitAll());
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll());
 
         http.rememberMe(configurer -> configurer.key(rememberMeKey)
                                                 .tokenValiditySeconds((int) Duration.ofDays(365).toSeconds())

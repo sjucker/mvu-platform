@@ -2,6 +2,7 @@ package ch.mvurdorf.platform.passivmitglied;
 
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedDao;
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedPaymentDao;
+import ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import org.jooq.Condition;
@@ -88,4 +89,19 @@ public class PassivmitgliedService {
         );
     }
 
+    public boolean exists(String email) {
+        return passivmitgliedDao.fetchOptionalByEmail(email).isPresent();
+    }
+
+    public void create(PassivmitgliedDto passivmitglied) {
+        passivmitgliedDao.insert(new Passivmitglied(null,
+                                                    passivmitglied.vorname(),
+                                                    passivmitglied.nachname(),
+                                                    passivmitglied.strasse(),
+                                                    passivmitglied.ort(),
+                                                    passivmitglied.email(),
+                                                    passivmitglied.bemerkung(),
+                                                    passivmitglied.kommunikationPost(),
+                                                    passivmitglied.kommunikationEmail()));
+    }
 }
