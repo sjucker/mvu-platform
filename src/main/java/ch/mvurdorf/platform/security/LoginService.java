@@ -21,6 +21,7 @@ public class LoginService implements UserDetailsService {
 
     public static final String USERS_GROUP = "USERS";
     public static final String NOTEN_GROUP = "NOTEN";
+    public static final String PASSIVMITGLIED_GROUP = "PASSIVMITGLIED";
 
     private final LoginDao loginDao;
 
@@ -48,6 +49,7 @@ public class LoginService implements UserDetailsService {
 
         Permission.of(USERS_GROUP, login.getUsersPermission()).ifPresent(roles::addAll);
         Permission.of(NOTEN_GROUP, login.getNotenPermission()).ifPresent(roles::addAll);
+        Permission.of(PASSIVMITGLIED_GROUP, login.getPassivmitgliedPermission()).ifPresent(roles::addAll);
 
         return roles;
     }

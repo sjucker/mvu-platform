@@ -1,3 +1,6 @@
+alter table login
+    add column passivmitglied_permission varchar(255) not null default 'NONE';
+
 create table passivmitglied
 (
     id                  bigserial

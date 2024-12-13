@@ -132,6 +132,20 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         return (String) get(7);
     }
 
+    /**
+     * Setter for <code>public.login.passivmitglied_permission</code>.
+     */
+    public void setPassivmitgliedPermission(String value) {
+        set(8, value);
+    }
+
+    /**
+     * Getter for <code>public.login.passivmitglied_permission</code>.
+     */
+    public String getPassivmitgliedPermission() {
+        return (String) get(8);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -155,7 +169,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission) {
+    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String passivmitgliedPermission) {
         super(Login.LOGIN);
 
         setId(id);
@@ -166,6 +180,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         setLastLogin(lastLogin);
         setUsersPermission(usersPermission);
         setNotenPermission(notenPermission);
+        setPassivmitgliedPermission(passivmitgliedPermission);
         resetChangedOnNotNull();
     }
 
@@ -184,6 +199,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setLastLogin(value.getLastLogin());
             setUsersPermission(value.getUsersPermission());
             setNotenPermission(value.getNotenPermission());
+            setPassivmitgliedPermission(value.getPassivmitgliedPermission());
             resetChangedOnNotNull();
         }
     }

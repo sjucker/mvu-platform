@@ -24,6 +24,7 @@ public class Login implements Serializable {
     private LocalDateTime lastLogin;
     private String usersPermission;
     private String notenPermission;
+    private String passivmitgliedPermission;
 
     public Login() {}
 
@@ -36,6 +37,7 @@ public class Login implements Serializable {
         this.lastLogin = value.lastLogin;
         this.usersPermission = value.usersPermission;
         this.notenPermission = value.notenPermission;
+        this.passivmitgliedPermission = value.passivmitgliedPermission;
     }
 
     public Login(
@@ -46,7 +48,8 @@ public class Login implements Serializable {
         Boolean active,
         LocalDateTime lastLogin,
         String usersPermission,
-        String notenPermission
+        String notenPermission,
+        String passivmitgliedPermission
     ) {
         this.id = id;
         this.email = email;
@@ -56,6 +59,7 @@ public class Login implements Serializable {
         this.lastLogin = lastLogin;
         this.usersPermission = usersPermission;
         this.notenPermission = notenPermission;
+        this.passivmitgliedPermission = passivmitgliedPermission;
     }
 
     /**
@@ -170,6 +174,20 @@ public class Login implements Serializable {
         this.notenPermission = notenPermission;
     }
 
+    /**
+     * Getter for <code>public.login.passivmitglied_permission</code>.
+     */
+    public String getPassivmitgliedPermission() {
+        return this.passivmitgliedPermission;
+    }
+
+    /**
+     * Setter for <code>public.login.passivmitglied_permission</code>.
+     */
+    public void setPassivmitgliedPermission(String passivmitgliedPermission) {
+        this.passivmitgliedPermission = passivmitgliedPermission;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -227,6 +245,12 @@ public class Login implements Serializable {
         }
         else if (!this.notenPermission.equals(other.notenPermission))
             return false;
+        if (this.passivmitgliedPermission == null) {
+            if (other.passivmitgliedPermission != null)
+                return false;
+        }
+        else if (!this.passivmitgliedPermission.equals(other.passivmitgliedPermission))
+            return false;
         return true;
     }
 
@@ -242,6 +266,7 @@ public class Login implements Serializable {
         result = prime * result + ((this.lastLogin == null) ? 0 : this.lastLogin.hashCode());
         result = prime * result + ((this.usersPermission == null) ? 0 : this.usersPermission.hashCode());
         result = prime * result + ((this.notenPermission == null) ? 0 : this.notenPermission.hashCode());
+        result = prime * result + ((this.passivmitgliedPermission == null) ? 0 : this.passivmitgliedPermission.hashCode());
         return result;
     }
 
@@ -257,6 +282,7 @@ public class Login implements Serializable {
         sb.append(", ").append(lastLogin);
         sb.append(", ").append(usersPermission);
         sb.append(", ").append(notenPermission);
+        sb.append(", ").append(passivmitgliedPermission);
 
         sb.append(")");
         return sb.toString();

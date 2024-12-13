@@ -191,4 +191,20 @@ public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.pla
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByNotenPermission(String... values) {
         return fetch(Login.LOGIN.NOTEN_PERMISSION, values);
     }
+
+    /**
+     * Fetch records that have <code>passivmitglied_permission BETWEEN
+     * lowerInclusive AND upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfPassivmitgliedPermission(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Login.LOGIN.PASSIVMITGLIED_PERMISSION, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>passivmitglied_permission IN
+     * (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByPassivmitgliedPermission(String... values) {
+        return fetch(Login.LOGIN.PASSIVMITGLIED_PERMISSION, values);
+    }
 }
