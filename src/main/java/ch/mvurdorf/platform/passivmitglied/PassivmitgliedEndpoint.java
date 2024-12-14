@@ -23,6 +23,11 @@ public class PassivmitgliedEndpoint {
         this.passivmitgliedService = passivmitgliedService;
     }
 
+    @GetMapping
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
+    }
+
     @PostMapping
     public ResponseEntity<Void> createPassivmitglied(@RequestBody PassivmitgliedDto passivmitglied) {
         logger.info("POST /api/passivmitglied {}", passivmitglied);

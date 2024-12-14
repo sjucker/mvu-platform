@@ -5,6 +5,7 @@ import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,6 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.time.Duration;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @EnableWebSecurity
@@ -45,11 +47,13 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     }
 
     @Bean
+    @Order(10)
     public SecurityFilterChain configurePublicApi(HttpSecurity http) throws Exception {
-        http.securityMatcher(antMatcher("/api/**"))
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
-        return http.build();
+        return http.securityMatcher(antMatcher("/api/**"))
+                   .csrf(AbstractHttpConfigurer::disable)
+                   .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                   .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                   .build();
     }
 
 }
