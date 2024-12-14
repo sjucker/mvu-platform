@@ -3,6 +3,7 @@ package ch.mvurdorf.platform.passivmitglied;
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedDao;
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedPaymentDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied;
+import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import org.jooq.Condition;
@@ -67,6 +68,7 @@ public class PassivmitgliedService {
                                   passivmitgliedRecord.getBemerkung(),
                                   passivmitgliedRecord.getKommunikationPost(),
                                   passivmitgliedRecord.getKommunikationEmail(),
+                                  passivmitgliedRecord.getRegisteredAt(),
                                   it.value2()
                           );
                       })
@@ -102,7 +104,8 @@ public class PassivmitgliedService {
                                                     passivmitglied.email(),
                                                     passivmitglied.bemerkung(),
                                                     passivmitglied.kommunikationPost(),
-                                                    passivmitglied.kommunikationEmail()));
+                                                    passivmitglied.kommunikationEmail(),
+                                                    DateUtil.now()));
     }
 
 }

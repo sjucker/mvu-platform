@@ -6,6 +6,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
+import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -53,6 +54,7 @@ public class PassivmitgliedView extends VerticalLayout {
         grid.addColumn(PassivmitgliedDto::email).setHeader("Email");
         grid.addColumn(PassivmitgliedDto::strasse).setHeader("Strasse");
         grid.addColumn(PassivmitgliedDto::ort).setHeader("PLZ/Ort");
+        grid.addColumn(new LocalDateTimeRenderer<>(PassivmitgliedDto::registeredAt, "dd.MM.yyyy hh:mm")).setHeader("Registriert am");
         grid.addColumn(PassivmitgliedDto::numberOfPayments).setHeader("# Bezahlungen");
         grid.addColumn(new LocalDateRenderer<>(dto -> dto.lastPayment().orElse(null), "dd.MM.yyyy")).setHeader("Letzte Bezahlung");
 

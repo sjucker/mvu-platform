@@ -8,6 +8,7 @@ import ch.mvurdorf.platform.jooq.AbstractSpringDAOImpl;
 import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
 import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedRecord;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -204,5 +205,20 @@ public class PassivmitgliedDao extends AbstractSpringDAOImpl<PassivmitgliedRecor
      */
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchByKommunikationEmail(Boolean... values) {
         return fetch(Passivmitglied.PASSIVMITGLIED.KOMMUNIKATION_EMAIL, values);
+    }
+
+    /**
+     * Fetch records that have <code>registered_at BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchRangeOfRegisteredAt(LocalDateTime lowerInclusive, LocalDateTime upperInclusive) {
+        return fetchRange(Passivmitglied.PASSIVMITGLIED.REGISTERED_AT, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>registered_at IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchByRegisteredAt(LocalDateTime... values) {
+        return fetch(Passivmitglied.PASSIVMITGLIED.REGISTERED_AT, values);
     }
 }

@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.passivmitglied;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ public record PassivmitgliedDto(String vorname,
                                 String bemerkung,
                                 boolean kommunikationPost,
                                 boolean kommunikationEmail,
+                                LocalDateTime registeredAt,
                                 List<PassivmitgliedPaymentDto> payments) {
 
     public Optional<LocalDate> lastPayment() {

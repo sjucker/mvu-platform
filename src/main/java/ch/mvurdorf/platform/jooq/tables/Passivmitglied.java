@@ -9,6 +9,7 @@ import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment.PassivmitgliedPaymentPath;
 import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedRecord;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -101,6 +102,11 @@ public class Passivmitglied extends TableImpl<PassivmitgliedRecord> {
      * The column <code>public.passivmitglied.kommunikation_email</code>.
      */
     public final TableField<PassivmitgliedRecord, Boolean> KOMMUNIKATION_EMAIL = createField(DSL.name("kommunikation_email"), SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column <code>public.passivmitglied.registered_at</code>.
+     */
+    public final TableField<PassivmitgliedRecord, LocalDateTime> REGISTERED_AT = createField(DSL.name("registered_at"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "");
 
     private Passivmitglied(Name alias, Table<PassivmitgliedRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

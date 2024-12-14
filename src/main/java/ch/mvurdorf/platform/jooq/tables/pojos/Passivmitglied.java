@@ -5,6 +5,7 @@ package ch.mvurdorf.platform.jooq.tables.pojos;
 
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 /**
@@ -24,6 +25,7 @@ public class Passivmitglied implements Serializable {
     private String bemerkung;
     private Boolean kommunikationPost;
     private Boolean kommunikationEmail;
+    private LocalDateTime registeredAt;
 
     public Passivmitglied() {}
 
@@ -37,6 +39,7 @@ public class Passivmitglied implements Serializable {
         this.bemerkung = value.bemerkung;
         this.kommunikationPost = value.kommunikationPost;
         this.kommunikationEmail = value.kommunikationEmail;
+        this.registeredAt = value.registeredAt;
     }
 
     public Passivmitglied(
@@ -48,7 +51,8 @@ public class Passivmitglied implements Serializable {
         String email,
         String bemerkung,
         Boolean kommunikationPost,
-        Boolean kommunikationEmail
+        Boolean kommunikationEmail,
+        LocalDateTime registeredAt
     ) {
         this.id = id;
         this.vorname = vorname;
@@ -59,6 +63,7 @@ public class Passivmitglied implements Serializable {
         this.bemerkung = bemerkung;
         this.kommunikationPost = kommunikationPost;
         this.kommunikationEmail = kommunikationEmail;
+        this.registeredAt = registeredAt;
     }
 
     /**
@@ -187,6 +192,20 @@ public class Passivmitglied implements Serializable {
         this.kommunikationEmail = kommunikationEmail;
     }
 
+    /**
+     * Getter for <code>public.passivmitglied.registered_at</code>.
+     */
+    public LocalDateTime getRegisteredAt() {
+        return this.registeredAt;
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.registered_at</code>.
+     */
+    public void setRegisteredAt(LocalDateTime registeredAt) {
+        this.registeredAt = registeredAt;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -250,6 +269,12 @@ public class Passivmitglied implements Serializable {
         }
         else if (!this.kommunikationEmail.equals(other.kommunikationEmail))
             return false;
+        if (this.registeredAt == null) {
+            if (other.registeredAt != null)
+                return false;
+        }
+        else if (!this.registeredAt.equals(other.registeredAt))
+            return false;
         return true;
     }
 
@@ -266,6 +291,7 @@ public class Passivmitglied implements Serializable {
         result = prime * result + ((this.bemerkung == null) ? 0 : this.bemerkung.hashCode());
         result = prime * result + ((this.kommunikationPost == null) ? 0 : this.kommunikationPost.hashCode());
         result = prime * result + ((this.kommunikationEmail == null) ? 0 : this.kommunikationEmail.hashCode());
+        result = prime * result + ((this.registeredAt == null) ? 0 : this.registeredAt.hashCode());
         return result;
     }
 
@@ -282,6 +308,7 @@ public class Passivmitglied implements Serializable {
         sb.append(", ").append(bemerkung);
         sb.append(", ").append(kommunikationPost);
         sb.append(", ").append(kommunikationEmail);
+        sb.append(", ").append(registeredAt);
 
         sb.append(")");
         return sb.toString();

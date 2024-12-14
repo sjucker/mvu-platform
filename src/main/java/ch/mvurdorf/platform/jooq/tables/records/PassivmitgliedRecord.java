@@ -6,6 +6,8 @@ package ch.mvurdorf.platform.jooq.tables.records;
 
 import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
 
+import java.time.LocalDateTime;
+
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
 
@@ -144,6 +146,20 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
         return (Boolean) get(8);
     }
 
+    /**
+     * Setter for <code>public.passivmitglied.registered_at</code>.
+     */
+    public void setRegisteredAt(LocalDateTime value) {
+        set(9, value);
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.registered_at</code>.
+     */
+    public LocalDateTime getRegisteredAt() {
+        return (LocalDateTime) get(9);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -167,7 +183,7 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
     /**
      * Create a detached, initialised PassivmitgliedRecord
      */
-    public PassivmitgliedRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail) {
+    public PassivmitgliedRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail, LocalDateTime registeredAt) {
         super(Passivmitglied.PASSIVMITGLIED);
 
         setId(id);
@@ -179,6 +195,7 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
         setBemerkung(bemerkung);
         setKommunikationPost(kommunikationPost);
         setKommunikationEmail(kommunikationEmail);
+        setRegisteredAt(registeredAt);
         resetChangedOnNotNull();
     }
 
@@ -198,6 +215,7 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
             setBemerkung(value.getBemerkung());
             setKommunikationPost(value.getKommunikationPost());
             setKommunikationEmail(value.getKommunikationEmail());
+            setRegisteredAt(value.getRegisteredAt());
             resetChangedOnNotNull();
         }
     }
