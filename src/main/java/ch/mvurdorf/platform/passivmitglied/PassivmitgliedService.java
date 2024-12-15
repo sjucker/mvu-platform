@@ -9,7 +9,6 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
-import org.jooq.Record1;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
@@ -123,7 +122,7 @@ public class PassivmitgliedService {
         return jooqDsl.select(DSL.max(PASSIVMITGLIED.EXTERNAL_ID))
                       .from(PASSIVMITGLIED)
                       .fetchOptional()
-                      .map(Record1::value1)
+                      .map(it -> it.value1() + 1L)
                       .orElse(1000001L);
     }
 
