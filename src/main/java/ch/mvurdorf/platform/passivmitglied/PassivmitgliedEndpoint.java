@@ -3,7 +3,6 @@ package ch.mvurdorf.platform.passivmitglied;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,18 +22,13 @@ public class PassivmitgliedEndpoint {
         this.passivmitgliedService = passivmitgliedService;
     }
 
-    @GetMapping
-    public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("pong");
-    }
-
     @PostMapping
-    public ResponseEntity<Void> createPassivmitglied(@RequestBody PassivmitgliedDto passivmitglied) {
+    public ResponseEntity<Long> createPassivmitglied(@RequestBody PassivmitgliedDto passivmitglied) {
         logger.info("POST /api/passivmitglied {}", passivmitglied);
         if (passivmitgliedService.exists(passivmitglied.email())) {
             return ResponseEntity.status(CONFLICT).build();
         }
-        passivmitgliedService.create(passivmitglied);
-        return ResponseEntity.ok().build();
+        var externalId = passivmitgliedService.create(passivmitglied);
+        return ResponseEntity.ok(externalId);
     }
 }

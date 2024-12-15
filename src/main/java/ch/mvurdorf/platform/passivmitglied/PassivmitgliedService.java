@@ -103,7 +103,8 @@ public class PassivmitgliedService {
         return passivmitgliedDao.fetchOptionalByEmail(email).isPresent();
     }
 
-    public void create(PassivmitgliedDto passivmitglied) {
+    public long create(PassivmitgliedDto passivmitglied) {
+        var externalId = getNextExternalId();
         passivmitgliedDao.insert(new Passivmitglied(null,
                                                     passivmitglied.vorname(),
                                                     passivmitglied.nachname(),
@@ -114,7 +115,8 @@ public class PassivmitgliedService {
                                                     passivmitglied.kommunikationPost(),
                                                     passivmitglied.kommunikationEmail(),
                                                     DateUtil.now(),
-                                                    getNextExternalId()));
+                                                    externalId));
+        return externalId;
     }
 
     private long getNextExternalId() {
