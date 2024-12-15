@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED;
 import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED_PAYMENT;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.math.NumberUtils.toLong;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
@@ -91,10 +92,13 @@ public class PassivmitgliedService {
         if (isBlank(filter)) {
             return DSL.trueCondition();
         }
+
+        var filterAsLong = toLong(filter);
         return DSL.or(
                 PASSIVMITGLIED.VORNAME.containsIgnoreCase(filter),
                 PASSIVMITGLIED.NACHNAME.containsIgnoreCase(filter),
-                PASSIVMITGLIED.EMAIL.containsIgnoreCase(filter)
+                PASSIVMITGLIED.EMAIL.containsIgnoreCase(filter),
+                filterAsLong > 0 ? PASSIVMITGLIED.EXTERNAL_ID.contains(filterAsLong) : DSL.noCondition()
         );
     }
 
