@@ -10,6 +10,7 @@ import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedPaymentRecord;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -132,5 +133,35 @@ public class PassivmitgliedPaymentDao extends AbstractSpringDAOImpl<Passivmitgli
      */
     public List<ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedPayment> fetchByBemerkung(String... values) {
         return fetch(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT.BEMERKUNG, values);
+    }
+
+    /**
+     * Fetch records that have <code>created_at BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedPayment> fetchRangeOfCreatedAt(LocalDateTime lowerInclusive, LocalDateTime upperInclusive) {
+        return fetchRange(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT.CREATED_AT, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>created_at IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedPayment> fetchByCreatedAt(LocalDateTime... values) {
+        return fetch(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT.CREATED_AT, values);
+    }
+
+    /**
+     * Fetch records that have <code>created_by BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedPayment> fetchRangeOfCreatedBy(String lowerInclusive, String upperInclusive) {
+        return fetchRange(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT.CREATED_BY, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>created_by IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedPayment> fetchByCreatedBy(String... values) {
+        return fetch(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT.CREATED_BY, values);
     }
 }

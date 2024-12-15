@@ -34,7 +34,7 @@ public class NotenDialog extends Dialog {
         setHeaderTitle(komposition.titel());
 
         var left = new VerticalLayout();
-        // TODO add grid with alrady uploaded noten
+        // TODO add grid with already uploaded noten
 
         var right = new VerticalLayout();
 
@@ -61,7 +61,7 @@ public class NotenDialog extends Dialog {
         stimmlage.setItemLabelGenerator(Stimmlage::getDescription);
         right.add(stimmlage);
 
-         save = new Button("Speichern", event -> {
+        save = new Button("Speichern", event -> {
             try {
                 notenService.insert(komposition.id(),
                                     new NotenDto(instrument.getValue(),

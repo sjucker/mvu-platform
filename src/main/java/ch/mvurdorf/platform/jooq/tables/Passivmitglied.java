@@ -108,6 +108,11 @@ public class Passivmitglied extends TableImpl<PassivmitgliedRecord> {
      */
     public final TableField<PassivmitgliedRecord, LocalDateTime> REGISTERED_AT = createField(DSL.name("registered_at"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "");
 
+    /**
+     * The column <code>public.passivmitglied.external_id</code>.
+     */
+    public final TableField<PassivmitgliedRecord, Long> EXTERNAL_ID = createField(DSL.name("external_id"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field(DSL.raw("1"), SQLDataType.BIGINT)), this, "");
+
     private Passivmitglied(Name alias, Table<PassivmitgliedRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

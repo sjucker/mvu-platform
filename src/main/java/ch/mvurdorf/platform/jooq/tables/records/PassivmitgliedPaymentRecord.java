@@ -8,6 +8,7 @@ import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -91,6 +92,34 @@ public class PassivmitgliedPaymentRecord extends UpdatableRecordImpl<Passivmitgl
         return (String) get(4);
     }
 
+    /**
+     * Setter for <code>public.passivmitglied_payment.created_at</code>.
+     */
+    public void setCreatedAt(LocalDateTime value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied_payment.created_at</code>.
+     */
+    public LocalDateTime getCreatedAt() {
+        return (LocalDateTime) get(5);
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied_payment.created_by</code>.
+     */
+    public void setCreatedBy(String value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied_payment.created_by</code>.
+     */
+    public String getCreatedBy() {
+        return (String) get(6);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -114,7 +143,7 @@ public class PassivmitgliedPaymentRecord extends UpdatableRecordImpl<Passivmitgl
     /**
      * Create a detached, initialised PassivmitgliedPaymentRecord
      */
-    public PassivmitgliedPaymentRecord(Long id, Long fkPassivmitglied, LocalDate datum, BigDecimal amount, String bemerkung) {
+    public PassivmitgliedPaymentRecord(Long id, Long fkPassivmitglied, LocalDate datum, BigDecimal amount, String bemerkung, LocalDateTime createdAt, String createdBy) {
         super(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT);
 
         setId(id);
@@ -122,6 +151,8 @@ public class PassivmitgliedPaymentRecord extends UpdatableRecordImpl<Passivmitgl
         setDatum(datum);
         setAmount(amount);
         setBemerkung(bemerkung);
+        setCreatedAt(createdAt);
+        setCreatedBy(createdBy);
         resetChangedOnNotNull();
     }
 
@@ -137,6 +168,8 @@ public class PassivmitgliedPaymentRecord extends UpdatableRecordImpl<Passivmitgl
             setDatum(value.getDatum());
             setAmount(value.getAmount());
             setBemerkung(value.getBemerkung());
+            setCreatedAt(value.getCreatedAt());
+            setCreatedBy(value.getCreatedBy());
             resetChangedOnNotNull();
         }
     }

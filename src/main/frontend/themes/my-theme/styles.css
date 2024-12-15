@@ -30,3 +30,7 @@ html {
     --lumo-success-contrast-color: hsl(159, 29%, 10%);
     --lumo-success-text-color: hsl(159, 61%, 40%);
 }
+
+.clickable {
+    cursor: pointer;
+}

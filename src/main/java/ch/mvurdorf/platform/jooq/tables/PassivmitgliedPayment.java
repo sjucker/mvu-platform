@@ -11,6 +11,7 @@ import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedPaymentRecord;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -83,6 +84,16 @@ public class PassivmitgliedPayment extends TableImpl<PassivmitgliedPaymentRecord
      * The column <code>public.passivmitglied_payment.bemerkung</code>.
      */
     public final TableField<PassivmitgliedPaymentRecord, String> BEMERKUNG = createField(DSL.name("bemerkung"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.passivmitglied_payment.created_at</code>.
+     */
+    public final TableField<PassivmitgliedPaymentRecord, LocalDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "");
+
+    /**
+     * The column <code>public.passivmitglied_payment.created_by</code>.
+     */
+    public final TableField<PassivmitgliedPaymentRecord, String> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'System'::character varying"), SQLDataType.VARCHAR)), this, "");
 
     private PassivmitgliedPayment(Name alias, Table<PassivmitgliedPaymentRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

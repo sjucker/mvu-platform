@@ -3,19 +3,17 @@ package ch.mvurdorf.platform.noten;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
 import jakarta.annotation.security.RolesAllowed;
 
 import static ch.mvurdorf.platform.security.LoginService.NOTEN_GROUP;
+import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static com.vaadin.flow.component.icon.VaadinIcon.UPLOAD;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.MUSIC_SOLID;
@@ -53,12 +51,7 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(KompositionDto::titel).setHeader("Titel");
         grid.addColumn(KompositionDto::komponist).setHeader("Komponist");
         grid.addColumn(KompositionDto::arrangeur).setHeader("Arrangeur");
-        grid.addColumn(new ComponentRenderer<>(dto -> {
-            var icon = new Icon(UPLOAD);
-            icon.addClassName(IconSize.SMALL);
-            icon.addClickListener(event -> NotenDialog.show(notenService, dto));
-            return icon;
-        }));
+        grid.addColumn(clickableIcon(UPLOAD, dto -> NotenDialog.show(notenService, dto)));
     }
 
     private void createControls() {

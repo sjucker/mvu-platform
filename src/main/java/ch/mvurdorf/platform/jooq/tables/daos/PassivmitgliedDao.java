@@ -221,4 +221,19 @@ public class PassivmitgliedDao extends AbstractSpringDAOImpl<PassivmitgliedRecor
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchByRegisteredAt(LocalDateTime... values) {
         return fetch(Passivmitglied.PASSIVMITGLIED.REGISTERED_AT, values);
     }
+
+    /**
+     * Fetch records that have <code>external_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchRangeOfExternalId(Long lowerInclusive, Long upperInclusive) {
+        return fetchRange(Passivmitglied.PASSIVMITGLIED.EXTERNAL_ID, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>external_id IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchByExternalId(Long... values) {
+        return fetch(Passivmitglied.PASSIVMITGLIED.EXTERNAL_ID, values);
+    }
 }

@@ -7,6 +7,7 @@ package ch.mvurdorf.platform.jooq.tables.pojos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 /**
@@ -22,6 +23,8 @@ public class PassivmitgliedPayment implements Serializable {
     private LocalDate datum;
     private BigDecimal amount;
     private String bemerkung;
+    private LocalDateTime createdAt;
+    private String createdBy;
 
     public PassivmitgliedPayment() {}
 
@@ -31,6 +34,8 @@ public class PassivmitgliedPayment implements Serializable {
         this.datum = value.datum;
         this.amount = value.amount;
         this.bemerkung = value.bemerkung;
+        this.createdAt = value.createdAt;
+        this.createdBy = value.createdBy;
     }
 
     public PassivmitgliedPayment(
@@ -38,13 +43,17 @@ public class PassivmitgliedPayment implements Serializable {
         Long fkPassivmitglied,
         LocalDate datum,
         BigDecimal amount,
-        String bemerkung
+        String bemerkung,
+        LocalDateTime createdAt,
+        String createdBy
     ) {
         this.id = id;
         this.fkPassivmitglied = fkPassivmitglied;
         this.datum = datum;
         this.amount = amount;
         this.bemerkung = bemerkung;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
     }
 
     /**
@@ -117,6 +126,34 @@ public class PassivmitgliedPayment implements Serializable {
         this.bemerkung = bemerkung;
     }
 
+    /**
+     * Getter for <code>public.passivmitglied_payment.created_at</code>.
+     */
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied_payment.created_at</code>.
+     */
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied_payment.created_by</code>.
+     */
+    public String getCreatedBy() {
+        return this.createdBy;
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied_payment.created_by</code>.
+     */
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -156,6 +193,18 @@ public class PassivmitgliedPayment implements Serializable {
         }
         else if (!this.bemerkung.equals(other.bemerkung))
             return false;
+        if (this.createdAt == null) {
+            if (other.createdAt != null)
+                return false;
+        }
+        else if (!this.createdAt.equals(other.createdAt))
+            return false;
+        if (this.createdBy == null) {
+            if (other.createdBy != null)
+                return false;
+        }
+        else if (!this.createdBy.equals(other.createdBy))
+            return false;
         return true;
     }
 
@@ -168,6 +217,8 @@ public class PassivmitgliedPayment implements Serializable {
         result = prime * result + ((this.datum == null) ? 0 : this.datum.hashCode());
         result = prime * result + ((this.amount == null) ? 0 : this.amount.hashCode());
         result = prime * result + ((this.bemerkung == null) ? 0 : this.bemerkung.hashCode());
+        result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
+        result = prime * result + ((this.createdBy == null) ? 0 : this.createdBy.hashCode());
         return result;
     }
 
@@ -180,6 +231,8 @@ public class PassivmitgliedPayment implements Serializable {
         sb.append(", ").append(datum);
         sb.append(", ").append(amount);
         sb.append(", ").append(bemerkung);
+        sb.append(", ").append(createdAt);
+        sb.append(", ").append(createdBy);
 
         sb.append(")");
         return sb.toString();

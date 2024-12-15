@@ -160,6 +160,20 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
         return (LocalDateTime) get(9);
     }
 
+    /**
+     * Setter for <code>public.passivmitglied.external_id</code>.
+     */
+    public void setExternalId(Long value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.external_id</code>.
+     */
+    public Long getExternalId() {
+        return (Long) get(10);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -183,7 +197,7 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
     /**
      * Create a detached, initialised PassivmitgliedRecord
      */
-    public PassivmitgliedRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail, LocalDateTime registeredAt) {
+    public PassivmitgliedRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail, LocalDateTime registeredAt, Long externalId) {
         super(Passivmitglied.PASSIVMITGLIED);
 
         setId(id);
@@ -196,6 +210,7 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
         setKommunikationPost(kommunikationPost);
         setKommunikationEmail(kommunikationEmail);
         setRegisteredAt(registeredAt);
+        setExternalId(externalId);
         resetChangedOnNotNull();
     }
 
@@ -216,6 +231,7 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
             setKommunikationPost(value.getKommunikationPost());
             setKommunikationEmail(value.getKommunikationEmail());
             setRegisteredAt(value.getRegisteredAt());
+            setExternalId(value.getExternalId());
             resetChangedOnNotNull();
         }
     }

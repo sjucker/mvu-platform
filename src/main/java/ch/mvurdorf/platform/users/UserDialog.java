@@ -8,6 +8,7 @@ import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.function.Consumer;
 
+import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.users.UserDialog.Mode.CREATE;
 import static ch.mvurdorf.platform.users.UserDialog.Mode.EDIT;
 
@@ -43,7 +44,7 @@ public class UserDialog extends Dialog {
 
         setHeaderTitle(mode == CREATE ? "User erstellen" : "User bearbeiten");
         getFooter().add(new Button("Abbrechen", e -> close()),
-                        new Button("Speichern", e -> {
+                        primaryButton("Speichern", () -> {
                             callback.accept(new UserDto(userId,
                                                         email.getValue(),
                                                         name.getValue(),

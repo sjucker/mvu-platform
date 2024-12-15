@@ -26,6 +26,7 @@ public class Passivmitglied implements Serializable {
     private Boolean kommunikationPost;
     private Boolean kommunikationEmail;
     private LocalDateTime registeredAt;
+    private Long externalId;
 
     public Passivmitglied() {}
 
@@ -40,6 +41,7 @@ public class Passivmitglied implements Serializable {
         this.kommunikationPost = value.kommunikationPost;
         this.kommunikationEmail = value.kommunikationEmail;
         this.registeredAt = value.registeredAt;
+        this.externalId = value.externalId;
     }
 
     public Passivmitglied(
@@ -52,7 +54,8 @@ public class Passivmitglied implements Serializable {
         String bemerkung,
         Boolean kommunikationPost,
         Boolean kommunikationEmail,
-        LocalDateTime registeredAt
+        LocalDateTime registeredAt,
+        Long externalId
     ) {
         this.id = id;
         this.vorname = vorname;
@@ -64,6 +67,7 @@ public class Passivmitglied implements Serializable {
         this.kommunikationPost = kommunikationPost;
         this.kommunikationEmail = kommunikationEmail;
         this.registeredAt = registeredAt;
+        this.externalId = externalId;
     }
 
     /**
@@ -206,6 +210,20 @@ public class Passivmitglied implements Serializable {
         this.registeredAt = registeredAt;
     }
 
+    /**
+     * Getter for <code>public.passivmitglied.external_id</code>.
+     */
+    public Long getExternalId() {
+        return this.externalId;
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.external_id</code>.
+     */
+    public void setExternalId(Long externalId) {
+        this.externalId = externalId;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -275,6 +293,12 @@ public class Passivmitglied implements Serializable {
         }
         else if (!this.registeredAt.equals(other.registeredAt))
             return false;
+        if (this.externalId == null) {
+            if (other.externalId != null)
+                return false;
+        }
+        else if (!this.externalId.equals(other.externalId))
+            return false;
         return true;
     }
 
@@ -292,6 +316,7 @@ public class Passivmitglied implements Serializable {
         result = prime * result + ((this.kommunikationPost == null) ? 0 : this.kommunikationPost.hashCode());
         result = prime * result + ((this.kommunikationEmail == null) ? 0 : this.kommunikationEmail.hashCode());
         result = prime * result + ((this.registeredAt == null) ? 0 : this.registeredAt.hashCode());
+        result = prime * result + ((this.externalId == null) ? 0 : this.externalId.hashCode());
         return result;
     }
 
@@ -309,6 +334,7 @@ public class Passivmitglied implements Serializable {
         sb.append(", ").append(kommunikationPost);
         sb.append(", ").append(kommunikationEmail);
         sb.append(", ").append(registeredAt);
+        sb.append(", ").append(externalId);
 
         sb.append(")");
         return sb.toString();

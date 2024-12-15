@@ -30,12 +30,16 @@ public class AuthenticatedUser {
                                     .map(userDetails -> loginDao.fetchOneByEmail(userDetails.getUsername()));
     }
 
+    public String getName() {
+        return get().map(Login::getName).orElse("?");
+    }
+
     public boolean hasWritePermission(String group) {
         return hasRole(group, WRITE);
     }
 
     public boolean hasReadPermission(String group) {
-        return hasRole(group, READ);
+        return hasRole(group, READ) && !hasRole(group, WRITE);
     }
 
     private boolean hasRole(String group, Permission permission) {

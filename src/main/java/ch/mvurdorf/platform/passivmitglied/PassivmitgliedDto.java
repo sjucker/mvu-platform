@@ -7,7 +7,9 @@ import java.util.Optional;
 
 import static java.util.Comparator.comparing;
 
-public record PassivmitgliedDto(String vorname,
+public record PassivmitgliedDto(Long id,
+                                Long externalId,
+                                String vorname,
                                 String nachname,
                                 String strasse,
                                 String ort,
@@ -27,5 +29,9 @@ public record PassivmitgliedDto(String vorname,
 
     public int numberOfPayments() {
         return payments.size();
+    }
+
+    public String fullName() {
+        return "%s %s".formatted(vorname, nachname);
     }
 }
