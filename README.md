@@ -11,7 +11,8 @@
 
 ## Build
 
-`mvn clean package -Pproduction`
+* `mvn clean package -Pproduction`
+* `mvn dependency:resolve-sources`
 
 ## Updates
 
