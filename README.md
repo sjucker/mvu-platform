@@ -21,3 +21,7 @@
 * Update Versions in Properties
     * `mvn -U versions:display-property-updates`
     * `mvn -U versions:update-properties`
+
+## Sonar
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sjucker_mvu-platform&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sjucker_mvu-platform)
