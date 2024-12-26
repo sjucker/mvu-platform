@@ -2,6 +2,7 @@ POST https://admin.mvurdorf.ch/api/passivmitglied
 Content-Type: application/json
 
 {
+  "anrede": "Lieber",
   "vorname": "Hans",
   "nachname": "Muster",
   "strasse": "Bahnhofsstrasse 1",
@@ -10,7 +11,8 @@ Content-Type: application/json
   "bemerkung": "Hallo!",
   "kommunikationPost": false,
   "kommunikationEmail": true,
-  "payments": []
+  "payments": [],
+  "vouchers": []
 }
 
 ###
