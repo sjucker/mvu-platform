@@ -13,10 +13,12 @@ import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED;
 import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED_PAYMENT;
+import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED_VOUCHER;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.math.NumberUtils.toLong;
 import static org.jooq.Records.mapping;
@@ -57,7 +59,17 @@ public class PassivmitgliedService {
                                               .from(PASSIVMITGLIED_PAYMENT)
                                               .where(PASSIVMITGLIED_PAYMENT.FK_PASSIVMITGLIED.eq(PASSIVMITGLIED.ID))
                                               .orderBy(PASSIVMITGLIED_PAYMENT.DATUM.desc())
-                              ).convertFrom(it -> it.map(mapping(PassivmitgliedPaymentDto::new)))
+                              ).convertFrom(it -> it.map(mapping(PassivmitgliedPaymentDto::new))),
+                              multiset(
+                                      select(PASSIVMITGLIED_VOUCHER.CODE,
+                                             PASSIVMITGLIED_VOUCHER.DESCRIPTION,
+                                             PASSIVMITGLIED_VOUCHER.VALID_UNTIL,
+                                             PASSIVMITGLIED_VOUCHER.REDEEMED_AT,
+                                             PASSIVMITGLIED_VOUCHER.REDEEMED_BY)
+                                              .from(PASSIVMITGLIED_VOUCHER)
+                                              .where(PASSIVMITGLIED_VOUCHER.FK_PASSIVMITGLIED.eq(PASSIVMITGLIED.ID))
+                                              .orderBy(PASSIVMITGLIED_VOUCHER.VALID_UNTIL.desc())
+                              ).convertFrom(it -> it.map(mapping(PassivmitgliedVoucherDto::new)))
                       )
                       .from(PASSIVMITGLIED)
                       .where(filterCondition(filter))
@@ -68,6 +80,8 @@ public class PassivmitgliedService {
                           return new PassivmitgliedDto(
                                   passivmitgliedRecord.getId(),
                                   passivmitgliedRecord.getExternalId(),
+                                  passivmitgliedRecord.getUuid(),
+                                  passivmitgliedRecord.getAnrede(),
                                   passivmitgliedRecord.getVorname(),
                                   passivmitgliedRecord.getNachname(),
                                   passivmitgliedRecord.getStrasse(),
@@ -77,7 +91,8 @@ public class PassivmitgliedService {
                                   passivmitgliedRecord.getKommunikationPost(),
                                   passivmitgliedRecord.getKommunikationEmail(),
                                   passivmitgliedRecord.getRegisteredAt(),
-                                  it.value2()
+                                  it.value2(),
+                                  it.value3()
                           );
                       })
                       .stream();
@@ -118,7 +133,9 @@ public class PassivmitgliedService {
                                                     passivmitglied.kommunikationPost(),
                                                     passivmitglied.kommunikationEmail(),
                                                     DateUtil.now(),
-                                                    externalId));
+                                                    externalId,
+                                                    passivmitglied.anrede(),
+                                                    UUID.randomUUID().toString()));
         return externalId;
     }
 

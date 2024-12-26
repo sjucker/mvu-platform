@@ -27,6 +27,8 @@ public class Passivmitglied implements Serializable {
     private Boolean kommunikationEmail;
     private LocalDateTime registeredAt;
     private Long externalId;
+    private String anrede;
+    private String uuid;
 
     public Passivmitglied() {}
 
@@ -42,6 +44,8 @@ public class Passivmitglied implements Serializable {
         this.kommunikationEmail = value.kommunikationEmail;
         this.registeredAt = value.registeredAt;
         this.externalId = value.externalId;
+        this.anrede = value.anrede;
+        this.uuid = value.uuid;
     }
 
     public Passivmitglied(
@@ -55,7 +59,9 @@ public class Passivmitglied implements Serializable {
         Boolean kommunikationPost,
         Boolean kommunikationEmail,
         LocalDateTime registeredAt,
-        Long externalId
+        Long externalId,
+        String anrede,
+        String uuid
     ) {
         this.id = id;
         this.vorname = vorname;
@@ -68,6 +74,8 @@ public class Passivmitglied implements Serializable {
         this.kommunikationEmail = kommunikationEmail;
         this.registeredAt = registeredAt;
         this.externalId = externalId;
+        this.anrede = anrede;
+        this.uuid = uuid;
     }
 
     /**
@@ -224,6 +232,34 @@ public class Passivmitglied implements Serializable {
         this.externalId = externalId;
     }
 
+    /**
+     * Getter for <code>public.passivmitglied.anrede</code>.
+     */
+    public String getAnrede() {
+        return this.anrede;
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.anrede</code>.
+     */
+    public void setAnrede(String anrede) {
+        this.anrede = anrede;
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.uuid</code>.
+     */
+    public String getUuid() {
+        return this.uuid;
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.uuid</code>.
+     */
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -299,6 +335,18 @@ public class Passivmitglied implements Serializable {
         }
         else if (!this.externalId.equals(other.externalId))
             return false;
+        if (this.anrede == null) {
+            if (other.anrede != null)
+                return false;
+        }
+        else if (!this.anrede.equals(other.anrede))
+            return false;
+        if (this.uuid == null) {
+            if (other.uuid != null)
+                return false;
+        }
+        else if (!this.uuid.equals(other.uuid))
+            return false;
         return true;
     }
 
@@ -317,6 +365,8 @@ public class Passivmitglied implements Serializable {
         result = prime * result + ((this.kommunikationEmail == null) ? 0 : this.kommunikationEmail.hashCode());
         result = prime * result + ((this.registeredAt == null) ? 0 : this.registeredAt.hashCode());
         result = prime * result + ((this.externalId == null) ? 0 : this.externalId.hashCode());
+        result = prime * result + ((this.anrede == null) ? 0 : this.anrede.hashCode());
+        result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
         return result;
     }
 
@@ -335,6 +385,8 @@ public class Passivmitglied implements Serializable {
         sb.append(", ").append(kommunikationEmail);
         sb.append(", ").append(registeredAt);
         sb.append(", ").append(externalId);
+        sb.append(", ").append(anrede);
+        sb.append(", ").append(uuid);
 
         sb.append(")");
         return sb.toString();

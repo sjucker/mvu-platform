@@ -9,6 +9,7 @@ import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.Noten;
 import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
 import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
+import ch.mvurdorf.platform.jooq.tables.PassivmitgliedVoucher;
 
 
 /**
@@ -41,4 +42,9 @@ public class Tables {
      * The table <code>public.passivmitglied_payment</code>.
      */
     public static final PassivmitgliedPayment PASSIVMITGLIED_PAYMENT = PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT;
+
+    /**
+     * The table <code>public.passivmitglied_voucher</code>.
+     */
+    public static final PassivmitgliedVoucher PASSIVMITGLIED_VOUCHER = PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER;
 }

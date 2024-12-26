@@ -9,6 +9,8 @@ import static java.util.Comparator.comparing;
 
 public record PassivmitgliedDto(Long id,
                                 Long externalId,
+                                String uuid,
+                                String anrede,
                                 String vorname,
                                 String nachname,
                                 String strasse,
@@ -18,7 +20,8 @@ public record PassivmitgliedDto(Long id,
                                 boolean kommunikationPost,
                                 boolean kommunikationEmail,
                                 LocalDateTime registeredAt,
-                                List<PassivmitgliedPaymentDto> payments) {
+                                List<PassivmitgliedPaymentDto> payments,
+                                List<PassivmitgliedVoucherDto> vouchers) {
 
     public Optional<LocalDate> lastPayment() {
         return payments.stream()

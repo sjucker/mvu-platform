@@ -7,6 +7,7 @@ package ch.mvurdorf.platform.jooq.tables;
 import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment.PassivmitgliedPaymentPath;
+import ch.mvurdorf.platform.jooq.tables.PassivmitgliedVoucher.PassivmitgliedVoucherPath;
 import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedRecord;
 
 import java.time.LocalDateTime;
@@ -113,6 +114,16 @@ public class Passivmitglied extends TableImpl<PassivmitgliedRecord> {
      */
     public final TableField<PassivmitgliedRecord, Long> EXTERNAL_ID = createField(DSL.name("external_id"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field(DSL.raw("1"), SQLDataType.BIGINT)), this, "");
 
+    /**
+     * The column <code>public.passivmitglied.anrede</code>.
+     */
+    public final TableField<PassivmitgliedRecord, String> ANREDE = createField(DSL.name("anrede"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("''::character varying"), SQLDataType.VARCHAR)), this, "");
+
+    /**
+     * The column <code>public.passivmitglied.uuid</code>.
+     */
+    public final TableField<PassivmitgliedRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("''::character varying"), SQLDataType.VARCHAR)), this, "");
+
     private Passivmitglied(Name alias, Table<PassivmitgliedRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
@@ -206,6 +217,19 @@ public class Passivmitglied extends TableImpl<PassivmitgliedRecord> {
             _passivmitgliedPayment = new PassivmitgliedPaymentPath(this, null, Keys.PASSIVMITGLIED_PAYMENT__PASSIVMITGLIED_PAYMENT_FK_PASSIVMITGLIED_FKEY.getInverseKey());
 
         return _passivmitgliedPayment;
+    }
+
+    private transient PassivmitgliedVoucherPath _passivmitgliedVoucher;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.passivmitglied_voucher</code> table
+     */
+    public PassivmitgliedVoucherPath passivmitgliedVoucher() {
+        if (_passivmitgliedVoucher == null)
+            _passivmitgliedVoucher = new PassivmitgliedVoucherPath(this, null, Keys.PASSIVMITGLIED_VOUCHER__PASSIVMITGLIED_VOUCHER_FK_PASSIVMITGLIED_FKEY.getInverseKey());
+
+        return _passivmitgliedVoucher;
     }
 
     @Override

@@ -174,6 +174,34 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
         return (Long) get(10);
     }
 
+    /**
+     * Setter for <code>public.passivmitglied.anrede</code>.
+     */
+    public void setAnrede(String value) {
+        set(11, value);
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.anrede</code>.
+     */
+    public String getAnrede() {
+        return (String) get(11);
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.uuid</code>.
+     */
+    public void setUuid(String value) {
+        set(12, value);
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.uuid</code>.
+     */
+    public String getUuid() {
+        return (String) get(12);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -197,7 +225,7 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
     /**
      * Create a detached, initialised PassivmitgliedRecord
      */
-    public PassivmitgliedRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail, LocalDateTime registeredAt, Long externalId) {
+    public PassivmitgliedRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail, LocalDateTime registeredAt, Long externalId, String anrede, String uuid) {
         super(Passivmitglied.PASSIVMITGLIED);
 
         setId(id);
@@ -211,6 +239,8 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
         setKommunikationEmail(kommunikationEmail);
         setRegisteredAt(registeredAt);
         setExternalId(externalId);
+        setAnrede(anrede);
+        setUuid(uuid);
         resetChangedOnNotNull();
     }
 
@@ -232,6 +262,8 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
             setKommunikationEmail(value.getKommunikationEmail());
             setRegisteredAt(value.getRegisteredAt());
             setExternalId(value.getExternalId());
+            setAnrede(value.getAnrede());
+            setUuid(value.getUuid());
             resetChangedOnNotNull();
         }
     }
