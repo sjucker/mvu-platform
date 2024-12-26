@@ -4,6 +4,7 @@ import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedDao;
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedPaymentDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied;
 import ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedPayment;
+import ch.mvurdorf.platform.service.QRBillService;
 import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -13,7 +14,9 @@ import org.jooq.Record1;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -31,13 +34,16 @@ public class PassivmitgliedService {
     private final DSLContext jooqDsl;
     private final PassivmitgliedDao passivmitgliedDao;
     private final PassivmitgliedPaymentDao passivmitgliedPaymentDao;
+    private final QRBillService qrBillService;
 
     public PassivmitgliedService(DSLContext jooqDsl,
                                  PassivmitgliedDao passivmitgliedDao,
-                                 PassivmitgliedPaymentDao passivmitgliedPaymentDao) {
+                                 PassivmitgliedPaymentDao passivmitgliedPaymentDao,
+                                 QRBillService qrBillService) {
         this.jooqDsl = jooqDsl;
         this.passivmitgliedDao = passivmitgliedDao;
         this.passivmitgliedPaymentDao = passivmitgliedPaymentDao;
+        this.qrBillService = qrBillService;
     }
 
     public ConfigurableFilterDataProvider<PassivmitgliedDto, Void, String> dataProvider() {
@@ -158,4 +164,13 @@ public class PassivmitgliedService {
                                                                                               user)));
     }
 
+    public Optional<byte[]> qrBill(Long externalId) {
+        return passivmitgliedDao.fetchByExternalId(externalId).stream()
+                                .findFirst()
+                                .map(passivmitglied -> {
+                                    var out = new ByteArrayOutputStream();
+                                    qrBillService.passivmitglied(20.0, passivmitglied.getExternalId(), out);
+                                    return out.toByteArray();
+                                });
+    }
 }

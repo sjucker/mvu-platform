@@ -1,4 +1,4 @@
-POST https://admin.mvurdorf.ch/api/passivmitglied
+POST {{base}}/passivmitglied
 Content-Type: application/json
 
 {
@@ -14,5 +14,9 @@ Content-Type: application/json
   "payments": [],
   "vouchers": []
 }
+
+###
+
+GET {{base}}/passivmitglied/1000001
 
 ###
