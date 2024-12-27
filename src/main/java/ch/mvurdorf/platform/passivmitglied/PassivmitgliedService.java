@@ -55,6 +55,10 @@ public class PassivmitgliedService {
     }
 
     private Stream<PassivmitgliedDto> fetch(String filter, int offset, int limit) {
+        return fetch(filterCondition(filter), offset, limit).stream();
+    }
+
+    private List<PassivmitgliedDto> fetch(Condition condition, int offset, int limit) {
         return jooqDsl.select(
                               PASSIVMITGLIED,
                               multiset(
@@ -79,7 +83,7 @@ public class PassivmitgliedService {
                               ).convertFrom(it -> it.map(mapping(PassivmitgliedVoucherDto::new)))
                       )
                       .from(PASSIVMITGLIED)
-                      .where(filterCondition(filter))
+                      .where(condition)
                       .offset(offset)
                       .limit(limit)
                       .fetch(it -> {
@@ -101,8 +105,7 @@ public class PassivmitgliedService {
                                   it.value2(),
                                   it.value3()
                           );
-                      })
-                      .stream();
+                      });
     }
 
     private int count(String filter) {
@@ -172,5 +175,9 @@ public class PassivmitgliedService {
                                     qrBillService.passivmitglied(20.0, passivmitglied.getExternalId(), out);
                                     return out.toByteArray();
                                 });
+    }
+
+    public Optional<PassivmitgliedDto> findByUUID(String uuid) {
+        return fetch(PASSIVMITGLIED.UUID.equal(uuid), 0, 1).stream().findFirst();
     }
 }
