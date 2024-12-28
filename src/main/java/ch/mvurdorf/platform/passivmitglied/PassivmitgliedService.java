@@ -100,7 +100,10 @@ public class PassivmitgliedService {
                                   passivmitgliedRecord.getVorname(),
                                   passivmitgliedRecord.getNachname(),
                                   passivmitgliedRecord.getStrasse(),
+                                  passivmitgliedRecord.getStrasseNr(),
+                                  passivmitgliedRecord.getPlz(),
                                   passivmitgliedRecord.getOrt(),
+                                  passivmitgliedRecord.getCountryCode(),
                                   passivmitgliedRecord.getEmail(),
                                   passivmitgliedRecord.getBemerkung(),
                                   passivmitgliedRecord.getKommunikationPost(),
@@ -149,7 +152,10 @@ public class PassivmitgliedService {
                                                     DateUtil.now(),
                                                     externalId,
                                                     passivmitglied.anrede(),
-                                                    UUID.randomUUID().toString()));
+                                                    UUID.randomUUID().toString(),
+                                                    passivmitglied.plz(),
+                                                    passivmitglied.strasseNr(),
+                                                    passivmitglied.countryCode()));
         return externalId;
     }
 

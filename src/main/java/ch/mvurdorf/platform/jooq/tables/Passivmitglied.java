@@ -124,6 +124,21 @@ public class Passivmitglied extends TableImpl<PassivmitgliedRecord> {
      */
     public final TableField<PassivmitgliedRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("''::character varying"), SQLDataType.VARCHAR)), this, "");
 
+    /**
+     * The column <code>public.passivmitglied.plz</code>.
+     */
+    public final TableField<PassivmitgliedRecord, String> PLZ = createField(DSL.name("plz"), SQLDataType.VARCHAR(10).nullable(false).defaultValue(DSL.field(DSL.raw("''::character varying"), SQLDataType.VARCHAR)), this, "");
+
+    /**
+     * The column <code>public.passivmitglied.strasse_nr</code>.
+     */
+    public final TableField<PassivmitgliedRecord, String> STRASSE_NR = createField(DSL.name("strasse_nr"), SQLDataType.VARCHAR(5).nullable(false).defaultValue(DSL.field(DSL.raw("''::character varying"), SQLDataType.VARCHAR)), this, "");
+
+    /**
+     * The column <code>public.passivmitglied.country_code</code>.
+     */
+    public final TableField<PassivmitgliedRecord, String> COUNTRY_CODE = createField(DSL.name("country_code"), SQLDataType.VARCHAR(2).nullable(false).defaultValue(DSL.field(DSL.raw("'CH'::character varying"), SQLDataType.VARCHAR)), this, "");
+
     private Passivmitglied(Name alias, Table<PassivmitgliedRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

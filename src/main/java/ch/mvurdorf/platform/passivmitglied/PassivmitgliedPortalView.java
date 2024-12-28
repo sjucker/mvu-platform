@@ -121,16 +121,28 @@ public class PassivmitgliedPortalView extends AppLayout implements HasUrlParamet
               .bind(PassivmitgliedEditDTO::getStrasse, PassivmitgliedEditDTO::setStrasse);
         formLayout.addFormItem(strasse, "Strasse");
 
+        var strasseNr = new TextField();
+        binder.forField(strasseNr)
+              .withValidator(new StringLengthValidator("Nr. muss zwischen 1 und 5 Zeichen haben", 1, 5))
+              .bind(PassivmitgliedEditDTO::getStrasseNr, PassivmitgliedEditDTO::setStrasseNr);
+        formLayout.addFormItem(strasse, "Nr.");
+
+        var plz = new TextField();
+        binder.forField(plz)
+              .withValidator(new StringLengthValidator("PLZ muss zwischen 1 und 10 Zeichen haben", 1, 10))
+              .bind(PassivmitgliedEditDTO::getPlz, PassivmitgliedEditDTO::setPlz);
+        formLayout.addFormItem(plz, "PLZ");
+
         var ort = new TextField();
         binder.forField(ort)
-              .withValidator(new StringLengthValidator("PLZ/Ort muss zwischen 1 und 255 Zeichen haben", 1, 255))
+              .withValidator(new StringLengthValidator("Ort muss zwischen 1 und 255 Zeichen haben", 1, 255))
               .bind(PassivmitgliedEditDTO::getOrt, PassivmitgliedEditDTO::setOrt);
-        formLayout.addFormItem(ort, "PLZ/Ort");
+        formLayout.addFormItem(ort, "Ort");
 
         var email = new TextField();
         binder.forField(email)
               .withValidator(new EmailValidator("Valide E-Mail eingeben"))
-              .withValidator(new StringLengthValidator("PLZ/Ort muss zwischen 1 und 255 Zeichen haben", 1, 255))
+              .withValidator(new StringLengthValidator("E-Mail muss zwischen 1 und 255 Zeichen haben", 1, 255))
               .bind(PassivmitgliedEditDTO::getEmail, PassivmitgliedEditDTO::setEmail);
         formLayout.setColspan(formLayout.addFormItem(email, "E-Mail"), 2);
 

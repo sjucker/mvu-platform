@@ -29,6 +29,9 @@ public class Passivmitglied implements Serializable {
     private Long externalId;
     private String anrede;
     private String uuid;
+    private String plz;
+    private String strasseNr;
+    private String countryCode;
 
     public Passivmitglied() {}
 
@@ -46,6 +49,9 @@ public class Passivmitglied implements Serializable {
         this.externalId = value.externalId;
         this.anrede = value.anrede;
         this.uuid = value.uuid;
+        this.plz = value.plz;
+        this.strasseNr = value.strasseNr;
+        this.countryCode = value.countryCode;
     }
 
     public Passivmitglied(
@@ -61,7 +67,10 @@ public class Passivmitglied implements Serializable {
         LocalDateTime registeredAt,
         Long externalId,
         String anrede,
-        String uuid
+        String uuid,
+        String plz,
+        String strasseNr,
+        String countryCode
     ) {
         this.id = id;
         this.vorname = vorname;
@@ -76,6 +85,9 @@ public class Passivmitglied implements Serializable {
         this.externalId = externalId;
         this.anrede = anrede;
         this.uuid = uuid;
+        this.plz = plz;
+        this.strasseNr = strasseNr;
+        this.countryCode = countryCode;
     }
 
     /**
@@ -260,6 +272,48 @@ public class Passivmitglied implements Serializable {
         this.uuid = uuid;
     }
 
+    /**
+     * Getter for <code>public.passivmitglied.plz</code>.
+     */
+    public String getPlz() {
+        return this.plz;
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.plz</code>.
+     */
+    public void setPlz(String plz) {
+        this.plz = plz;
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.strasse_nr</code>.
+     */
+    public String getStrasseNr() {
+        return this.strasseNr;
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.strasse_nr</code>.
+     */
+    public void setStrasseNr(String strasseNr) {
+        this.strasseNr = strasseNr;
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.country_code</code>.
+     */
+    public String getCountryCode() {
+        return this.countryCode;
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.country_code</code>.
+     */
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -347,6 +401,24 @@ public class Passivmitglied implements Serializable {
         }
         else if (!this.uuid.equals(other.uuid))
             return false;
+        if (this.plz == null) {
+            if (other.plz != null)
+                return false;
+        }
+        else if (!this.plz.equals(other.plz))
+            return false;
+        if (this.strasseNr == null) {
+            if (other.strasseNr != null)
+                return false;
+        }
+        else if (!this.strasseNr.equals(other.strasseNr))
+            return false;
+        if (this.countryCode == null) {
+            if (other.countryCode != null)
+                return false;
+        }
+        else if (!this.countryCode.equals(other.countryCode))
+            return false;
         return true;
     }
 
@@ -367,6 +439,9 @@ public class Passivmitglied implements Serializable {
         result = prime * result + ((this.externalId == null) ? 0 : this.externalId.hashCode());
         result = prime * result + ((this.anrede == null) ? 0 : this.anrede.hashCode());
         result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
+        result = prime * result + ((this.plz == null) ? 0 : this.plz.hashCode());
+        result = prime * result + ((this.strasseNr == null) ? 0 : this.strasseNr.hashCode());
+        result = prime * result + ((this.countryCode == null) ? 0 : this.countryCode.hashCode());
         return result;
     }
 
@@ -387,6 +462,9 @@ public class Passivmitglied implements Serializable {
         sb.append(", ").append(externalId);
         sb.append(", ").append(anrede);
         sb.append(", ").append(uuid);
+        sb.append(", ").append(plz);
+        sb.append(", ").append(strasseNr);
+        sb.append(", ").append(countryCode);
 
         sb.append(")");
         return sb.toString();

@@ -266,4 +266,49 @@ public class PassivmitgliedDao extends AbstractSpringDAOImpl<PassivmitgliedRecor
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchByUuid(String... values) {
         return fetch(Passivmitglied.PASSIVMITGLIED.UUID, values);
     }
+
+    /**
+     * Fetch records that have <code>plz BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchRangeOfPlz(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Passivmitglied.PASSIVMITGLIED.PLZ, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>plz IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchByPlz(String... values) {
+        return fetch(Passivmitglied.PASSIVMITGLIED.PLZ, values);
+    }
+
+    /**
+     * Fetch records that have <code>strasse_nr BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchRangeOfStrasseNr(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Passivmitglied.PASSIVMITGLIED.STRASSE_NR, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>strasse_nr IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchByStrasseNr(String... values) {
+        return fetch(Passivmitglied.PASSIVMITGLIED.STRASSE_NR, values);
+    }
+
+    /**
+     * Fetch records that have <code>country_code BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchRangeOfCountryCode(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Passivmitglied.PASSIVMITGLIED.COUNTRY_CODE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>country_code IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied> fetchByCountryCode(String... values) {
+        return fetch(Passivmitglied.PASSIVMITGLIED.COUNTRY_CODE, values);
+    }
 }

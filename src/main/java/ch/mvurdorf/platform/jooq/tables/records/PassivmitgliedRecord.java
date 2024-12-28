@@ -202,6 +202,48 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
         return (String) get(12);
     }
 
+    /**
+     * Setter for <code>public.passivmitglied.plz</code>.
+     */
+    public void setPlz(String value) {
+        set(13, value);
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.plz</code>.
+     */
+    public String getPlz() {
+        return (String) get(13);
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.strasse_nr</code>.
+     */
+    public void setStrasseNr(String value) {
+        set(14, value);
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.strasse_nr</code>.
+     */
+    public String getStrasseNr() {
+        return (String) get(14);
+    }
+
+    /**
+     * Setter for <code>public.passivmitglied.country_code</code>.
+     */
+    public void setCountryCode(String value) {
+        set(15, value);
+    }
+
+    /**
+     * Getter for <code>public.passivmitglied.country_code</code>.
+     */
+    public String getCountryCode() {
+        return (String) get(15);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -225,7 +267,7 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
     /**
      * Create a detached, initialised PassivmitgliedRecord
      */
-    public PassivmitgliedRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail, LocalDateTime registeredAt, Long externalId, String anrede, String uuid) {
+    public PassivmitgliedRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail, LocalDateTime registeredAt, Long externalId, String anrede, String uuid, String plz, String strasseNr, String countryCode) {
         super(Passivmitglied.PASSIVMITGLIED);
 
         setId(id);
@@ -241,6 +283,9 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
         setExternalId(externalId);
         setAnrede(anrede);
         setUuid(uuid);
+        setPlz(plz);
+        setStrasseNr(strasseNr);
+        setCountryCode(countryCode);
         resetChangedOnNotNull();
     }
 
@@ -264,6 +309,9 @@ public class PassivmitgliedRecord extends UpdatableRecordImpl<PassivmitgliedReco
             setExternalId(value.getExternalId());
             setAnrede(value.getAnrede());
             setUuid(value.getUuid());
+            setPlz(value.getPlz());
+            setStrasseNr(value.getStrasseNr());
+            setCountryCode(value.getCountryCode());
             resetChangedOnNotNull();
         }
     }

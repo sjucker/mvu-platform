@@ -12,6 +12,8 @@ public class PassivmitgliedEditDTO {
     private String vorname;
     private String nachname;
     private String strasse;
+    private String strasseNr;
+    private String plz;
     private String ort;
     private String email;
     private String bemerkung;
@@ -23,6 +25,8 @@ public class PassivmitgliedEditDTO {
         existing.setVorname(vorname);
         existing.setNachname(nachname);
         existing.setStrasse(strasse);
+        existing.setStrasseNr(strasseNr);
+        existing.setPlz(plz);
         existing.setOrt(ort);
         existing.setEmail(email);
         existing.setBemerkung(bemerkung);

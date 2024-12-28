@@ -14,7 +14,10 @@ public record PassivmitgliedDto(Long id,
                                 String vorname,
                                 String nachname,
                                 String strasse,
+                                String strasseNr,
+                                String plz,
                                 String ort,
+                                String countryCode,
                                 String email,
                                 String bemerkung,
                                 boolean kommunikationPost,
@@ -45,6 +48,6 @@ public record PassivmitgliedDto(Long id,
     }
 
     public PassivmitgliedEditDTO edit() {
-        return new PassivmitgliedEditDTO(id, anrede, vorname, nachname, strasse, ort, email, bemerkung, kommunikationPost, kommunikationEmail);
+        return new PassivmitgliedEditDTO(id, anrede, vorname, nachname, strasse, strasseNr, plz, ort, email, bemerkung, kommunikationPost, kommunikationEmail);
     }
 }
