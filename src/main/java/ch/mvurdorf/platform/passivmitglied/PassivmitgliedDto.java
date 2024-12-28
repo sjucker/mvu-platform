@@ -34,6 +34,12 @@ public record PassivmitgliedDto(Long id,
         return payments.size();
     }
 
+    public List<PassivmitgliedPaymentDto> paymentsNewestFirst() {
+        return payments.stream()
+                       .sorted(comparing(PassivmitgliedPaymentDto::datum).reversed())
+                       .toList();
+    }
+
     public String fullName() {
         return "%s %s".formatted(vorname, nachname);
     }

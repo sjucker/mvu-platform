@@ -6,7 +6,9 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -52,6 +54,7 @@ public class PassivmitgliedPortalView extends AppLayout implements HasUrlParamet
             var tabs = new TabSheet();
             tabs.setSizeFull();
             tabs.add(new Tab("Bezahlen"), createBezahlenTab(passivmitglied));
+            tabs.add(new Tab("Gutscheine"), createVouchersTab(passivmitglied));
             tabs.add(new Tab("Daten"), createDatenTab(passivmitglied));
             setContent(tabs);
         } else {
@@ -70,6 +73,20 @@ public class PassivmitgliedPortalView extends AppLayout implements HasUrlParamet
         qrBillImage.addClassName(MaxWidth.FULL);
         content.add(qrBillImage);
 
+        if (!passivmitglied.payments().isEmpty()) {
+            content.add(new H3("Vergangene Bezahlungen"));
+            content.add(new UnorderedList(passivmitglied.paymentsNewestFirst().stream()
+                                                        .map(it -> new ListItem(it.description()))
+                                                        .toArray(ListItem[]::new)));
+
+        }
+
+        return content;
+    }
+
+    private Component createVouchersTab(PassivmitgliedDto passivmitglied) {
+        var content = new VerticalLayout();
+        content.setSizeFull();
         return content;
     }
 
