@@ -37,4 +37,8 @@ public record PassivmitgliedDto(Long id,
     public String fullName() {
         return "%s %s".formatted(vorname, nachname);
     }
+
+    public PassivmitgliedEditDTO edit() {
+        return new PassivmitgliedEditDTO(id, anrede, vorname, nachname, strasse, ort, email, bemerkung, kommunikationPost, kommunikationEmail);
+    }
 }

@@ -149,6 +149,12 @@ public class PassivmitgliedService {
         return externalId;
     }
 
+    public void update(PassivmitgliedEditDTO passivmitglied) {
+        var existing = passivmitgliedDao.findOptionalById(passivmitglied.getId()).orElseThrow();
+        passivmitglied.applyTo(existing);
+        passivmitgliedDao.update(existing);
+    }
+
     private long getNextExternalId() {
         return jooqDsl.select(DSL.max(PASSIVMITGLIED.EXTERNAL_ID))
                       .from(PASSIVMITGLIED)
