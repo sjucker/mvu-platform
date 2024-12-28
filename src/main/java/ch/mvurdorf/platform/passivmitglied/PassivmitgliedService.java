@@ -58,6 +58,10 @@ public class PassivmitgliedService {
         return fetch(filterCondition(filter), offset, limit).stream();
     }
 
+    private Optional<PassivmitgliedDto> fetch(Condition condition) {
+        return fetch(condition, 0, 1).stream().findFirst();
+    }
+
     private List<PassivmitgliedDto> fetch(Condition condition, int offset, int limit) {
         return jooqDsl.select(
                               PASSIVMITGLIED,
@@ -174,16 +178,15 @@ public class PassivmitgliedService {
     }
 
     public Optional<byte[]> qrBill(Long externalId) {
-        return passivmitgliedDao.fetchByExternalId(externalId).stream()
-                                .findFirst()
-                                .map(passivmitglied -> {
-                                    var out = new ByteArrayOutputStream();
-                                    qrBillService.passivmitglied(20.0, passivmitglied.getExternalId(), out);
-                                    return out.toByteArray();
-                                });
+        return fetch(PASSIVMITGLIED.EXTERNAL_ID.eq(externalId))
+                .map(passivmitglied -> {
+                    var out = new ByteArrayOutputStream();
+                    qrBillService.passivmitglied(20.0, passivmitglied, out);
+                    return out.toByteArray();
+                });
     }
 
     public Optional<PassivmitgliedDto> findByUUID(String uuid) {
-        return fetch(PASSIVMITGLIED.UUID.equal(uuid), 0, 1).stream().findFirst();
+        return fetch(PASSIVMITGLIED.UUID.equal(uuid));
     }
 }

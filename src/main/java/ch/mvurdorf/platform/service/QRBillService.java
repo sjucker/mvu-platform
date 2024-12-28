@@ -1,5 +1,6 @@
 package ch.mvurdorf.platform.service;
 
+import ch.mvurdorf.platform.passivmitglied.PassivmitgliedDto;
 import net.codecrete.qrbill.generator.Address;
 import net.codecrete.qrbill.generator.Bill;
 import net.codecrete.qrbill.generator.BillFormat;
@@ -15,13 +16,13 @@ import java.io.OutputStream;
 @Service
 public class QRBillService {
 
-    public void passivmitglied(double amount, Long externalId, OutputStream out) {
+    public void passivmitglied(double amount, PassivmitgliedDto passivmitgliedDto, OutputStream out) {
         var bill = new Bill();
         bill.setAccount("CH03 0070 0110 9014 7015 4");
         bill.setAmountFromDouble(amount);
         bill.setCurrency("CHF");
-        bill.createAndSetCreditorReference(externalId.toString());
-        bill.setUnstructuredMessage("Passivmitglied-Beitrag MV Urdorf");
+        bill.createAndSetCreditorReference(passivmitgliedDto.externalId().toString());
+        bill.setUnstructuredMessage("Passivmitglied-Beitrag " + passivmitgliedDto.fullName());
 
         var creditor = new Address();
         creditor.setName("Musikverein Harmonie Urdorf");
@@ -34,7 +35,7 @@ public class QRBillService {
 
         var billFormat = new BillFormat();
         billFormat.setGraphicsFormat(GraphicsFormat.PNG);
-        billFormat.setOutputSize(OutputSize.QR_BILL_ONLY);
+        billFormat.setOutputSize(OutputSize.PAYMENT_PART_ONLY);
         billFormat.setLanguage(Language.DE);
         bill.setFormat(billFormat);
 

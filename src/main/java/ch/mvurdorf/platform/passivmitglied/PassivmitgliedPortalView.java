@@ -5,6 +5,7 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,8 +20,12 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
+
+import java.io.ByteArrayInputStream;
 
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 
@@ -46,14 +51,29 @@ public class PassivmitgliedPortalView extends AppLayout implements HasUrlParamet
         if (passivmitglied != null) {
             var tabs = new TabSheet();
             tabs.setSizeFull();
-            tabs.add(new Tab("Daten"), createDatenTabs(passivmitglied));
+            tabs.add(new Tab("Bezahlen"), createBezahlenTab(passivmitglied));
+            tabs.add(new Tab("Daten"), createDatenTab(passivmitglied));
             setContent(tabs);
         } else {
             setContent(new VerticalLayout(new Paragraph("Passivmitglied nicht gefunden.")));
         }
     }
 
-    private Component createDatenTabs(PassivmitgliedDto passivmitglied) {
+    private Component createBezahlenTab(PassivmitgliedDto passivmitglied) {
+        var content = new VerticalLayout();
+        content.setSizeFull();
+
+        var qrBillImage = new Image(new StreamResource("qr-bill.png", () -> {
+            var imgBytes = passivmitgliedService.qrBill(passivmitglied.externalId()).orElseThrow();
+            return new ByteArrayInputStream(imgBytes);
+        }), "QR Rechnung");
+        qrBillImage.addClassName(MaxWidth.FULL);
+        content.add(qrBillImage);
+
+        return content;
+    }
+
+    private Component createDatenTab(PassivmitgliedDto passivmitglied) {
         var content = new VerticalLayout();
         content.setSizeFull();
 
