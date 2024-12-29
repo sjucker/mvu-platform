@@ -1,5 +1,6 @@
 package ch.mvurdorf.platform.passivmitglied;
 
+import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -29,7 +30,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 
 import java.io.ByteArrayInputStream;
-import java.time.LocalDate;
 
 import static ch.mvurdorf.platform.ui.ComponentUtil.image;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
@@ -101,7 +101,7 @@ public class PassivmitgliedPortalView extends AppLayout implements HasUrlParamet
             .setHeader("QR-Code");
 
         grid.setItems(passivmitglied.vouchersNewestFirst().stream()
-                                    .filter(v -> v.validUntil().isAfter(LocalDate.now()))
+                                    .filter(v -> v.validUntil().isAfter(DateUtil.today()))
                                     .toList());
 
         content.add(grid);
