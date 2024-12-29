@@ -6,6 +6,7 @@ import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedVoucherDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied;
 import ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedPayment;
 import ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedVoucher;
+import ch.mvurdorf.platform.service.MailService;
 import ch.mvurdorf.platform.service.QRBillService;
 import ch.mvurdorf.platform.service.QRCodeService;
 import ch.mvurdorf.platform.utils.DateUtil;
@@ -38,8 +39,8 @@ import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class PassivmitgliedService {
     private final DSLContext jooqDsl;
     private final PassivmitgliedDao passivmitgliedDao;
@@ -47,6 +48,7 @@ public class PassivmitgliedService {
     private final PassivmitgliedVoucherDao passivmitgliedVoucherDao;
     private final QRBillService qrBillService;
     private final QRCodeService qrCodeService;
+    private final MailService mailService;
 
     public ConfigurableFilterDataProvider<PassivmitgliedDto, Void, String> dataProvider() {
         var dataProvider = DataProvider.<PassivmitgliedDto, String>fromFilteringCallbacks(
@@ -142,22 +144,25 @@ public class PassivmitgliedService {
 
     public long create(PassivmitgliedDto passivmitglied) {
         var externalId = getNextExternalId();
-        passivmitgliedDao.insert(new Passivmitglied(null,
-                                                    passivmitglied.vorname(),
-                                                    passivmitglied.nachname(),
-                                                    passivmitglied.strasse(),
-                                                    passivmitglied.ort(),
-                                                    passivmitglied.email(),
-                                                    passivmitglied.bemerkung(),
-                                                    passivmitglied.kommunikationPost(),
-                                                    passivmitglied.kommunikationEmail(),
-                                                    DateUtil.now(),
-                                                    externalId,
-                                                    passivmitglied.anrede(),
-                                                    UUID.randomUUID().toString(),
-                                                    passivmitglied.plz(),
-                                                    passivmitglied.strasseNr(),
-                                                    passivmitglied.countryCode()));
+        var newPassivmitglied = new Passivmitglied(null,
+                                                   passivmitglied.vorname(),
+                                                   passivmitglied.nachname(),
+                                                   passivmitglied.strasse(),
+                                                   passivmitglied.ort(),
+                                                   passivmitglied.email(),
+                                                   passivmitglied.bemerkung(),
+                                                   passivmitglied.kommunikationPost(),
+                                                   passivmitglied.kommunikationEmail(),
+                                                   DateUtil.now(),
+                                                   externalId,
+                                                   passivmitglied.anrede(),
+                                                   UUID.randomUUID().toString(),
+                                                   passivmitglied.plz(),
+                                                   passivmitglied.strasseNr(),
+                                                   passivmitglied.countryCode());
+        passivmitgliedDao.insert(newPassivmitglied);
+
+        mailService.sendSupporterRegistrationEmail(newPassivmitglied);
         return externalId;
     }
 

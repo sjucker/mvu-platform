@@ -1,0 +1,32 @@
+<mjml>
+    <mj-head>
+        <mj-attributes>
+            <mj-all padding="0"/>
+            <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto"/>
+            <mj-section background-color="white"/>
+        </mj-attributes>
+    </mj-head>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-text color="#d60323">
+                    <h1>Support Harmonie Urdorf</h1>
+                </mj-text>
+                <mj-text>
+                    <h2>
+                        <span th:text="${anrede}">Lieber</span>
+                        <span th:text="${vorname}">Max</span>
+                    </h2>
+                    <p>Vielen Dank, dass du den Musikverein Harmonie Urdorf unterstützen willst!</p>
+                    <p>Hier findest du alle weiteren Informationen zur Bezahlung, Gutscheine, etc.</p>
+                </mj-text>
+                <mj-button background-color="#d60323"
+                           color="white"
+                           th:href="${link}"
+                           padding="20px 0 0 0">
+                    Zum Portal
+                </mj-button>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>
