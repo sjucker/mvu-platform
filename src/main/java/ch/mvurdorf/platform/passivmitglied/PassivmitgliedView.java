@@ -12,11 +12,13 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
 import static ch.mvurdorf.platform.security.LoginService.PASSIVMITGLIED_GROUP;
+import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.EYE;
+import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.MONEY_BILL_ALT;
 
@@ -51,6 +53,17 @@ public class PassivmitgliedView extends VerticalLayout {
         filter.setValueChangeMode(TIMEOUT);
         filter.setClearButtonVisible(true);
         controls.add(filter);
+
+        if (authenticatedUser.hasWritePermission(PASSIVMITGLIED_GROUP)) {
+            var addVouchers = primaryButton("Gutscheine", () -> VouchersDialog.show(passivmitgliedService,
+                                                                                    created -> {
+                                                                                        if (created) {
+                                                                                            dataProvider.refreshAll();
+                                                                                        }
+                                                                                    }));
+            addVouchers.setIcon(PLUS.create());
+            controls.add(addVouchers);
+        }
     }
 
     private void createGrid() {

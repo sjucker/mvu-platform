@@ -2,19 +2,27 @@ package ch.mvurdorf.platform.passivmitglied;
 
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedDao;
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedPaymentDao;
+import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedVoucherDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied;
 import ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedPayment;
+import ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedVoucher;
 import ch.mvurdorf.platform.service.QRBillService;
+import ch.mvurdorf.platform.service.QRCodeService;
 import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,28 +31,22 @@ import java.util.stream.Stream;
 import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED;
 import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED_PAYMENT;
 import static ch.mvurdorf.platform.jooq.Tables.PASSIVMITGLIED_VOUCHER;
+import static java.util.Locale.ROOT;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.math.NumberUtils.toLong;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
 
+@RequiredArgsConstructor
 @Service
 public class PassivmitgliedService {
     private final DSLContext jooqDsl;
     private final PassivmitgliedDao passivmitgliedDao;
     private final PassivmitgliedPaymentDao passivmitgliedPaymentDao;
+    private final PassivmitgliedVoucherDao passivmitgliedVoucherDao;
     private final QRBillService qrBillService;
-
-    public PassivmitgliedService(DSLContext jooqDsl,
-                                 PassivmitgliedDao passivmitgliedDao,
-                                 PassivmitgliedPaymentDao passivmitgliedPaymentDao,
-                                 QRBillService qrBillService) {
-        this.jooqDsl = jooqDsl;
-        this.passivmitgliedDao = passivmitgliedDao;
-        this.passivmitgliedPaymentDao = passivmitgliedPaymentDao;
-        this.qrBillService = qrBillService;
-    }
+    private final QRCodeService qrCodeService;
 
     public ConfigurableFilterDataProvider<PassivmitgliedDto, Void, String> dataProvider() {
         var dataProvider = DataProvider.<PassivmitgliedDto, String>fromFilteringCallbacks(
@@ -187,12 +189,41 @@ public class PassivmitgliedService {
         return fetch(PASSIVMITGLIED.EXTERNAL_ID.eq(externalId))
                 .map(passivmitglied -> {
                     var out = new ByteArrayOutputStream();
-                    qrBillService.passivmitglied(20.0, passivmitglied, out);
+                    qrBillService.passivmitglied(passivmitglied, 20.0, out);
                     return out.toByteArray();
                 });
     }
 
     public Optional<PassivmitgliedDto> findByUUID(String uuid) {
         return fetch(PASSIVMITGLIED.UUID.equal(uuid));
+    }
+
+    public byte[] qrCode(Long externalId, PassivmitgliedVoucherDto voucher) {
+        try {
+            var out = new ByteArrayOutputStream();
+            qrCodeService.generate("%s:%s".formatted(externalId, voucher.code()), new MemoryCacheImageOutputStream(out));
+            return out.toByteArray();
+        } catch (IOException e) {
+            return new byte[0];
+        }
+    }
+
+    public void createVouchers(String prefix, String description, LocalDate validUntil) {
+        passivmitgliedDao.findAll().stream()
+                         // TODO filter certain (e.g., not payed in last 12 months)?
+                         .forEach(passivmitglied -> {
+                             passivmitgliedVoucherDao.insert(new PassivmitgliedVoucher(null,
+                                                                                       passivmitglied.getId(),
+                                                                                       getCode(prefix),
+                                                                                       description,
+                                                                                       validUntil,
+                                                                                       null,
+                                                                                       null));
+                         });
+    }
+
+    private static String getCode(String prefix) {
+        return "%s-%s".formatted(prefix,
+                                 RandomStringUtils.insecure().nextAlphanumeric(5).toLowerCase(ROOT));
     }
 }

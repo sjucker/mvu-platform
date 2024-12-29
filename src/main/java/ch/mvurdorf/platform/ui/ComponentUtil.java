@@ -3,11 +3,16 @@ package ch.mvurdorf.platform.ui;
 import ch.mvurdorf.platform.ui.StyleUtility.IconStyle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.function.Function;
 
 import static com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY;
 import static com.vaadin.flow.theme.lumo.LumoUtility.TextColor.PRIMARY;
@@ -21,7 +26,7 @@ public final class ComponentUtil {
     public static Icon clickableIcon(VaadinIcon vaadinIcon, Runnable action) {
         var icon = new Icon(vaadinIcon);
         icon.addClassNames(PRIMARY, IconSize.SMALL, IconStyle.CLICKABLE);
-        icon.addClickListener(event -> action.run());
+        icon.addClickListener(_ -> action.run());
         return icon;
     }
 
@@ -44,5 +49,11 @@ public final class ComponentUtil {
         datePicker.setLocale(GERMAN);
         datePicker.setI18n(germanI18n);
         return datePicker;
+    }
+
+    public static <T> ValueProvider<T, Image> image(Function<T, String> name, Function<T, byte[]> bytes) {
+        return t -> new Image(new StreamResource(name.apply(t),
+                                                 () -> new ByteArrayInputStream(bytes.apply(t))),
+                              "");
     }
 }

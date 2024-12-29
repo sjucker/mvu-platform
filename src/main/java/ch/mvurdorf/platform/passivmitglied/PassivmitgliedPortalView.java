@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.ListItem;
@@ -28,8 +29,11 @@ import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 
 import java.io.ByteArrayInputStream;
+import java.time.LocalDate;
 
+import static ch.mvurdorf.platform.ui.ComponentUtil.image;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
+import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 
 @PageTitle("Passivmitglied")
 
@@ -87,6 +91,20 @@ public class PassivmitgliedPortalView extends AppLayout implements HasUrlParamet
     private Component createVouchersTab(PassivmitgliedDto passivmitglied) {
         var content = new VerticalLayout();
         content.setSizeFull();
+
+        var grid = new Grid<PassivmitgliedVoucherDto>();
+        grid.setSizeFull();
+        grid.addColumn(PassivmitgliedVoucherDto::description).setHeader("Titel");
+        grid.addColumn(dateRenderer(PassivmitgliedVoucherDto::validUntil)).setHeader("Gültig bis");
+        grid.addColumn(PassivmitgliedVoucherDto::code).setHeader("Code");
+        grid.addComponentColumn(image(PassivmitgliedVoucherDto::code, dto -> passivmitgliedService.qrCode(passivmitglied.externalId(), dto)))
+            .setHeader("QR-Code");
+
+        grid.setItems(passivmitglied.vouchersNewestFirst().stream()
+                                    .filter(v -> v.validUntil().isAfter(LocalDate.now()))
+                                    .toList());
+
+        content.add(grid);
         return content;
     }
 
@@ -125,7 +143,7 @@ public class PassivmitgliedPortalView extends AppLayout implements HasUrlParamet
         binder.forField(strasseNr)
               .withValidator(new StringLengthValidator("Nr. muss zwischen 1 und 5 Zeichen haben", 1, 5))
               .bind(PassivmitgliedEditDTO::getStrasseNr, PassivmitgliedEditDTO::setStrasseNr);
-        formLayout.addFormItem(strasse, "Nr.");
+        formLayout.addFormItem(strasseNr, "Nr.");
 
         var plz = new TextField();
         binder.forField(plz)

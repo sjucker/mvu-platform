@@ -43,6 +43,12 @@ public record PassivmitgliedDto(Long id,
                        .toList();
     }
 
+    public List<PassivmitgliedVoucherDto> vouchersNewestFirst() {
+        return vouchers.stream()
+                       .sorted(comparing(PassivmitgliedVoucherDto::validUntil).reversed())
+                       .toList();
+    }
+
     public String fullName() {
         return "%s %s".formatted(vorname, nachname);
     }

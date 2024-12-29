@@ -16,13 +16,13 @@ import java.io.OutputStream;
 @Service
 public class QRBillService {
 
-    public void passivmitglied(double amount, PassivmitgliedDto passivmitglied, OutputStream out) {
+    public void passivmitglied(PassivmitgliedDto passivmitglied, double amount, OutputStream out) {
         var bill = new Bill();
         bill.setAccount("CH03 0070 0110 9014 7015 4");
         bill.setAmountFromDouble(amount);
         bill.setCurrency("CHF");
         bill.createAndSetCreditorReference(passivmitglied.externalId().toString());
-        bill.setUnstructuredMessage("Passivmitglied-Beitrag " + passivmitglied.fullName());
+        bill.setUnstructuredMessage("Referenz-Nr. " + passivmitglied.externalId());
 
         var creditor = new Address();
         creditor.setName("Musikverein Harmonie Urdorf");

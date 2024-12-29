@@ -10,7 +10,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS_CIRCLE;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
-import static com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode.BETWEEN;
 import static com.vaadin.flow.theme.lumo.LumoUtility.Gap.MEDIUM;
 
 public class PassivmitgliedDialog extends Dialog {
@@ -99,7 +97,7 @@ public class PassivmitgliedDialog extends Dialog {
         content.add(grid);
         add(content);
 
-        getFooter().add(new Button("Abbrechen", e -> close()));
+        getFooter().add(new Button("Abbrechen", _ -> close()));
         if (!readOnly) {
             getFooter().add(primaryButton("Speichern", () -> {
                 callback.accept(newPayments.stream()
