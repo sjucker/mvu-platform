@@ -6,6 +6,7 @@ package ch.mvurdorf.platform.jooq.tables;
 
 import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
+import ch.mvurdorf.platform.jooq.tables.KonzertEntry.KonzertEntryPath;
 import ch.mvurdorf.platform.jooq.tables.Noten.NotenPath;
 import ch.mvurdorf.platform.jooq.tables.records.KompositionRecord;
 
@@ -155,6 +156,19 @@ public class Komposition extends TableImpl<KompositionRecord> {
     @Override
     public UniqueKey<KompositionRecord> getPrimaryKey() {
         return Keys.PK__KOMPOSITION;
+    }
+
+    private transient KonzertEntryPath _konzertEntry;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.konzert_entry</code> table
+     */
+    public KonzertEntryPath konzertEntry() {
+        if (_konzertEntry == null)
+            _konzertEntry = new KonzertEntryPath(this, null, Keys.KONZERT_ENTRY__KONZERT_ENTRY_FK_KOMPOSITION_FKEY.getInverseKey());
+
+        return _konzertEntry;
     }
 
     private transient NotenPath _noten;

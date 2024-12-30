@@ -6,6 +6,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
@@ -14,9 +15,9 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.function.Function;
 
+import static ch.mvurdorf.platform.utils.FormatUtil.LOCALE;
 import static com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY;
 import static com.vaadin.flow.theme.lumo.LumoUtility.TextColor.PRIMARY;
-import static java.util.Locale.GERMAN;
 
 public final class ComponentUtil {
 
@@ -46,9 +47,15 @@ public final class ComponentUtil {
         germanI18n.setFirstDayOfWeek(1); // Monday
 
         var datePicker = new DatePicker(label);
-        datePicker.setLocale(GERMAN);
+        datePicker.setLocale(LOCALE);
         datePicker.setI18n(germanI18n);
         return datePicker;
+    }
+
+    public static TimePicker timePicker(String label) {
+        var timePicker = new TimePicker(label);
+        timePicker.setLocale(LOCALE);
+        return timePicker;
     }
 
     public static <T> ValueProvider<T, Image> image(Function<T, String> name, Function<T, byte[]> bytes) {

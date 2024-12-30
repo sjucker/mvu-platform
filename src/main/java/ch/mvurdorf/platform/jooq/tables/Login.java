@@ -98,6 +98,11 @@ public class Login extends TableImpl<LoginRecord> {
      */
     public final TableField<LoginRecord, String> PASSIVMITGLIED_PERMISSION = createField(DSL.name("passivmitglied_permission"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::character varying"), SQLDataType.VARCHAR)), this, "");
 
+    /**
+     * The column <code>public.login.konzerte_permission</code>.
+     */
+    public final TableField<LoginRecord, String> KONZERTE_PERMISSION = createField(DSL.name("konzerte_permission"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::character varying"), SQLDataType.VARCHAR)), this, "");
+
     private Login(Name alias, Table<LoginRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

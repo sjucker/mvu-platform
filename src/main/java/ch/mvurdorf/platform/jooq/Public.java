@@ -5,6 +5,8 @@ package ch.mvurdorf.platform.jooq;
 
 
 import ch.mvurdorf.platform.jooq.tables.Komposition;
+import ch.mvurdorf.platform.jooq.tables.Konzert;
+import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.Noten;
 import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
@@ -36,6 +38,16 @@ public class Public extends SchemaImpl {
      * The table <code>public.komposition</code>.
      */
     public final Komposition KOMPOSITION = Komposition.KOMPOSITION;
+
+    /**
+     * The table <code>public.konzert</code>.
+     */
+    public final Konzert KONZERT = Konzert.KONZERT;
+
+    /**
+     * The table <code>public.konzert_entry</code>.
+     */
+    public final KonzertEntry KONZERT_ENTRY = KonzertEntry.KONZERT_ENTRY;
 
     /**
      * The table <code>public.login</code>.
@@ -79,6 +91,8 @@ public class Public extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             Komposition.KOMPOSITION,
+            Konzert.KONZERT,
+            KonzertEntry.KONZERT_ENTRY,
             Login.LOGIN,
             Noten.NOTEN,
             Passivmitglied.PASSIVMITGLIED,

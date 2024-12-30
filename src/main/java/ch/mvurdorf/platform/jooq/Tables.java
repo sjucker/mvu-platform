@@ -5,6 +5,8 @@ package ch.mvurdorf.platform.jooq;
 
 
 import ch.mvurdorf.platform.jooq.tables.Komposition;
+import ch.mvurdorf.platform.jooq.tables.Konzert;
+import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.Noten;
 import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
@@ -22,6 +24,16 @@ public class Tables {
      * The table <code>public.komposition</code>.
      */
     public static final Komposition KOMPOSITION = Komposition.KOMPOSITION;
+
+    /**
+     * The table <code>public.konzert</code>.
+     */
+    public static final Konzert KONZERT = Konzert.KONZERT;
+
+    /**
+     * The table <code>public.konzert_entry</code>.
+     */
+    public static final KonzertEntry KONZERT_ENTRY = KonzertEntry.KONZERT_ENTRY;
 
     /**
      * The table <code>public.login</code>.

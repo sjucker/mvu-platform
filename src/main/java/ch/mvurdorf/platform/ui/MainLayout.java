@@ -22,6 +22,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
 import com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
+import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.info.BuildProperties;
 
@@ -36,7 +37,7 @@ public class MainLayout extends AppLayout {
 
     private final AuthenticatedUser authenticatedUser;
 
-    public MainLayout(AuthenticatedUser authenticatedUser, BuildProperties buildProperties) {
+    public MainLayout(AuthenticatedUser authenticatedUser, @Nullable BuildProperties buildProperties) {
         this.authenticatedUser = authenticatedUser;
         this.buildProperties = buildProperties;
 
@@ -97,10 +98,12 @@ public class MainLayout extends AppLayout {
             layout.add(logoutButton);
         }
 
-        var version = new Span("Version: %s".formatted(buildProperties.getVersion()));
-        version.addDoubleClickListener(_ -> log.error("testing error mail"));
-        version.addClassNames(FontSize.XXSMALL);
-        layout.add(version);
+        if (buildProperties != null) {
+            var version = new Span("Version: %s".formatted(buildProperties.getVersion()));
+            version.addDoubleClickListener(_ -> log.error("testing error mail"));
+            version.addClassNames(FontSize.XXSMALL);
+            layout.add(version);
+        }
         footer.add(layout);
         return footer;
     }

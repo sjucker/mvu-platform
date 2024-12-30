@@ -146,6 +146,20 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         return (String) get(8);
     }
 
+    /**
+     * Setter for <code>public.login.konzerte_permission</code>.
+     */
+    public void setKonzertePermission(String value) {
+        set(9, value);
+    }
+
+    /**
+     * Getter for <code>public.login.konzerte_permission</code>.
+     */
+    public String getKonzertePermission() {
+        return (String) get(9);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -169,7 +183,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String passivmitgliedPermission) {
+    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String passivmitgliedPermission, String konzertePermission) {
         super(Login.LOGIN);
 
         setId(id);
@@ -181,6 +195,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         setUsersPermission(usersPermission);
         setNotenPermission(notenPermission);
         setPassivmitgliedPermission(passivmitgliedPermission);
+        setKonzertePermission(konzertePermission);
         resetChangedOnNotNull();
     }
 
@@ -200,6 +215,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setUsersPermission(value.getUsersPermission());
             setNotenPermission(value.getNotenPermission());
             setPassivmitgliedPermission(value.getPassivmitgliedPermission());
+            setKonzertePermission(value.getKonzertePermission());
             resetChangedOnNotNull();
         }
     }
