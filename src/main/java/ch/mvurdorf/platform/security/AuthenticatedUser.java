@@ -30,8 +30,14 @@ public class AuthenticatedUser {
                                     .map(userDetails -> loginDao.fetchOneByEmail(userDetails.getUsername()));
     }
 
+    @Transactional
     public String getName() {
         return get().map(Login::getName).orElse("?");
+    }
+
+    @Transactional
+    public String getEmail() {
+        return get().map(Login::getEmail).orElse("?");
     }
 
     public boolean hasWritePermission(String group) {

@@ -18,9 +18,14 @@ import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.server.menu.MenuConfiguration;
-import com.vaadin.flow.theme.lumo.LumoUtility;
+import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
+import com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
+import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
+import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.info.BuildProperties;
 
+@Slf4j
 @Layout
 @AnonymousAllowed
 public class MainLayout extends AppLayout {
@@ -45,16 +50,16 @@ public class MainLayout extends AppLayout {
         toggle.setAriaLabel("Menu toggle");
 
         viewTitle = new H1();
-        viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
+        viewTitle.addClassNames(FontSize.LARGE, Margin.NONE);
 
         addToNavbar(true, toggle, viewTitle);
     }
 
     private void addDrawerContent() {
         var appName = new Span("MVU");
-        appName.addClassNames(LumoUtility.FontWeight.SEMIBOLD, LumoUtility.FontSize.LARGE);
+        appName.addClassNames(FontWeight.SEMIBOLD, FontSize.LARGE);
         var header = new Header(appName);
-        header.addClassNames(LumoUtility.Padding.SMALL);
+        header.addClassNames(Padding.SMALL);
 
         var scroller = new Scroller(createNavigation());
 
@@ -93,7 +98,8 @@ public class MainLayout extends AppLayout {
         }
 
         var version = new Span("Version: %s".formatted(buildProperties.getVersion()));
-        version.addClassNames(LumoUtility.FontSize.XXSMALL);
+        version.addDoubleClickListener(_ -> log.error("testing error mail"));
+        version.addClassNames(FontSize.XXSMALL);
         layout.add(version);
         footer.add(layout);
         return footer;
