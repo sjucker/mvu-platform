@@ -1,16 +1,20 @@
 package ch.mvurdorf.platform.konzerte;
 
-public record KonzertEntryDto(String description,
-                              Integer index,
+import ch.mvurdorf.platform.noten.KompositionDto;
+
+// either placeholder or komposition details are set
+public record KonzertEntryDto(Integer index,
+                              String placeholder,
                               Long kompositionId,
                               String kompositionTitel,
+                              String kompositionKomponist,
                               String kompositionArrangeur) {
 
     public String titel() {
         if (kompositionId != null) {
-            return kompositionTitel + " " + kompositionArrangeur;
+            return KompositionDto.getLabel(kompositionTitel, kompositionKomponist, kompositionArrangeur);
         } else {
-            return description;
+            return "- %s -".formatted(placeholder);
         }
     }
 }

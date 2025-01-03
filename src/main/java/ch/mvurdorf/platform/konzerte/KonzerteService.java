@@ -3,6 +3,8 @@ package ch.mvurdorf.platform.konzerte;
 import ch.mvurdorf.platform.jooq.tables.daos.KompositionDao;
 import ch.mvurdorf.platform.jooq.tables.daos.KonzertDao;
 import ch.mvurdorf.platform.jooq.tables.daos.KonzertEntryDao;
+import ch.mvurdorf.platform.jooq.tables.pojos.Konzert;
+import ch.mvurdorf.platform.jooq.tables.pojos.KonzertEntry;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +13,8 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -67,10 +69,11 @@ public class KonzerteService {
         return jooqDsl.select(
                               KONZERT,
                               multiset(
-                                      select(KONZERT_ENTRY.DESCRIPTION,
-                                             KONZERT_ENTRY.INDEX,
+                                      select(KONZERT_ENTRY.INDEX,
+                                             KONZERT_ENTRY.PLACEHOLDER,
                                              KOMPOSITION.ID,
                                              KOMPOSITION.TITEL,
+                                             KOMPOSITION.KOMPONIST,
                                              KOMPOSITION.ARRANGEUR)
                                               .from(KONZERT_ENTRY)
                                               .leftJoin(KOMPOSITION).on(KONZERT_ENTRY.FK_KOMPOSITION.eq(KOMPOSITION.ID))
@@ -86,20 +89,48 @@ public class KonzerteService {
                       .fetch(it -> {
                           var konzertRecord = it.value1();
                           return new KonzertDto(
+                                  konzertRecord.getId(),
                                   konzertRecord.getName(),
                                   konzertRecord.getDatum(),
                                   konzertRecord.getZeit(),
                                   konzertRecord.getLocation(),
-                                  konzertRecord.getLocation(),
+                                  konzertRecord.getDescription(),
                                   it.value2()
                           );
                       });
     }
 
-    public List<KonzertEntryDto> getAvailableKompositions() {
-        return kompositionDao.findAll().stream()
-                             .map(it -> new KonzertEntryDto(null, 0, it.getId(), it.getTitel(), it.getArrangeur()))
-                             .sorted(Comparator.comparing(KonzertEntryDto::kompositionTitel).thenComparing(KonzertEntryDto::kompositionArrangeur))
-                             .toList();
+    @Transactional
+    public void upsert(KonzertDto dto) {
+        Long konzertId;
+        if (dto.id() != null) {
+            var konzert = konzertDao.findOptionalById(dto.id()).orElseThrow();
+            konzert.setName(dto.name());
+            konzert.setDatum(dto.datum());
+            konzert.setZeit(dto.zeit());
+            konzert.setLocation(dto.location());
+            konzert.setDescription(dto.description());
+            konzertDao.update(konzert);
+            konzertId = konzert.getId();
+            // delete all existing entries and re-insert new
+            jooqDsl.deleteFrom(KONZERT_ENTRY)
+                   .where(KONZERT_ENTRY.FK_KONZERT.eq(konzertId))
+                   .execute();
+        } else {
+            var konzert = new Konzert(null, dto.name(), dto.datum(), dto.zeit(), dto.location(), dto.description());
+            konzertDao.insert(konzert);
+            konzertId = konzert.getId();
+        }
+
+        var index = 1;
+        for (var entry : dto.entries()) {
+            konzertEntryDao.insert(new KonzertEntry(null, konzertId, index++, entry.kompositionId(), entry.placeholder()));
+        }
+    }
+
+    @Transactional
+    public void delete(KonzertDto dto) {
+        log.info("deleting konzert {}", dto);
+        konzertDao.deleteById(dto.id());
     }
 }

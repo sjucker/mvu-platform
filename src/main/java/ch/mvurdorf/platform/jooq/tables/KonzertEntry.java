@@ -79,9 +79,9 @@ public class KonzertEntry extends TableImpl<KonzertEntryRecord> {
     public final TableField<KonzertEntryRecord, Long> FK_KOMPOSITION = createField(DSL.name("fk_komposition"), SQLDataType.BIGINT, this, "");
 
     /**
-     * The column <code>public.konzert_entry.description</code>.
+     * The column <code>public.konzert_entry.placeholder</code>.
      */
-    public final TableField<KonzertEntryRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(255), this, "");
+    public final TableField<KonzertEntryRecord, String> PLACEHOLDER = createField(DSL.name("placeholder"), SQLDataType.VARCHAR(255), this, "");
 
     private KonzertEntry(Name alias, Table<KonzertEntryRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

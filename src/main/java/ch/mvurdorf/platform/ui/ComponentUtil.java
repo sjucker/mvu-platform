@@ -17,6 +17,7 @@ import java.util.function.Function;
 
 import static ch.mvurdorf.platform.utils.FormatUtil.LOCALE;
 import static com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY;
+import static com.vaadin.flow.component.button.ButtonVariant.LUMO_TERTIARY;
 import static com.vaadin.flow.theme.lumo.LumoUtility.TextColor.PRIMARY;
 
 public final class ComponentUtil {
@@ -32,8 +33,18 @@ public final class ComponentUtil {
     }
 
     public static Button primaryButton(String label, Runnable action) {
-        var button = new Button(label, e -> action.run());
+        var button = new Button(label, _ -> action.run());
         button.addThemeVariants(LUMO_PRIMARY);
+        return button;
+    }
+
+    public static Button secondaryButton(String label, Runnable action) {
+        return new Button(label, _ -> action.run());
+    }
+
+    public static Button tertiaryButton(String label, Runnable action) {
+        var button = new Button(label, _ -> action.run());
+        button.addThemeVariants(LUMO_TERTIARY);
         return button;
     }
 

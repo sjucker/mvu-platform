@@ -19,7 +19,7 @@ public class KonzertEntry implements Serializable {
     private Long fkKonzert;
     private Integer index;
     private Long fkKomposition;
-    private String description;
+    private String placeholder;
 
     public KonzertEntry() {}
 
@@ -28,7 +28,7 @@ public class KonzertEntry implements Serializable {
         this.fkKonzert = value.fkKonzert;
         this.index = value.index;
         this.fkKomposition = value.fkKomposition;
-        this.description = value.description;
+        this.placeholder = value.placeholder;
     }
 
     public KonzertEntry(
@@ -36,13 +36,13 @@ public class KonzertEntry implements Serializable {
         Long fkKonzert,
         Integer index,
         Long fkKomposition,
-        String description
+        String placeholder
     ) {
         this.id = id;
         this.fkKonzert = fkKonzert;
         this.index = index;
         this.fkKomposition = fkKomposition;
-        this.description = description;
+        this.placeholder = placeholder;
     }
 
     /**
@@ -102,17 +102,17 @@ public class KonzertEntry implements Serializable {
     }
 
     /**
-     * Getter for <code>public.konzert_entry.description</code>.
+     * Getter for <code>public.konzert_entry.placeholder</code>.
      */
-    public String getDescription() {
-        return this.description;
+    public String getPlaceholder() {
+        return this.placeholder;
     }
 
     /**
-     * Setter for <code>public.konzert_entry.description</code>.
+     * Setter for <code>public.konzert_entry.placeholder</code>.
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
     }
 
     @Override
@@ -148,11 +148,11 @@ public class KonzertEntry implements Serializable {
         }
         else if (!this.fkKomposition.equals(other.fkKomposition))
             return false;
-        if (this.description == null) {
-            if (other.description != null)
+        if (this.placeholder == null) {
+            if (other.placeholder != null)
                 return false;
         }
-        else if (!this.description.equals(other.description))
+        else if (!this.placeholder.equals(other.placeholder))
             return false;
         return true;
     }
@@ -165,7 +165,7 @@ public class KonzertEntry implements Serializable {
         result = prime * result + ((this.fkKonzert == null) ? 0 : this.fkKonzert.hashCode());
         result = prime * result + ((this.index == null) ? 0 : this.index.hashCode());
         result = prime * result + ((this.fkKomposition == null) ? 0 : this.fkKomposition.hashCode());
-        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.placeholder == null) ? 0 : this.placeholder.hashCode());
         return result;
     }
 
@@ -177,7 +177,7 @@ public class KonzertEntry implements Serializable {
         sb.append(", ").append(fkKonzert);
         sb.append(", ").append(index);
         sb.append(", ").append(fkKomposition);
-        sb.append(", ").append(description);
+        sb.append(", ").append(placeholder);
 
         sb.append(")");
         return sb.toString();

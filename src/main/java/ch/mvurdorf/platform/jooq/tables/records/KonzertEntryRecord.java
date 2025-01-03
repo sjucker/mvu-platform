@@ -75,16 +75,16 @@ public class KonzertEntryRecord extends UpdatableRecordImpl<KonzertEntryRecord> 
     }
 
     /**
-     * Setter for <code>public.konzert_entry.description</code>.
+     * Setter for <code>public.konzert_entry.placeholder</code>.
      */
-    public void setDescription(String value) {
+    public void setPlaceholder(String value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>public.konzert_entry.description</code>.
+     * Getter for <code>public.konzert_entry.placeholder</code>.
      */
-    public String getDescription() {
+    public String getPlaceholder() {
         return (String) get(4);
     }
 
@@ -111,14 +111,14 @@ public class KonzertEntryRecord extends UpdatableRecordImpl<KonzertEntryRecord> 
     /**
      * Create a detached, initialised KonzertEntryRecord
      */
-    public KonzertEntryRecord(Long id, Long fkKonzert, Integer index, Long fkKomposition, String description) {
+    public KonzertEntryRecord(Long id, Long fkKonzert, Integer index, Long fkKomposition, String placeholder) {
         super(KonzertEntry.KONZERT_ENTRY);
 
         setId(id);
         setFkKonzert(fkKonzert);
         setIndex(index);
         setFkKomposition(fkKomposition);
-        setDescription(description);
+        setPlaceholder(placeholder);
         resetChangedOnNotNull();
     }
 
@@ -133,7 +133,7 @@ public class KonzertEntryRecord extends UpdatableRecordImpl<KonzertEntryRecord> 
             setFkKonzert(value.getFkKonzert());
             setIndex(value.getIndex());
             setFkKomposition(value.getFkKomposition());
-            setDescription(value.getDescription());
+            setPlaceholder(value.getPlaceholder());
             resetChangedOnNotNull();
         }
     }

@@ -10,9 +10,13 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static ch.mvurdorf.platform.jooq.tables.Komposition.KOMPOSITION;
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsLast;
 
 @Service
 public class KompositionService {
@@ -26,6 +30,15 @@ public class KompositionService {
 
     public void insert(KompositionDto komposition) {
         kompositionDao.insert(new Komposition(null, komposition.titel(), komposition.komponist(), komposition.arrangeur(), komposition.durationInSeconds()));
+    }
+
+    public List<KompositionDto> findAllSorted() {
+        return kompositionDao.findAll().stream()
+                             .map(komposition -> new KompositionDto(komposition.getId(), komposition.getTitel(), komposition.getKomponist(), komposition.getArrangeur(), komposition.getDurationInSeconds()))
+                             .sorted(comparing(KompositionDto::titel)
+                                             .thenComparing(KompositionDto::komponist, nullsLast(naturalOrder()))
+                                             .thenComparing(KompositionDto::arrangeur, nullsLast(naturalOrder())))
+                             .toList();
     }
 
     public ConfigurableFilterDataProvider<KompositionDto, Void, String> dataProvider() {
