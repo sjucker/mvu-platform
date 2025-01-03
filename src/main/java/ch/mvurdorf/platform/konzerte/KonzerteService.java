@@ -5,6 +5,7 @@ import ch.mvurdorf.platform.jooq.tables.daos.KonzertDao;
 import ch.mvurdorf.platform.jooq.tables.daos.KonzertEntryDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.Konzert;
 import ch.mvurdorf.platform.jooq.tables.pojos.KonzertEntry;
+import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import lombok.RequiredArgsConstructor;
@@ -132,5 +133,9 @@ public class KonzerteService {
     public void delete(KonzertDto dto) {
         log.info("deleting konzert {}", dto);
         konzertDao.deleteById(dto.id());
+    }
+
+    public List<KonzertDto> getFutureKonzerte() {
+        return fetch(KONZERT.DATUM.greaterOrEqual(DateUtil.today()), 0, 10);
     }
 }

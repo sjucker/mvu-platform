@@ -3,6 +3,8 @@ package ch.mvurdorf.platform.utils;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -18,6 +20,20 @@ public class FormatUtil {
             return "-";
         }
         return date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+
+    public static String formatTime(LocalTime time) {
+        if (time == null) {
+            return "-";
+        }
+        return time.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public static String formatDateTime(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return "-";
+        }
+        return dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
     }
 
     public static String formatCurrency(BigDecimal amount) {
