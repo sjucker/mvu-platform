@@ -28,7 +28,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.LIST_OL_SOLID;
 @PageTitle("Konzerte")
 @Route("konzerte")
 @RolesAllowed({KONZERTE_GROUP})
-@Menu(order = 2, icon = LIST_OL_SOLID)
+@Menu(order = 4, icon = LIST_OL_SOLID)
 public class KonzerteView extends VerticalLayout {
 
     private final KonzerteService konzerteService;

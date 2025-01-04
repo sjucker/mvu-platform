@@ -160,6 +160,20 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         return (String) get(9);
     }
 
+    /**
+     * Setter for <code>public.login.repertoire_permission</code>.
+     */
+    public void setRepertoirePermission(String value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for <code>public.login.repertoire_permission</code>.
+     */
+    public String getRepertoirePermission() {
+        return (String) get(10);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -183,7 +197,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String passivmitgliedPermission, String konzertePermission) {
+    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String passivmitgliedPermission, String konzertePermission, String repertoirePermission) {
         super(Login.LOGIN);
 
         setId(id);
@@ -196,6 +210,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         setNotenPermission(notenPermission);
         setPassivmitgliedPermission(passivmitgliedPermission);
         setKonzertePermission(konzertePermission);
+        setRepertoirePermission(repertoirePermission);
         resetChangedOnNotNull();
     }
 
@@ -216,6 +231,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setNotenPermission(value.getNotenPermission());
             setPassivmitgliedPermission(value.getPassivmitgliedPermission());
             setKonzertePermission(value.getKonzertePermission());
+            setRepertoirePermission(value.getRepertoirePermission());
             resetChangedOnNotNull();
         }
     }

@@ -26,6 +26,8 @@ import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.info.BuildProperties;
 
+import static ch.mvurdorf.platform.utils.FormatUtil.formatInstant;
+
 @Slf4j
 @Layout
 @AnonymousAllowed
@@ -91,7 +93,7 @@ public class MainLayout extends AppLayout {
         if (maybeUser.isPresent()) {
             var user = maybeUser.get();
             var logoutButton = new Button("Logout %s".formatted(user.getName()),
-                                          e -> authenticatedUser.logout());
+                                          _ -> authenticatedUser.logout());
             logoutButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
             logoutButton.setIcon(VaadinIcon.EXIT_O.create());
             logoutButton.setWidthFull();
@@ -102,7 +104,9 @@ public class MainLayout extends AppLayout {
             var version = new Span("Version: %s".formatted(buildProperties.getVersion()));
             version.addDoubleClickListener(_ -> log.error("testing error mail"));
             version.addClassNames(FontSize.XXSMALL);
-            layout.add(version);
+            var time = new Span("Time: %s".formatted(formatInstant(buildProperties.getTime())));
+            time.addClassNames(FontSize.XXSMALL);
+            layout.add(version, time);
         }
         footer.add(layout);
         return footer;

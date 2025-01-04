@@ -47,6 +47,7 @@ class UsersService {
                                   NONE.name(),
                                   NONE.name(),
                                   NONE.name(),
+                                  NONE.name(),
                                   NONE.name()));
         return password;
     }

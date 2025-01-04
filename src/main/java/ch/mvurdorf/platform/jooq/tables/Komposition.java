@@ -8,6 +8,7 @@ import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry.KonzertEntryPath;
 import ch.mvurdorf.platform.jooq.tables.Noten.NotenPath;
+import ch.mvurdorf.platform.jooq.tables.RepertoireEntry.RepertoireEntryPath;
 import ch.mvurdorf.platform.jooq.tables.records.KompositionRecord;
 
 import java.util.Collection;
@@ -181,6 +182,19 @@ public class Komposition extends TableImpl<KompositionRecord> {
             _noten = new NotenPath(this, null, Keys.NOTEN__NOTEN_FK_KOMPOSITION_FKEY.getInverseKey());
 
         return _noten;
+    }
+
+    private transient RepertoireEntryPath _repertoireEntry;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.repertoire_entry</code> table
+     */
+    public RepertoireEntryPath repertoireEntry() {
+        if (_repertoireEntry == null)
+            _repertoireEntry = new RepertoireEntryPath(this, null, Keys.REPERTOIRE_ENTRY__REPERTOIRE_ENTRY_FK_KOMPOSITION_FKEY.getInverseKey());
+
+        return _repertoireEntry;
     }
 
     @Override

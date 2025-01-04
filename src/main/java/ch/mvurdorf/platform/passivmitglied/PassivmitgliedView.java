@@ -25,7 +25,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.MONEY_BILL_ALT;
 @PageTitle("Passivmitglieder")
 @Route("passivmitglied")
 @RolesAllowed({PASSIVMITGLIED_GROUP})
-@Menu(order = 3, icon = MONEY_BILL_ALT)
+@Menu(order = 5, icon = MONEY_BILL_ALT)
 public class PassivmitgliedView extends VerticalLayout {
 
     private final PassivmitgliedService passivmitgliedService;

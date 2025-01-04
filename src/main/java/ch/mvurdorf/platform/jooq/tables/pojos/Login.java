@@ -26,6 +26,7 @@ public class Login implements Serializable {
     private String notenPermission;
     private String passivmitgliedPermission;
     private String konzertePermission;
+    private String repertoirePermission;
 
     public Login() {}
 
@@ -40,6 +41,7 @@ public class Login implements Serializable {
         this.notenPermission = value.notenPermission;
         this.passivmitgliedPermission = value.passivmitgliedPermission;
         this.konzertePermission = value.konzertePermission;
+        this.repertoirePermission = value.repertoirePermission;
     }
 
     public Login(
@@ -52,7 +54,8 @@ public class Login implements Serializable {
         String usersPermission,
         String notenPermission,
         String passivmitgliedPermission,
-        String konzertePermission
+        String konzertePermission,
+        String repertoirePermission
     ) {
         this.id = id;
         this.email = email;
@@ -64,6 +67,7 @@ public class Login implements Serializable {
         this.notenPermission = notenPermission;
         this.passivmitgliedPermission = passivmitgliedPermission;
         this.konzertePermission = konzertePermission;
+        this.repertoirePermission = repertoirePermission;
     }
 
     /**
@@ -206,6 +210,20 @@ public class Login implements Serializable {
         this.konzertePermission = konzertePermission;
     }
 
+    /**
+     * Getter for <code>public.login.repertoire_permission</code>.
+     */
+    public String getRepertoirePermission() {
+        return this.repertoirePermission;
+    }
+
+    /**
+     * Setter for <code>public.login.repertoire_permission</code>.
+     */
+    public void setRepertoirePermission(String repertoirePermission) {
+        this.repertoirePermission = repertoirePermission;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -275,6 +293,12 @@ public class Login implements Serializable {
         }
         else if (!this.konzertePermission.equals(other.konzertePermission))
             return false;
+        if (this.repertoirePermission == null) {
+            if (other.repertoirePermission != null)
+                return false;
+        }
+        else if (!this.repertoirePermission.equals(other.repertoirePermission))
+            return false;
         return true;
     }
 
@@ -292,6 +316,7 @@ public class Login implements Serializable {
         result = prime * result + ((this.notenPermission == null) ? 0 : this.notenPermission.hashCode());
         result = prime * result + ((this.passivmitgliedPermission == null) ? 0 : this.passivmitgliedPermission.hashCode());
         result = prime * result + ((this.konzertePermission == null) ? 0 : this.konzertePermission.hashCode());
+        result = prime * result + ((this.repertoirePermission == null) ? 0 : this.repertoirePermission.hashCode());
         return result;
     }
 
@@ -309,6 +334,7 @@ public class Login implements Serializable {
         sb.append(", ").append(notenPermission);
         sb.append(", ").append(passivmitgliedPermission);
         sb.append(", ").append(konzertePermission);
+        sb.append(", ").append(repertoirePermission);
 
         sb.append(")");
         return sb.toString();

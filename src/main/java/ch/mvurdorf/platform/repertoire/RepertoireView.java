@@ -6,15 +6,19 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
-import static org.vaadin.lineawesome.LineAwesomeIconUrl.LIST_ALT;
+import static ch.mvurdorf.platform.security.LoginService.REPERTOIRE_GROUP;
+import static org.vaadin.lineawesome.LineAwesomeIconUrl.VOLUME_UP_SOLID;
 
 @PageTitle("Repertoire")
 @Route("repertoire")
-@RolesAllowed({"ADMIN"})
-@Menu(order = 3, icon = LIST_ALT)
+@RolesAllowed({REPERTOIRE_GROUP})
+@Menu(order = 3, icon = VOLUME_UP_SOLID)
 public class RepertoireView extends VerticalLayout {
 
-    public RepertoireView() {
+    private final RepertoireService repertoireService;
+
+    public RepertoireView(RepertoireService repertoireService) {
+        this.repertoireService = repertoireService;
 
         setSizeFull();
     }
