@@ -6,6 +6,7 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.ListItem;
@@ -69,6 +70,11 @@ public class PassivmitgliedPortalView extends AppLayout implements HasUrlParamet
     private Component createBezahlenTab(PassivmitgliedDto passivmitglied) {
         var content = new VerticalLayout();
         content.setSizeFull();
+
+        content.add(new Anchor(new StreamResource("qr-rechnung.pdf", () -> {
+            var pdfBytes = passivmitgliedService.qrBillPdf(passivmitglied.externalId()).orElseThrow();
+            return new ByteArrayInputStream(pdfBytes);
+        }), "Rechnung als PDF herunterladen"));
 
         var qrBillImage = new Image(new StreamResource("qr-bill.png", () -> {
             var imgBytes = passivmitgliedService.qrBill(passivmitglied.externalId()).orElseThrow();

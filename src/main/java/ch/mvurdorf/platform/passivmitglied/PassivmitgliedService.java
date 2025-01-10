@@ -42,6 +42,8 @@ import static org.jooq.impl.DSL.select;
 @Service
 @RequiredArgsConstructor
 public class PassivmitgliedService {
+    private static final double PASSIVMITGLIED_AMOUNT = 20.0;
+
     private final DSLContext jooqDsl;
     private final PassivmitgliedDao passivmitgliedDao;
     private final PassivmitgliedPaymentDao passivmitgliedPaymentDao;
@@ -194,9 +196,14 @@ public class PassivmitgliedService {
         return fetch(PASSIVMITGLIED.EXTERNAL_ID.eq(externalId))
                 .map(passivmitglied -> {
                     var out = new ByteArrayOutputStream();
-                    qrBillService.passivmitglied(passivmitglied, 20.0, out);
+                    qrBillService.passivmitglied(passivmitglied, PASSIVMITGLIED_AMOUNT, out);
                     return out.toByteArray();
                 });
+    }
+
+    public Optional<byte[]> qrBillPdf(Long externalId) {
+        return fetch(PASSIVMITGLIED.EXTERNAL_ID.eq(externalId))
+                .flatMap(passivmitglied -> qrBillService.passivmitgliedPdf(passivmitglied, PASSIVMITGLIED_AMOUNT));
     }
 
     public Optional<PassivmitgliedDto> findByUUID(String uuid) {
