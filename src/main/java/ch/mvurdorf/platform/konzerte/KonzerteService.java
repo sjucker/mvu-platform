@@ -17,11 +17,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static ch.mvurdorf.platform.jooq.Tables.KOMPOSITION;
 import static ch.mvurdorf.platform.jooq.Tables.KONZERT;
 import static ch.mvurdorf.platform.jooq.Tables.KONZERT_ENTRY;
+import static java.util.Comparator.comparing;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.multiset;
@@ -136,6 +138,12 @@ public class KonzerteService {
     }
 
     public List<KonzertDto> getFutureKonzerte() {
-        return fetch(KONZERT.DATUM.greaterOrEqual(DateUtil.today()), 0, 10);
+        return fetch(KONZERT.DATUM.greaterOrEqual(DateUtil.today()), 0, 10).stream()
+                                                                           .sorted(comparing(KonzertDto::datumZeit))
+                                                                           .toList();
+    }
+
+    public Optional<KonzertDto> findById(Long id) {
+        return fetch(KONZERT.ID.eq(id), 0, 1).stream().findFirst();
     }
 }

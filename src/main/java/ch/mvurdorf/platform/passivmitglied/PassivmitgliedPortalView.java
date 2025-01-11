@@ -37,7 +37,6 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 
 @PageTitle("Passivmitglied")
-
 @Route(value = "portal", autoLayout = false)
 @AnonymousAllowed
 public class PassivmitgliedPortalView extends AppLayout implements HasUrlParameter<String> {

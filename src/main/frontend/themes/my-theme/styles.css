@@ -34,3 +34,11 @@ html {
 .clickable {
     cursor: pointer;
 }
+
+.auto {
+    cursor: auto;
+}
+
+.pointer {
+    cursor: pointer;
+}

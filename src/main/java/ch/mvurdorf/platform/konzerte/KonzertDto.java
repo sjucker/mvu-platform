@@ -6,6 +6,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
+
 public record KonzertDto(Long id,
                          String name,
                          LocalDate datum,
@@ -20,5 +22,9 @@ public record KonzertDto(Long id,
 
     public LocalDateTime datumZeit() {
         return LocalDateTime.of(datum, zeit);
+    }
+
+    public String dateTimeAndLocation() {
+        return "%s, %s".formatted(formatDateTime(datumZeit()), location());
     }
 }

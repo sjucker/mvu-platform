@@ -48,7 +48,7 @@ public class NotenDialog extends Dialog {
         grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::instrument)).setHeader("Instrument");
         grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::stimme)).setHeader("Stimme");
         grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::stimmlage)).setHeader("Stimmlage");
-        grid.addColumn(iconDownloadLink(DOWNLOAD, dto -> storageService.read(dto.id()), dto -> "%s.pdf".formatted(dto.instrument().getDescription())));
+        grid.addColumn(iconDownloadLink(DOWNLOAD, dto -> storageService.read(dto.id()), dto -> dto.filename()));
         grid.setItems(notenService.findByKomposition(komposition.id()));
 
         left.add(grid);

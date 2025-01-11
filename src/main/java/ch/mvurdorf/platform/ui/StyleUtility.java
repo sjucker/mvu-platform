@@ -13,4 +13,9 @@ public final class StyleUtility {
         }
 
     }
+
+    public static final class Cursor {
+        public static final String AUTO = "auto";
+        public static final String POINTER = "pointer";
+    }
 }

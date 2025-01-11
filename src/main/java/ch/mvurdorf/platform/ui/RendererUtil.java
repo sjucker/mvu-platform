@@ -1,8 +1,10 @@
 package ch.mvurdorf.platform.ui;
 
 import ch.mvurdorf.platform.ui.StyleUtility.IconStyle;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HtmlContainer;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static com.vaadin.flow.component.html.AnchorTarget.BLANK;
 
@@ -31,16 +34,25 @@ public final class RendererUtil {
         return new LocalDateTimeRenderer<>(getter::apply, "dd.MM.yyyy hh:mm");
     }
 
-    public static <T> ComponentRenderer<Icon, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler) {
+    public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler) {
+        return clickableIcon(vaadinIcon, clickHandler, _ -> true);
+    }
+
+    public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler, Predicate<T> display) {
         return new ComponentRenderer<>(dto -> {
-            var icon = new Icon(vaadinIcon);
-            icon.addClassNames(IconSize.SMALL, IconStyle.CLICKABLE);
-            icon.addClickListener(event -> {
-                if (event.isFromClient()) {
-                    clickHandler.accept(dto);
-                }
-            });
-            return icon;
+            if (display.test(dto)) {
+
+                var icon = new Icon(vaadinIcon);
+                icon.addClassNames(IconSize.SMALL, IconStyle.CLICKABLE);
+                icon.addClickListener(event -> {
+                    if (event.isFromClient()) {
+                        clickHandler.accept(dto);
+                    }
+                });
+                return icon;
+            } else {
+                return new Div();
+            }
         });
     }
 
