@@ -8,6 +8,8 @@ import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.function.Consumer;
 
+import static com.vaadin.flow.component.Unit.PERCENTAGE;
+
 public class KompositionDialog extends Dialog {
 
     private final Consumer<KompositionDto> callback;
@@ -19,6 +21,8 @@ public class KompositionDialog extends Dialog {
     public static void show(Consumer<KompositionDto> callback) {
         var dialog = new KompositionDialog(callback);
         dialog.init();
+        dialog.setModal(true);
+        dialog.setMinWidth(66, PERCENTAGE);
         dialog.open();
     }
 

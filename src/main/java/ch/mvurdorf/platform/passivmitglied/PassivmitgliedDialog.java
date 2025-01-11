@@ -20,6 +20,7 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.datePicker;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;
+import static com.vaadin.flow.component.Unit.PERCENTAGE;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS_CIRCLE;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import static com.vaadin.flow.theme.lumo.LumoUtility.Gap.MEDIUM;
@@ -52,7 +53,7 @@ public class PassivmitgliedDialog extends Dialog {
         dialog.setModal(true);
         dialog.setResizable(true);
         dialog.setCloseOnOutsideClick(false);
-        dialog.setMinWidth("66%");
+        dialog.setMinWidth(66, PERCENTAGE);
         dialog.open();
     }
 

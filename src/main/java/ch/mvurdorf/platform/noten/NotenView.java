@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.noten;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import ch.mvurdorf.platform.service.StorageService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -26,15 +27,17 @@ public class NotenView extends VerticalLayout {
 
     private final NotenService notenService;
     private final KompositionService kompositionService;
+    private final StorageService storageService;
     private final AuthenticatedUser authenticatedUser;
 
     private HorizontalLayout controls;
     private Grid<KompositionDto> grid;
     private ConfigurableFilterDataProvider<KompositionDto, Void, String> dataProvider;
 
-    public NotenView(NotenService notenService, KompositionService kompositionService, AuthenticatedUser authenticatedUser) {
+    public NotenView(NotenService notenService, KompositionService kompositionService, StorageService storageService, AuthenticatedUser authenticatedUser) {
         this.notenService = notenService;
         this.kompositionService = kompositionService;
+        this.storageService = storageService;
         this.authenticatedUser = authenticatedUser;
 
         setSizeFull();
@@ -51,13 +54,13 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(KompositionDto::titel).setHeader("Titel");
         grid.addColumn(KompositionDto::komponist).setHeader("Komponist");
         grid.addColumn(KompositionDto::arrangeur).setHeader("Arrangeur");
-        grid.addColumn(clickableIcon(UPLOAD, dto -> NotenDialog.show(notenService, dto)));
+        grid.addColumn(clickableIcon(UPLOAD, dto -> NotenDialog.show(notenService, storageService, dto)));
     }
 
     private void createControls() {
         controls = new HorizontalLayout();
         if (authenticatedUser.hasWritePermission(NOTEN_GROUP)) {
-            controls.add(new Button("Komposition hinzufügen", event -> {
+            controls.add(new Button("Komposition hinzufügen", _ -> {
                 KompositionDialog.show(kompositionDto -> {
                     kompositionService.insert(kompositionDto);
                     dataProvider.refreshAll();
