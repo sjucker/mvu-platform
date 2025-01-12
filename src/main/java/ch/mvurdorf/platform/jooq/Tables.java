@@ -14,6 +14,7 @@ import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
 import ch.mvurdorf.platform.jooq.tables.PassivmitgliedVoucher;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
+import ch.mvurdorf.platform.jooq.tables.Voucher;
 
 
 /**
@@ -71,4 +72,9 @@ public class Tables {
      * The table <code>public.repertoire_entry</code>.
      */
     public static final RepertoireEntry REPERTOIRE_ENTRY = RepertoireEntry.REPERTOIRE_ENTRY;
+
+    /**
+     * The table <code>public.voucher</code>.
+     */
+    public static final Voucher VOUCHER = Voucher.VOUCHER;
 }

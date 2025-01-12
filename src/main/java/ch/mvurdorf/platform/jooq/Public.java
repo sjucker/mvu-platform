@@ -14,6 +14,7 @@ import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
 import ch.mvurdorf.platform.jooq.tables.PassivmitgliedVoucher;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
+import ch.mvurdorf.platform.jooq.tables.Voucher;
 
 import java.util.Arrays;
 import java.util.List;
@@ -87,6 +88,11 @@ public class Public extends SchemaImpl {
     public final RepertoireEntry REPERTOIRE_ENTRY = RepertoireEntry.REPERTOIRE_ENTRY;
 
     /**
+     * The table <code>public.voucher</code>.
+     */
+    public final Voucher VOUCHER = Voucher.VOUCHER;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -111,7 +117,8 @@ public class Public extends SchemaImpl {
             PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT,
             PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER,
             Repertoire.REPERTOIRE,
-            RepertoireEntry.REPERTOIRE_ENTRY
+            RepertoireEntry.REPERTOIRE_ENTRY,
+            Voucher.VOUCHER
         );
     }
 }

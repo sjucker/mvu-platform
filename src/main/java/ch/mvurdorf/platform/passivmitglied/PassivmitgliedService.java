@@ -3,9 +3,11 @@ package ch.mvurdorf.platform.passivmitglied;
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedDao;
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedPaymentDao;
 import ch.mvurdorf.platform.jooq.tables.daos.PassivmitgliedVoucherDao;
+import ch.mvurdorf.platform.jooq.tables.daos.VoucherDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied;
 import ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedPayment;
 import ch.mvurdorf.platform.jooq.tables.pojos.PassivmitgliedVoucher;
+import ch.mvurdorf.platform.jooq.tables.pojos.Voucher;
 import ch.mvurdorf.platform.service.MailService;
 import ch.mvurdorf.platform.service.QRBillService;
 import ch.mvurdorf.platform.service.QRCodeService;
@@ -46,6 +48,7 @@ public class PassivmitgliedService {
 
     private final DSLContext jooqDsl;
     private final PassivmitgliedDao passivmitgliedDao;
+    private final VoucherDao voucherDao;
     private final PassivmitgliedPaymentDao passivmitgliedPaymentDao;
     private final PassivmitgliedVoucherDao passivmitgliedVoucherDao;
     private final QRBillService qrBillService;
@@ -164,6 +167,15 @@ public class PassivmitgliedService {
                                                    passivmitglied.countryCode());
         passivmitgliedDao.insert(newPassivmitglied);
 
+        voucherDao.fetchRangeOfValidUntil(DateUtil.today(), DateUtil.MAX_DATE)
+                  .forEach(voucher -> passivmitgliedVoucherDao.insert(new PassivmitgliedVoucher(null,
+                                                                                                newPassivmitglied.getId(),
+                                                                                                getCode(voucher.getCodePrefix()),
+                                                                                                voucher.getDescription(),
+                                                                                                voucher.getValidUntil(),
+                                                                                                null,
+                                                                                                null)));
+
         mailService.sendSupporterRegistrationEmail(newPassivmitglied);
         return externalId;
     }
@@ -221,17 +233,19 @@ public class PassivmitgliedService {
     }
 
     public void createVouchers(String prefix, String description, LocalDate validUntil) {
-        passivmitgliedDao.findAll().stream()
+        // insert voucher-template for new registrations
+        voucherDao.insert(new Voucher(null, prefix, description, validUntil));
+
+        // add for all existing ones
+        passivmitgliedDao.findAll()
                          // TODO filter certain (e.g., not payed in last 12 months)?
-                         .forEach(passivmitglied -> {
-                             passivmitgliedVoucherDao.insert(new PassivmitgliedVoucher(null,
-                                                                                       passivmitglied.getId(),
-                                                                                       getCode(prefix),
-                                                                                       description,
-                                                                                       validUntil,
-                                                                                       null,
-                                                                                       null));
-                         });
+                         .forEach(passivmitglied -> passivmitgliedVoucherDao.insert(new PassivmitgliedVoucher(null,
+                                                                                                              passivmitglied.getId(),
+                                                                                                              getCode(prefix),
+                                                                                                              description,
+                                                                                                              validUntil,
+                                                                                                              null,
+                                                                                                              null)));
     }
 
     private static String getCode(String prefix) {

@@ -14,6 +14,7 @@ import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
 import ch.mvurdorf.platform.jooq.tables.PassivmitgliedVoucher;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
+import ch.mvurdorf.platform.jooq.tables.Voucher;
 import ch.mvurdorf.platform.jooq.tables.records.KompositionRecord;
 import ch.mvurdorf.platform.jooq.tables.records.KonzertEntryRecord;
 import ch.mvurdorf.platform.jooq.tables.records.KonzertRecord;
@@ -24,6 +25,7 @@ import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedRecord;
 import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedVoucherRecord;
 import ch.mvurdorf.platform.jooq.tables.records.RepertoireEntryRecord;
 import ch.mvurdorf.platform.jooq.tables.records.RepertoireRecord;
+import ch.mvurdorf.platform.jooq.tables.records.VoucherRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -55,6 +57,7 @@ public class Keys {
     public static final UniqueKey<PassivmitgliedVoucherRecord> PK__PASSIVMITGLIED_VOUCHER = Internal.createUniqueKey(PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER, DSL.name("pk__passivmitglied_voucher"), new TableField[] { PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER.ID }, true);
     public static final UniqueKey<RepertoireRecord> PK__REPERTOIRE = Internal.createUniqueKey(Repertoire.REPERTOIRE, DSL.name("pk__repertoire"), new TableField[] { Repertoire.REPERTOIRE.ID }, true);
     public static final UniqueKey<RepertoireEntryRecord> PK__REPERTOIRE_ENTRY = Internal.createUniqueKey(RepertoireEntry.REPERTOIRE_ENTRY, DSL.name("pk__repertoire_entry"), new TableField[] { RepertoireEntry.REPERTOIRE_ENTRY.ID }, true);
+    public static final UniqueKey<VoucherRecord> PK__VOUCHER = Internal.createUniqueKey(Voucher.VOUCHER, DSL.name("pk__voucher"), new TableField[] { Voucher.VOUCHER.ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
