@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -77,7 +78,8 @@ public class KonzerteService {
                                              KOMPOSITION.ID,
                                              KOMPOSITION.TITEL,
                                              KOMPOSITION.KOMPONIST,
-                                             KOMPOSITION.ARRANGEUR)
+                                             KOMPOSITION.ARRANGEUR,
+                                             KONZERT_ENTRY.ZUGABE)
                                               .from(KONZERT_ENTRY)
                                               .leftJoin(KOMPOSITION).on(KONZERT_ENTRY.FK_KOMPOSITION.eq(KOMPOSITION.ID))
                                               .where(KONZERT_ENTRY.FK_KONZERT.eq(KONZERT.ID))
@@ -127,7 +129,7 @@ public class KonzerteService {
 
         var index = 1;
         for (var entry : dto.entries()) {
-            konzertEntryDao.insert(new KonzertEntry(null, konzertId, index++, entry.kompositionId(), entry.placeholder()));
+            konzertEntryDao.insert(new KonzertEntry(null, konzertId, index++, entry.kompositionId(), entry.placeholder(), entry.zugabe()));
         }
     }
 
@@ -145,5 +147,29 @@ public class KonzerteService {
 
     public Optional<KonzertDto> findById(Long id) {
         return fetch(KONZERT.ID.eq(id), 0, 1).stream().findFirst();
+    }
+
+    public static String getNumber(KonzertEntryDto dto, List<KonzertEntryDto> entries) {
+        if (dto.isPlaceholder()) {
+            return null;
+        }
+
+        int number = 1;
+        for (var entry : entries) {
+            if (Objects.equals(entry.index(), dto.index())) {
+                break;
+            }
+            if (!entry.isPlaceholder()) {
+                if (dto.zugabe()) {
+                    if (entry.zugabe()) {
+                        number++;
+                    }
+                } else {
+                    number++;
+                }
+            }
+        }
+
+        return (dto.zugabe() ? "Z%d" : "%d").formatted(number);
     }
 }

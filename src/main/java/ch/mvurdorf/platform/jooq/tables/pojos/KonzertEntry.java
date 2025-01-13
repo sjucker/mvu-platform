@@ -20,6 +20,7 @@ public class KonzertEntry implements Serializable {
     private Integer index;
     private Long fkKomposition;
     private String placeholder;
+    private Boolean zugabe;
 
     public KonzertEntry() {}
 
@@ -29,6 +30,7 @@ public class KonzertEntry implements Serializable {
         this.index = value.index;
         this.fkKomposition = value.fkKomposition;
         this.placeholder = value.placeholder;
+        this.zugabe = value.zugabe;
     }
 
     public KonzertEntry(
@@ -36,13 +38,15 @@ public class KonzertEntry implements Serializable {
         Long fkKonzert,
         Integer index,
         Long fkKomposition,
-        String placeholder
+        String placeholder,
+        Boolean zugabe
     ) {
         this.id = id;
         this.fkKonzert = fkKonzert;
         this.index = index;
         this.fkKomposition = fkKomposition;
         this.placeholder = placeholder;
+        this.zugabe = zugabe;
     }
 
     /**
@@ -115,6 +119,20 @@ public class KonzertEntry implements Serializable {
         this.placeholder = placeholder;
     }
 
+    /**
+     * Getter for <code>public.konzert_entry.zugabe</code>.
+     */
+    public Boolean getZugabe() {
+        return this.zugabe;
+    }
+
+    /**
+     * Setter for <code>public.konzert_entry.zugabe</code>.
+     */
+    public void setZugabe(Boolean zugabe) {
+        this.zugabe = zugabe;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -154,6 +172,12 @@ public class KonzertEntry implements Serializable {
         }
         else if (!this.placeholder.equals(other.placeholder))
             return false;
+        if (this.zugabe == null) {
+            if (other.zugabe != null)
+                return false;
+        }
+        else if (!this.zugabe.equals(other.zugabe))
+            return false;
         return true;
     }
 
@@ -166,6 +190,7 @@ public class KonzertEntry implements Serializable {
         result = prime * result + ((this.index == null) ? 0 : this.index.hashCode());
         result = prime * result + ((this.fkKomposition == null) ? 0 : this.fkKomposition.hashCode());
         result = prime * result + ((this.placeholder == null) ? 0 : this.placeholder.hashCode());
+        result = prime * result + ((this.zugabe == null) ? 0 : this.zugabe.hashCode());
         return result;
     }
 
@@ -178,6 +203,7 @@ public class KonzertEntry implements Serializable {
         sb.append(", ").append(index);
         sb.append(", ").append(fkKomposition);
         sb.append(", ").append(placeholder);
+        sb.append(", ").append(zugabe);
 
         sb.append(")");
         return sb.toString();

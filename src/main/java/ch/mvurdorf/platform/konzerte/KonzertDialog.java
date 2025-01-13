@@ -2,6 +2,8 @@ package ch.mvurdorf.platform.konzerte;
 
 import ch.mvurdorf.platform.noten.KompositionDto;
 import ch.mvurdorf.platform.noten.KompositionService;
+import ch.mvurdorf.platform.ui.CheckboxRenderer;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -24,6 +26,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static com.vaadin.flow.component.grid.dnd.GridDropLocation.BELOW;
 import static com.vaadin.flow.component.grid.dnd.GridDropMode.BETWEEN;
 import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
+import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 @Slf4j
@@ -90,10 +93,13 @@ public class KonzertDialog extends Dialog {
         kompositionSelection.setItemLabelGenerator(KompositionDto::label);
         kompositionSelection.setWidthFull();
 
+        var zugabe = new Checkbox("Zugabe?", false);
+
         var entriesGrid = new Grid<KonzertEntryDto>();
         entriesDataView = entriesGrid.setItems(dto.entries());
         entriesGrid.setSizeFull();
         entriesGrid.addColumn(KonzertEntryDto::titel).setHeader("Titel").setFlexGrow(1);
+        entriesGrid.addColumn(new CheckboxRenderer<>(KonzertEntryDto::zugabe)).setHeader("Zugabe");
         entriesGrid.addColumn(clickableIcon(TRASH, item -> entriesDataView.removeItem(item))).setFlexGrow(0);
         entriesGrid.setAllRowsVisible(true);
         entriesGrid.setMinHeight("300px");
@@ -133,9 +139,11 @@ public class KonzertDialog extends Dialog {
                                                                                                                                       selection.id(),
                                                                                                                                       selection.titel(),
                                                                                                                                       selection.komponist(),
-                                                                                                                                      selection.arrangeur()))));
+                                                                                                                                      selection.arrangeur(),
+                                                                                                                                      zugabe.getValue()))));
 
-        var kompositionSelectionControls = new HorizontalLayout(kompositionSelection, addButton);
+        var kompositionSelectionControls = new HorizontalLayout(kompositionSelection, zugabe, addButton);
+        kompositionSelectionControls.setAlignItems(CENTER);
         kompositionSelectionControls.setWidthFull();
 
         var placeholder = new TextField();
@@ -145,7 +153,7 @@ public class KonzertDialog extends Dialog {
         var addPlaceholderButton = secondaryButton("Platzhalter hinzufügen",
                                                    () -> placeholder.getOptionalValue()
                                                                     .ifPresent(value -> {
-                                                                        entriesDataView.addItem(new KonzertEntryDto(null, value, null, null, null, null));
+                                                                        entriesDataView.addItem(new KonzertEntryDto(null, value, null, null, null, null, false));
                                                                         placeholder.clear();
                                                                     }));
         var placeholderControls = new HorizontalLayout(placeholder, addPlaceholderButton);

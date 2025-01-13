@@ -10,7 +10,8 @@ public record KonzertEntryDto(Integer index,
                               Long kompositionId,
                               String kompositionTitel,
                               String kompositionKomponist,
-                              String kompositionArrangeur) {
+                              String kompositionArrangeur,
+                              boolean zugabe) {
 
     public String titel() {
         if (kompositionId != null) {

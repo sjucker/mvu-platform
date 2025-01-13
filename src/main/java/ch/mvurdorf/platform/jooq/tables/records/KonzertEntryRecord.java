@@ -88,6 +88,20 @@ public class KonzertEntryRecord extends UpdatableRecordImpl<KonzertEntryRecord> 
         return (String) get(4);
     }
 
+    /**
+     * Setter for <code>public.konzert_entry.zugabe</code>.
+     */
+    public void setZugabe(Boolean value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>public.konzert_entry.zugabe</code>.
+     */
+    public Boolean getZugabe() {
+        return (Boolean) get(5);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -111,7 +125,7 @@ public class KonzertEntryRecord extends UpdatableRecordImpl<KonzertEntryRecord> 
     /**
      * Create a detached, initialised KonzertEntryRecord
      */
-    public KonzertEntryRecord(Long id, Long fkKonzert, Integer index, Long fkKomposition, String placeholder) {
+    public KonzertEntryRecord(Long id, Long fkKonzert, Integer index, Long fkKomposition, String placeholder, Boolean zugabe) {
         super(KonzertEntry.KONZERT_ENTRY);
 
         setId(id);
@@ -119,6 +133,7 @@ public class KonzertEntryRecord extends UpdatableRecordImpl<KonzertEntryRecord> 
         setIndex(index);
         setFkKomposition(fkKomposition);
         setPlaceholder(placeholder);
+        setZugabe(zugabe);
         resetChangedOnNotNull();
     }
 
@@ -134,6 +149,7 @@ public class KonzertEntryRecord extends UpdatableRecordImpl<KonzertEntryRecord> 
             setIndex(value.getIndex());
             setFkKomposition(value.getFkKomposition());
             setPlaceholder(value.getPlaceholder());
+            setZugabe(value.getZugabe());
             resetChangedOnNotNull();
         }
     }

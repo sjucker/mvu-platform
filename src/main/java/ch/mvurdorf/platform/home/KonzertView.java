@@ -16,9 +16,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
 import jakarta.annotation.security.PermitAll;
 
-import java.util.List;
-import java.util.Objects;
-
+import static ch.mvurdorf.platform.konzerte.KonzerteService.getNumber;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -66,21 +64,5 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                     add(entries);
                 },
                 () -> add(new Paragraph("Konzert nicht gefunden.")));
-    }
-
-    private Integer getNumber(KonzertEntryDto dto, List<KonzertEntryDto> entries) {
-        if (dto.isPlaceholder()) {
-            return null;
-        }
-        int number = 1;
-        for (var entry : entries) {
-            if (Objects.equals(entry.index(), dto.index())) {
-                return number;
-            }
-            if (!entry.isPlaceholder()) {
-                number++;
-            }
-        }
-        return number;
     }
 }

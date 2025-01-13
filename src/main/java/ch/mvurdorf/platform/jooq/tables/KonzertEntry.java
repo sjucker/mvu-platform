@@ -83,6 +83,11 @@ public class KonzertEntry extends TableImpl<KonzertEntryRecord> {
      */
     public final TableField<KonzertEntryRecord, String> PLACEHOLDER = createField(DSL.name("placeholder"), SQLDataType.VARCHAR(255), this, "");
 
+    /**
+     * The column <code>public.konzert_entry.zugabe</code>.
+     */
+    public final TableField<KonzertEntryRecord, Boolean> ZUGABE = createField(DSL.name("zugabe"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("false"), SQLDataType.BOOLEAN)), this, "");
+
     private KonzertEntry(Name alias, Table<KonzertEntryRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
