@@ -4,6 +4,7 @@
 package ch.mvurdorf.platform.jooq;
 
 
+import ch.mvurdorf.platform.jooq.tables.InstrumentPermission;
 import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Konzert;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
@@ -37,6 +38,11 @@ public class Public extends SchemaImpl {
      * The reference instance of <code>public</code>
      */
     public static final Public PUBLIC = new Public();
+
+    /**
+     * The table <code>public.instrument_permission</code>.
+     */
+    public final InstrumentPermission INSTRUMENT_PERMISSION = InstrumentPermission.INSTRUMENT_PERMISSION;
 
     /**
      * The table <code>public.komposition</code>.
@@ -118,6 +124,7 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
+            InstrumentPermission.INSTRUMENT_PERMISSION,
             Komposition.KOMPOSITION,
             Konzert.KONZERT,
             KonzertEntry.KONZERT_ENTRY,

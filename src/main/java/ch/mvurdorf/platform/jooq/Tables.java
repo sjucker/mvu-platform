@@ -4,6 +4,7 @@
 package ch.mvurdorf.platform.jooq;
 
 
+import ch.mvurdorf.platform.jooq.tables.InstrumentPermission;
 import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Konzert;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
@@ -22,6 +23,11 @@ import ch.mvurdorf.platform.jooq.tables.Voucher;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
+
+    /**
+     * The table <code>public.instrument_permission</code>.
+     */
+    public static final InstrumentPermission INSTRUMENT_PERMISSION = InstrumentPermission.INSTRUMENT_PERMISSION;
 
     /**
      * The table <code>public.komposition</code>.

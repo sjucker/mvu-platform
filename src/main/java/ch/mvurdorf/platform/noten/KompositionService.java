@@ -29,12 +29,12 @@ public class KompositionService {
     }
 
     public void insert(KompositionDto komposition) {
-        kompositionDao.insert(new Komposition(null, komposition.titel(), komposition.komponist(), komposition.arrangeur(), komposition.durationInSeconds()));
+        kompositionDao.insert(new Komposition(null, komposition.titel(), komposition.komponist(), komposition.arrangeur(), komposition.format().name()));
     }
 
     public List<KompositionDto> findAllSorted() {
         return kompositionDao.findAll().stream()
-                             .map(komposition -> new KompositionDto(komposition.getId(), komposition.getTitel(), komposition.getKomponist(), komposition.getArrangeur(), komposition.getDurationInSeconds()))
+                             .map(komposition -> new KompositionDto(komposition.getId(), komposition.getTitel(), komposition.getKomponist(), komposition.getArrangeur(), NotenFormat.valueOf(komposition.getFormat())))
                              .sorted(comparing(KompositionDto::titel)
                                              .thenComparing(KompositionDto::komponist, nullsLast(naturalOrder()))
                                              .thenComparing(KompositionDto::arrangeur, nullsLast(naturalOrder())))
@@ -75,7 +75,7 @@ public class KompositionService {
                                   it.get(KOMPOSITION.TITEL),
                                   it.get(KOMPOSITION.KOMPONIST),
                                   it.get(KOMPOSITION.ARRANGEUR),
-                                  it.get(KOMPOSITION.DURATION_IN_SECONDS));
+                                  NotenFormat.valueOf(it.get(KOMPOSITION.FORMAT)));
     }
 
     private int count(String filter) {

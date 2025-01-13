@@ -75,17 +75,17 @@ public class KompositionRecord extends UpdatableRecordImpl<KompositionRecord> {
     }
 
     /**
-     * Setter for <code>public.komposition.duration_in_seconds</code>.
+     * Setter for <code>public.komposition.format</code>.
      */
-    public void setDurationInSeconds(Integer value) {
+    public void setFormat(String value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>public.komposition.duration_in_seconds</code>.
+     * Getter for <code>public.komposition.format</code>.
      */
-    public Integer getDurationInSeconds() {
-        return (Integer) get(4);
+    public String getFormat() {
+        return (String) get(4);
     }
 
     // -------------------------------------------------------------------------
@@ -111,14 +111,14 @@ public class KompositionRecord extends UpdatableRecordImpl<KompositionRecord> {
     /**
      * Create a detached, initialised KompositionRecord
      */
-    public KompositionRecord(Long id, String titel, String komponist, String arrangeur, Integer durationInSeconds) {
+    public KompositionRecord(Long id, String titel, String komponist, String arrangeur, String format) {
         super(Komposition.KOMPOSITION);
 
         setId(id);
         setTitel(titel);
         setKomponist(komponist);
         setArrangeur(arrangeur);
-        setDurationInSeconds(durationInSeconds);
+        setFormat(format);
         resetChangedOnNotNull();
     }
 
@@ -133,7 +133,7 @@ public class KompositionRecord extends UpdatableRecordImpl<KompositionRecord> {
             setTitel(value.getTitel());
             setKomponist(value.getKomponist());
             setArrangeur(value.getArrangeur());
-            setDurationInSeconds(value.getDurationInSeconds());
+            setFormat(value.getFormat());
             resetChangedOnNotNull();
         }
     }

@@ -2,6 +2,7 @@ package ch.mvurdorf.platform.noten;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.service.StorageService;
+import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -54,6 +55,7 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(KompositionDto::titel).setHeader("Titel");
         grid.addColumn(KompositionDto::komponist).setHeader("Komponist");
         grid.addColumn(KompositionDto::arrangeur).setHeader("Arrangeur");
+        grid.addColumn(new LocalizedEnumRenderer<>(KompositionDto::format)).setHeader("Format");
         grid.addColumn(clickableIcon(UPLOAD, dto -> NotenDialog.show(notenService, storageService, dto)));
     }
 
