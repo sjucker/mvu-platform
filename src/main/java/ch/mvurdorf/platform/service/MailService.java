@@ -1,7 +1,7 @@
 package ch.mvurdorf.platform.service;
 
 import ch.mvurdorf.platform.Application.PlatformProperties;
-import ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied;
+import ch.mvurdorf.platform.jooq.tables.pojos.Supporter;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -33,24 +33,24 @@ public class MailService {
     private final PlatformProperties platformProperties;
 
     @Async
-    public void sendSupporterRegistrationEmail(Passivmitglied passivmitglied) {
-        log.info("sending supporter registration mail to {}", passivmitglied.getEmail());
+    public void sendSupporterRegistrationEmail(Supporter supporter) {
+        log.info("sending supporter registration mail to {}", supporter.getEmail());
         try {
             var variables = new HashMap<String, Object>();
-            variables.put("anrede", passivmitglied.getAnrede());
-            variables.put("vorname", passivmitglied.getVorname());
-            variables.put("link", "%s/portal/%s".formatted(platformProperties.supportUrl(), passivmitglied.getUuid()));
+            variables.put("anrede", supporter.getAnrede());
+            variables.put("vorname", supporter.getVorname());
+            variables.put("link", "%s/portal/%s".formatted(platformProperties.supportUrl(), supporter.getUuid()));
 
             var mjml = templateEngine.process("supporter-registration", new Context(GERMAN, variables));
 
             var mimeMessage = mailSender.createMimeMessage();
-            var helper = setSenderReceiverMetadata(mimeMessage, passivmitglied.getEmail());
+            var helper = setSenderReceiverMetadata(mimeMessage, supporter.getEmail());
             helper.setSubject("%s%s".formatted(getSubjectPrefix(), "Support Musikverein Harmonie Urdorf"));
             helper.setText(mjmlService.render(mjml), true);
 
             mailSender.send(mimeMessage);
         } catch (RuntimeException | MessagingException e) {
-            log.error("could not send supporter registration mail %s".formatted(passivmitglied.getEmail()), e);
+            log.error("could not send supporter registration mail %s".formatted(supporter.getEmail()), e);
         }
     }
 

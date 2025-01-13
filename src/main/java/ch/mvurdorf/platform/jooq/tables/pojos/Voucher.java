@@ -20,6 +20,7 @@ public class Voucher implements Serializable {
     private String codePrefix;
     private String description;
     private LocalDate validUntil;
+    private String type;
 
     public Voucher() {}
 
@@ -28,18 +29,21 @@ public class Voucher implements Serializable {
         this.codePrefix = value.codePrefix;
         this.description = value.description;
         this.validUntil = value.validUntil;
+        this.type = value.type;
     }
 
     public Voucher(
         Long id,
         String codePrefix,
         String description,
-        LocalDate validUntil
+        LocalDate validUntil,
+        String type
     ) {
         this.id = id;
         this.codePrefix = codePrefix;
         this.description = description;
         this.validUntil = validUntil;
+        this.type = type;
     }
 
     /**
@@ -98,6 +102,20 @@ public class Voucher implements Serializable {
         this.validUntil = validUntil;
     }
 
+    /**
+     * Getter for <code>public.voucher.type</code>.
+     */
+    public String getType() {
+        return this.type;
+    }
+
+    /**
+     * Setter for <code>public.voucher.type</code>.
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -131,6 +149,12 @@ public class Voucher implements Serializable {
         }
         else if (!this.validUntil.equals(other.validUntil))
             return false;
+        if (this.type == null) {
+            if (other.type != null)
+                return false;
+        }
+        else if (!this.type.equals(other.type))
+            return false;
         return true;
     }
 
@@ -142,6 +166,7 @@ public class Voucher implements Serializable {
         result = prime * result + ((this.codePrefix == null) ? 0 : this.codePrefix.hashCode());
         result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
         result = prime * result + ((this.validUntil == null) ? 0 : this.validUntil.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         return result;
     }
 
@@ -153,6 +178,7 @@ public class Voucher implements Serializable {
         sb.append(", ").append(codePrefix);
         sb.append(", ").append(description);
         sb.append(", ").append(validUntil);
+        sb.append(", ").append(type);
 
         sb.append(")");
         return sb.toString();

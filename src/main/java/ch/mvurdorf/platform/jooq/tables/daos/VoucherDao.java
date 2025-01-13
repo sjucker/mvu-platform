@@ -117,4 +117,19 @@ public class VoucherDao extends AbstractSpringDAOImpl<VoucherRecord, ch.mvurdorf
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Voucher> fetchByValidUntil(LocalDate... values) {
         return fetch(Voucher.VOUCHER.VALID_UNTIL, values);
     }
+
+    /**
+     * Fetch records that have <code>type BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Voucher> fetchRangeOfType(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Voucher.VOUCHER.TYPE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>type IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Voucher> fetchByType(String... values) {
+        return fetch(Voucher.VOUCHER.TYPE, values);
+    }
 }

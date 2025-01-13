@@ -24,7 +24,7 @@ public class Login implements Serializable {
     private LocalDateTime lastLogin;
     private String usersPermission;
     private String notenPermission;
-    private String passivmitgliedPermission;
+    private String supporterPermission;
     private String konzertePermission;
     private String repertoirePermission;
 
@@ -39,7 +39,7 @@ public class Login implements Serializable {
         this.lastLogin = value.lastLogin;
         this.usersPermission = value.usersPermission;
         this.notenPermission = value.notenPermission;
-        this.passivmitgliedPermission = value.passivmitgliedPermission;
+        this.supporterPermission = value.supporterPermission;
         this.konzertePermission = value.konzertePermission;
         this.repertoirePermission = value.repertoirePermission;
     }
@@ -53,7 +53,7 @@ public class Login implements Serializable {
         LocalDateTime lastLogin,
         String usersPermission,
         String notenPermission,
-        String passivmitgliedPermission,
+        String supporterPermission,
         String konzertePermission,
         String repertoirePermission
     ) {
@@ -65,7 +65,7 @@ public class Login implements Serializable {
         this.lastLogin = lastLogin;
         this.usersPermission = usersPermission;
         this.notenPermission = notenPermission;
-        this.passivmitgliedPermission = passivmitgliedPermission;
+        this.supporterPermission = supporterPermission;
         this.konzertePermission = konzertePermission;
         this.repertoirePermission = repertoirePermission;
     }
@@ -183,17 +183,17 @@ public class Login implements Serializable {
     }
 
     /**
-     * Getter for <code>public.login.passivmitglied_permission</code>.
+     * Getter for <code>public.login.supporter_permission</code>.
      */
-    public String getPassivmitgliedPermission() {
-        return this.passivmitgliedPermission;
+    public String getSupporterPermission() {
+        return this.supporterPermission;
     }
 
     /**
-     * Setter for <code>public.login.passivmitglied_permission</code>.
+     * Setter for <code>public.login.supporter_permission</code>.
      */
-    public void setPassivmitgliedPermission(String passivmitgliedPermission) {
-        this.passivmitgliedPermission = passivmitgliedPermission;
+    public void setSupporterPermission(String supporterPermission) {
+        this.supporterPermission = supporterPermission;
     }
 
     /**
@@ -281,11 +281,11 @@ public class Login implements Serializable {
         }
         else if (!this.notenPermission.equals(other.notenPermission))
             return false;
-        if (this.passivmitgliedPermission == null) {
-            if (other.passivmitgliedPermission != null)
+        if (this.supporterPermission == null) {
+            if (other.supporterPermission != null)
                 return false;
         }
-        else if (!this.passivmitgliedPermission.equals(other.passivmitgliedPermission))
+        else if (!this.supporterPermission.equals(other.supporterPermission))
             return false;
         if (this.konzertePermission == null) {
             if (other.konzertePermission != null)
@@ -314,7 +314,7 @@ public class Login implements Serializable {
         result = prime * result + ((this.lastLogin == null) ? 0 : this.lastLogin.hashCode());
         result = prime * result + ((this.usersPermission == null) ? 0 : this.usersPermission.hashCode());
         result = prime * result + ((this.notenPermission == null) ? 0 : this.notenPermission.hashCode());
-        result = prime * result + ((this.passivmitgliedPermission == null) ? 0 : this.passivmitgliedPermission.hashCode());
+        result = prime * result + ((this.supporterPermission == null) ? 0 : this.supporterPermission.hashCode());
         result = prime * result + ((this.konzertePermission == null) ? 0 : this.konzertePermission.hashCode());
         result = prime * result + ((this.repertoirePermission == null) ? 0 : this.repertoirePermission.hashCode());
         return result;
@@ -332,7 +332,7 @@ public class Login implements Serializable {
         sb.append(", ").append(lastLogin);
         sb.append(", ").append(usersPermission);
         sb.append(", ").append(notenPermission);
-        sb.append(", ").append(passivmitgliedPermission);
+        sb.append(", ").append(supporterPermission);
         sb.append(", ").append(konzertePermission);
         sb.append(", ").append(repertoirePermission);
 

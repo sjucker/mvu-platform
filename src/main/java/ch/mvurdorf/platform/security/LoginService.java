@@ -21,7 +21,7 @@ public class LoginService implements UserDetailsService {
 
     public static final String USERS_GROUP = "USERS";
     public static final String NOTEN_GROUP = "NOTEN";
-    public static final String PASSIVMITGLIED_GROUP = "PASSIVMITGLIED";
+    public static final String SUPPORTER_GROUP = "SUPPORTER";
     public static final String KONZERTE_GROUP = "KONZERTE";
     public static final String REPERTOIRE_GROUP = "REPERTOIRE";
 
@@ -51,7 +51,7 @@ public class LoginService implements UserDetailsService {
 
         Permission.of(USERS_GROUP, login.getUsersPermission()).ifPresent(roles::addAll);
         Permission.of(NOTEN_GROUP, login.getNotenPermission()).ifPresent(roles::addAll);
-        Permission.of(PASSIVMITGLIED_GROUP, login.getPassivmitgliedPermission()).ifPresent(roles::addAll);
+        Permission.of(SUPPORTER_GROUP, login.getSupporterPermission()).ifPresent(roles::addAll);
         Permission.of(KONZERTE_GROUP, login.getKonzertePermission()).ifPresent(roles::addAll);
         Permission.of(REPERTOIRE_GROUP, login.getRepertoirePermission()).ifPresent(roles::addAll);
 

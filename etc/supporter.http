@@ -1,7 +1,8 @@
-POST {{base}}/passivmitglied
+POST {{base}}/supporter
 Content-Type: application/json
 
 {
+  "type": "PASSIVMITGLIED",
   "anrede": "Lieber",
   "vorname": "Hans",
   "nachname": "Muster",
@@ -20,6 +21,6 @@ Content-Type: application/json
 
 ###
 
-GET {{base}}/passivmitglied/1000001
+GET {{base}}/supporter/1000001
 
 ###

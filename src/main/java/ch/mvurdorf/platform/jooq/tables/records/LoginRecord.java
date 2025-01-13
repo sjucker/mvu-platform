@@ -133,16 +133,16 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     }
 
     /**
-     * Setter for <code>public.login.passivmitglied_permission</code>.
+     * Setter for <code>public.login.supporter_permission</code>.
      */
-    public void setPassivmitgliedPermission(String value) {
+    public void setSupporterPermission(String value) {
         set(8, value);
     }
 
     /**
-     * Getter for <code>public.login.passivmitglied_permission</code>.
+     * Getter for <code>public.login.supporter_permission</code>.
      */
-    public String getPassivmitgliedPermission() {
+    public String getSupporterPermission() {
         return (String) get(8);
     }
 
@@ -197,7 +197,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String passivmitgliedPermission, String konzertePermission, String repertoirePermission) {
+    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission) {
         super(Login.LOGIN);
 
         setId(id);
@@ -208,7 +208,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         setLastLogin(lastLogin);
         setUsersPermission(usersPermission);
         setNotenPermission(notenPermission);
-        setPassivmitgliedPermission(passivmitgliedPermission);
+        setSupporterPermission(supporterPermission);
         setKonzertePermission(konzertePermission);
         setRepertoirePermission(repertoirePermission);
         resetChangedOnNotNull();
@@ -229,7 +229,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setLastLogin(value.getLastLogin());
             setUsersPermission(value.getUsersPermission());
             setNotenPermission(value.getNotenPermission());
-            setPassivmitgliedPermission(value.getPassivmitgliedPermission());
+            setSupporterPermission(value.getSupporterPermission());
             setKonzertePermission(value.getKonzertePermission());
             setRepertoirePermission(value.getRepertoirePermission());
             resetChangedOnNotNull();

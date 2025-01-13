@@ -1,12 +1,12 @@
-package ch.mvurdorf.platform.passivmitglied;
+package ch.mvurdorf.platform.supporter;
 
-import ch.mvurdorf.platform.jooq.tables.pojos.Passivmitglied;
+import ch.mvurdorf.platform.jooq.tables.pojos.Supporter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PassivmitgliedEditDTO {
+public class SupporterEditDTO {
     private final Long id;
     private String anrede;
     private String vorname;
@@ -20,7 +20,7 @@ public class PassivmitgliedEditDTO {
     private boolean kommunikationPost;
     private boolean kommunikationEmail;
 
-    public void applyTo(Passivmitglied existing) {
+    public void applyTo(Supporter existing) {
         existing.setAnrede(anrede);
         existing.setVorname(vorname);
         existing.setNachname(nachname);

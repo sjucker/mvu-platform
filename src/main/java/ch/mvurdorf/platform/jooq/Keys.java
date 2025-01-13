@@ -9,22 +9,22 @@ import ch.mvurdorf.platform.jooq.tables.Konzert;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.Noten;
-import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
-import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
-import ch.mvurdorf.platform.jooq.tables.PassivmitgliedVoucher;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
+import ch.mvurdorf.platform.jooq.tables.Supporter;
+import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
+import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
 import ch.mvurdorf.platform.jooq.tables.records.KompositionRecord;
 import ch.mvurdorf.platform.jooq.tables.records.KonzertEntryRecord;
 import ch.mvurdorf.platform.jooq.tables.records.KonzertRecord;
 import ch.mvurdorf.platform.jooq.tables.records.LoginRecord;
 import ch.mvurdorf.platform.jooq.tables.records.NotenRecord;
-import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedPaymentRecord;
-import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedRecord;
-import ch.mvurdorf.platform.jooq.tables.records.PassivmitgliedVoucherRecord;
 import ch.mvurdorf.platform.jooq.tables.records.RepertoireEntryRecord;
 import ch.mvurdorf.platform.jooq.tables.records.RepertoireRecord;
+import ch.mvurdorf.platform.jooq.tables.records.SupporterPaymentRecord;
+import ch.mvurdorf.platform.jooq.tables.records.SupporterRecord;
+import ch.mvurdorf.platform.jooq.tables.records.SupporterVoucherRecord;
 import ch.mvurdorf.platform.jooq.tables.records.VoucherRecord;
 
 import org.jooq.ForeignKey;
@@ -51,12 +51,12 @@ public class Keys {
     public static final UniqueKey<LoginRecord> PK__LOGIN = Internal.createUniqueKey(Login.LOGIN, DSL.name("pk__login"), new TableField[] { Login.LOGIN.ID }, true);
     public static final UniqueKey<LoginRecord> UQ__LOGIN_EMAIL = Internal.createUniqueKey(Login.LOGIN, DSL.name("uq__login_email"), new TableField[] { Login.LOGIN.EMAIL }, true);
     public static final UniqueKey<NotenRecord> PK__NOTEN = Internal.createUniqueKey(Noten.NOTEN, DSL.name("pk__noten"), new TableField[] { Noten.NOTEN.ID }, true);
-    public static final UniqueKey<PassivmitgliedRecord> PASSIVMITGLIED_EMAIL_KEY = Internal.createUniqueKey(Passivmitglied.PASSIVMITGLIED, DSL.name("passivmitglied_email_key"), new TableField[] { Passivmitglied.PASSIVMITGLIED.EMAIL }, true);
-    public static final UniqueKey<PassivmitgliedRecord> PK__PASSIVMITGLIED = Internal.createUniqueKey(Passivmitglied.PASSIVMITGLIED, DSL.name("pk__passivmitglied"), new TableField[] { Passivmitglied.PASSIVMITGLIED.ID }, true);
-    public static final UniqueKey<PassivmitgliedPaymentRecord> PK__PASSIVMITGLIED_PAYMENT = Internal.createUniqueKey(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT, DSL.name("pk__passivmitglied_payment"), new TableField[] { PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT.ID }, true);
-    public static final UniqueKey<PassivmitgliedVoucherRecord> PK__PASSIVMITGLIED_VOUCHER = Internal.createUniqueKey(PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER, DSL.name("pk__passivmitglied_voucher"), new TableField[] { PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER.ID }, true);
     public static final UniqueKey<RepertoireRecord> PK__REPERTOIRE = Internal.createUniqueKey(Repertoire.REPERTOIRE, DSL.name("pk__repertoire"), new TableField[] { Repertoire.REPERTOIRE.ID }, true);
     public static final UniqueKey<RepertoireEntryRecord> PK__REPERTOIRE_ENTRY = Internal.createUniqueKey(RepertoireEntry.REPERTOIRE_ENTRY, DSL.name("pk__repertoire_entry"), new TableField[] { RepertoireEntry.REPERTOIRE_ENTRY.ID }, true);
+    public static final UniqueKey<SupporterRecord> PASSIVMITGLIED_EMAIL_KEY = Internal.createUniqueKey(Supporter.SUPPORTER, DSL.name("passivmitglied_email_key"), new TableField[] { Supporter.SUPPORTER.EMAIL }, true);
+    public static final UniqueKey<SupporterRecord> PK__PASSIVMITGLIED = Internal.createUniqueKey(Supporter.SUPPORTER, DSL.name("pk__passivmitglied"), new TableField[] { Supporter.SUPPORTER.ID }, true);
+    public static final UniqueKey<SupporterPaymentRecord> PK__PASSIVMITGLIED_PAYMENT = Internal.createUniqueKey(SupporterPayment.SUPPORTER_PAYMENT, DSL.name("pk__passivmitglied_payment"), new TableField[] { SupporterPayment.SUPPORTER_PAYMENT.ID }, true);
+    public static final UniqueKey<SupporterVoucherRecord> PK__PASSIVMITGLIED_VOUCHER = Internal.createUniqueKey(SupporterVoucher.SUPPORTER_VOUCHER, DSL.name("pk__passivmitglied_voucher"), new TableField[] { SupporterVoucher.SUPPORTER_VOUCHER.ID }, true);
     public static final UniqueKey<VoucherRecord> PK__VOUCHER = Internal.createUniqueKey(Voucher.VOUCHER, DSL.name("pk__voucher"), new TableField[] { Voucher.VOUCHER.ID }, true);
 
     // -------------------------------------------------------------------------
@@ -66,8 +66,8 @@ public class Keys {
     public static final ForeignKey<KonzertEntryRecord, KompositionRecord> KONZERT_ENTRY__KONZERT_ENTRY_FK_KOMPOSITION_FKEY = Internal.createForeignKey(KonzertEntry.KONZERT_ENTRY, DSL.name("konzert_entry_fk_komposition_fkey"), new TableField[] { KonzertEntry.KONZERT_ENTRY.FK_KOMPOSITION }, Keys.PK__KOMPOSITION, new TableField[] { Komposition.KOMPOSITION.ID }, true);
     public static final ForeignKey<KonzertEntryRecord, KonzertRecord> KONZERT_ENTRY__KONZERT_ENTRY_FK_KONZERT_FKEY = Internal.createForeignKey(KonzertEntry.KONZERT_ENTRY, DSL.name("konzert_entry_fk_konzert_fkey"), new TableField[] { KonzertEntry.KONZERT_ENTRY.FK_KONZERT }, Keys.PK__KONZERT, new TableField[] { Konzert.KONZERT.ID }, true);
     public static final ForeignKey<NotenRecord, KompositionRecord> NOTEN__NOTEN_FK_KOMPOSITION_FKEY = Internal.createForeignKey(Noten.NOTEN, DSL.name("noten_fk_komposition_fkey"), new TableField[] { Noten.NOTEN.FK_KOMPOSITION }, Keys.PK__KOMPOSITION, new TableField[] { Komposition.KOMPOSITION.ID }, true);
-    public static final ForeignKey<PassivmitgliedPaymentRecord, PassivmitgliedRecord> PASSIVMITGLIED_PAYMENT__PASSIVMITGLIED_PAYMENT_FK_PASSIVMITGLIED_FKEY = Internal.createForeignKey(PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT, DSL.name("passivmitglied_payment_fk_passivmitglied_fkey"), new TableField[] { PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT.FK_PASSIVMITGLIED }, Keys.PK__PASSIVMITGLIED, new TableField[] { Passivmitglied.PASSIVMITGLIED.ID }, true);
-    public static final ForeignKey<PassivmitgliedVoucherRecord, PassivmitgliedRecord> PASSIVMITGLIED_VOUCHER__PASSIVMITGLIED_VOUCHER_FK_PASSIVMITGLIED_FKEY = Internal.createForeignKey(PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER, DSL.name("passivmitglied_voucher_fk_passivmitglied_fkey"), new TableField[] { PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER.FK_PASSIVMITGLIED }, Keys.PK__PASSIVMITGLIED, new TableField[] { Passivmitglied.PASSIVMITGLIED.ID }, true);
     public static final ForeignKey<RepertoireEntryRecord, KompositionRecord> REPERTOIRE_ENTRY__REPERTOIRE_ENTRY_FK_KOMPOSITION_FKEY = Internal.createForeignKey(RepertoireEntry.REPERTOIRE_ENTRY, DSL.name("repertoire_entry_fk_komposition_fkey"), new TableField[] { RepertoireEntry.REPERTOIRE_ENTRY.FK_KOMPOSITION }, Keys.PK__KOMPOSITION, new TableField[] { Komposition.KOMPOSITION.ID }, true);
     public static final ForeignKey<RepertoireEntryRecord, RepertoireRecord> REPERTOIRE_ENTRY__REPERTOIRE_ENTRY_FK_REPERTOIRE_FKEY = Internal.createForeignKey(RepertoireEntry.REPERTOIRE_ENTRY, DSL.name("repertoire_entry_fk_repertoire_fkey"), new TableField[] { RepertoireEntry.REPERTOIRE_ENTRY.FK_REPERTOIRE }, Keys.PK__REPERTOIRE, new TableField[] { Repertoire.REPERTOIRE.ID }, true);
+    public static final ForeignKey<SupporterPaymentRecord, SupporterRecord> SUPPORTER_PAYMENT__PASSIVMITGLIED_PAYMENT_FK_PASSIVMITGLIED_FKEY = Internal.createForeignKey(SupporterPayment.SUPPORTER_PAYMENT, DSL.name("passivmitglied_payment_fk_passivmitglied_fkey"), new TableField[] { SupporterPayment.SUPPORTER_PAYMENT.FK_SUPPORTER }, Keys.PK__PASSIVMITGLIED, new TableField[] { Supporter.SUPPORTER.ID }, true);
+    public static final ForeignKey<SupporterVoucherRecord, SupporterRecord> SUPPORTER_VOUCHER__PASSIVMITGLIED_VOUCHER_FK_PASSIVMITGLIED_FKEY = Internal.createForeignKey(SupporterVoucher.SUPPORTER_VOUCHER, DSL.name("passivmitglied_voucher_fk_passivmitglied_fkey"), new TableField[] { SupporterVoucher.SUPPORTER_VOUCHER.FK_SUPPORTER }, Keys.PK__PASSIVMITGLIED, new TableField[] { Supporter.SUPPORTER.ID }, true);
 }

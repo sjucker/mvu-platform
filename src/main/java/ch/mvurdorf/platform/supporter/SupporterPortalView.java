@@ -1,4 +1,4 @@
-package ch.mvurdorf.platform.passivmitglied;
+package ch.mvurdorf.platform.supporter;
 
 import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.flow.component.Component;
@@ -36,153 +36,153 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.image;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 
-@PageTitle("Passivmitglied")
+@PageTitle("Supporter")
 @Route(value = "portal", autoLayout = false)
 @AnonymousAllowed
-public class PassivmitgliedPortalView extends AppLayout implements HasUrlParameter<String> {
+public class SupporterPortalView extends AppLayout implements HasUrlParameter<String> {
 
-    private final PassivmitgliedService passivmitgliedService;
+    private final SupporterService supporterService;
 
-    public PassivmitgliedPortalView(PassivmitgliedService passivmitgliedService) {
-        this.passivmitgliedService = passivmitgliedService;
+    public SupporterPortalView(SupporterService supporterService) {
+        this.supporterService = supporterService;
 
-        var title = new H3("Passivmitglied");
+        var title = new H3("Supporter");
         title.addClassName(Padding.SMALL);
         addToNavbar(title);
     }
 
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
-        var passivmitglied = passivmitgliedService.findByUUID(parameter).orElse(null);
-        if (passivmitglied != null) {
+        var supporter = supporterService.findByUUID(parameter).orElse(null);
+        if (supporter != null) {
             var tabs = new TabSheet();
             tabs.setSizeFull();
-            tabs.add(new Tab("Bezahlen"), createBezahlenTab(passivmitglied));
-            tabs.add(new Tab("Gutscheine"), createVouchersTab(passivmitglied));
-            tabs.add(new Tab("Daten"), createDatenTab(passivmitglied));
+            tabs.add(new Tab("Bezahlen"), createBezahlenTab(supporter));
+            tabs.add(new Tab("Gutscheine"), createVouchersTab(supporter));
+            tabs.add(new Tab("Daten"), createDatenTab(supporter));
             setContent(tabs);
         } else {
-            setContent(new VerticalLayout(new Paragraph("Passivmitglied nicht gefunden.")));
+            setContent(new VerticalLayout(new Paragraph("Supporter nicht gefunden.")));
         }
     }
 
-    private Component createBezahlenTab(PassivmitgliedDto passivmitglied) {
+    private Component createBezahlenTab(SupporterDto supporter) {
         var content = new VerticalLayout();
         content.setSizeFull();
 
         content.add(new Anchor(new StreamResource("qr-rechnung.pdf", () -> {
-            var pdfBytes = passivmitgliedService.qrBillPdf(passivmitglied.externalId()).orElseThrow();
+            var pdfBytes = supporterService.qrBillPdf(supporter.externalId()).orElseThrow();
             return new ByteArrayInputStream(pdfBytes);
         }), "Rechnung als PDF herunterladen"));
 
         var qrBillImage = new Image(new StreamResource("qr-bill.png", () -> {
-            var imgBytes = passivmitgliedService.qrBill(passivmitglied.externalId()).orElseThrow();
+            var imgBytes = supporterService.qrBill(supporter.externalId()).orElseThrow();
             return new ByteArrayInputStream(imgBytes);
         }), "QR Rechnung");
         qrBillImage.addClassName(MaxWidth.FULL);
         content.add(qrBillImage);
 
-        if (!passivmitglied.payments().isEmpty()) {
+        if (!supporter.payments().isEmpty()) {
             content.add(new H3("Vergangene Bezahlungen"));
-            content.add(new UnorderedList(passivmitglied.paymentsNewestFirst().stream()
-                                                        .map(it -> new ListItem(it.description()))
-                                                        .toArray(ListItem[]::new)));
+            content.add(new UnorderedList(supporter.paymentsNewestFirst().stream()
+                                                   .map(it -> new ListItem(it.description()))
+                                                   .toArray(ListItem[]::new)));
 
         }
 
         return content;
     }
 
-    private Component createVouchersTab(PassivmitgliedDto passivmitglied) {
+    private Component createVouchersTab(SupporterDto supporter) {
         var content = new VerticalLayout();
         content.setSizeFull();
 
-        var grid = new Grid<PassivmitgliedVoucherDto>();
+        var grid = new Grid<SupporterVoucherDto>();
         grid.setSizeFull();
-        grid.addColumn(PassivmitgliedVoucherDto::description).setHeader("Titel");
-        grid.addColumn(dateRenderer(PassivmitgliedVoucherDto::validUntil)).setHeader("Gültig bis");
-        grid.addColumn(PassivmitgliedVoucherDto::code).setHeader("Code");
-        grid.addComponentColumn(image(PassivmitgliedVoucherDto::code, dto -> passivmitgliedService.qrCode(passivmitglied.externalId(), dto)))
+        grid.addColumn(SupporterVoucherDto::description).setHeader("Titel");
+        grid.addColumn(dateRenderer(SupporterVoucherDto::validUntil)).setHeader("Gültig bis");
+        grid.addColumn(SupporterVoucherDto::code).setHeader("Code");
+        grid.addComponentColumn(image(SupporterVoucherDto::code, dto -> supporterService.qrCode(supporter.externalId(), dto)))
             .setHeader("QR-Code");
 
-        grid.setItems(passivmitglied.vouchersNewestFirst().stream()
-                                    .filter(v -> v.validUntil().isAfter(DateUtil.today()))
-                                    .toList());
+        grid.setItems(supporter.vouchersNewestFirst().stream()
+                               .filter(v -> v.validUntil().isAfter(DateUtil.today()))
+                               .toList());
 
         content.add(grid);
         return content;
     }
 
-    private Component createDatenTab(PassivmitgliedDto passivmitglied) {
+    private Component createDatenTab(SupporterDto supporter) {
         var content = new VerticalLayout();
         content.setSizeFull();
 
-        var binder = new Binder<>(PassivmitgliedEditDTO.class);
+        var binder = new Binder<>(SupporterEditDTO.class);
 
         var formLayout = new FormLayout();
 
         var anrede = new Select<String>();
         anrede.setItems("Liebe", "Lieber", "Hallo");
-        binder.bind(anrede, PassivmitgliedEditDTO::getAnrede, PassivmitgliedEditDTO::setAnrede);
+        binder.bind(anrede, SupporterEditDTO::getAnrede, SupporterEditDTO::setAnrede);
         formLayout.setColspan(formLayout.addFormItem(anrede, "Anrede"), 2);
 
         var vorname = new TextField();
         binder.forField(vorname)
               .withValidator(new StringLengthValidator("Vorname muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(PassivmitgliedEditDTO::getVorname, PassivmitgliedEditDTO::setVorname);
+              .bind(SupporterEditDTO::getVorname, SupporterEditDTO::setVorname);
         formLayout.addFormItem(vorname, "Vorname");
 
         var nachname = new TextField();
         binder.forField(nachname)
               .withValidator(new StringLengthValidator("Nachname muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(PassivmitgliedEditDTO::getNachname, PassivmitgliedEditDTO::setNachname);
+              .bind(SupporterEditDTO::getNachname, SupporterEditDTO::setNachname);
         formLayout.addFormItem(nachname, "Nachname");
 
         var strasse = new TextField();
         binder.forField(strasse)
               .withValidator(new StringLengthValidator("Strasse muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(PassivmitgliedEditDTO::getStrasse, PassivmitgliedEditDTO::setStrasse);
+              .bind(SupporterEditDTO::getStrasse, SupporterEditDTO::setStrasse);
         formLayout.addFormItem(strasse, "Strasse");
 
         var strasseNr = new TextField();
         binder.forField(strasseNr)
               .withValidator(new StringLengthValidator("Nr. muss zwischen 1 und 5 Zeichen haben", 1, 5))
-              .bind(PassivmitgliedEditDTO::getStrasseNr, PassivmitgliedEditDTO::setStrasseNr);
+              .bind(SupporterEditDTO::getStrasseNr, SupporterEditDTO::setStrasseNr);
         formLayout.addFormItem(strasseNr, "Nr.");
 
         var plz = new TextField();
         binder.forField(plz)
               .withValidator(new StringLengthValidator("PLZ muss zwischen 1 und 10 Zeichen haben", 1, 10))
-              .bind(PassivmitgliedEditDTO::getPlz, PassivmitgliedEditDTO::setPlz);
+              .bind(SupporterEditDTO::getPlz, SupporterEditDTO::setPlz);
         formLayout.addFormItem(plz, "PLZ");
 
         var ort = new TextField();
         binder.forField(ort)
               .withValidator(new StringLengthValidator("Ort muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(PassivmitgliedEditDTO::getOrt, PassivmitgliedEditDTO::setOrt);
+              .bind(SupporterEditDTO::getOrt, SupporterEditDTO::setOrt);
         formLayout.addFormItem(ort, "Ort");
 
         var email = new TextField();
         binder.forField(email)
               .withValidator(new EmailValidator("Valide E-Mail eingeben"))
               .withValidator(new StringLengthValidator("E-Mail muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(PassivmitgliedEditDTO::getEmail, PassivmitgliedEditDTO::setEmail);
+              .bind(SupporterEditDTO::getEmail, SupporterEditDTO::setEmail);
         formLayout.setColspan(formLayout.addFormItem(email, "E-Mail"), 2);
 
         var kommunikationPost = new Checkbox();
-        binder.bind(kommunikationPost, PassivmitgliedEditDTO::isKommunikationPost, PassivmitgliedEditDTO::setKommunikationPost);
+        binder.bind(kommunikationPost, SupporterEditDTO::isKommunikationPost, SupporterEditDTO::setKommunikationPost);
         formLayout.addFormItem(kommunikationPost, "Kommunikation per Post");
 
         var kommunikationEmail = new Checkbox();
-        binder.bind(kommunikationEmail, PassivmitgliedEditDTO::isKommunikationEmail, PassivmitgliedEditDTO::setKommunikationEmail);
+        binder.bind(kommunikationEmail, SupporterEditDTO::isKommunikationEmail, SupporterEditDTO::setKommunikationEmail);
         formLayout.addFormItem(kommunikationEmail, "Kommunikation per E-Mail");
 
-        var edit = passivmitglied.edit();
+        var edit = supporter.edit();
         binder.readBean(edit);
         content.add(formLayout);
         var save = primaryButton("Speichern", () -> {
             if (binder.writeBeanIfValid(edit)) {
-                passivmitgliedService.update(edit);
+                supporterService.update(edit);
                 Notification.show("Gespeichert!");
             } else {
                 Notification.show("Bitte alle Felder ausfüllen");

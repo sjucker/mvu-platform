@@ -48,7 +48,7 @@ public class NotenDialog extends Dialog {
         grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::instrument)).setHeader("Instrument");
         grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::stimme)).setHeader("Stimme");
         grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::stimmlage)).setHeader("Stimmlage");
-        grid.addColumn(iconDownloadLink(DOWNLOAD, dto -> storageService.read(dto.id()), dto -> dto.filename()));
+        grid.addColumn(iconDownloadLink(DOWNLOAD, dto -> storageService.read(dto.id()), NotenDto::filename));
         grid.setItems(notenService.findByKomposition(komposition.id()));
 
         left.add(grid);
@@ -60,7 +60,7 @@ public class NotenDialog extends Dialog {
         upload.setAcceptedFileTypes(".pdf");
         upload.setMaxFiles(1);
         upload.setMaxFileSize(1024 * 1024 * 50);
-        upload.addSucceededListener(event -> save.setEnabled(true));
+        upload.addSucceededListener(_ -> save.setEnabled(true));
 
         right.add(upload);
 
@@ -108,6 +108,6 @@ public class NotenDialog extends Dialog {
 
         add(new HorizontalLayout(left, right));
 
-        getFooter().add(new Button("Schliessen", e -> close()));
+        getFooter().add(new Button("Schliessen", _ -> close()));
     }
 }

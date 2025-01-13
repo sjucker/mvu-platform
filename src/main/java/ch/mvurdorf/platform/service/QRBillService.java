@@ -1,6 +1,6 @@
 package ch.mvurdorf.platform.service;
 
-import ch.mvurdorf.platform.passivmitglied.PassivmitgliedDto;
+import ch.mvurdorf.platform.supporter.SupporterDto;
 import lombok.extern.slf4j.Slf4j;
 import net.codecrete.qrbill.generator.Address;
 import net.codecrete.qrbill.generator.Bill;
@@ -26,9 +26,9 @@ import static org.apache.pdfbox.pdmodel.common.PDRectangle.A4;
 @Service
 public class QRBillService {
 
-    public Optional<byte[]> passivmitgliedPdf(PassivmitgliedDto passivmitglied, double amount) {
+    public Optional<byte[]> supporterPdf(SupporterDto supporter, double amount) {
         var out = new ByteArrayOutputStream();
-        passivmitglied(passivmitglied, amount, OutputSize.A4_PORTRAIT_SHEET, out);
+        supporter(supporter, amount, OutputSize.A4_PORTRAIT_SHEET, out);
 
         try (var document = new PDDocument();
              var pdfOut = new ByteArrayOutputStream()) {
@@ -51,17 +51,17 @@ public class QRBillService {
         }
     }
 
-    public void passivmitglied(PassivmitgliedDto passivmitglied, double amount, OutputStream out) {
-        passivmitglied(passivmitglied, amount, OutputSize.PAYMENT_PART_ONLY, out);
+    public void supporter(SupporterDto supporter, double amount, OutputStream out) {
+        supporter(supporter, amount, OutputSize.PAYMENT_PART_ONLY, out);
     }
 
-    public void passivmitglied(PassivmitgliedDto passivmitglied, double amount, OutputSize outputSize, OutputStream out) {
+    public void supporter(SupporterDto supporter, double amount, OutputSize outputSize, OutputStream out) {
         var bill = new Bill();
         bill.setAccount("CH03 0070 0110 9014 7015 4");
         bill.setAmountFromDouble(amount);
         bill.setCurrency("CHF");
-        bill.createAndSetCreditorReference(passivmitglied.externalId().toString());
-        bill.setUnstructuredMessage("Referenz-Nr. " + passivmitglied.externalId());
+        bill.createAndSetCreditorReference(supporter.externalId().toString());
+        bill.setUnstructuredMessage("Referenz-Nr. " + supporter.externalId());
 
         var creditor = new Address();
         creditor.setName("Musikverein Harmonie Urdorf");
@@ -73,12 +73,12 @@ public class QRBillService {
         bill.setCreditor(creditor);
 
         var debtor = new Address();
-        debtor.setName(passivmitglied.fullName());
-        debtor.setStreet(passivmitglied.strasse());
-        debtor.setHouseNo(passivmitglied.strasseNr());
-        debtor.setPostalCode(passivmitglied.plz());
-        debtor.setTown(passivmitglied.ort());
-        debtor.setCountryCode(passivmitglied.countryCode());
+        debtor.setName(supporter.fullName());
+        debtor.setStreet(supporter.strasse());
+        debtor.setHouseNo(supporter.strasseNr());
+        debtor.setPostalCode(supporter.plz());
+        debtor.setTown(supporter.ort());
+        debtor.setCountryCode(supporter.countryCode());
         bill.setDebtor(debtor);
 
         var billFormat = new BillFormat();

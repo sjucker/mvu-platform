@@ -71,6 +71,11 @@ public class Voucher extends TableImpl<VoucherRecord> {
      */
     public final TableField<VoucherRecord, LocalDate> VALID_UNTIL = createField(DSL.name("valid_until"), SQLDataType.LOCALDATE.nullable(false), this, "");
 
+    /**
+     * The column <code>public.voucher.type</code>.
+     */
+    public final TableField<VoucherRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'PASSIVMITGLIED'::character varying"), SQLDataType.VARCHAR)), this, "");
+
     private Voucher(Name alias, Table<VoucherRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

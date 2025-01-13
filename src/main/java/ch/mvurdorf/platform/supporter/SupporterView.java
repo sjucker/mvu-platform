@@ -1,6 +1,7 @@
-package ch.mvurdorf.platform.passivmitglied;
+package ch.mvurdorf.platform.supporter;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -11,7 +12,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
-import static ch.mvurdorf.platform.security.LoginService.PASSIVMITGLIED_GROUP;
+import static ch.mvurdorf.platform.security.LoginService.SUPPORTER_GROUP;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
@@ -22,22 +23,22 @@ import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.MONEY_BILL_ALT;
 
-@PageTitle("Passivmitglieder")
-@Route("passivmitglied")
-@RolesAllowed({PASSIVMITGLIED_GROUP})
+@PageTitle("Supporter")
+@Route("supporter")
+@RolesAllowed({SUPPORTER_GROUP})
 @Menu(order = 5, icon = MONEY_BILL_ALT)
-public class PassivmitgliedView extends VerticalLayout {
+public class SupporterView extends VerticalLayout {
 
-    private final PassivmitgliedService passivmitgliedService;
+    private final SupporterService supporterService;
     private final AuthenticatedUser authenticatedUser;
 
     private HorizontalLayout controls;
-    private Grid<PassivmitgliedDto> grid;
-    private ConfigurableFilterDataProvider<PassivmitgliedDto, Void, String> dataProvider;
+    private Grid<SupporterDto> grid;
+    private ConfigurableFilterDataProvider<SupporterDto, Void, String> dataProvider;
 
-    public PassivmitgliedView(PassivmitgliedService passivmitgliedService,
-                              AuthenticatedUser authenticatedUser) {
-        this.passivmitgliedService = passivmitgliedService;
+    public SupporterView(SupporterService supporterService,
+                         AuthenticatedUser authenticatedUser) {
+        this.supporterService = supporterService;
         this.authenticatedUser = authenticatedUser;
 
         setSizeFull();
@@ -54,8 +55,8 @@ public class PassivmitgliedView extends VerticalLayout {
         filter.setClearButtonVisible(true);
         controls.add(filter);
 
-        if (authenticatedUser.hasWritePermission(PASSIVMITGLIED_GROUP)) {
-            var addVouchers = primaryButton("Gutscheine", () -> VouchersDialog.show(passivmitgliedService,
+        if (authenticatedUser.hasWritePermission(SUPPORTER_GROUP)) {
+            var addVouchers = primaryButton("Gutscheine", () -> VouchersDialog.show(supporterService,
                                                                                     created -> {
                                                                                         if (created) {
                                                                                             dataProvider.refreshAll();
@@ -68,28 +69,28 @@ public class PassivmitgliedView extends VerticalLayout {
 
     private void createGrid() {
         grid = new Grid<>();
-
-        grid.addColumn(PassivmitgliedDto::externalId).setHeader("Referenz-Nr.");
-        grid.addColumn(PassivmitgliedDto::vorname).setHeader("Vorname");
-        grid.addColumn(PassivmitgliedDto::nachname).setHeader("Nachname");
-        grid.addColumn(PassivmitgliedDto::email).setHeader("Email");
-        grid.addColumn(PassivmitgliedDto::strasse).setHeader("Strasse");
-        grid.addColumn(PassivmitgliedDto::ort).setHeader("PLZ/Ort");
-        grid.addColumn(dateTimeRenderer(PassivmitgliedDto::registeredAt)).setHeader("Registriert am");
-        grid.addColumn(PassivmitgliedDto::numberOfPayments).setHeader("# Bezahlungen");
+        grid.addColumn(new LocalizedEnumRenderer<>(SupporterDto::type)).setHeader("Typ");
+        grid.addColumn(SupporterDto::externalId).setHeader("Referenz-Nr.");
+        grid.addColumn(SupporterDto::vorname).setHeader("Vorname");
+        grid.addColumn(SupporterDto::nachname).setHeader("Nachname");
+        grid.addColumn(SupporterDto::email).setHeader("Email");
+        grid.addColumn(SupporterDto::strasse).setHeader("Strasse");
+        grid.addColumn(SupporterDto::ort).setHeader("PLZ/Ort");
+        grid.addColumn(dateTimeRenderer(SupporterDto::registeredAt)).setHeader("Registriert am");
+        grid.addColumn(SupporterDto::numberOfPayments).setHeader("# Bezahlungen");
         grid.addColumn(dateRenderer(dto -> dto.lastPayment().orElse(null))).setHeader("Letzte Bezahlung");
-        if (authenticatedUser.hasWritePermission(PASSIVMITGLIED_GROUP)) {
+        if (authenticatedUser.hasWritePermission(SUPPORTER_GROUP)) {
             grid.addColumn(clickableIcon(EDIT,
-                                         dto -> PassivmitgliedDialog.show(dto, newPayments -> {
-                                             passivmitgliedService.addPayments(dto.id(), newPayments, authenticatedUser.getName());
+                                         dto -> SupporterDialog.show(dto, newPayments -> {
+                                             supporterService.addPayments(dto.id(), newPayments, authenticatedUser.getName());
                                              dataProvider.refreshAll();
                                          })));
         }
-        if (authenticatedUser.hasReadPermission(PASSIVMITGLIED_GROUP)) {
-            grid.addColumn(clickableIcon(EYE, PassivmitgliedDialog::showReadOnly));
+        if (authenticatedUser.hasReadPermission(SUPPORTER_GROUP)) {
+            grid.addColumn(clickableIcon(EYE, SupporterDialog::showReadOnly));
         }
 
-        dataProvider = passivmitgliedService.dataProvider();
+        dataProvider = supporterService.dataProvider();
         grid.setDataProvider(dataProvider);
     }
 }

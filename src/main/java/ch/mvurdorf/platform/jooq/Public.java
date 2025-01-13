@@ -9,17 +9,18 @@ import ch.mvurdorf.platform.jooq.tables.Konzert;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.Noten;
-import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
-import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
-import ch.mvurdorf.platform.jooq.tables.PassivmitgliedVoucher;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
+import ch.mvurdorf.platform.jooq.tables.Supporter;
+import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
+import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.jooq.Catalog;
+import org.jooq.Sequence;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
@@ -63,21 +64,6 @@ public class Public extends SchemaImpl {
     public final Noten NOTEN = Noten.NOTEN;
 
     /**
-     * The table <code>public.passivmitglied</code>.
-     */
-    public final Passivmitglied PASSIVMITGLIED = Passivmitglied.PASSIVMITGLIED;
-
-    /**
-     * The table <code>public.passivmitglied_payment</code>.
-     */
-    public final PassivmitgliedPayment PASSIVMITGLIED_PAYMENT = PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT;
-
-    /**
-     * The table <code>public.passivmitglied_voucher</code>.
-     */
-    public final PassivmitgliedVoucher PASSIVMITGLIED_VOUCHER = PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER;
-
-    /**
      * The table <code>public.repertoire</code>.
      */
     public final Repertoire REPERTOIRE = Repertoire.REPERTOIRE;
@@ -86,6 +72,21 @@ public class Public extends SchemaImpl {
      * The table <code>public.repertoire_entry</code>.
      */
     public final RepertoireEntry REPERTOIRE_ENTRY = RepertoireEntry.REPERTOIRE_ENTRY;
+
+    /**
+     * The table <code>public.supporter</code>.
+     */
+    public final Supporter SUPPORTER = Supporter.SUPPORTER;
+
+    /**
+     * The table <code>public.supporter_payment</code>.
+     */
+    public final SupporterPayment SUPPORTER_PAYMENT = SupporterPayment.SUPPORTER_PAYMENT;
+
+    /**
+     * The table <code>public.supporter_voucher</code>.
+     */
+    public final SupporterVoucher SUPPORTER_VOUCHER = SupporterVoucher.SUPPORTER_VOUCHER;
 
     /**
      * The table <code>public.voucher</code>.
@@ -106,6 +107,15 @@ public class Public extends SchemaImpl {
     }
 
     @Override
+    public final List<Sequence<?>> getSequences() {
+        return Arrays.asList(
+            Sequences.PASSIVMITGLIED_ID_SEQ,
+            Sequences.PASSIVMITGLIED_PAYMENT_ID_SEQ,
+            Sequences.PASSIVMITGLIED_VOUCHER_ID_SEQ
+        );
+    }
+
+    @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             Komposition.KOMPOSITION,
@@ -113,11 +123,11 @@ public class Public extends SchemaImpl {
             KonzertEntry.KONZERT_ENTRY,
             Login.LOGIN,
             Noten.NOTEN,
-            Passivmitglied.PASSIVMITGLIED,
-            PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT,
-            PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER,
             Repertoire.REPERTOIRE,
             RepertoireEntry.REPERTOIRE_ENTRY,
+            Supporter.SUPPORTER,
+            SupporterPayment.SUPPORTER_PAYMENT,
+            SupporterVoucher.SUPPORTER_VOUCHER,
             Voucher.VOUCHER
         );
     }

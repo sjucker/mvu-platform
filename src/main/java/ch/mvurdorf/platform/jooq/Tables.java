@@ -9,11 +9,11 @@ import ch.mvurdorf.platform.jooq.tables.Konzert;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.Noten;
-import ch.mvurdorf.platform.jooq.tables.Passivmitglied;
-import ch.mvurdorf.platform.jooq.tables.PassivmitgliedPayment;
-import ch.mvurdorf.platform.jooq.tables.PassivmitgliedVoucher;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
+import ch.mvurdorf.platform.jooq.tables.Supporter;
+import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
+import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
 
 
@@ -49,21 +49,6 @@ public class Tables {
     public static final Noten NOTEN = Noten.NOTEN;
 
     /**
-     * The table <code>public.passivmitglied</code>.
-     */
-    public static final Passivmitglied PASSIVMITGLIED = Passivmitglied.PASSIVMITGLIED;
-
-    /**
-     * The table <code>public.passivmitglied_payment</code>.
-     */
-    public static final PassivmitgliedPayment PASSIVMITGLIED_PAYMENT = PassivmitgliedPayment.PASSIVMITGLIED_PAYMENT;
-
-    /**
-     * The table <code>public.passivmitglied_voucher</code>.
-     */
-    public static final PassivmitgliedVoucher PASSIVMITGLIED_VOUCHER = PassivmitgliedVoucher.PASSIVMITGLIED_VOUCHER;
-
-    /**
      * The table <code>public.repertoire</code>.
      */
     public static final Repertoire REPERTOIRE = Repertoire.REPERTOIRE;
@@ -72,6 +57,21 @@ public class Tables {
      * The table <code>public.repertoire_entry</code>.
      */
     public static final RepertoireEntry REPERTOIRE_ENTRY = RepertoireEntry.REPERTOIRE_ENTRY;
+
+    /**
+     * The table <code>public.supporter</code>.
+     */
+    public static final Supporter SUPPORTER = Supporter.SUPPORTER;
+
+    /**
+     * The table <code>public.supporter_payment</code>.
+     */
+    public static final SupporterPayment SUPPORTER_PAYMENT = SupporterPayment.SUPPORTER_PAYMENT;
+
+    /**
+     * The table <code>public.supporter_voucher</code>.
+     */
+    public static final SupporterVoucher SUPPORTER_VOUCHER = SupporterVoucher.SUPPORTER_VOUCHER;
 
     /**
      * The table <code>public.voucher</code>.
