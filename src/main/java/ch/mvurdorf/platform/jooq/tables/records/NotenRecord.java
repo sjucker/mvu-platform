@@ -61,31 +61,17 @@ public class NotenRecord extends UpdatableRecordImpl<NotenRecord> {
     }
 
     /**
-     * Setter for <code>public.noten.stimme</code>.
-     */
-    public void setStimme(String value) {
-        set(3, value);
-    }
-
-    /**
-     * Getter for <code>public.noten.stimme</code>.
-     */
-    public String getStimme() {
-        return (String) get(3);
-    }
-
-    /**
      * Setter for <code>public.noten.stimmlage</code>.
      */
     public void setStimmlage(String value) {
-        set(4, value);
+        set(3, value);
     }
 
     /**
      * Getter for <code>public.noten.stimmlage</code>.
      */
     public String getStimmlage() {
-        return (String) get(4);
+        return (String) get(3);
     }
 
     // -------------------------------------------------------------------------
@@ -111,13 +97,12 @@ public class NotenRecord extends UpdatableRecordImpl<NotenRecord> {
     /**
      * Create a detached, initialised NotenRecord
      */
-    public NotenRecord(Long id, Long fkKomposition, String instrument, String stimme, String stimmlage) {
+    public NotenRecord(Long id, Long fkKomposition, String instrument, String stimmlage) {
         super(Noten.NOTEN);
 
         setId(id);
         setFkKomposition(fkKomposition);
         setInstrument(instrument);
-        setStimme(stimme);
         setStimmlage(stimmlage);
         resetChangedOnNotNull();
     }
@@ -132,7 +117,6 @@ public class NotenRecord extends UpdatableRecordImpl<NotenRecord> {
             setId(value.getId());
             setFkKomposition(value.getFkKomposition());
             setInstrument(value.getInstrument());
-            setStimme(value.getStimme());
             setStimmlage(value.getStimmlage());
             resetChangedOnNotNull();
         }

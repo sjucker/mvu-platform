@@ -103,21 +103,6 @@ public class NotenDao extends AbstractSpringDAOImpl<NotenRecord, ch.mvurdorf.pla
     }
 
     /**
-     * Fetch records that have <code>stimme BETWEEN lowerInclusive AND
-     * upperInclusive</code>
-     */
-    public List<ch.mvurdorf.platform.jooq.tables.pojos.Noten> fetchRangeOfStimme(String lowerInclusive, String upperInclusive) {
-        return fetchRange(Noten.NOTEN.STIMME, lowerInclusive, upperInclusive);
-    }
-
-    /**
-     * Fetch records that have <code>stimme IN (values)</code>
-     */
-    public List<ch.mvurdorf.platform.jooq.tables.pojos.Noten> fetchByStimme(String... values) {
-        return fetch(Noten.NOTEN.STIMME, values);
-    }
-
-    /**
      * Fetch records that have <code>stimmlage BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */

@@ -3,6 +3,7 @@ package ch.mvurdorf.platform.home;
 import ch.mvurdorf.platform.konzerte.KonzertEntryDto;
 import ch.mvurdorf.platform.konzerte.KonzerteService;
 import ch.mvurdorf.platform.noten.NotenService;
+import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.service.StorageService;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
@@ -29,17 +30,15 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
     private final KonzerteService konzerteService;
     private final NotenService notenService;
     private final StorageService storageService;
+    private final AuthenticatedUser authenticatedUser;
 
-    public KonzertView(KonzerteService konzerteService, NotenService notenService, StorageService storageService) {
+    public KonzertView(KonzerteService konzerteService, NotenService notenService, StorageService storageService, AuthenticatedUser authenticatedUser) {
         this.konzerteService = konzerteService;
         this.notenService = notenService;
         this.storageService = storageService;
-        setSizeFull();
-        create();
-    }
+        this.authenticatedUser = authenticatedUser;
 
-    private void create() {
-        add("");
+        setSizeFull();
     }
 
     @Override
@@ -58,7 +57,7 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                            .setWidth("60px").setFlexGrow(0);
                     entries.addColumn(KonzertEntryDto::titel);
                     entries.addColumn(clickableIcon(MUSIC,
-                                                    dto -> KonzertNotenDialog.show(notenService, storageService, dto.kompositionId(), dto.kompositionTitel()),
+                                                    dto -> KonzertNotenDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.kompositionId(), dto.kompositionTitel()),
                                                     dto -> !dto.isPlaceholder())).setWidth("60px").setFlexGrow(0);
                     entries.setItems(konzertDto.entries());
                     add(entries);

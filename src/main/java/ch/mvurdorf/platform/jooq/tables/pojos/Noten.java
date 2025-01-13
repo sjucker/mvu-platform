@@ -18,7 +18,6 @@ public class Noten implements Serializable {
     private Long id;
     private Long fkKomposition;
     private String instrument;
-    private String stimme;
     private String stimmlage;
 
     public Noten() {}
@@ -27,7 +26,6 @@ public class Noten implements Serializable {
         this.id = value.id;
         this.fkKomposition = value.fkKomposition;
         this.instrument = value.instrument;
-        this.stimme = value.stimme;
         this.stimmlage = value.stimmlage;
     }
 
@@ -35,13 +33,11 @@ public class Noten implements Serializable {
         Long id,
         Long fkKomposition,
         String instrument,
-        String stimme,
         String stimmlage
     ) {
         this.id = id;
         this.fkKomposition = fkKomposition;
         this.instrument = instrument;
-        this.stimme = stimme;
         this.stimmlage = stimmlage;
     }
 
@@ -88,20 +84,6 @@ public class Noten implements Serializable {
     }
 
     /**
-     * Getter for <code>public.noten.stimme</code>.
-     */
-    public String getStimme() {
-        return this.stimme;
-    }
-
-    /**
-     * Setter for <code>public.noten.stimme</code>.
-     */
-    public void setStimme(String stimme) {
-        this.stimme = stimme;
-    }
-
-    /**
      * Getter for <code>public.noten.stimmlage</code>.
      */
     public String getStimmlage() {
@@ -142,12 +124,6 @@ public class Noten implements Serializable {
         }
         else if (!this.instrument.equals(other.instrument))
             return false;
-        if (this.stimme == null) {
-            if (other.stimme != null)
-                return false;
-        }
-        else if (!this.stimme.equals(other.stimme))
-            return false;
         if (this.stimmlage == null) {
             if (other.stimmlage != null)
                 return false;
@@ -164,7 +140,6 @@ public class Noten implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.fkKomposition == null) ? 0 : this.fkKomposition.hashCode());
         result = prime * result + ((this.instrument == null) ? 0 : this.instrument.hashCode());
-        result = prime * result + ((this.stimme == null) ? 0 : this.stimme.hashCode());
         result = prime * result + ((this.stimmlage == null) ? 0 : this.stimmlage.hashCode());
         return result;
     }
@@ -176,7 +151,6 @@ public class Noten implements Serializable {
         sb.append(id);
         sb.append(", ").append(fkKomposition);
         sb.append(", ").append(instrument);
-        sb.append(", ").append(stimme);
         sb.append(", ").append(stimmlage);
 
         sb.append(")");

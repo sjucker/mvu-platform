@@ -73,11 +73,6 @@ public class Noten extends TableImpl<NotenRecord> {
     public final TableField<NotenRecord, String> INSTRUMENT = createField(DSL.name("instrument"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>public.noten.stimme</code>.
-     */
-    public final TableField<NotenRecord, String> STIMME = createField(DSL.name("stimme"), SQLDataType.VARCHAR(255), this, "");
-
-    /**
      * The column <code>public.noten.stimmlage</code>.
      */
     public final TableField<NotenRecord, String> STIMMLAGE = createField(DSL.name("stimmlage"), SQLDataType.VARCHAR(255), this, "");

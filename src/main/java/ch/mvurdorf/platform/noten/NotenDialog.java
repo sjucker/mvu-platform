@@ -1,7 +1,6 @@
 package ch.mvurdorf.platform.noten;
 
 import ch.mvurdorf.platform.common.Instrument;
-import ch.mvurdorf.platform.common.Stimme;
 import ch.mvurdorf.platform.common.Stimmlage;
 import ch.mvurdorf.platform.service.StorageService;
 import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
@@ -46,7 +45,6 @@ public class NotenDialog extends Dialog {
         var grid = new Grid<NotenDto>();
         grid.setSizeFull();
         grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::instrument)).setHeader("Instrument");
-        grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::stimme)).setHeader("Stimme");
         grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::stimmlage)).setHeader("Stimmlage");
         grid.addColumn(iconDownloadLink(DOWNLOAD, dto -> storageService.read(dto.id()), NotenDto::filename));
         grid.setItems(notenService.findByKomposition(komposition.id()));
@@ -70,12 +68,6 @@ public class NotenDialog extends Dialog {
         instrument.setRequired(true);
         right.add(instrument);
 
-        var stimme = new ComboBox<Stimme>("Stimme");
-        stimme.setItems(Stimme.values());
-        stimme.setClearButtonVisible(true);
-        stimme.setItemLabelGenerator(Stimme::getDescription);
-        right.add(stimme);
-
         var stimmlage = new ComboBox<Stimmlage>("Stimmlage");
         stimmlage.setClearButtonVisible(true);
         stimmlage.setItems(Stimmlage.values());
@@ -87,13 +79,11 @@ public class NotenDialog extends Dialog {
                 notenService.insert(komposition.id(),
                                     new NotenDto(null,
                                                  instrument.getValue(),
-                                                 stimme.getOptionalValue().orElse(null),
                                                  stimmlage.getOptionalValue().orElse(null)),
                                     buffer.getInputStream().readAllBytes());
 
                 upload.clearFileList();
                 instrument.clear();
-                stimme.clear();
                 stimmlage.clear();
                 Notification.show("Noten gespeichert!");
 
