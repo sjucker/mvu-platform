@@ -106,7 +106,7 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
             .setHeader("QR-Code");
 
         grid.setItems(supporter.vouchersNewestFirst().stream()
-                               .filter(v -> v.validUntil().isAfter(DateUtil.today()))
+                               .filter(v -> !DateUtil.today().isAfter(v.validUntil()))
                                .toList());
 
         content.add(grid);
