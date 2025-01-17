@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Optional;
 
+import static net.codecrete.qrbill.generator.OutputSize.A4_PORTRAIT_SHEET;
+import static net.codecrete.qrbill.generator.OutputSize.PAYMENT_PART_ONLY;
 import static org.apache.pdfbox.pdmodel.common.PDRectangle.A4;
 
 @Slf4j
@@ -28,7 +30,7 @@ public class QRBillService {
 
     public Optional<byte[]> supporterPdf(SupporterDto supporter, double amount) {
         var out = new ByteArrayOutputStream();
-        supporter(supporter, amount, OutputSize.A4_PORTRAIT_SHEET, out);
+        supporter(supporter, amount, A4_PORTRAIT_SHEET, out);
 
         try (var document = new PDDocument();
              var pdfOut = new ByteArrayOutputStream()) {
@@ -52,7 +54,7 @@ public class QRBillService {
     }
 
     public void supporter(SupporterDto supporter, double amount, OutputStream out) {
-        supporter(supporter, amount, OutputSize.PAYMENT_PART_ONLY, out);
+        supporter(supporter, amount, PAYMENT_PART_ONLY, out);
     }
 
     public void supporter(SupporterDto supporter, double amount, OutputSize outputSize, OutputStream out) {
