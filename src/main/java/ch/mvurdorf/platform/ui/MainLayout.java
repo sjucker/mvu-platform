@@ -34,10 +34,9 @@ import static ch.mvurdorf.platform.utils.FormatUtil.formatInstant;
 public class MainLayout extends AppLayout {
 
     private final BuildProperties buildProperties;
+    private final AuthenticatedUser authenticatedUser;
 
     private H1 viewTitle;
-
-    private final AuthenticatedUser authenticatedUser;
 
     public MainLayout(AuthenticatedUser authenticatedUser, @Nullable BuildProperties buildProperties) {
         this.authenticatedUser = authenticatedUser;
@@ -49,8 +48,8 @@ public class MainLayout extends AppLayout {
     }
 
     private void addHeaderContent() {
-        DrawerToggle toggle = new DrawerToggle();
-        toggle.setAriaLabel("Menu toggle");
+        var toggle = new DrawerToggle();
+        toggle.setAriaLabel("Menu");
 
         viewTitle = new H1();
         viewTitle.addClassNames(FontSize.LARGE, Margin.NONE);
