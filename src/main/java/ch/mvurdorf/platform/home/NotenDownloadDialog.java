@@ -18,13 +18,13 @@ import static com.vaadin.flow.component.icon.VaadinIcon.DOWNLOAD;
 import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor(access = PRIVATE)
-public class KonzertNotenDialog extends Dialog {
+public class NotenDownloadDialog extends Dialog {
 
     private final NotenService notenService;
     private final StorageService storageService;
 
     public static void show(NotenService notenService, StorageService storageService, Set<Instrument> instrumentPermissions, Long kompositionId, String kompositionTitel) {
-        var dialog = new KonzertNotenDialog(notenService, storageService);
+        var dialog = new NotenDownloadDialog(notenService, storageService);
         dialog.init(kompositionId, kompositionTitel, instrumentPermissions);
         dialog.setModal(true);
         dialog.setWidth(500, PIXELS);

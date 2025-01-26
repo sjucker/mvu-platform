@@ -1,6 +1,8 @@
 package ch.mvurdorf.platform.users;
 
+import ch.mvurdorf.platform.common.Instrument;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -19,6 +21,7 @@ public class UserDialog extends Dialog {
 
     private EmailField email;
     private TextField name;
+    private CheckboxGroup<Instrument> instrumentPermissions;
     private Long userId = null;
 
     private UserDialog(Mode mode, Consumer<UserDto> callback) {
@@ -48,7 +51,8 @@ public class UserDialog extends Dialog {
                             callback.accept(new UserDto(userId,
                                                         email.getValue(),
                                                         name.getValue(),
-                                                        true));
+                                                        true,
+                                                        instrumentPermissions.getValue()));
                             close();
                         }));
 
@@ -60,12 +64,18 @@ public class UserDialog extends Dialog {
         name = new TextField("Name");
         formLayout.add(name);
 
+        instrumentPermissions = new CheckboxGroup<>("Instrument", Instrument.values());
+        instrumentPermissions.setItemLabelGenerator(Instrument::getDescription);
+        formLayout.add(instrumentPermissions);
+        formLayout.setColspan(instrumentPermissions, 2);
+
         add(formLayout);
 
         if (user != null) {
             userId = user.id();
             email.setValue(user.email());
             name.setValue(user.name());
+            instrumentPermissions.setValue(user.instrumentPermissions());
         }
     }
 

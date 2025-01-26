@@ -57,7 +57,7 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                            .setWidth("60px").setFlexGrow(0);
                     entries.addColumn(KonzertEntryDto::titel);
                     entries.addColumn(clickableIcon(MUSIC,
-                                                    dto -> KonzertNotenDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.kompositionId(), dto.kompositionTitel()),
+                                                    dto -> NotenDownloadDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.kompositionId(), dto.kompositionTitel()),
                                                     dto -> !dto.isPlaceholder())).setWidth("60px").setFlexGrow(0);
                     entries.setItems(konzertDto.entries());
                     add(entries);
