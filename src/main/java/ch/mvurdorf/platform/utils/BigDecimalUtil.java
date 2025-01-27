@@ -11,6 +11,9 @@ import static lombok.AccessLevel.PRIVATE;
 public class BigDecimalUtil {
 
     public static String formatBigDecimal(BigDecimal number) {
+        if (number == null) {
+            return "";
+        }
         var df = new DecimalFormat("#.#");
         return df.format(number);
     }
