@@ -1,25 +1,38 @@
 package ch.mvurdorf.platform.home;
 
+import ch.mvurdorf.platform.common.Instrument;
 import ch.mvurdorf.platform.noten.NotenService;
+import ch.mvurdorf.platform.repertoire.RepertoireDto;
 import ch.mvurdorf.platform.repertoire.RepertoireEntryDto;
 import ch.mvurdorf.platform.repertoire.RepertoireService;
 import ch.mvurdorf.platform.repertoire.RepertoireType;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.service.StorageService;
-import ch.mvurdorf.platform.utils.FormatUtil;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.InputStreamFactory;
+import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.PermitAll;
 
+import java.io.ByteArrayInputStream;
+
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.utils.BigDecimalUtil.formatBigDecimal;
+import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
+import static com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -56,7 +69,13 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
                                                   details.addClassName(LumoUtility.Whitespace.PRE_WRAP);
                                                   add(details);
                                               }
-                                              add(new Paragraph("Letzter Änderung am: %s".formatted(FormatUtil.formatDateTime(repertoire.createdAt()))));
+
+                                              var controls = new HorizontalLayout(new Span("Letzte Änderung am: %s".formatted(formatDateTime(repertoire.createdAt()))),
+                                                                                  createExportAllButton(repertoire));
+                                              controls.setWidthFull();
+                                              controls.setJustifyContentMode(JustifyContentMode.BETWEEN);
+                                              controls.setAlignItems(Alignment.BASELINE);
+                                              add(controls);
 
                                               var entries = new Grid<RepertoireEntryDto>();
                                               entries.addColumn(dto -> formatBigDecimal(dto.number()))
@@ -68,5 +87,43 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
                                               add(entries);
                                           },
                                           () -> add(new Paragraph("Kein Repertoire gefunden")));
+    }
+
+    private Button createExportAllButton(RepertoireDto repertoire) {
+        var exportAll = new Button("Alle PDFs herunterladen");
+        exportAll.addThemeVariants(LUMO_PRIMARY);
+
+        var instrumentPermissions = authenticatedUser.getInstrumentPermissions();
+        if (instrumentPermissions.size() == 1) {
+            // user is allowed to see PDfs of single instrument, export immediately, otherwise provide instrument-selection
+            exportAll.addClickListener(_ -> exportAll(repertoire, instrumentPermissions.stream().findFirst().orElseThrow()));
+        } else {
+            var contextMenu = new ContextMenu();
+            contextMenu.setTarget(exportAll);
+            contextMenu.setOpenOnClick(true);
+
+            if (instrumentPermissions.isEmpty()) {
+                // users has no permission/restriction, sees all
+                contextMenu.addItem("Alle", _ -> exportAll(repertoire, null));
+            }
+
+            for (var instrument : Instrument.values()) {
+                if (instrumentPermissions.isEmpty() || instrumentPermissions.contains(instrument)) {
+                    contextMenu.addItem(instrument.getDescription(), _ -> exportAll(repertoire, instrument));
+                }
+            }
+        }
+
+        return exportAll;
+    }
+
+    private void exportAll(RepertoireDto repertoire, Instrument instrument) {
+        var bytes = instrument != null ?
+                notenService.exportNotenToPdf(repertoire.kompositionIds(), instrument) :
+                notenService.exportNotenToPdf(repertoire.kompositionIds());
+
+        var resource = new StreamResource("noten.pdf", (InputStreamFactory) () -> new ByteArrayInputStream(bytes));
+        var registration = VaadinSession.getCurrent().getResourceRegistry().registerResource(resource);
+        UI.getCurrent().getPage().open(registration.getResourceUri().toString());
     }
 }

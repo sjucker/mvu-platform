@@ -7,4 +7,11 @@ public record RepertoireDto(RepertoireType type,
                             LocalDateTime createdAt,
                             String details,
                             List<RepertoireEntryDto> entries) {
+
+    public List<Long> kompositionIds() {
+        return entries.stream()
+                      .map(RepertoireEntryDto::kompositionId)
+                      .toList();
+    }
+
 }
