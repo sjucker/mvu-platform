@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static ch.mvurdorf.platform.jooq.Tables.INSTRUMENT_PERMISSION;
 import static ch.mvurdorf.platform.jooq.Tables.LOGIN;
@@ -58,30 +59,31 @@ class UsersService {
         jooqDsl.execute(delete(INSTRUMENT_PERMISSION)
                                 .where(INSTRUMENT_PERMISSION.FK_LOGIN.eq(login.getId())));
 
-        insertInstrumentPermissions(user);
+        insertInstrumentPermissions(user.instrumentPermissions(), login.getId());
     }
 
-    private void insertInstrumentPermissions(UserDto user) {
-        user.instrumentPermissions().stream()
-            .map(it -> new InstrumentPermission(user.id(), it.name()))
-            .forEach(instrumentPermissionDao::insert);
+    private void insertInstrumentPermissions(Set<Instrument> instruments, Long loginId) {
+        instruments.stream()
+                   .map(it -> new InstrumentPermission(loginId, it.name()))
+                   .forEach(instrumentPermissionDao::insert);
     }
 
     public String create(UserDto newUser) {
         var password = RandomStringUtils.secure().nextAlphanumeric(8);
-        loginDao.insert(new Login(null,
-                                  newUser.email(),
-                                  newUser.name(),
-                                  passwordEncoder.encode(password),
-                                  true,
-                                  null,
-                                  NONE.name(),
-                                  NONE.name(),
-                                  NONE.name(),
-                                  NONE.name(),
-                                  NONE.name()));
+        var newLogin = new Login(null,
+                                 newUser.email(),
+                                 newUser.name(),
+                                 passwordEncoder.encode(password),
+                                 true,
+                                 null,
+                                 NONE.name(),
+                                 NONE.name(),
+                                 NONE.name(),
+                                 NONE.name(),
+                                 NONE.name());
+        loginDao.insert(newLogin);
 
-        insertInstrumentPermissions(newUser);
+        insertInstrumentPermissions(newUser.instrumentPermissions(), newLogin.getId());
 
         return password;
     }

@@ -48,7 +48,7 @@ class UsersView extends VerticalLayout {
         controls = new HorizontalLayout();
         if (authenticatedUser.hasWritePermission(USERS_GROUP)) {
             controls.add(new Button("Neuer User",
-                                    event -> UserDialog.create(newUser -> {
+                                    _ -> UserDialog.create(newUser -> {
                                         var password = usersService.create(newUser);
                                         Notification.show("User erstellt mit Passwort: " + password, 0, TOP_CENTER);
                                         grid.setItems(usersService.findAll());
