@@ -58,8 +58,12 @@ class UsersService {
         jooqDsl.execute(delete(INSTRUMENT_PERMISSION)
                                 .where(INSTRUMENT_PERMISSION.FK_LOGIN.eq(login.getId())));
 
+        insertInstrumentPermissions(user);
+    }
+
+    private void insertInstrumentPermissions(UserDto user) {
         user.instrumentPermissions().stream()
-            .map(it -> new InstrumentPermission(login.getId(), it.name()))
+            .map(it -> new InstrumentPermission(user.id(), it.name()))
             .forEach(instrumentPermissionDao::insert);
     }
 
@@ -76,6 +80,9 @@ class UsersService {
                                   NONE.name(),
                                   NONE.name(),
                                   NONE.name()));
+
+        insertInstrumentPermissions(newUser);
+
         return password;
     }
 }
