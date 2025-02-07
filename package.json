@@ -4,18 +4,20 @@
   "type": "module",
   "dependencies": {
     "@polymer/polymer": "3.5.2",
-    "@vaadin/bundles": "24.6.2",
+    "@vaadin-component-factory/vcf-pdf-viewer": "3.1.0",
+    "@vaadin/bundles": "24.6.3",
     "@vaadin/common-frontend": "0.0.19",
-    "@vaadin/polymer-legacy-adapter": "24.6.2",
-    "@vaadin/react-components": "24.6.2",
+    "@vaadin/polymer-legacy-adapter": "24.6.3",
+    "@vaadin/react-components": "24.6.3",
     "@vaadin/vaadin-development-mode-detector": "2.0.7",
-    "@vaadin/vaadin-lumo-styles": "24.6.2",
-    "@vaadin/vaadin-material-styles": "24.6.2",
-    "@vaadin/vaadin-themable-mixin": "24.6.2",
+    "@vaadin/vaadin-lumo-styles": "24.6.3",
+    "@vaadin/vaadin-material-styles": "24.6.3",
+    "@vaadin/vaadin-themable-mixin": "24.6.3",
     "@vaadin/vaadin-usage-statistics": "2.1.3",
     "construct-style-sheets-polyfill": "3.1.0",
     "date-fns": "2.29.3",
     "lit": "3.2.1",
+    "print-js": "1.6.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-router-dom": "6.28.0"
@@ -35,7 +37,7 @@
     "strip-css-comments": "5.0.0",
     "transform-ast": "2.4.4",
     "typescript": "5.7.3",
-    "vite": "6.0.6",
+    "vite": "6.0.11",
     "vite-plugin-checker": "0.8.0",
     "workbox-build": "7.3.0",
     "workbox-core": "7.3.0",
@@ -44,18 +46,20 @@
   "vaadin": {
     "dependencies": {
       "@polymer/polymer": "3.5.2",
-      "@vaadin/bundles": "24.6.2",
+      "@vaadin-component-factory/vcf-pdf-viewer": "3.1.0",
+      "@vaadin/bundles": "24.6.3",
       "@vaadin/common-frontend": "0.0.19",
-      "@vaadin/polymer-legacy-adapter": "24.6.2",
-      "@vaadin/react-components": "24.6.2",
+      "@vaadin/polymer-legacy-adapter": "24.6.3",
+      "@vaadin/react-components": "24.6.3",
       "@vaadin/vaadin-development-mode-detector": "2.0.7",
-      "@vaadin/vaadin-lumo-styles": "24.6.2",
-      "@vaadin/vaadin-material-styles": "24.6.2",
-      "@vaadin/vaadin-themable-mixin": "24.6.2",
+      "@vaadin/vaadin-lumo-styles": "24.6.3",
+      "@vaadin/vaadin-material-styles": "24.6.3",
+      "@vaadin/vaadin-themable-mixin": "24.6.3",
       "@vaadin/vaadin-usage-statistics": "2.1.3",
       "construct-style-sheets-polyfill": "3.1.0",
       "date-fns": "2.29.3",
       "lit": "3.2.1",
+      "print-js": "1.6.0",
       "react": "18.3.1",
       "react-dom": "18.3.1",
       "react-router-dom": "6.28.0"
@@ -75,13 +79,13 @@
       "strip-css-comments": "5.0.0",
       "transform-ast": "2.4.4",
       "typescript": "5.7.3",
-      "vite": "6.0.6",
+      "vite": "6.0.11",
       "vite-plugin-checker": "0.8.0",
       "workbox-build": "7.3.0",
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "8e03b293b155ac154b471c2320d3c9199d2d6f714548763d1d880cc2ff5dd755"
+    "hash": "49a436fc8c8ed0f60ff1a5f39b296684c82fc36096af9337a99be418f110a1e7"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -99,6 +103,8 @@
     "date-fns": "$date-fns",
     "@vaadin/vaadin-themable-mixin": "$@vaadin/vaadin-themable-mixin",
     "@vaadin/vaadin-lumo-styles": "$@vaadin/vaadin-lumo-styles",
-    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles"
+    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles",
+    "print-js": "$print-js",
+    "@vaadin-component-factory/vcf-pdf-viewer": "$@vaadin-component-factory/vcf-pdf-viewer"
   }
 }
