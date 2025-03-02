@@ -93,7 +93,7 @@ public class QRBillService {
         try {
             out.write(qr);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("could not generate qr", e);
         }
     }
 

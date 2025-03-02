@@ -23,8 +23,11 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @Configuration
 public class SecurityConfiguration extends VaadinWebSecurity {
 
-    @Value("${remember-me.key}")
-    private String rememberMeKey;
+    private final String rememberMeKey;
+
+    public SecurityConfiguration(@Value("${remember-me.key}") String rememberMeKey) {
+        this.rememberMeKey = rememberMeKey;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
