@@ -12,16 +12,16 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
+        <version>3.4.4</version>
     </parent>
 
     <properties>
         <java.version>23</java.version>
-        <vaadin.version>24.6.6</vaadin.version>
+        <vaadin.version>24.7.0</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
         <!-- spring boot is behind, older version does not support postgres 16.4 -->
-        <flyway.version>11.3.4</flyway.version>
-        <google-cloud-storage.version>2.49.0</google-cloud-storage.version>
+        <flyway.version>11.5.0</flyway.version>
+        <google-cloud-storage.version>2.50.0</google-cloud-storage.version>
         <qrbill-generator.version>3.3.1</qrbill-generator.version>
         <qrcodegen.version>1.8.0</qrcodegen.version>
         <pdfbox.version>3.0.4</pdfbox.version>
@@ -30,7 +30,7 @@
         <testcontainers-jooq-codegen-maven-plugin.version>0.0.4</testcontainers-jooq-codegen-maven-plugin.version>
         <archunit.version>1.4.0</archunit.version>
 
-        <sonar-maven-plugin.version>5.0.0.4389</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>5.1.0.4751</sonar-maven-plugin.version>
 
         <!-- start local DB using src/main/docker/postgres.yml  -->
         <db.url>jdbc:postgresql://localhost:5432/mvu</db.url>
