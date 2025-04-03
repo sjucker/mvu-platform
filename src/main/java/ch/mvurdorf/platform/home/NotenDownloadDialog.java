@@ -1,7 +1,7 @@
 package ch.mvurdorf.platform.home;
 
 import ch.mvurdorf.platform.common.Instrument;
-import ch.mvurdorf.platform.noten.NotenDto;
+import ch.mvurdorf.platform.noten.NotenPdfDto;
 import ch.mvurdorf.platform.noten.NotenService;
 import ch.mvurdorf.platform.service.StorageService;
 import com.vaadin.flow.component.button.Button;
@@ -37,16 +37,16 @@ public class NotenDownloadDialog extends Dialog {
         if (noten.isEmpty()) {
             add(new Paragraph("Keine Noten vorhanden..."));
         } else {
-            var grid = new Grid<NotenDto>();
-            grid.addColumn(NotenDto::description);
+            var grid = new Grid<NotenPdfDto>();
+            grid.addColumn(NotenPdfDto::description);
             grid.addColumn(iconDownloadLink(DOWNLOAD,
                                             dto -> storageService.read(dto.id()),
-                                            NotenDto::filename));
+                                            NotenPdfDto::filename));
             if (instrumentPermissions.isEmpty()) {
                 grid.setItems(noten);
             } else {
                 grid.setItems(noten.stream()
-                                   .filter(dto -> instrumentPermissions.contains(dto.instrument()))
+                                   .filter(dto -> instrumentPermissions.stream().anyMatch(instrument -> dto.assignments().contains(instrument)))
                                    .toList());
             }
             add(grid);

@@ -182,7 +182,7 @@ public class SupporterService {
         return externalId;
     }
 
-    public void update(SupporterEditDTO supporter) {
+    public void update(SupporterEditDto supporter) {
         var existing = supporterDao.findOptionalById(supporter.getId()).orElseThrow();
         supporter.applyTo(existing);
         supporterDao.update(existing);

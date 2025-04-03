@@ -7,7 +7,7 @@ package ch.mvurdorf.platform.jooq.tables;
 import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry.KonzertEntryPath;
-import ch.mvurdorf.platform.jooq.tables.Noten.NotenPath;
+import ch.mvurdorf.platform.jooq.tables.NotenPdf.NotenPdfPath;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry.RepertoireEntryPath;
 import ch.mvurdorf.platform.jooq.tables.records.KompositionRecord;
 
@@ -81,6 +81,16 @@ public class Komposition extends TableImpl<KompositionRecord> {
      * The column <code>public.komposition.format</code>.
      */
     public final TableField<KompositionRecord, String> FORMAT = createField(DSL.name("format"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'KONZERTMAPPE'::character varying"), SQLDataType.VARCHAR)), this, "");
+
+    /**
+     * The column <code>public.komposition.audio_sample</code>.
+     */
+    public final TableField<KompositionRecord, String> AUDIO_SAMPLE = createField(DSL.name("audio_sample"), SQLDataType.VARCHAR(255), this, "");
+
+    /**
+     * The column <code>public.komposition.comment</code>.
+     */
+    public final TableField<KompositionRecord, String> COMMENT = createField(DSL.name("comment"), SQLDataType.VARCHAR(1024), this, "");
 
     private Komposition(Name alias, Table<KompositionRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -172,16 +182,17 @@ public class Komposition extends TableImpl<KompositionRecord> {
         return _konzertEntry;
     }
 
-    private transient NotenPath _noten;
+    private transient NotenPdfPath _notenPdf;
 
     /**
-     * Get the implicit to-many join path to the <code>public.noten</code> table
+     * Get the implicit to-many join path to the <code>public.noten_pdf</code>
+     * table
      */
-    public NotenPath noten() {
-        if (_noten == null)
-            _noten = new NotenPath(this, null, Keys.NOTEN__NOTEN_FK_KOMPOSITION_FKEY.getInverseKey());
+    public NotenPdfPath notenPdf() {
+        if (_notenPdf == null)
+            _notenPdf = new NotenPdfPath(this, null, Keys.NOTEN_PDF__NOTEN_FK_KOMPOSITION_FKEY.getInverseKey());
 
-        return _noten;
+        return _notenPdf;
     }
 
     private transient RepertoireEntryPath _repertoireEntry;

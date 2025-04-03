@@ -9,7 +9,8 @@ import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Konzert;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
 import ch.mvurdorf.platform.jooq.tables.Login;
-import ch.mvurdorf.platform.jooq.tables.Noten;
+import ch.mvurdorf.platform.jooq.tables.NotenPdf;
+import ch.mvurdorf.platform.jooq.tables.NotenPdfAssignment;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
@@ -65,9 +66,14 @@ public class Public extends SchemaImpl {
     public final Login LOGIN = Login.LOGIN;
 
     /**
-     * The table <code>public.noten</code>.
+     * The table <code>public.noten_pdf</code>.
      */
-    public final Noten NOTEN = Noten.NOTEN;
+    public final NotenPdf NOTEN_PDF = NotenPdf.NOTEN_PDF;
+
+    /**
+     * The table <code>public.noten_pdf_assignment</code>.
+     */
+    public final NotenPdfAssignment NOTEN_PDF_ASSIGNMENT = NotenPdfAssignment.NOTEN_PDF_ASSIGNMENT;
 
     /**
      * The table <code>public.repertoire</code>.
@@ -115,6 +121,7 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Sequence<?>> getSequences() {
         return Arrays.asList(
+            Sequences.NOTEN_ID_SEQ,
             Sequences.PASSIVMITGLIED_ID_SEQ,
             Sequences.PASSIVMITGLIED_PAYMENT_ID_SEQ,
             Sequences.PASSIVMITGLIED_VOUCHER_ID_SEQ
@@ -129,7 +136,8 @@ public class Public extends SchemaImpl {
             Konzert.KONZERT,
             KonzertEntry.KONZERT_ENTRY,
             Login.LOGIN,
-            Noten.NOTEN,
+            NotenPdf.NOTEN_PDF,
+            NotenPdfAssignment.NOTEN_PDF_ASSIGNMENT,
             Repertoire.REPERTOIRE,
             RepertoireEntry.REPERTOIRE_ENTRY,
             Supporter.SUPPORTER,

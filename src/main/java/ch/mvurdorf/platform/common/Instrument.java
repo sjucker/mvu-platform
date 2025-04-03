@@ -1,30 +1,31 @@
 package ch.mvurdorf.platform.common;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum Instrument implements LocalizedEnum {
+    PICOLLO("Picollo"),
     FLOETE("Flöte"),
+    OBOE("Oboe"),
     KLARINETTE("Klarinette"),
     BASS_KLARINETTE("Bass Klarinette"),
-    OBOE("Oboe"),
     FAGOTT("Fagott"),
+    ALT_SAXOPHON("Altsaxophon"),
+    TENOR_SAXOPHON("Tenorsaxophon"),
+    BARITON_SAXOPHON("Baritonsaxophon"),
     TROMPETE("Trompete"),
     HORN("Horn"),
     EUPHONIUM("Euphonium"),
     POSAUNE("Posaune"),
     BASSPOSAUNE("Bass Posaune"),
     TUBA("Tuba"),
-    PERKUSSION("Perkusion"),
-    PARTITUR("Partitur"),
     E_BASS("E-Bass"),
-    E_GUITAR("E-Guitar");
+    E_GUITAR("E-Guitar"),
+    PERKUSSION("Perkusion"),
+    PARTITUR("Partitur");
 
     private final String description;
 
-    Instrument(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
 }

@@ -2,8 +2,10 @@ package ch.mvurdorf.platform.noten;
 
 import ch.mvurdorf.platform.common.Instrument;
 import ch.mvurdorf.platform.common.Stimmlage;
-import ch.mvurdorf.platform.jooq.tables.daos.NotenDao;
-import ch.mvurdorf.platform.jooq.tables.pojos.Noten;
+import ch.mvurdorf.platform.jooq.tables.daos.NotenPdfAssignmentDao;
+import ch.mvurdorf.platform.jooq.tables.daos.NotenPdfDao;
+import ch.mvurdorf.platform.jooq.tables.pojos.NotenPdf;
+import ch.mvurdorf.platform.jooq.tables.pojos.NotenPdfAssignment;
 import ch.mvurdorf.platform.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,22 +15,25 @@ import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.jooq.DSLContext;
+import org.jooq.Records;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static ch.mvurdorf.platform.jooq.Tables.NOTEN;
-import static java.util.Comparator.naturalOrder;
-import static java.util.Comparator.nullsLast;
+import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF;
+import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF_ASSIGNMENT;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.pdfbox.io.IOUtils.createMemoryOnlyStreamCache;
+import static org.jooq.impl.DSL.multiset;
+import static org.jooq.impl.DSL.select;
 
 @Slf4j
 @Service
@@ -36,25 +41,38 @@ import static org.apache.pdfbox.io.IOUtils.createMemoryOnlyStreamCache;
 public class NotenService {
 
     private final DSLContext jooqDsl;
-    private final NotenDao notenDao;
+    private final NotenPdfDao notenPdfDao;
+    private final NotenPdfAssignmentDao notenPdfAssignmentDao;
     private final StorageService storageService;
 
-    public void insert(Long kompositionId, NotenDto noten, byte[] file) {
-        var notenPojo = new Noten(null, kompositionId,
-                                  noten.instrument().name(),
-                                  ofNullable(noten.stimmlage()).map(Enum::name).orElse(null));
-        notenDao.insert(notenPojo);
-        storageService.write(notenPojo.getId(), file);
+    public void insert(Long kompositionId, NotenPdfDto noten, byte[] file) {
+        var notenPdf = new NotenPdf(null,
+                                    kompositionId,
+                                    ofNullable(noten.stimmlage()).map(Enum::name).orElse(null));
+        notenPdfDao.insert(notenPdf);
+        noten.assignments().forEach(notenAssignment ->
+                                            notenPdfAssignmentDao.insert(new NotenPdfAssignment(null,
+                                                                                                notenPdf.getId(),
+                                                                                                notenAssignment.instrument().name(),
+                                                                                                ofNullable(notenAssignment.stimme()).map(Enum::name).orElse(null))));
+
+        storageService.write(notenPdf.getId(), file);
     }
 
-    public List<NotenDto> findByKomposition(Long kompositionId) {
-        return notenDao.fetchByFkKomposition(kompositionId).stream()
-                       .map(noten -> new NotenDto(noten.getId(),
-                                                  Instrument.valueOf(noten.getInstrument()),
-                                                  Stimmlage.of(noten.getStimmlage()).orElse(null)))
-                       .sorted(Comparator.comparing(NotenDto::instrument)
-                                         .thenComparing(NotenDto::stimmlage, nullsLast(naturalOrder())))
-                       .toList();
+    public List<NotenPdfDto> findByKomposition(Long kompositionId) {
+        return jooqDsl.select(NOTEN_PDF.ID,
+                              NOTEN_PDF.STIMMLAGE,
+                              multiset(
+                                      select(NOTEN_PDF_ASSIGNMENT.INSTRUMENT,
+                                             NOTEN_PDF_ASSIGNMENT.STIMME)
+                                              .from(NOTEN_PDF_ASSIGNMENT)
+                                              .where(NOTEN_PDF_ASSIGNMENT.FK_NOTEN_PDF.eq(NOTEN_PDF.ID))
+                              ).convertFrom(it -> it.map(Records.mapping(NotenAssignmentDto::of))))
+                      .from(NOTEN_PDF)
+                      .where(NOTEN_PDF.FK_KOMPOSITION.eq(kompositionId))
+                      .fetch(it -> new NotenPdfDto(it.value1(),
+                                                   new HashSet<>(it.value3()),
+                                                   Stimmlage.of(it.value2()).orElse(null)));
     }
 
     public byte[] exportNotenToPdf(List<Long> kompositionIds) {
@@ -66,11 +84,13 @@ public class NotenService {
     }
 
     public byte[] exportNotenToPdf(List<Long> kompositionIds, Set<String> instruments) {
-        List<Long> notenIds = jooqDsl.select(NOTEN.ID)
-                                     .from(NOTEN)
-                                     .where(NOTEN.FK_KOMPOSITION.in(kompositionIds),
-                                            NOTEN.INSTRUMENT.in(instruments))
-                                     .fetch(NOTEN.ID);
+        List<Long> notenIds = new ArrayList<>();
+        // TODO
+//        List<Long> notenIds = jooqDsl.select(NOTEN.ID)
+//                                     .from(NOTEN)
+//                                     .where(NOTEN.FK_KOMPOSITION.in(kompositionIds),
+//                                            NOTEN.INSTRUMENT.in(instruments))
+//                                     .fetch(NOTEN.ID);
 
         try (var out = new ByteArrayOutputStream()) {
             var pdfMergerUtility = new PDFMergerUtility();

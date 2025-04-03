@@ -88,6 +88,34 @@ public class KompositionRecord extends UpdatableRecordImpl<KompositionRecord> {
         return (String) get(4);
     }
 
+    /**
+     * Setter for <code>public.komposition.audio_sample</code>.
+     */
+    public void setAudioSample(String value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>public.komposition.audio_sample</code>.
+     */
+    public String getAudioSample() {
+        return (String) get(5);
+    }
+
+    /**
+     * Setter for <code>public.komposition.comment</code>.
+     */
+    public void setComment(String value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for <code>public.komposition.comment</code>.
+     */
+    public String getComment() {
+        return (String) get(6);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -111,7 +139,7 @@ public class KompositionRecord extends UpdatableRecordImpl<KompositionRecord> {
     /**
      * Create a detached, initialised KompositionRecord
      */
-    public KompositionRecord(Long id, String titel, String komponist, String arrangeur, String format) {
+    public KompositionRecord(Long id, String titel, String komponist, String arrangeur, String format, String audioSample, String comment) {
         super(Komposition.KOMPOSITION);
 
         setId(id);
@@ -119,6 +147,8 @@ public class KompositionRecord extends UpdatableRecordImpl<KompositionRecord> {
         setKomponist(komponist);
         setArrangeur(arrangeur);
         setFormat(format);
+        setAudioSample(audioSample);
+        setComment(comment);
         resetChangedOnNotNull();
     }
 
@@ -134,6 +164,8 @@ public class KompositionRecord extends UpdatableRecordImpl<KompositionRecord> {
             setKomponist(value.getKomponist());
             setArrangeur(value.getArrangeur());
             setFormat(value.getFormat());
+            setAudioSample(value.getAudioSample());
+            setComment(value.getComment());
             resetChangedOnNotNull();
         }
     }

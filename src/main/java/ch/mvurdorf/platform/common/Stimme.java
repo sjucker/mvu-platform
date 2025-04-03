@@ -8,20 +8,19 @@ import java.util.Optional;
 
 @Getter
 @RequiredArgsConstructor
-public enum Stimmlage implements LocalizedEnum {
-    B("B♭"),
-    C("C"),
-    ES("E♭"),
-    F("F");
+public enum Stimme implements LocalizedEnum {
+    STIMME_1("1."),
+    STIMME_2("2."),
+    STIMME_3("3."),
+    STIMME_4("4.");
 
     private final String description;
 
-    public static Optional<Stimmlage> of(String stimmlage) {
-        if (StringUtils.isBlank(stimmlage)) {
+    public static Optional<Stimme> of(String stimme) {
+        if (StringUtils.isBlank(stimme)) {
             return Optional.empty();
         }
 
-        return Optional.of(Stimmlage.valueOf(stimmlage));
+        return Optional.of(Stimme.valueOf(stimme));
     }
-
 }

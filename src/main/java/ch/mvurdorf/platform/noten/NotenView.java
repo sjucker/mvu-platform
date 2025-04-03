@@ -57,6 +57,10 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(KompositionDto::arrangeur).setHeader("Arrangeur");
         grid.addColumn(new LocalizedEnumRenderer<>(KompositionDto::format)).setHeader("Format");
         grid.addColumn(clickableIcon(UPLOAD, dto -> NotenDialog.show(notenService, storageService, dto)));
+        grid.addItemDoubleClickListener(event -> KompositionDialog.show(event.getItem(), kompositionDto -> {
+            kompositionService.update(kompositionDto);
+            dataProvider.refreshAll();
+        }));
     }
 
     private void createControls() {

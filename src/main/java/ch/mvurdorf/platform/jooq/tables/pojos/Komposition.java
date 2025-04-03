@@ -20,6 +20,8 @@ public class Komposition implements Serializable {
     private String komponist;
     private String arrangeur;
     private String format;
+    private String audioSample;
+    private String comment;
 
     public Komposition() {}
 
@@ -29,6 +31,8 @@ public class Komposition implements Serializable {
         this.komponist = value.komponist;
         this.arrangeur = value.arrangeur;
         this.format = value.format;
+        this.audioSample = value.audioSample;
+        this.comment = value.comment;
     }
 
     public Komposition(
@@ -36,13 +40,17 @@ public class Komposition implements Serializable {
         String titel,
         String komponist,
         String arrangeur,
-        String format
+        String format,
+        String audioSample,
+        String comment
     ) {
         this.id = id;
         this.titel = titel;
         this.komponist = komponist;
         this.arrangeur = arrangeur;
         this.format = format;
+        this.audioSample = audioSample;
+        this.comment = comment;
     }
 
     /**
@@ -115,6 +123,34 @@ public class Komposition implements Serializable {
         this.format = format;
     }
 
+    /**
+     * Getter for <code>public.komposition.audio_sample</code>.
+     */
+    public String getAudioSample() {
+        return this.audioSample;
+    }
+
+    /**
+     * Setter for <code>public.komposition.audio_sample</code>.
+     */
+    public void setAudioSample(String audioSample) {
+        this.audioSample = audioSample;
+    }
+
+    /**
+     * Getter for <code>public.komposition.comment</code>.
+     */
+    public String getComment() {
+        return this.comment;
+    }
+
+    /**
+     * Setter for <code>public.komposition.comment</code>.
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -154,6 +190,18 @@ public class Komposition implements Serializable {
         }
         else if (!this.format.equals(other.format))
             return false;
+        if (this.audioSample == null) {
+            if (other.audioSample != null)
+                return false;
+        }
+        else if (!this.audioSample.equals(other.audioSample))
+            return false;
+        if (this.comment == null) {
+            if (other.comment != null)
+                return false;
+        }
+        else if (!this.comment.equals(other.comment))
+            return false;
         return true;
     }
 
@@ -166,6 +214,8 @@ public class Komposition implements Serializable {
         result = prime * result + ((this.komponist == null) ? 0 : this.komponist.hashCode());
         result = prime * result + ((this.arrangeur == null) ? 0 : this.arrangeur.hashCode());
         result = prime * result + ((this.format == null) ? 0 : this.format.hashCode());
+        result = prime * result + ((this.audioSample == null) ? 0 : this.audioSample.hashCode());
+        result = prime * result + ((this.comment == null) ? 0 : this.comment.hashCode());
         return result;
     }
 
@@ -178,6 +228,8 @@ public class Komposition implements Serializable {
         sb.append(", ").append(komponist);
         sb.append(", ").append(arrangeur);
         sb.append(", ").append(format);
+        sb.append(", ").append(audioSample);
+        sb.append(", ").append(comment);
 
         sb.append(")");
         return sb.toString();

@@ -3,9 +3,11 @@ package ch.mvurdorf.platform.noten;
 import ch.mvurdorf.platform.common.Instrument;
 import ch.mvurdorf.platform.common.Stimmlage;
 import ch.mvurdorf.platform.service.StorageService;
+import ch.mvurdorf.platform.ui.ListRenderer;
 import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
@@ -16,6 +18,7 @@ import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.util.Set;
 
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.iconDownloadLink;
@@ -42,11 +45,11 @@ public class NotenDialog extends Dialog {
         setHeaderTitle(komposition.titel());
 
         var left = new VerticalLayout();
-        var grid = new Grid<NotenDto>();
+        var grid = new Grid<NotenPdfDto>();
         grid.setSizeFull();
-        grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::instrument)).setHeader("Instrument");
-        grid.addColumn(new LocalizedEnumRenderer<>(NotenDto::stimmlage)).setHeader("Stimmlage");
-        grid.addColumn(iconDownloadLink(DOWNLOAD, dto -> storageService.read(dto.id()), NotenDto::filename));
+        grid.addColumn(new ListRenderer<>(NotenPdfDto::assignmentDescriptions)).setHeader("Instrumente");
+        grid.addColumn(new LocalizedEnumRenderer<>(NotenPdfDto::stimmlage)).setHeader("Stimmlage");
+        grid.addColumn(iconDownloadLink(DOWNLOAD, dto -> storageService.read(dto.id()), NotenPdfDto::filename));
         grid.setItems(notenService.findByKomposition(komposition.id()));
 
         left.add(grid);
@@ -62,7 +65,7 @@ public class NotenDialog extends Dialog {
 
         right.add(upload);
 
-        var instrument = new ComboBox<Instrument>("Instrument");
+        var instrument = new MultiSelectComboBox<Instrument>("Instrumente");
         instrument.setItems(Instrument.values());
         instrument.setItemLabelGenerator(Instrument::getDescription);
         instrument.setRequired(true);
@@ -77,9 +80,9 @@ public class NotenDialog extends Dialog {
         save = primaryButton("Speichern", () -> {
             try {
                 notenService.insert(komposition.id(),
-                                    new NotenDto(null,
-                                                 instrument.getValue(),
-                                                 stimmlage.getOptionalValue().orElse(null)),
+                                    new NotenPdfDto(null,
+                                                    Set.of(), // TODO
+                                                    stimmlage.getOptionalValue().orElse(null)),
                                     buffer.getInputStream().readAllBytes());
 
                 upload.clearFileList();

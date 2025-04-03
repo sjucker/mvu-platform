@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SupporterEditDTO {
+public class SupporterEditDto {
     private final Long id;
     private String anrede;
     private String vorname;

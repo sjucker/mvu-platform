@@ -54,7 +54,7 @@ public record SupporterDto(Long id,
         return "%s %s".formatted(vorname, nachname);
     }
 
-    public SupporterEditDTO edit() {
-        return new SupporterEditDTO(id, anrede, vorname, nachname, strasse, strasseNr, plz, ort, email, bemerkung, kommunikationPost, kommunikationEmail);
+    public SupporterEditDto edit() {
+        return new SupporterEditDto(id, anrede, vorname, nachname, strasse, strasseNr, plz, ort, email, bemerkung, kommunikationPost, kommunikationEmail);
     }
 }

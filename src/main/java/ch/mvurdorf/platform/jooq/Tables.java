@@ -9,7 +9,8 @@ import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Konzert;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
 import ch.mvurdorf.platform.jooq.tables.Login;
-import ch.mvurdorf.platform.jooq.tables.Noten;
+import ch.mvurdorf.platform.jooq.tables.NotenPdf;
+import ch.mvurdorf.platform.jooq.tables.NotenPdfAssignment;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
@@ -50,9 +51,14 @@ public class Tables {
     public static final Login LOGIN = Login.LOGIN;
 
     /**
-     * The table <code>public.noten</code>.
+     * The table <code>public.noten_pdf</code>.
      */
-    public static final Noten NOTEN = Noten.NOTEN;
+    public static final NotenPdf NOTEN_PDF = NotenPdf.NOTEN_PDF;
+
+    /**
+     * The table <code>public.noten_pdf_assignment</code>.
+     */
+    public static final NotenPdfAssignment NOTEN_PDF_ASSIGNMENT = NotenPdfAssignment.NOTEN_PDF_ASSIGNMENT;
 
     /**
      * The table <code>public.repertoire</code>.

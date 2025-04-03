@@ -6,7 +6,9 @@ public record KompositionDto(Long id,
                              String titel,
                              String komponist,
                              String arrangeur,
-                             NotenFormat format) {
+                             NotenFormat format,
+                             String audioSample,
+                             String comment) {
 
     public String label() {
         return getLabel(titel, komponist, arrangeur);

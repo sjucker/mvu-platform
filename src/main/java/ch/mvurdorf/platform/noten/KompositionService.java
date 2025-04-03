@@ -29,12 +29,17 @@ public class KompositionService {
     }
 
     public void insert(KompositionDto komposition) {
-        kompositionDao.insert(new Komposition(null, komposition.titel(), komposition.komponist(), komposition.arrangeur(), komposition.format().name()));
+        kompositionDao.insert(new Komposition(null, komposition.titel(), komposition.komponist(), komposition.arrangeur(), komposition.format().name(), komposition.audioSample(), komposition.comment()));
+    }
+
+    public void update(KompositionDto komposition) {
+        kompositionDao.update(new Komposition(komposition.id(), komposition.titel(), komposition.komponist(), komposition.arrangeur(), komposition.format().name(), komposition.audioSample(), komposition.comment()));
     }
 
     public List<KompositionDto> findAllSorted() {
         return kompositionDao.findAll().stream()
-                             .map(komposition -> new KompositionDto(komposition.getId(), komposition.getTitel(), komposition.getKomponist(), komposition.getArrangeur(), NotenFormat.valueOf(komposition.getFormat())))
+                             .map(komposition -> new KompositionDto(komposition.getId(), komposition.getTitel(), komposition.getKomponist(), komposition.getArrangeur(),
+                                                                    NotenFormat.valueOf(komposition.getFormat()), komposition.getAudioSample(), komposition.getComment()))
                              .sorted(comparing(KompositionDto::titel)
                                              .thenComparing(KompositionDto::komponist, nullsLast(naturalOrder()))
                                              .thenComparing(KompositionDto::arrangeur, nullsLast(naturalOrder())))
@@ -75,7 +80,9 @@ public class KompositionService {
                                   it.get(KOMPOSITION.TITEL),
                                   it.get(KOMPOSITION.KOMPONIST),
                                   it.get(KOMPOSITION.ARRANGEUR),
-                                  NotenFormat.valueOf(it.get(KOMPOSITION.FORMAT)));
+                                  NotenFormat.valueOf(it.get(KOMPOSITION.FORMAT)),
+                                  it.get(KOMPOSITION.AUDIO_SAMPLE),
+                                  it.get(KOMPOSITION.COMMENT));
     }
 
     private int count(String filter) {

@@ -117,64 +117,64 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
         var content = new VerticalLayout();
         content.setSizeFull();
 
-        var binder = new Binder<>(SupporterEditDTO.class);
+        var binder = new Binder<>(SupporterEditDto.class);
 
         var formLayout = new FormLayout();
 
         var anrede = new Select<String>();
         anrede.setItems("Liebe", "Lieber", "Hallo");
-        binder.bind(anrede, SupporterEditDTO::getAnrede, SupporterEditDTO::setAnrede);
+        binder.bind(anrede, SupporterEditDto::getAnrede, SupporterEditDto::setAnrede);
         formLayout.setColspan(formLayout.addFormItem(anrede, "Anrede"), 2);
 
         var vorname = new TextField();
         binder.forField(vorname)
               .withValidator(new StringLengthValidator("Vorname muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(SupporterEditDTO::getVorname, SupporterEditDTO::setVorname);
+              .bind(SupporterEditDto::getVorname, SupporterEditDto::setVorname);
         formLayout.addFormItem(vorname, "Vorname");
 
         var nachname = new TextField();
         binder.forField(nachname)
               .withValidator(new StringLengthValidator("Nachname muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(SupporterEditDTO::getNachname, SupporterEditDTO::setNachname);
+              .bind(SupporterEditDto::getNachname, SupporterEditDto::setNachname);
         formLayout.addFormItem(nachname, "Nachname");
 
         var strasse = new TextField();
         binder.forField(strasse)
               .withValidator(new StringLengthValidator("Strasse muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(SupporterEditDTO::getStrasse, SupporterEditDTO::setStrasse);
+              .bind(SupporterEditDto::getStrasse, SupporterEditDto::setStrasse);
         formLayout.addFormItem(strasse, "Strasse");
 
         var strasseNr = new TextField();
         binder.forField(strasseNr)
               .withValidator(new StringLengthValidator("Nr. muss zwischen 1 und 5 Zeichen haben", 1, 5))
-              .bind(SupporterEditDTO::getStrasseNr, SupporterEditDTO::setStrasseNr);
+              .bind(SupporterEditDto::getStrasseNr, SupporterEditDto::setStrasseNr);
         formLayout.addFormItem(strasseNr, "Nr.");
 
         var plz = new TextField();
         binder.forField(plz)
               .withValidator(new StringLengthValidator("PLZ muss zwischen 1 und 10 Zeichen haben", 1, 10))
-              .bind(SupporterEditDTO::getPlz, SupporterEditDTO::setPlz);
+              .bind(SupporterEditDto::getPlz, SupporterEditDto::setPlz);
         formLayout.addFormItem(plz, "PLZ");
 
         var ort = new TextField();
         binder.forField(ort)
               .withValidator(new StringLengthValidator("Ort muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(SupporterEditDTO::getOrt, SupporterEditDTO::setOrt);
+              .bind(SupporterEditDto::getOrt, SupporterEditDto::setOrt);
         formLayout.addFormItem(ort, "Ort");
 
         var email = new TextField();
         binder.forField(email)
               .withValidator(new EmailValidator("Valide E-Mail eingeben"))
               .withValidator(new StringLengthValidator("E-Mail muss zwischen 1 und 255 Zeichen haben", 1, 255))
-              .bind(SupporterEditDTO::getEmail, SupporterEditDTO::setEmail);
+              .bind(SupporterEditDto::getEmail, SupporterEditDto::setEmail);
         formLayout.setColspan(formLayout.addFormItem(email, "E-Mail"), 2);
 
         var kommunikationPost = new Checkbox();
-        binder.bind(kommunikationPost, SupporterEditDTO::isKommunikationPost, SupporterEditDTO::setKommunikationPost);
+        binder.bind(kommunikationPost, SupporterEditDto::isKommunikationPost, SupporterEditDto::setKommunikationPost);
         formLayout.addFormItem(kommunikationPost, "Kommunikation per Post");
 
         var kommunikationEmail = new Checkbox();
-        binder.bind(kommunikationEmail, SupporterEditDTO::isKommunikationEmail, SupporterEditDTO::setKommunikationEmail);
+        binder.bind(kommunikationEmail, SupporterEditDto::isKommunikationEmail, SupporterEditDto::setKommunikationEmail);
         formLayout.addFormItem(kommunikationEmail, "Kommunikation per E-Mail");
 
         var edit = supporter.edit();

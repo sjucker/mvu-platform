@@ -131,4 +131,34 @@ public class KompositionDao extends AbstractSpringDAOImpl<KompositionRecord, ch.
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Komposition> fetchByFormat(String... values) {
         return fetch(Komposition.KOMPOSITION.FORMAT, values);
     }
+
+    /**
+     * Fetch records that have <code>audio_sample BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Komposition> fetchRangeOfAudioSample(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Komposition.KOMPOSITION.AUDIO_SAMPLE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>audio_sample IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Komposition> fetchByAudioSample(String... values) {
+        return fetch(Komposition.KOMPOSITION.AUDIO_SAMPLE, values);
+    }
+
+    /**
+     * Fetch records that have <code>comment BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Komposition> fetchRangeOfComment(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Komposition.KOMPOSITION.COMMENT, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>comment IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Komposition> fetchByComment(String... values) {
+        return fetch(Komposition.KOMPOSITION.COMMENT, values);
+    }
 }
