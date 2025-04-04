@@ -1,7 +1,6 @@
 package ch.mvurdorf.platform.noten;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
-import ch.mvurdorf.platform.service.StorageService;
 import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -28,17 +27,17 @@ public class NotenView extends VerticalLayout {
 
     private final NotenService notenService;
     private final KompositionService kompositionService;
-    private final StorageService storageService;
+    private final NotenPdfUploadService notenPdfUploadService;
     private final AuthenticatedUser authenticatedUser;
 
     private HorizontalLayout controls;
     private Grid<KompositionDto> grid;
     private ConfigurableFilterDataProvider<KompositionDto, Void, String> dataProvider;
 
-    public NotenView(NotenService notenService, KompositionService kompositionService, StorageService storageService, AuthenticatedUser authenticatedUser) {
+    public NotenView(NotenService notenService, KompositionService kompositionService, NotenPdfUploadService notenPdfUploadService, AuthenticatedUser authenticatedUser) {
         this.notenService = notenService;
         this.kompositionService = kompositionService;
-        this.storageService = storageService;
+        this.notenPdfUploadService = notenPdfUploadService;
         this.authenticatedUser = authenticatedUser;
 
         setSizeFull();
@@ -56,7 +55,7 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(KompositionDto::komponist).setHeader("Komponist");
         grid.addColumn(KompositionDto::arrangeur).setHeader("Arrangeur");
         grid.addColumn(new LocalizedEnumRenderer<>(KompositionDto::format)).setHeader("Format");
-        grid.addColumn(clickableIcon(UPLOAD, dto -> NotenDialog.show(notenService, storageService, dto)));
+        grid.addColumn(clickableIcon(UPLOAD, dto -> NotenPdfUploadDialog.show(notenPdfUploadService, dto)));
         grid.addItemDoubleClickListener(event -> KompositionDialog.show(event.getItem(), kompositionDto -> {
             kompositionService.update(kompositionDto);
             dataProvider.refreshAll();

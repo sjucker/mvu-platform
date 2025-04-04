@@ -45,7 +45,7 @@ public class KompositionDialog extends Dialog {
         var formLayout = new FormLayout();
         var titel = new TextField("Titel");
         titel.setRequired(true);
-        formLayout.add(titel);
+        formLayout.add(titel, 2);
 
         var komponist = new TextField("Komponist");
         formLayout.add(komponist);
@@ -64,7 +64,7 @@ public class KompositionDialog extends Dialog {
         formLayout.add(audioSample);
 
         var comment = new TextArea("Kommentar");
-        formLayout.add(comment);
+        formLayout.add(comment, 2);
 
         if (existingKomposition != null) {
             titel.setValue(existingKomposition.titel());

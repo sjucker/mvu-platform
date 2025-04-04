@@ -1,13 +1,12 @@
 package ch.mvurdorf.platform.service;
 
+import com.google.cloud.storage.StorageException;
 import org.springframework.core.io.FileSystemResource;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -25,7 +24,7 @@ public class LocalStorageService implements StorageService {
         try {
             Files.copy(new ByteArrayInputStream(content), target, REPLACE_EXISTING);
         } catch (IOException e) {
-            // TODO
+            throw new StorageException(e);
         }
     }
 
@@ -38,8 +37,7 @@ public class LocalStorageService implements StorageService {
         try {
             return Files.readAllBytes(getPath(blob));
         } catch (IOException e) {
-            // TODO
-            return new byte[0];
+            throw new StorageException(e);
         }
     }
 }

@@ -32,6 +32,11 @@ public final class ComponentUtil {
         return icon;
     }
 
+    public static Button primaryButton(String label) {
+        return primaryButton(label, () -> {
+        });
+    }
+
     public static Button primaryButton(String label, Runnable action) {
         var button = new Button(label, _ -> action.run());
         button.addThemeVariants(LUMO_PRIMARY);

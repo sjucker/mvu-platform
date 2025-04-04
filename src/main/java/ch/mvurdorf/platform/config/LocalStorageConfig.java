@@ -12,7 +12,7 @@ public class LocalStorageConfig {
 
     @Bean
     public StorageService localStorageService() {
-        return new LocalStorageService("target");
+        return new LocalStorageService("etc/cloudstorage");
     }
 
 }
