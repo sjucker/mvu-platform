@@ -41,12 +41,14 @@ public class NotenDownloadDialog extends Dialog {
             grid.addColumn(NotenPdfDto::description);
             grid.addColumn(iconDownloadLink(DOWNLOAD,
                                             dto -> storageService.read(dto.id()),
-                                            NotenPdfDto::filename));
+                                            NotenPdfDto::filename))
+                .setWidth("60px")
+                .setFlexGrow(0);
             if (instrumentPermissions.isEmpty()) {
                 grid.setItems(noten);
             } else {
                 grid.setItems(noten.stream()
-                                   .filter(dto -> instrumentPermissions.stream().anyMatch(instrument -> dto.assignments().contains(instrument)))
+                                   .filter(dto -> instrumentPermissions.stream().anyMatch(dto::allowed))
                                    .toList());
             }
             add(grid);

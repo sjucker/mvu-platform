@@ -23,12 +23,12 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF;
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF_ASSIGNMENT;
+import static java.util.Comparator.comparing;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.pdfbox.io.IOUtils.createMemoryOnlyStreamCache;
@@ -71,8 +71,13 @@ public class NotenService {
                       .from(NOTEN_PDF)
                       .where(NOTEN_PDF.FK_KOMPOSITION.eq(kompositionId))
                       .fetch(it -> new NotenPdfDto(it.value1(),
-                                                   new HashSet<>(it.value3()),
-                                                   Stimmlage.of(it.value2()).orElse(null)));
+                                                   it.value3().stream()
+                                                     .sorted(comparing(NotenAssignmentDto::instrument))
+                                                     .toList(),
+                                                   Stimmlage.of(it.value2()).orElse(null)))
+                      .stream()
+                      .sorted()
+                      .toList();
     }
 
     public byte[] exportNotenToPdf(List<Long> kompositionIds) {

@@ -49,7 +49,7 @@ public class RepertoireView extends VerticalLayout {
 
         var grid = new Grid<RepertoireEntryDto>();
         grid.setSizeFull();
-        grid.addColumn(RepertoireEntryDto::number).setWidth("100px");
+        grid.addColumn(RepertoireEntryDto::number).setWidth("100px").setFlexGrow(0);
         grid.addColumn(RepertoireEntryDto::label);
 
         repertoire.ifPresent(it -> grid.setItems(it.entries()));
