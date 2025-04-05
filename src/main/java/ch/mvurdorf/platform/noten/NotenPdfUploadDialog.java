@@ -41,6 +41,7 @@ public class NotenPdfUploadDialog extends Dialog {
     private PdfViewer pdfViewer;
     private Scroller scroller;
     private NotenPdfAssignmentContainer notenPdfAssignmentContainer;
+    private Button save;
 
     public static void show(NotenPdfUploadService notenPdfUploadService, KompositionDto komposition) {
         var dialog = new NotenPdfUploadDialog(notenPdfUploadService);
@@ -61,11 +62,13 @@ public class NotenPdfUploadDialog extends Dialog {
         upload.setMaxFileSize(1024 * 1024 * 100);
         upload.addSucceededListener(_ -> {
             pdfUploaded = true;
+            save.setEnabled(true);
             scroller.setVisible(true);
             pdfViewer.setSrc(new StreamResource(buffer.getFileName(), buffer::getInputStream));
         });
         upload.addFileRemovedListener(_ -> {
             pdfUploaded = false;
+            save.setEnabled(false);
             scroller.setVisible(false);
             pdfViewer.setSrc("");
         });
@@ -86,10 +89,10 @@ public class NotenPdfUploadDialog extends Dialog {
         add(splitLayout);
 
         getFooter().add(new Button("Verwerfen", _ -> close()));
-        var save = primaryButton("Speichern");
-        save.addClickListener(_ -> {
+        save = primaryButton("Speichern", () -> {
             if (!pdfUploaded) {
                 Notification.show("Zuerst ein PDF hochladen!");
+                save.setEnabled(true);
                 return;
             }
 
@@ -111,6 +114,7 @@ public class NotenPdfUploadDialog extends Dialog {
             }
         });
         save.setDisableOnClick(true);
+        save.setEnabled(false);
         getFooter().add(save);
     }
 
