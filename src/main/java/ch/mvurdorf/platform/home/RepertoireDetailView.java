@@ -96,7 +96,7 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
         var instrumentPermissions = authenticatedUser.getInstrumentPermissions();
         if (instrumentPermissions.size() == 1) {
             // user is allowed to see PDfs of single instrument, export immediately, otherwise provide instrument-selection
-            exportAll.addClickListener(_ -> exportAll(repertoire, instrumentPermissions.stream().findFirst().orElseThrow()));
+            exportAll.addClickListener(e -> exportAll(repertoire, instrumentPermissions.stream().findFirst().orElseThrow()));
         } else {
             var contextMenu = new ContextMenu();
             contextMenu.setTarget(exportAll);
@@ -104,12 +104,12 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
 
             if (instrumentPermissions.isEmpty()) {
                 // users has no permission/restriction, sees all
-                contextMenu.addItem("Alle", _ -> exportAll(repertoire, null));
+                contextMenu.addItem("Alle", e -> exportAll(repertoire, null));
             }
 
             for (var instrument : Instrument.values()) {
                 if (instrumentPermissions.isEmpty() || instrumentPermissions.contains(instrument)) {
-                    contextMenu.addItem(instrument.getDescription(), _ -> exportAll(repertoire, instrument));
+                    contextMenu.addItem(instrument.getDescription(), e -> exportAll(repertoire, instrument));
                 }
             }
         }

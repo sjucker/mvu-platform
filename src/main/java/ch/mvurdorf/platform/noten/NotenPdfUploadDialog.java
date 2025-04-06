@@ -62,13 +62,13 @@ public class NotenPdfUploadDialog extends Dialog {
         upload.setAcceptedFileTypes(".pdf");
         upload.setMaxFiles(1);
         upload.setMaxFileSize(1024 * 1024 * 100);
-        upload.addSucceededListener(_ -> {
+        upload.addSucceededListener(e -> {
             pdfUploaded = true;
             save.setEnabled(true);
             scroller.setVisible(true);
             pdfViewer.setSrc(new StreamResource(buffer.getFileName(), buffer::getInputStream));
         });
-        upload.addFileRemovedListener(_ -> {
+        upload.addFileRemovedListener(e -> {
             pdfUploaded = false;
             save.setEnabled(false);
             scroller.setVisible(false);
@@ -90,7 +90,7 @@ public class NotenPdfUploadDialog extends Dialog {
         splitLayout.setSizeFull();
         add(splitLayout);
 
-        getFooter().add(new Button("Verwerfen", _ -> close()));
+        getFooter().add(new Button("Verwerfen", e -> close()));
         save = primaryButton("Speichern", () -> {
             if (!pdfUploaded) {
                 Notification.show("Zuerst ein PDF hochladen!");
@@ -135,7 +135,7 @@ public class NotenPdfUploadDialog extends Dialog {
         public NotenPdfAssignmentContainer() {
             getContent().setSizeFull();
 
-            var add = new Button(VaadinIcon.PLUS.create(), _ -> {
+            var add = new Button(VaadinIcon.PLUS.create(), e -> {
                 var notenPdfAssignment = new NotenPdfAssignment();
                 assignments.add(notenPdfAssignment);
                 getContent().addComponentAsFirst(notenPdfAssignment);

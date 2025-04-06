@@ -92,7 +92,7 @@ public class MainLayout extends AppLayout {
         if (maybeUser.isPresent()) {
             var user = maybeUser.get();
             var logoutButton = new Button("Logout %s".formatted(user.getName()),
-                                          _ -> authenticatedUser.logout());
+                                          e -> authenticatedUser.logout());
             logoutButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
             logoutButton.setIcon(VaadinIcon.EXIT_O.create());
             logoutButton.setWidthFull();
@@ -101,7 +101,7 @@ public class MainLayout extends AppLayout {
 
         if (buildProperties != null) {
             var version = new Span("Version: %s".formatted(buildProperties.getVersion()));
-            version.addDoubleClickListener(_ -> log.error("testing error mail"));
+            version.addDoubleClickListener(e -> log.error("testing error mail"));
             version.addClassNames(FontSize.XXSMALL);
             var time = new Span("Time: %s".formatted(formatInstant(buildProperties.getTime())));
             time.addClassNames(FontSize.XXSMALL);

@@ -128,7 +128,7 @@ public class KonzertDialog extends Dialog {
             }
         });
 
-        entriesGrid.addDragEndListener(_ -> {
+        entriesGrid.addDragEndListener(e -> {
             draggedItem = null;
             entriesGrid.setDropMode(null);
         });

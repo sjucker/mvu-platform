@@ -35,7 +35,7 @@ public final class RendererUtil {
     }
 
     public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler) {
-        return clickableIcon(vaadinIcon, clickHandler, _ -> true);
+        return clickableIcon(vaadinIcon, clickHandler, e -> true);
     }
 
     public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler, Predicate<T> display) {

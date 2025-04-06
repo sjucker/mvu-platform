@@ -28,22 +28,22 @@ public final class ComponentUtil {
     public static Icon clickableIcon(VaadinIcon vaadinIcon, Runnable action) {
         var icon = new Icon(vaadinIcon);
         icon.addClassNames(PRIMARY, IconSize.SMALL, IconStyle.CLICKABLE);
-        icon.addClickListener(_ -> action.run());
+        icon.addClickListener(e -> action.run());
         return icon;
     }
 
     public static Button primaryButton(String label, Runnable action) {
-        var button = new Button(label, _ -> action.run());
+        var button = new Button(label, e -> action.run());
         button.addThemeVariants(LUMO_PRIMARY);
         return button;
     }
 
     public static Button secondaryButton(String label, Runnable action) {
-        return new Button(label, _ -> action.run());
+        return new Button(label, e -> action.run());
     }
 
     public static Button tertiaryButton(String label, Runnable action) {
-        var button = new Button(label, _ -> action.run());
+        var button = new Button(label, e -> action.run());
         button.addThemeVariants(LUMO_TERTIARY);
         return button;
     }

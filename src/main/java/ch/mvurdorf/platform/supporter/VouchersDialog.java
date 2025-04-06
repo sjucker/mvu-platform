@@ -45,7 +45,7 @@ public class VouchersDialog extends Dialog {
         var validUntil = datePicker("Gültig bis");
         formLayout.add(validUntil);
 
-        getFooter().add(new Button("Abbrechen", _ -> close()));
+        getFooter().add(new Button("Abbrechen", e -> close()));
         getFooter().add(primaryButton("Speichern", () -> {
             service.createVouchers(prefix.getValue(), description.getValue(), validUntil.getValue(), type.getValue());
             callback.accept(true);

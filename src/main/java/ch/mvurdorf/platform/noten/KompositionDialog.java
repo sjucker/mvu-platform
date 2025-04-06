@@ -77,7 +77,7 @@ public class KompositionDialog extends Dialog {
 
         add(formLayout);
 
-        getFooter().add(new Button("Abbrechen", _ -> close()),
+        getFooter().add(new Button("Abbrechen", e -> close()),
                         primaryButton("Speichern", () -> {
                             callback.accept(new KompositionDto(existingKomposition != null ? existingKomposition.id() : null,
                                                                titel.getValue(),

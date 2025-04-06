@@ -50,7 +50,7 @@ public class HomeView extends VerticalLayout {
                 card.add(new H6(konzert.dateTimeAndLocation()));
                 card.add(new H4(konzert.name()));
                 card.addClassNames(Border.ALL, BorderColor.CONTRAST_90, BorderRadius.MEDIUM, Cursor.POINTER);
-                card.addClickListener(_ -> UI.getCurrent().navigate(KonzertView.class, konzert.id()));
+                card.addClickListener(e -> UI.getCurrent().navigate(KonzertView.class, konzert.id()));
                 add(card);
             }
         }
