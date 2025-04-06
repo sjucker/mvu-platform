@@ -1,6 +1,8 @@
 package ch.mvurdorf.platform.noten;
 
+import ch.mvurdorf.platform.home.NotenDownloadDialog;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import ch.mvurdorf.platform.service.StorageService;
 import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,8 +15,14 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
+import java.util.Set;
+
 import static ch.mvurdorf.platform.security.LoginService.NOTEN_GROUP;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
+import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
+import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
+import static com.vaadin.flow.component.icon.VaadinIcon.EXTERNAL_LINK;
+import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
 import static com.vaadin.flow.component.icon.VaadinIcon.UPLOAD;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.MUSIC_SOLID;
@@ -26,6 +34,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.MUSIC_SOLID;
 public class NotenView extends VerticalLayout {
 
     private final NotenService notenService;
+    private final StorageService storageService;
     private final KompositionService kompositionService;
     private final NotenPdfUploadService notenPdfUploadService;
     private final AuthenticatedUser authenticatedUser;
@@ -34,8 +43,9 @@ public class NotenView extends VerticalLayout {
     private Grid<KompositionDto> grid;
     private ConfigurableFilterDataProvider<KompositionDto, Void, String> dataProvider;
 
-    public NotenView(NotenService notenService, KompositionService kompositionService, NotenPdfUploadService notenPdfUploadService, AuthenticatedUser authenticatedUser) {
+    public NotenView(NotenService notenService, StorageService storageService, KompositionService kompositionService, NotenPdfUploadService notenPdfUploadService, AuthenticatedUser authenticatedUser) {
         this.notenService = notenService;
+        this.storageService = storageService;
         this.kompositionService = kompositionService;
         this.notenPdfUploadService = notenPdfUploadService;
         this.authenticatedUser = authenticatedUser;
@@ -51,15 +61,22 @@ public class NotenView extends VerticalLayout {
         dataProvider = kompositionService.dataProvider();
         grid.setDataProvider(dataProvider);
 
+        grid.addColumn(clickableIcon(UPLOAD, dto -> NotenPdfUploadDialog.show(notenPdfUploadService, dto), "Noten-Upload")).setWidth("60px").setFlexGrow(0);
+        grid.addColumn(clickableIcon(MUSIC, dto -> NotenDownloadDialog.show(notenService, storageService, Set.of(), dto.id(), dto.titel()), "Noten-Download")).setWidth("60px").setFlexGrow(0);
+        grid.addColumn(clickableIcon(EDIT, this::edit, "Bearbeiten")).setWidth("60px").setFlexGrow(0);
         grid.addColumn(KompositionDto::titel).setHeader("Titel");
         grid.addColumn(KompositionDto::komponist).setHeader("Komponist");
         grid.addColumn(KompositionDto::arrangeur).setHeader("Arrangeur");
         grid.addColumn(new LocalizedEnumRenderer<>(KompositionDto::format)).setHeader("Format");
-        grid.addColumn(clickableIcon(UPLOAD, dto -> NotenPdfUploadDialog.show(notenPdfUploadService, dto)));
-        grid.addItemDoubleClickListener(event -> KompositionDialog.show(event.getItem(), kompositionDto -> {
+        grid.addColumn(externalLink(EXTERNAL_LINK, KompositionDto::audioSample)).setHeader("Hörprobe");
+        grid.addItemDoubleClickListener(event -> edit(event.getItem()));
+    }
+
+    private void edit(KompositionDto item) {
+        KompositionDialog.show(item, kompositionDto -> {
             kompositionService.update(kompositionDto);
             dataProvider.refreshAll();
-        }));
+        });
     }
 
     private void createControls() {

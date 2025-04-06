@@ -21,6 +21,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.vaadin.flow.component.html.AnchorTarget.BLANK;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class RendererUtil {
     private RendererUtil() {
@@ -34,15 +35,20 @@ public final class RendererUtil {
         return new LocalDateTimeRenderer<>(getter::apply, "dd.MM.yyyy hh:mm");
     }
 
-    public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler) {
-        return clickableIcon(vaadinIcon, clickHandler, _ -> true);
+    public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler, String tooltipText) {
+        return clickableIcon(vaadinIcon, clickHandler, _ -> true, tooltipText);
     }
 
-    public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler, Predicate<T> display) {
+    public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler) {
+        return clickableIcon(vaadinIcon, clickHandler, _ -> true, "");
+    }
+
+    public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler, Predicate<T> display, String tooltipText) {
         return new ComponentRenderer<>(dto -> {
             if (display.test(dto)) {
 
                 var icon = new Icon(vaadinIcon);
+                icon.setTooltipText(tooltipText);
                 icon.addClassNames(IconSize.SMALL, IconStyle.CLICKABLE);
                 icon.addClickListener(event -> {
                     if (event.isFromClient()) {
@@ -65,6 +71,21 @@ public final class RendererUtil {
             anchor.setHref(new StreamResource(nameGetter.apply(dto), () -> new ByteArrayInputStream(byteGetter.apply(dto))));
             anchor.setTarget(BLANK);
             return anchor;
+        });
+    }
+
+    public static <T> ComponentRenderer<HtmlContainer, T> externalLink(VaadinIcon vaadinIcon,
+                                                                       Function<T, String> urlGetter) {
+        return new ComponentRenderer<>(dto -> {
+            if (isNotBlank(urlGetter.apply(dto))) {
+                var icon = vaadinIcon.create();
+                icon.addClassNames(IconSize.SMALL, IconStyle.CLICKABLE);
+                var anchor = new Anchor(urlGetter.apply(dto), icon);
+                anchor.setTarget(BLANK);
+                return anchor;
+            } else {
+                return new Div();
+            }
         });
     }
 
