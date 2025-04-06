@@ -65,7 +65,7 @@ public class NotenView extends VerticalLayout {
     private void createControls() {
         controls = new HorizontalLayout();
         if (authenticatedUser.hasWritePermission(NOTEN_GROUP)) {
-            controls.add(new Button("Komposition hinzufügen", e -> {
+            controls.add(new Button("Komposition hinzufügen", _ -> {
                 KompositionDialog.show(kompositionDto -> {
                     kompositionService.insert(kompositionDto);
                     dataProvider.refreshAll();

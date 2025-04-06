@@ -98,7 +98,7 @@ public class SupporterDialog extends Dialog {
         content.add(grid);
         add(content);
 
-        getFooter().add(new Button("Abbrechen", e -> close()));
+        getFooter().add(new Button("Abbrechen", _ -> close()));
         if (!readOnly) {
             getFooter().add(primaryButton("Speichern", () -> {
                 callback.accept(newPayments.stream()

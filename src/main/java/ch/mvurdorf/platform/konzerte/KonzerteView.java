@@ -88,12 +88,12 @@ public class KonzerteView extends VerticalLayout {
                                              } else {
                                                  new ConfirmDialog("%s löschen?".formatted(dto.name()), "Sicher?",
                                                                    "Löschen",
-                                                                   e -> {
+                                                                   _ -> {
                                                                        konzerteService.delete(dto);
                                                                        dataProvider.refreshAll();
                                                                    },
                                                                    "Abbrechen",
-                                                                   e -> {
+                                                                   _ -> {
                                                                    })
                                                          .open();
 

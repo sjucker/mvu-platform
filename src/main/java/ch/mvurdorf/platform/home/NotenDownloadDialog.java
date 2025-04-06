@@ -53,6 +53,6 @@ public class NotenDownloadDialog extends Dialog {
             }
             add(grid);
         }
-        getFooter().add(new Button("Schliessen", e -> close()));
+        getFooter().add(new Button("Schliessen", _ -> close()));
     }
 }

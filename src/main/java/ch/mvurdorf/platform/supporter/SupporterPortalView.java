@@ -190,7 +190,7 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
         });
         save.setDisableOnClick(true);
         save.setEnabled(false);
-        binder.addValueChangeListener(e -> save.setEnabled(true));
+        binder.addValueChangeListener(_ -> save.setEnabled(true));
         content.add(save);
 
         return content;
