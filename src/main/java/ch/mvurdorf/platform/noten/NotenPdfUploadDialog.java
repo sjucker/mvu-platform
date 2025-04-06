@@ -42,6 +42,8 @@ public class NotenPdfUploadDialog extends Dialog {
     private Scroller scroller;
     private NotenPdfAssignmentContainer notenPdfAssignmentContainer;
     private Button save;
+    private MemoryBuffer buffer;
+    private Upload upload;
 
     public static void show(NotenPdfUploadService notenPdfUploadService, KompositionDto komposition) {
         var dialog = new NotenPdfUploadDialog(notenPdfUploadService);
@@ -54,8 +56,8 @@ public class NotenPdfUploadDialog extends Dialog {
     private void init(KompositionDto komposition) {
         setHeaderTitle(komposition.titel());
 
-        var buffer = new MemoryBuffer();
-        var upload = new Upload(buffer);
+        buffer = new MemoryBuffer();
+        upload = new Upload(buffer);
         upload.setI18n(new UploadGermanI18N());
         upload.setAcceptedFileTypes(".pdf");
         upload.setMaxFiles(1);
@@ -116,6 +118,14 @@ public class NotenPdfUploadDialog extends Dialog {
         save.setDisableOnClick(true);
         save.setEnabled(false);
         getFooter().add(save);
+    }
+
+    @Override
+    public void close() {
+        // make sure memory is released
+        buffer = new MemoryBuffer();
+        upload.setReceiver(buffer);
+        super.close();
     }
 
     private static class NotenPdfAssignmentContainer extends Composite<VerticalLayout> {
