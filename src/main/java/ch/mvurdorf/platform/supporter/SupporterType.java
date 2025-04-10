@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum SupporterType implements LocalizedEnum {
-    PASSIVMITGLIED(20.0, "Passivitglied"),
+    PASSIVMITGLIED(20.0, "Passivmitglied"),
     GOENNER(100.0, "Gönner");
 
     private final double amount;

@@ -97,18 +97,16 @@ public class RepertoireView extends VerticalLayout {
         controls.setWidthFull();
         controls.addClassName(Gap.LARGE);
         controls.setAlignItems(BASELINE);
-        var add = primaryButton("Hinzufügen", () -> {
-            RepertoireEntryAddDialog.show(kompositionService, newEntry -> {
-                entries.add(newEntry);
-                entries.sort(comparing(RepertoireEntryDto::number, nullsLast(naturalOrder())));
-                grid.setItems(entries);
-                save.setEnabled(true);
-            });
-        });
+        var add = primaryButton("Hinzufügen", () -> RepertoireEntryAddDialog.show(kompositionService, newEntry -> {
+                                    entries.add(newEntry);
+                                    entries.sort(comparing(RepertoireEntryDto::number, nullsLast(naturalOrder())));
+                                    grid.setItems(entries);
+                                    save.setEnabled(true);
+                                }));
         controls.add(add, save);
         repertoire.ifPresent(it -> {
             var info = new Span("Letzte Aktualisierung am: %s durch %s".formatted(formatDateTime(it.createdAt()), it.createdBy()));
-            info.addClassName(FontSize.SMALL);
+            info.addClassName(FontSize.XSMALL);
             controls.add(info);
         });
 

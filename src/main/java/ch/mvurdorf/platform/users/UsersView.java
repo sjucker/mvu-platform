@@ -3,9 +3,7 @@ package ch.mvurdorf.platform.users;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -18,6 +16,7 @@ import jakarta.annotation.security.RolesAllowed;
 import static ch.mvurdorf.platform.security.LoginService.USERS_GROUP;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_COLUMN_BORDERS;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_COMPACT;
+import static com.vaadin.flow.component.icon.VaadinIcon.CHECK;
 import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.USER;
 
@@ -32,7 +31,6 @@ class UsersView extends VerticalLayout {
 
     private HorizontalLayout controls;
     private Grid<UserDto> grid;
-    private GridListDataView<UserDto> gridListDataView;
 
     public UsersView(UsersService usersService, AuthenticatedUser authenticatedUser) {
         this.usersService = usersService;
@@ -61,13 +59,13 @@ class UsersView extends VerticalLayout {
         grid.addThemeVariants(LUMO_COLUMN_BORDERS, LUMO_COMPACT);
         grid.setHeightFull();
 
-        gridListDataView = grid.setItems(usersService.findAll());
+        grid.setItems(usersService.findAll());
 
         grid.addColumn(UserDto::email)
             .setHeader("Email");
         grid.addColumn(UserDto::name)
             .setHeader("Name");
-        grid.addColumn(new ComponentRenderer<>(userDto -> userDto.active() ? VaadinIcon.CHECK.create() : new Div()))
+        grid.addColumn(new ComponentRenderer<>(userDto -> userDto.active() ? CHECK.create() : new Div()))
             .setHeader("Aktiv");
 
         grid.addItemDoubleClickListener(event -> UserDialog.edit(event.getItem(), user -> {
