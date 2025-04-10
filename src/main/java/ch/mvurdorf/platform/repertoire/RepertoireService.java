@@ -2,11 +2,16 @@ package ch.mvurdorf.platform.repertoire;
 
 import ch.mvurdorf.platform.jooq.tables.daos.RepertoireDao;
 import ch.mvurdorf.platform.jooq.tables.daos.RepertoireEntryDao;
+import ch.mvurdorf.platform.jooq.tables.pojos.Repertoire;
+import ch.mvurdorf.platform.jooq.tables.pojos.RepertoireEntry;
+import ch.mvurdorf.platform.utils.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static ch.mvurdorf.platform.jooq.Tables.KOMPOSITION;
@@ -49,6 +54,7 @@ public class RepertoireService {
                           return new RepertoireDto(
                                   RepertoireType.valueOf(repertoire.getType()),
                                   repertoire.getCreatedAt(),
+                                  repertoire.getCreatedBy(),
                                   repertoire.getDetails(),
                                   it.value2()
                           );
@@ -56,4 +62,10 @@ public class RepertoireService {
 
     }
 
+    @Transactional
+    public void save(List<RepertoireEntryDto> entries, RepertoireType repertoireType, String details, String user) {
+        var repertoire = new Repertoire(null, repertoireType.name(), DateUtil.now(), details, user);
+        repertoireDao.insert(repertoire);
+        entries.forEach(entry -> repertoireEntryDao.insert(new RepertoireEntry(null, repertoire.getId(), entry.kompositionId(), entry.number())));
+    }
 }

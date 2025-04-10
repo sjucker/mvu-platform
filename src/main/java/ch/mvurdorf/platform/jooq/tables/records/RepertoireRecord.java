@@ -76,6 +76,20 @@ public class RepertoireRecord extends UpdatableRecordImpl<RepertoireRecord> {
         return (String) get(3);
     }
 
+    /**
+     * Setter for <code>public.repertoire.created_by</code>.
+     */
+    public void setCreatedBy(String value) {
+        set(4, value);
+    }
+
+    /**
+     * Getter for <code>public.repertoire.created_by</code>.
+     */
+    public String getCreatedBy() {
+        return (String) get(4);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -99,13 +113,14 @@ public class RepertoireRecord extends UpdatableRecordImpl<RepertoireRecord> {
     /**
      * Create a detached, initialised RepertoireRecord
      */
-    public RepertoireRecord(Long id, String type, LocalDateTime createdAt, String details) {
+    public RepertoireRecord(Long id, String type, LocalDateTime createdAt, String details, String createdBy) {
         super(Repertoire.REPERTOIRE);
 
         setId(id);
         setType(type);
         setCreatedAt(createdAt);
         setDetails(details);
+        setCreatedBy(createdBy);
         resetChangedOnNotNull();
     }
 
@@ -120,6 +135,7 @@ public class RepertoireRecord extends UpdatableRecordImpl<RepertoireRecord> {
             setType(value.getType());
             setCreatedAt(value.getCreatedAt());
             setDetails(value.getDetails());
+            setCreatedBy(value.getCreatedBy());
             resetChangedOnNotNull();
         }
     }

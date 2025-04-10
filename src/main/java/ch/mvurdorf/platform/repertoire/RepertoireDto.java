@@ -5,6 +5,7 @@ import java.util.List;
 
 public record RepertoireDto(RepertoireType type,
                             LocalDateTime createdAt,
+                            String createdBy,
                             String details,
                             List<RepertoireEntryDto> entries) {
 

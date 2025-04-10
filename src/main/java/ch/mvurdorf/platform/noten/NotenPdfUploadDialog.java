@@ -3,13 +3,13 @@ package ch.mvurdorf.platform.noten;
 import ch.mvurdorf.platform.common.Instrument;
 import ch.mvurdorf.platform.common.Stimme;
 import ch.mvurdorf.platform.common.Stimmlage;
+import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import ch.mvurdorf.platform.ui.i18n.UploadGermanI18N;
 import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
@@ -21,23 +21,29 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.server.StreamResource;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.Loader;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static com.vaadin.flow.component.Unit.PIXELS;
+import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 
+@Slf4j
 @RequiredArgsConstructor(access = PRIVATE)
 public class NotenPdfUploadDialog extends Dialog {
 
     private final NotenPdfUploadService notenPdfUploadService;
 
     private boolean pdfUploaded = false;
+    private int pageCount = 0;
     private PdfViewer pdfViewer;
     private Scroller scroller;
     private NotenPdfAssignmentContainer notenPdfAssignmentContainer;
@@ -67,6 +73,8 @@ public class NotenPdfUploadDialog extends Dialog {
             save.setEnabled(true);
             scroller.setVisible(true);
             pdfViewer.setSrc(new StreamResource(buffer.getFileName(), buffer::getInputStream));
+            pageCount = getPdfPageCount();
+            notenPdfAssignmentContainer.add("%d-%d".formatted(1, pageCount));
         });
         upload.addFileRemovedListener(_ -> {
             pdfUploaded = false;
@@ -120,6 +128,23 @@ public class NotenPdfUploadDialog extends Dialog {
         getFooter().add(save);
     }
 
+    private int getPdfPageCount() {
+        try {
+            return getPdfPageCount(buffer.getInputStream().readAllBytes());
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            return 0;
+        }
+    }
+
+    public int getPdfPageCount(byte[] pdfBytes) {
+        try (var pdDocument = Loader.loadPDF(pdfBytes)) {
+            return pdDocument.getNumberOfPages();
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
     @Override
     public void close() {
         // make sure memory is released
@@ -135,19 +160,26 @@ public class NotenPdfUploadDialog extends Dialog {
         public NotenPdfAssignmentContainer() {
             getContent().setSizeFull();
 
-            var add = new Button(VaadinIcon.PLUS.create(), _ -> {
-                var notenPdfAssignment = new NotenPdfAssignment();
+            var add = new Button(PLUS.create(), _ -> {
+                var pages = assignments.getLast().getPages();
+                var nextPages = pages.isValid() ? "%d-%d".formatted(pages.to + 1, pages.to + 1 + (pages.to - pages.from)) : "";
+                var notenPdfAssignment = new NotenPdfAssignment(nextPages);
                 assignments.add(notenPdfAssignment);
-                getContent().addComponentAsFirst(notenPdfAssignment);
+                getContent().addComponentAtIndex(assignments.size() - 1, notenPdfAssignment);
             });
             getContent().add(add);
-            add.click();
         }
 
         public List<CreateNotenPdfDto> get() {
             return assignments.stream()
                               .flatMap(assignment -> assignment.get().stream())
                               .toList();
+        }
+
+        public void add(String pages) {
+            var notenPdfAssignment = new NotenPdfAssignment(pages);
+            assignments.add(notenPdfAssignment);
+            getContent().addComponentAtIndex(assignments.size() - 1, notenPdfAssignment);
         }
     }
 
@@ -158,11 +190,12 @@ public class NotenPdfUploadDialog extends Dialog {
         private final MultiSelectComboBox<Stimme> stimmen;
         private final TextField pages;
 
-        public NotenPdfAssignment() {
+        public NotenPdfAssignment(String pagesValue) {
             stimmlage = new Select<>();
+            stimmlage.setEmptySelectionAllowed(true);
             stimmlage.setLabel("Stimmlage");
             stimmlage.setItems(Stimmlage.values());
-            stimmlage.setItemLabelGenerator(Stimmlage::getDescription);
+            stimmlage.setRenderer(new LocalizedEnumRenderer<>(s -> s));
             stimmlage.setWidthFull();
 
             instrumente = new MultiSelectComboBox<>("Instrumente");
@@ -178,6 +211,7 @@ public class NotenPdfUploadDialog extends Dialog {
 
             pages = new TextField("Seiten");
             pages.setWidth(140, PIXELS);
+            pages.setValue(pagesValue);
             pages.setPlaceholder("z.B. 1-5 oder 9");
             pages.setRequired(true);
 
@@ -213,6 +247,10 @@ public class NotenPdfUploadDialog extends Dialog {
                                             pagesFromTo.from(), pagesFromTo.to());
 
             return Optional.of(dto);
+        }
+
+        public Pages getPages() {
+            return parsePages(pages.getValue());
         }
 
     }

@@ -24,13 +24,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.InputStreamFactory;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.theme.lumo.LumoUtility;
+import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
+import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
 import jakarta.annotation.security.PermitAll;
 
 import java.io.ByteArrayInputStream;
 
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
-import static ch.mvurdorf.platform.utils.BigDecimalUtil.formatBigDecimal;
+import static ch.mvurdorf.platform.ui.RendererUtil.repertoireNumber;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
 import static com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
@@ -66,11 +67,13 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
                                               add(new H2(type.getDescription()));
                                               if (isNotBlank(repertoire.details())) {
                                                   var details = new Paragraph(repertoire.details());
-                                                  details.addClassName(LumoUtility.Whitespace.PRE_WRAP);
+                                                  details.addClassName(Whitespace.PRE_WRAP);
                                                   add(details);
                                               }
 
-                                              var controls = new HorizontalLayout(new Span("Letzte Änderung am: %s".formatted(formatDateTime(repertoire.createdAt()))),
+                                              var lastUpdated = new Span("Letzte Änderung am: %s durch %s".formatted(formatDateTime(repertoire.createdAt()), repertoire.createdBy()));
+                                              lastUpdated.addClassName(FontSize.XSMALL);
+                                              var controls = new HorizontalLayout(lastUpdated,
                                                                                   createExportAllButton(repertoire));
                                               controls.setWidthFull();
                                               controls.setJustifyContentMode(JustifyContentMode.BETWEEN);
@@ -78,11 +81,12 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
                                               add(controls);
 
                                               var entries = new Grid<RepertoireEntryDto>();
-                                              entries.addColumn(dto -> formatBigDecimal(dto.number()))
+                                              entries.addColumn(clickableIcon(MUSIC,
+                                                                              dto -> NotenDownloadDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.kompositionId(), dto.kompositionTitel())))
+                                                     .setWidth("60px").setFlexGrow(0);
+                                              entries.addColumn(repertoireNumber(RepertoireEntryDto::number))
                                                      .setWidth("100px").setFlexGrow(0);
                                               entries.addColumn(RepertoireEntryDto::label);
-                                              entries.addColumn(clickableIcon(MUSIC,
-                                                                              dto -> NotenDownloadDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.kompositionId(), dto.kompositionTitel()))).setWidth("60px").setFlexGrow(0);
                                               entries.setItems(repertoire.entries());
                                               add(entries);
                                           },

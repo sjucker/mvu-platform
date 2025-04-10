@@ -20,6 +20,7 @@ public class Repertoire implements Serializable {
     private String type;
     private LocalDateTime createdAt;
     private String details;
+    private String createdBy;
 
     public Repertoire() {}
 
@@ -28,18 +29,21 @@ public class Repertoire implements Serializable {
         this.type = value.type;
         this.createdAt = value.createdAt;
         this.details = value.details;
+        this.createdBy = value.createdBy;
     }
 
     public Repertoire(
         Long id,
         String type,
         LocalDateTime createdAt,
-        String details
+        String details,
+        String createdBy
     ) {
         this.id = id;
         this.type = type;
         this.createdAt = createdAt;
         this.details = details;
+        this.createdBy = createdBy;
     }
 
     /**
@@ -98,6 +102,20 @@ public class Repertoire implements Serializable {
         this.details = details;
     }
 
+    /**
+     * Getter for <code>public.repertoire.created_by</code>.
+     */
+    public String getCreatedBy() {
+        return this.createdBy;
+    }
+
+    /**
+     * Setter for <code>public.repertoire.created_by</code>.
+     */
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -131,6 +149,12 @@ public class Repertoire implements Serializable {
         }
         else if (!this.details.equals(other.details))
             return false;
+        if (this.createdBy == null) {
+            if (other.createdBy != null)
+                return false;
+        }
+        else if (!this.createdBy.equals(other.createdBy))
+            return false;
         return true;
     }
 
@@ -142,6 +166,7 @@ public class Repertoire implements Serializable {
         result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         result = prime * result + ((this.details == null) ? 0 : this.details.hashCode());
+        result = prime * result + ((this.createdBy == null) ? 0 : this.createdBy.hashCode());
         return result;
     }
 
@@ -153,6 +178,7 @@ public class Repertoire implements Serializable {
         sb.append(", ").append(type);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(details);
+        sb.append(", ").append(createdBy);
 
         sb.append(")");
         return sb.toString();

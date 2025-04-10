@@ -76,6 +76,11 @@ public class Repertoire extends TableImpl<RepertoireRecord> {
      */
     public final TableField<RepertoireRecord, String> DETAILS = createField(DSL.name("details"), SQLDataType.CLOB, this, "");
 
+    /**
+     * The column <code>public.repertoire.created_by</code>.
+     */
+    public final TableField<RepertoireRecord, String> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.VARCHAR(255), this, "");
+
     private Repertoire(Name alias, Table<RepertoireRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

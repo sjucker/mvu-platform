@@ -26,3 +26,21 @@
 ## Sonar
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sjucker_mvu-platform&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sjucker_mvu-platform)
+
+## Heroku
+
+### Database
+
+* `heroku pg:info --app mvu`
+
+### Database Backup
+
+* Prod:  
+  `heroku pg:backups:capture --app mvu`  
+  `heroku pg:backups:download --app mvu`
+
+* Restore locally:
+    * Drop all tables
+    * `pg_restore --no-owner -h localhost -U mvu -d mvu -W latest.dump`
+
+

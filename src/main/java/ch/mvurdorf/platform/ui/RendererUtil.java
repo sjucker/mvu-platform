@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.ui;
 
 import ch.mvurdorf.platform.ui.StyleUtility.IconStyle;
+import ch.mvurdorf.platform.utils.BigDecimalUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HtmlContainer;
 import com.vaadin.flow.component.html.Anchor;
@@ -10,10 +11,12 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
+import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
 
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
@@ -87,6 +90,10 @@ public final class RendererUtil {
                 return new Div();
             }
         });
+    }
+
+    public static <T> TextRenderer<T> repertoireNumber(Function<T, BigDecimal> getter) {
+        return new TextRenderer<>(dto -> BigDecimalUtil.formatBigDecimal(getter.apply(dto)));
     }
 
 }

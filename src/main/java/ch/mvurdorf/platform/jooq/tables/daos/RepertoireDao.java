@@ -117,4 +117,19 @@ public class RepertoireDao extends AbstractSpringDAOImpl<RepertoireRecord, ch.mv
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Repertoire> fetchByDetails(String... values) {
         return fetch(Repertoire.REPERTOIRE.DETAILS, values);
     }
+
+    /**
+     * Fetch records that have <code>created_by BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Repertoire> fetchRangeOfCreatedBy(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Repertoire.REPERTOIRE.CREATED_BY, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>created_by IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Repertoire> fetchByCreatedBy(String... values) {
+        return fetch(Repertoire.REPERTOIRE.CREATED_BY, values);
+    }
 }
