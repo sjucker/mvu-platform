@@ -73,6 +73,11 @@ public class NotenPdf extends TableImpl<NotenPdfRecord> {
      */
     public final TableField<NotenPdfRecord, String> STIMMLAGE = createField(DSL.name("stimmlage"), SQLDataType.VARCHAR(255), this, "");
 
+    /**
+     * The column <code>public.noten_pdf.notenschluessel</code>.
+     */
+    public final TableField<NotenPdfRecord, String> NOTENSCHLUESSEL = createField(DSL.name("notenschluessel"), SQLDataType.VARCHAR(255), this, "");
+
     private NotenPdf(Name alias, Table<NotenPdfRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

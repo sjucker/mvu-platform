@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.noten;
 
 import ch.mvurdorf.platform.common.Instrument;
+import ch.mvurdorf.platform.common.Notenschluessel;
 import ch.mvurdorf.platform.common.Stimme;
 import ch.mvurdorf.platform.common.Stimmlage;
 import jakarta.annotation.Nullable;
@@ -17,7 +18,8 @@ import static java.util.stream.Collectors.toList;
 
 public record NotenPdfDto(Long id,
                           @NotNull List<NotenAssignmentDto> assignments,
-                          @Nullable Stimmlage stimmlage) implements Comparable<NotenPdfDto> {
+                          @Nullable Stimmlage stimmlage,
+                          @Nullable Notenschluessel notenschluessel) implements Comparable<NotenPdfDto> {
 
     public String description() {
         var assignmentsByInstrument = assignments.stream()
@@ -42,10 +44,15 @@ public record NotenPdfDto(Long id,
                                    }
                                });
 
-        if (stimmlage != null) {
+        if (stimmlage != null && notenschluessel != null) {
+            return "%s (in %s, %s)".formatted(joiner, stimmlage.getDescription(), notenschluessel.getDescription());
+        } else if (stimmlage != null) {
             return "%s (in %s)".formatted(joiner, stimmlage.getDescription());
+        } else if (notenschluessel != null) {
+            return "%s (%s)".formatted(joiner, notenschluessel.getDescription());
+        } else {
+            return joiner.toString();
         }
-        return joiner.toString();
     }
 
     public String filename() {

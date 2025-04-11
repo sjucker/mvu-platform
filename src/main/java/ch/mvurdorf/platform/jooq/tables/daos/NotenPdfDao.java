@@ -101,4 +101,19 @@ public class NotenPdfDao extends AbstractSpringDAOImpl<NotenPdfRecord, ch.mvurdo
     public List<ch.mvurdorf.platform.jooq.tables.pojos.NotenPdf> fetchByStimmlage(String... values) {
         return fetch(NotenPdf.NOTEN_PDF.STIMMLAGE, values);
     }
+
+    /**
+     * Fetch records that have <code>notenschluessel BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.NotenPdf> fetchRangeOfNotenschluessel(String lowerInclusive, String upperInclusive) {
+        return fetchRange(NotenPdf.NOTEN_PDF.NOTENSCHLUESSEL, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>notenschluessel IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.NotenPdf> fetchByNotenschluessel(String... values) {
+        return fetch(NotenPdf.NOTEN_PDF.NOTENSCHLUESSEL, values);
+    }
 }

@@ -60,6 +60,20 @@ public class NotenPdfRecord extends UpdatableRecordImpl<NotenPdfRecord> {
         return (String) get(2);
     }
 
+    /**
+     * Setter for <code>public.noten_pdf.notenschluessel</code>.
+     */
+    public void setNotenschluessel(String value) {
+        set(3, value);
+    }
+
+    /**
+     * Getter for <code>public.noten_pdf.notenschluessel</code>.
+     */
+    public String getNotenschluessel() {
+        return (String) get(3);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -83,12 +97,13 @@ public class NotenPdfRecord extends UpdatableRecordImpl<NotenPdfRecord> {
     /**
      * Create a detached, initialised NotenPdfRecord
      */
-    public NotenPdfRecord(Long id, Long fkKomposition, String stimmlage) {
+    public NotenPdfRecord(Long id, Long fkKomposition, String stimmlage, String notenschluessel) {
         super(NotenPdf.NOTEN_PDF);
 
         setId(id);
         setFkKomposition(fkKomposition);
         setStimmlage(stimmlage);
+        setNotenschluessel(notenschluessel);
         resetChangedOnNotNull();
     }
 
@@ -102,6 +117,7 @@ public class NotenPdfRecord extends UpdatableRecordImpl<NotenPdfRecord> {
             setId(value.getId());
             setFkKomposition(value.getFkKomposition());
             setStimmlage(value.getStimmlage());
+            setNotenschluessel(value.getNotenschluessel());
             resetChangedOnNotNull();
         }
     }

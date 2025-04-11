@@ -39,7 +39,9 @@ public class NotenPdfUploadService {
             }
 
             for (var notenPdfAssignment : notenPdfAssignments) {
-                var notenPdf = new NotenPdf(null, kompositionId, ofNullable(notenPdfAssignment.stimmlage()).map(Enum::name).orElse(null));
+                var notenPdf = new NotenPdf(null, kompositionId,
+                                            ofNullable(notenPdfAssignment.stimmlage()).map(Enum::name).orElse(null),
+                                            ofNullable(notenPdfAssignment.notenschluessel()).map(Enum::name).orElse(null));
                 notenPdfDao.insert(notenPdf);
 
                 var extractor = new PageExtractor(pdDocument, notenPdfAssignment.pageFrom(), notenPdfAssignment.pageTo());

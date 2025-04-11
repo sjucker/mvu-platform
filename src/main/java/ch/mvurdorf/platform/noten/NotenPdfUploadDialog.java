@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.noten;
 
 import ch.mvurdorf.platform.common.Instrument;
+import ch.mvurdorf.platform.common.Notenschluessel;
 import ch.mvurdorf.platform.common.Stimme;
 import ch.mvurdorf.platform.common.Stimmlage;
 import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
@@ -185,12 +186,20 @@ public class NotenPdfUploadDialog extends Dialog {
 
     private static class NotenPdfAssignment extends Composite<HorizontalLayout> {
 
+        private final Select<Notenschluessel> notenschluessel;
         private final Select<Stimmlage> stimmlage;
         private final MultiSelectComboBox<Instrument> instrumente;
         private final MultiSelectComboBox<Stimme> stimmen;
         private final TextField pages;
 
         public NotenPdfAssignment(String pagesValue) {
+            notenschluessel = new Select<>();
+            notenschluessel.setEmptySelectionAllowed(true);
+            notenschluessel.setLabel("Notenschlüssel");
+            notenschluessel.setItems(Notenschluessel.values());
+            notenschluessel.setRenderer(new LocalizedEnumRenderer<>(s -> s));
+            notenschluessel.setWidthFull();
+
             stimmlage = new Select<>();
             stimmlage.setEmptySelectionAllowed(true);
             stimmlage.setLabel("Stimmlage");
@@ -216,7 +225,7 @@ public class NotenPdfUploadDialog extends Dialog {
             pages.setRequired(true);
 
             getContent().setWidthFull();
-            getContent().add(stimmlage, instrumente, stimmen, pages);
+            getContent().add(notenschluessel, stimmlage, instrumente, stimmen, pages);
         }
 
         public Optional<CreateNotenPdfDto> get() {
@@ -243,6 +252,7 @@ public class NotenPdfUploadDialog extends Dialog {
             }
 
             var dto = new CreateNotenPdfDto(stimmlage.getOptionalValue().orElse(null),
+                                            notenschluessel.getOptionalValue().orElse(null),
                                             assignments,
                                             pagesFromTo.from(), pagesFromTo.to());
 

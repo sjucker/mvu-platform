@@ -18,6 +18,7 @@ public class NotenPdf implements Serializable {
     private Long id;
     private Long fkKomposition;
     private String stimmlage;
+    private String notenschluessel;
 
     public NotenPdf() {}
 
@@ -25,16 +26,19 @@ public class NotenPdf implements Serializable {
         this.id = value.id;
         this.fkKomposition = value.fkKomposition;
         this.stimmlage = value.stimmlage;
+        this.notenschluessel = value.notenschluessel;
     }
 
     public NotenPdf(
         Long id,
         Long fkKomposition,
-        String stimmlage
+        String stimmlage,
+        String notenschluessel
     ) {
         this.id = id;
         this.fkKomposition = fkKomposition;
         this.stimmlage = stimmlage;
+        this.notenschluessel = notenschluessel;
     }
 
     /**
@@ -79,6 +83,20 @@ public class NotenPdf implements Serializable {
         this.stimmlage = stimmlage;
     }
 
+    /**
+     * Getter for <code>public.noten_pdf.notenschluessel</code>.
+     */
+    public String getNotenschluessel() {
+        return this.notenschluessel;
+    }
+
+    /**
+     * Setter for <code>public.noten_pdf.notenschluessel</code>.
+     */
+    public void setNotenschluessel(String notenschluessel) {
+        this.notenschluessel = notenschluessel;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -106,6 +124,12 @@ public class NotenPdf implements Serializable {
         }
         else if (!this.stimmlage.equals(other.stimmlage))
             return false;
+        if (this.notenschluessel == null) {
+            if (other.notenschluessel != null)
+                return false;
+        }
+        else if (!this.notenschluessel.equals(other.notenschluessel))
+            return false;
         return true;
     }
 
@@ -116,6 +140,7 @@ public class NotenPdf implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.fkKomposition == null) ? 0 : this.fkKomposition.hashCode());
         result = prime * result + ((this.stimmlage == null) ? 0 : this.stimmlage.hashCode());
+        result = prime * result + ((this.notenschluessel == null) ? 0 : this.notenschluessel.hashCode());
         return result;
     }
 
@@ -126,6 +151,7 @@ public class NotenPdf implements Serializable {
         sb.append(id);
         sb.append(", ").append(fkKomposition);
         sb.append(", ").append(stimmlage);
+        sb.append(", ").append(notenschluessel);
 
         sb.append(")");
         return sb.toString();

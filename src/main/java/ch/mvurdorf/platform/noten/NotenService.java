@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.noten;
 
 import ch.mvurdorf.platform.common.Instrument;
+import ch.mvurdorf.platform.common.Notenschluessel;
 import ch.mvurdorf.platform.common.Stimmlage;
 import ch.mvurdorf.platform.jooq.tables.daos.NotenPdfAssignmentDao;
 import ch.mvurdorf.platform.jooq.tables.daos.NotenPdfDao;
@@ -48,7 +49,8 @@ public class NotenService {
     public void insert(Long kompositionId, NotenPdfDto noten, byte[] file) {
         var notenPdf = new NotenPdf(null,
                                     kompositionId,
-                                    ofNullable(noten.stimmlage()).map(Enum::name).orElse(null));
+                                    ofNullable(noten.stimmlage()).map(Enum::name).orElse(null),
+                                    ofNullable(noten.notenschluessel()).map(Enum::name).orElse(null));
         notenPdfDao.insert(notenPdf);
         noten.assignments().forEach(notenAssignment ->
                                             notenPdfAssignmentDao.insert(new NotenPdfAssignment(null,
@@ -62,6 +64,7 @@ public class NotenService {
     public List<NotenPdfDto> findByKomposition(Long kompositionId) {
         return jooqDsl.select(NOTEN_PDF.ID,
                               NOTEN_PDF.STIMMLAGE,
+                              NOTEN_PDF.NOTENSCHLUESSEL,
                               multiset(
                                       select(NOTEN_PDF_ASSIGNMENT.INSTRUMENT,
                                              NOTEN_PDF_ASSIGNMENT.STIMME)
@@ -71,10 +74,11 @@ public class NotenService {
                       .from(NOTEN_PDF)
                       .where(NOTEN_PDF.FK_KOMPOSITION.eq(kompositionId))
                       .fetch(it -> new NotenPdfDto(it.value1(),
-                                                   it.value3().stream()
+                                                   it.value4().stream()
                                                      .sorted(comparing(NotenAssignmentDto::instrument))
                                                      .toList(),
-                                                   Stimmlage.of(it.value2()).orElse(null)))
+                                                   Stimmlage.of(it.value2()).orElse(null),
+                                                   Notenschluessel.of(it.value3()).orElse(null)))
                       .stream()
                       .sorted()
                       .toList();
