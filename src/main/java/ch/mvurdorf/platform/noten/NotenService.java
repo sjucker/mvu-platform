@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -93,13 +92,12 @@ public class NotenService {
     }
 
     public byte[] exportNotenToPdf(List<Long> kompositionIds, Set<String> instruments) {
-        List<Long> notenIds = new ArrayList<>();
-        // TODO
-//        List<Long> notenIds = jooqDsl.select(NOTEN.ID)
-//                                     .from(NOTEN)
-//                                     .where(NOTEN.FK_KOMPOSITION.in(kompositionIds),
-//                                            NOTEN.INSTRUMENT.in(instruments))
-//                                     .fetch(NOTEN.ID);
+        List<Long> notenIds = jooqDsl.selectDistinct(NOTEN_PDF.ID)
+                                     .from(NOTEN_PDF)
+                                     .join(NOTEN_PDF_ASSIGNMENT).on(NOTEN_PDF_ASSIGNMENT.FK_NOTEN_PDF.eq(NOTEN_PDF.ID))
+                                     .where(NOTEN_PDF.FK_KOMPOSITION.in(kompositionIds),
+                                            NOTEN_PDF_ASSIGNMENT.INSTRUMENT.in(instruments))
+                                     .fetch(NOTEN_PDF.ID);
 
         try (var out = new ByteArrayOutputStream()) {
             var pdfMergerUtility = new PDFMergerUtility();

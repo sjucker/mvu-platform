@@ -77,7 +77,8 @@ public class KonzerteView extends VerticalLayout {
         grid.addColumn(KonzertDto::description).setHeader("Details");
         if (authenticatedUser.hasWritePermission(KONZERTE_GROUP)) {
             grid.addColumn(clickableIcon(EDIT,
-                                         dto -> KonzertDialog.edit(konzerteService, kompositionService, dto, () -> dataProvider.refreshAll())));
+                                         dto -> KonzertDialog.edit(konzerteService, kompositionService, dto, () -> dataProvider.refreshAll())))
+                .setWidth("60px").setFlexGrow(0);
         }
 
         if (authenticatedUser.hasWritePermission(KONZERTE_GROUP)) {
@@ -98,7 +99,8 @@ public class KonzerteView extends VerticalLayout {
                                                          .open();
 
                                              }
-                                         }));
+                                         }))
+                .setWidth("60px").setFlexGrow(0);
 
         }
 

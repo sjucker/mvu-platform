@@ -21,6 +21,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -91,6 +92,7 @@ public class NotenPdfUploadDialog extends Dialog {
         scroller.setVisible(false);
 
         var content = new VerticalLayout(upload, scroller);
+        content.setPadding(false);
 
         pdfViewer = new PdfViewer();
         pdfViewer.setSizeFull();
@@ -160,6 +162,8 @@ public class NotenPdfUploadDialog extends Dialog {
 
         public NotenPdfAssignmentContainer() {
             getContent().setSizeFull();
+            getContent().setMargin(false);
+            getContent().setPadding(false);
 
             var add = new Button(PLUS.create(), _ -> {
                 var pages = assignments.getLast().getPages();
@@ -198,33 +202,37 @@ public class NotenPdfUploadDialog extends Dialog {
             notenschluessel.setLabel("Notenschlüssel");
             notenschluessel.setItems(Notenschluessel.values());
             notenschluessel.setRenderer(new LocalizedEnumRenderer<>(s -> s));
-            notenschluessel.setWidthFull();
+            notenschluessel.setWidth(150, PIXELS);
 
             stimmlage = new Select<>();
             stimmlage.setEmptySelectionAllowed(true);
             stimmlage.setLabel("Stimmlage");
             stimmlage.setItems(Stimmlage.values());
             stimmlage.setRenderer(new LocalizedEnumRenderer<>(s -> s));
-            stimmlage.setWidthFull();
+            stimmlage.setWidth(100, PIXELS);
 
             instrumente = new MultiSelectComboBox<>("Instrumente");
             instrumente.setItems(Instrument.values());
             instrumente.setItemLabelGenerator(Instrument::getDescription);
             instrumente.setRequired(true);
-            instrumente.setWidthFull();
+            instrumente.setWidth(240, PIXELS);
 
             stimmen = new MultiSelectComboBox<>("Stimmen");
             stimmen.setItems(Stimme.values());
             stimmen.setItemLabelGenerator(Stimme::getDescription);
-            stimmen.setWidthFull();
+            stimmen.setWidth(140, PIXELS);
 
             pages = new TextField("Seiten");
-            pages.setWidth(140, PIXELS);
             pages.setValue(pagesValue);
             pages.setPlaceholder("z.B. 1-5 oder 9");
             pages.setRequired(true);
+            pages.setWidth(100, PIXELS);
 
             getContent().setWidthFull();
+            getContent().setMargin(false);
+            getContent().setPadding(false);
+            getContent().setWrap(true);
+            getContent().addClassNames(Gap.Row.XSMALL, Gap.Column.MEDIUM);
             getContent().add(notenschluessel, stimmlage, instrumente, stimmen, pages);
         }
 
