@@ -8,7 +8,6 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -36,7 +35,6 @@ public class KonzertDialog extends Dialog {
     private final KonzerteService konzerteService;
     private final KompositionService kompositionService;
 
-    private GridListDataView<KonzertEntryDto> entriesDataView;
     private KonzertEntryDto draggedItem;
 
     private KonzertDialog(KonzerteService konzerteService, KompositionService kompositionService) {
@@ -97,11 +95,11 @@ public class KonzertDialog extends Dialog {
         var zugabe = new Checkbox("Zugabe?", false);
 
         var entriesGrid = new Grid<KonzertEntryDto>();
-        entriesDataView = entriesGrid.setItems(dto.entries());
+        var entriesDataView = entriesGrid.setItems(dto.entries());
         entriesGrid.setSizeFull();
         entriesGrid.addColumn(KonzertEntryDto::titel).setHeader("Titel").setFlexGrow(1);
         entriesGrid.addColumn(new CheckboxRenderer<>(KonzertEntryDto::zugabe)).setHeader("Zugabe");
-        entriesGrid.addColumn(clickableIcon(TRASH, item -> entriesDataView.removeItem(item))).setFlexGrow(0);
+        entriesGrid.addColumn(clickableIcon(TRASH, entriesDataView::removeItem)).setFlexGrow(0);
         entriesGrid.setAllRowsVisible(true);
         entriesGrid.setMinHeight("300px");
         entriesGrid.setRowsDraggable(true);

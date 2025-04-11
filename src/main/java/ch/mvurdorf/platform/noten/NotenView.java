@@ -82,12 +82,10 @@ public class NotenView extends VerticalLayout {
     private void createControls() {
         controls = new HorizontalLayout();
         if (authenticatedUser.hasWritePermission(NOTEN_GROUP)) {
-            controls.add(new Button("Komposition hinzufügen", _ -> {
-                KompositionDialog.show(kompositionDto -> {
-                    kompositionService.insert(kompositionDto);
-                    dataProvider.refreshAll();
-                });
-            }));
+            controls.add(new Button("Komposition hinzufügen", _ -> KompositionDialog.show(kompositionDto -> {
+                kompositionService.insert(kompositionDto);
+                dataProvider.refreshAll();
+            })));
         }
 
         var filter = new TextField(event -> dataProvider.setFilter(event.getValue()));
