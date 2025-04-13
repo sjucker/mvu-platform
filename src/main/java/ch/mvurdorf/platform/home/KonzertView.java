@@ -19,6 +19,8 @@ import jakarta.annotation.security.PermitAll;
 
 import static ch.mvurdorf.platform.konzerte.KonzerteService.getNumber;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
+import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
+import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -59,7 +61,10 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                     entries.addColumn(clickableIcon(MUSIC,
                                                     dto -> NotenDownloadDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.kompositionId(), dto.kompositionTitel()),
                                                     dto -> !dto.isPlaceholder(),
-                                                    "Noten-Download")).setWidth("60px").setFlexGrow(0);
+                                                    "Noten-Download"))
+                           .setWidth("60px").setFlexGrow(0);
+                    entries.addColumn(externalLink(FILE_SOUND, KonzertEntryDto::kompositionAudioSample))
+                           .setWidth("60px").setFlexGrow(0);
                     entries.setItems(konzertDto.entries());
                     add(entries);
                 },

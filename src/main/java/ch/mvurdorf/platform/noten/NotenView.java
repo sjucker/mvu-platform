@@ -21,7 +21,7 @@ import static ch.mvurdorf.platform.security.LoginService.NOTEN_GROUP;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
-import static com.vaadin.flow.component.icon.VaadinIcon.EXTERNAL_LINK;
+import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
 import static com.vaadin.flow.component.icon.VaadinIcon.UPLOAD;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
@@ -68,7 +68,7 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(KompositionDto::komponist).setHeader("Komponist");
         grid.addColumn(KompositionDto::arrangeur).setHeader("Arrangeur");
         grid.addColumn(new LocalizedEnumRenderer<>(KompositionDto::format)).setHeader("Format");
-        grid.addColumn(externalLink(EXTERNAL_LINK, KompositionDto::audioSample)).setHeader("Hörprobe");
+        grid.addColumn(externalLink(FILE_SOUND, KompositionDto::audioSample)).setHeader("Hörprobe");
         grid.addItemDoubleClickListener(event -> edit(event.getItem()));
     }
 

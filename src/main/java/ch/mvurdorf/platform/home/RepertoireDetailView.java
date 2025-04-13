@@ -35,7 +35,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
 import static ch.mvurdorf.platform.ui.RendererUtil.repertoireNumber;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
 import static com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY;
-import static com.vaadin.flow.component.icon.VaadinIcon.EXTERNAL_LINK;
+import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -89,7 +89,7 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
                                               entries.addColumn(repertoireNumber(RepertoireEntryDto::number))
                                                      .setWidth("100px").setFlexGrow(0);
                                               entries.addColumn(RepertoireEntryDto::label);
-                                              entries.addColumn(externalLink(EXTERNAL_LINK, RepertoireEntryDto::kompositionAudioSample))
+                                              entries.addColumn(externalLink(FILE_SOUND, RepertoireEntryDto::kompositionAudioSample))
                                                      .setWidth("60px").setFlexGrow(0);
                                               entries.setItems(repertoire.entries());
                                               add(entries);

@@ -139,6 +139,7 @@ public class KonzertDialog extends Dialog {
                                                                                                                                       selection.titel(),
                                                                                                                                       selection.komponist(),
                                                                                                                                       selection.arrangeur(),
+                                                                                                                                      selection.audioSample(),
                                                                                                                                       zugabe.getValue()))));
 
         var kompositionSelectionControls = new HorizontalLayout(kompositionSelection, zugabe, addButton);
@@ -152,7 +153,7 @@ public class KonzertDialog extends Dialog {
         var addPlaceholderButton = secondaryButton("Platzhalter hinzufügen",
                                                    () -> placeholder.getOptionalValue()
                                                                     .ifPresent(value -> {
-                                                                        entriesDataView.addItem(new KonzertEntryDto(null, value, null, null, null, null, false));
+                                                                        entriesDataView.addItem(new KonzertEntryDto(null, value, null, null, null, null, null, false));
                                                                         placeholder.clear();
                                                                     }));
         var placeholderControls = new HorizontalLayout(placeholder, addPlaceholderButton);

@@ -79,6 +79,7 @@ public class KonzerteService {
                                              KOMPOSITION.TITEL,
                                              KOMPOSITION.KOMPONIST,
                                              KOMPOSITION.ARRANGEUR,
+                                             KOMPOSITION.AUDIO_SAMPLE,
                                              KONZERT_ENTRY.ZUGABE)
                                               .from(KONZERT_ENTRY)
                                               .leftJoin(KOMPOSITION).on(KONZERT_ENTRY.FK_KOMPOSITION.eq(KOMPOSITION.ID))

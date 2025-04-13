@@ -11,6 +11,7 @@ public record KonzertEntryDto(Integer index,
                               String kompositionTitel,
                               String kompositionKomponist,
                               String kompositionArrangeur,
+                              String kompositionAudioSample,
                               boolean zugabe) {
 
     public String titel() {
