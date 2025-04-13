@@ -8,6 +8,7 @@ public record RepertoireEntryDto(Long kompositionId,
                                  String kompositionTitel,
                                  String kompositionKomponist,
                                  String kompositionArrangeur,
+                                 String kompositionAudioSample,
                                  BigDecimal number) {
 
     public String label() {

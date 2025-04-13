@@ -38,6 +38,7 @@ public class RepertoireService {
                                              KOMPOSITION.TITEL,
                                              KOMPOSITION.KOMPONIST,
                                              KOMPOSITION.ARRANGEUR,
+                                             KOMPOSITION.AUDIO_SAMPLE,
                                              REPERTOIRE_ENTRY.NUMBER)
                                               .from(REPERTOIRE_ENTRY)
                                               .leftJoin(KOMPOSITION).on(REPERTOIRE_ENTRY.FK_KOMPOSITION.eq(KOMPOSITION.ID))

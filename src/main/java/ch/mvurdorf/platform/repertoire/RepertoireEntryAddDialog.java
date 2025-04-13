@@ -45,7 +45,7 @@ public class RepertoireEntryAddDialog extends Dialog {
                 Notification.show("Bitte Komposition auswählen!");
             } else {
                 var kompositionDto = kompositionen.getValue();
-                callback.accept(new RepertoireEntryDto(kompositionDto.id(), kompositionDto.titel(), kompositionDto.komponist(), kompositionDto.arrangeur(), nummer.getOptionalValue().orElse(null)));
+                callback.accept(new RepertoireEntryDto(kompositionDto.id(), kompositionDto.titel(), kompositionDto.komponist(), kompositionDto.arrangeur(), kompositionDto.audioSample(), nummer.getOptionalValue().orElse(null)));
                 close();
             }
         }));
