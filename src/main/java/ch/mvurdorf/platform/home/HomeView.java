@@ -8,6 +8,7 @@ import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -16,6 +17,7 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility.Border;
 import com.vaadin.flow.theme.lumo.LumoUtility.BorderColor;
 import com.vaadin.flow.theme.lumo.LumoUtility.BorderRadius;
+import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import jakarta.annotation.security.PermitAll;
 
 import static ch.mvurdorf.platform.repertoire.RepertoireType.KONZERTMAPPE;
@@ -57,8 +59,11 @@ public class HomeView extends VerticalLayout {
 
         add(new Hr());
         add(new H3("Repertoire"));
-        add(new RouterLink(KONZERTMAPPE.getDescription(), RepertoireDetailView.class, KONZERTMAPPE.name()));
-        add(new RouterLink(MARSCHBUCH.getDescription(), RepertoireDetailView.class, MARSCHBUCH.name()));
+        var links = new HorizontalLayout(new RouterLink(KONZERTMAPPE.getDescription(), RepertoireDetailView.class, KONZERTMAPPE.name()),
+                                         new RouterLink(MARSCHBUCH.getDescription(), RepertoireDetailView.class, MARSCHBUCH.name()));
+        links.addClassName(Gap.LARGE);
+        links.setWrap(true);
+        add(links);
     }
 
 }
