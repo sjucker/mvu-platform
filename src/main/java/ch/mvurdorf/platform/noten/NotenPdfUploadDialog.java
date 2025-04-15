@@ -57,6 +57,8 @@ public class NotenPdfUploadDialog extends Dialog {
         var dialog = new NotenPdfUploadDialog(notenPdfUploadService);
         dialog.init(komposition);
         dialog.setModal(true);
+        dialog.setCloseOnEsc(false);
+        dialog.setCloseOnOutsideClick(false);
         dialog.setSizeFull();
         dialog.open();
     }

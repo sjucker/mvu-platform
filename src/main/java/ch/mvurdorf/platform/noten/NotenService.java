@@ -2,6 +2,7 @@ package ch.mvurdorf.platform.noten;
 
 import ch.mvurdorf.platform.common.Instrument;
 import ch.mvurdorf.platform.common.Notenschluessel;
+import ch.mvurdorf.platform.common.Stimme;
 import ch.mvurdorf.platform.common.Stimmlage;
 import ch.mvurdorf.platform.jooq.tables.daos.NotenPdfAssignmentDao;
 import ch.mvurdorf.platform.jooq.tables.daos.NotenPdfDao;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +34,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.apache.pdfbox.io.IOUtils.createMemoryOnlyStreamCache;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.trueCondition;
 
 @Slf4j
 @Service
@@ -83,21 +84,20 @@ public class NotenService {
                       .toList();
     }
 
-    public byte[] exportNotenToPdf(List<Long> kompositionIds) {
-        return exportNotenToPdf(kompositionIds, Arrays.stream(Instrument.values()).map(Instrument::name).collect(toSet()));
-    }
+    public byte[] exportNotenToPdf(List<Long> kompositionIds, Instrument instrument, Set<Stimme> stimme, Set<Stimmlage> stimmlage, Set<Notenschluessel> noteneschluessel) {
+        var stimmeValues = stimme.stream().map(Enum::name).collect(toSet());
+        var stimmlagValues = stimmlage.stream().map(Enum::name).collect(toSet());
+        var noteneschluesselValues = noteneschluessel.stream().map(Enum::name).collect(toSet());
 
-    public byte[] exportNotenToPdf(List<Long> kompositionIds, Instrument instrument) {
-        return exportNotenToPdf(kompositionIds, Set.of(instrument.name()));
-    }
-
-    public byte[] exportNotenToPdf(List<Long> kompositionIds, Set<String> instruments) {
-        List<Long> notenIds = jooqDsl.selectDistinct(NOTEN_PDF.ID)
-                                     .from(NOTEN_PDF)
-                                     .join(NOTEN_PDF_ASSIGNMENT).on(NOTEN_PDF_ASSIGNMENT.FK_NOTEN_PDF.eq(NOTEN_PDF.ID))
-                                     .where(NOTEN_PDF.FK_KOMPOSITION.in(kompositionIds),
-                                            NOTEN_PDF_ASSIGNMENT.INSTRUMENT.in(instruments))
-                                     .fetch(NOTEN_PDF.ID);
+        var notenIds = jooqDsl.selectDistinct(NOTEN_PDF.ID)
+                              .from(NOTEN_PDF)
+                              .join(NOTEN_PDF_ASSIGNMENT).on(NOTEN_PDF_ASSIGNMENT.FK_NOTEN_PDF.eq(NOTEN_PDF.ID))
+                              .where(NOTEN_PDF.FK_KOMPOSITION.in(kompositionIds),
+                                     NOTEN_PDF_ASSIGNMENT.INSTRUMENT.eq(instrument.name()),
+                                     stimmeValues.isEmpty() ? trueCondition() : NOTEN_PDF_ASSIGNMENT.STIMME.isNull().or(NOTEN_PDF_ASSIGNMENT.STIMME.in(stimmeValues)),
+                                     stimmlagValues.isEmpty() ? trueCondition() : NOTEN_PDF.STIMMLAGE.isNull().or(NOTEN_PDF.STIMMLAGE.in(stimmlagValues)),
+                                     noteneschluesselValues.isEmpty() ? trueCondition() : NOTEN_PDF.NOTENSCHLUESSEL.isNull().or(NOTEN_PDF.NOTENSCHLUESSEL.in(noteneschluesselValues)))
+                              .fetch(NOTEN_PDF.ID);
 
         try (var out = new ByteArrayOutputStream()) {
             var pdfMergerUtility = new PDFMergerUtility();
