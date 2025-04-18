@@ -20,5 +20,5 @@ error-screenshots/
 webpack.generated.js
 
 src/main/resources/application-local.properties
-src/main/bundles/prod.bundle
+src/main/bundles/
 etc/cloudstorage/*
