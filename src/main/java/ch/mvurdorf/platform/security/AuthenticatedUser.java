@@ -6,7 +6,9 @@ import ch.mvurdorf.platform.jooq.tables.daos.LoginDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.Login;
 import ch.mvurdorf.platform.security.LoginService.Permission;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,22 +20,25 @@ import static ch.mvurdorf.platform.security.LoginService.Permission.WRITE;
 import static java.util.stream.Collectors.toSet;
 
 @Component
+@RequiredArgsConstructor
 public class AuthenticatedUser {
 
     private final LoginDao loginDao;
     private final InstrumentPermissionDao instrumentPermissionDao;
     private final AuthenticationContext authenticationContext;
 
-    public AuthenticatedUser(AuthenticationContext authenticationContext, LoginDao loginDao, InstrumentPermissionDao instrumentPermissionDao) {
-        this.loginDao = loginDao;
-        this.authenticationContext = authenticationContext;
-        this.instrumentPermissionDao = instrumentPermissionDao;
-    }
-
     @Transactional
     public Optional<Login> get() {
-        return authenticationContext.getAuthenticatedUser(UserDetails.class)
-                                    .map(userDetails -> loginDao.fetchOneByEmail(userDetails.getUsername()));
+        return authenticationContext.getAuthenticatedUser(Object.class)
+                                    .flatMap(o -> {
+                                        if (o instanceof Jwt jwt) {
+                                            return Optional.ofNullable(jwt.getClaimAsString("email"));
+                                        } else if (o instanceof UserDetails userDetails) {
+                                            return Optional.of(userDetails.getUsername());
+                                        }
+                                        return Optional.empty();
+                                    })
+                                    .map(loginDao::fetchOneByEmail);
     }
 
     @Transactional

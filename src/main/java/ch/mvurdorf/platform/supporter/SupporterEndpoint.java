@@ -37,4 +37,10 @@ public class SupporterEndpoint {
     public ResponseEntity<byte[]> getQrBill(@PathVariable("externalId") Long externalId) {
         return ResponseEntity.of(supporterService.qrBill(externalId));
     }
+
+    @GetMapping
+    public ResponseEntity<String> ping() {
+        log.info("GET /api/supporter");
+        return ResponseEntity.ok("pong");
+    }
 }

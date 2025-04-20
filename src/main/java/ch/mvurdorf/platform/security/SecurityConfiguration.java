@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,6 +31,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     }
 
     @Bean
+    @Deprecated
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
@@ -51,6 +53,17 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
     @Bean
     @Order(10)
+    public SecurityFilterChain configureSecuredApi(HttpSecurity http) throws Exception {
+        return http.securityMatcher(antMatcher("/api/secured/**"))
+                   .csrf(AbstractHttpConfigurer::disable)
+                   .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                   .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                   .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                   .build();
+    }
+
+    @Bean
+    @Order(11)
     public SecurityFilterChain configurePublicApi(HttpSecurity http) throws Exception {
         return http.securityMatcher(antMatcher("/api/**"))
                    .csrf(AbstractHttpConfigurer::disable)
