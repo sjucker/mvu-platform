@@ -20,7 +20,7 @@ public class FirebaseService {
 
     // https://cloud.google.com/identity-platform/docs/reference/rest/v1/accounts/signUp
 
-    private record FirebaseSignUpRequest(String email, String password, String displayName, boolean emailVerified) {}
+    private record FirebaseSignUpRequest(String email, String displayName, String password, boolean emailVerified) {}
 
     private record FirebaseSignUpResponse(String idToken, String refreshToken) {}
 
