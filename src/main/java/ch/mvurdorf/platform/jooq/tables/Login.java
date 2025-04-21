@@ -69,11 +69,6 @@ public class Login extends TableImpl<LoginRecord> {
     public final TableField<LoginRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>public.login.password</code>.
-     */
-    public final TableField<LoginRecord, String> PASSWORD = createField(DSL.name("password"), SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
      * The column <code>public.login.active</code>.
      */
     public final TableField<LoginRecord, Boolean> ACTIVE = createField(DSL.name("active"), SQLDataType.BOOLEAN.nullable(false), this, "");

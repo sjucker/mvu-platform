@@ -5,14 +5,15 @@ import ch.mvurdorf.platform.jooq.tables.daos.InstrumentPermissionDao;
 import ch.mvurdorf.platform.jooq.tables.daos.LoginDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.InstrumentPermission;
 import ch.mvurdorf.platform.jooq.tables.pojos.Login;
+import ch.mvurdorf.platform.service.FirebaseService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jooq.DSLContext;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static ch.mvurdorf.platform.jooq.Tables.INSTRUMENT_PERMISSION;
@@ -31,7 +32,7 @@ class UsersService {
     private final DSLContext jooqDsl;
     private final LoginDao loginDao;
     private final InstrumentPermissionDao instrumentPermissionDao;
-    private final PasswordEncoder passwordEncoder;
+    private final FirebaseService firebaseService;
 
     List<UserDto> findAll() {
         return jooqDsl.select(LOGIN,
@@ -68,12 +69,16 @@ class UsersService {
                    .forEach(instrumentPermissionDao::insert);
     }
 
-    public String create(UserDto newUser) {
+    public Optional<String> create(UserDto newUser) {
         var password = RandomStringUtils.secure().nextAlphanumeric(8);
+        var created = firebaseService.createUser(newUser.email(), newUser.name(), password);
+        if (!created) {
+            return Optional.empty();
+        }
+
         var newLogin = new Login(null,
                                  newUser.email(),
                                  newUser.name(),
-                                 passwordEncoder.encode(password),
                                  true,
                                  null,
                                  NONE.name(),
@@ -85,6 +90,6 @@ class UsersService {
 
         insertInstrumentPermissions(newUser.instrumentPermissions(), newLogin.getId());
 
-        return password;
+        return Optional.of(password);
     }
 }

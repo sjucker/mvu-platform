@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties({MjmlConfiguration.MjmlProperties.class})
-public class MjmlConfiguration {
+@EnableConfigurationProperties({MjmlConfig.MjmlProperties.class})
+public class MjmlConfig {
 
     private static final String BASE_URL = "https://api.mjml.io/v1/render";
 

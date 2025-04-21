@@ -63,115 +63,101 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     }
 
     /**
-     * Setter for <code>public.login.password</code>.
-     */
-    public void setPassword(String value) {
-        set(3, value);
-    }
-
-    /**
-     * Getter for <code>public.login.password</code>.
-     */
-    public String getPassword() {
-        return (String) get(3);
-    }
-
-    /**
      * Setter for <code>public.login.active</code>.
      */
     public void setActive(Boolean value) {
-        set(4, value);
+        set(3, value);
     }
 
     /**
      * Getter for <code>public.login.active</code>.
      */
     public Boolean getActive() {
-        return (Boolean) get(4);
+        return (Boolean) get(3);
     }
 
     /**
      * Setter for <code>public.login.last_login</code>.
      */
     public void setLastLogin(LocalDateTime value) {
-        set(5, value);
+        set(4, value);
     }
 
     /**
      * Getter for <code>public.login.last_login</code>.
      */
     public LocalDateTime getLastLogin() {
-        return (LocalDateTime) get(5);
+        return (LocalDateTime) get(4);
     }
 
     /**
      * Setter for <code>public.login.users_permission</code>.
      */
     public void setUsersPermission(String value) {
-        set(6, value);
+        set(5, value);
     }
 
     /**
      * Getter for <code>public.login.users_permission</code>.
      */
     public String getUsersPermission() {
-        return (String) get(6);
+        return (String) get(5);
     }
 
     /**
      * Setter for <code>public.login.noten_permission</code>.
      */
     public void setNotenPermission(String value) {
-        set(7, value);
+        set(6, value);
     }
 
     /**
      * Getter for <code>public.login.noten_permission</code>.
      */
     public String getNotenPermission() {
-        return (String) get(7);
+        return (String) get(6);
     }
 
     /**
      * Setter for <code>public.login.supporter_permission</code>.
      */
     public void setSupporterPermission(String value) {
-        set(8, value);
+        set(7, value);
     }
 
     /**
      * Getter for <code>public.login.supporter_permission</code>.
      */
     public String getSupporterPermission() {
-        return (String) get(8);
+        return (String) get(7);
     }
 
     /**
      * Setter for <code>public.login.konzerte_permission</code>.
      */
     public void setKonzertePermission(String value) {
-        set(9, value);
+        set(8, value);
     }
 
     /**
      * Getter for <code>public.login.konzerte_permission</code>.
      */
     public String getKonzertePermission() {
-        return (String) get(9);
+        return (String) get(8);
     }
 
     /**
      * Setter for <code>public.login.repertoire_permission</code>.
      */
     public void setRepertoirePermission(String value) {
-        set(10, value);
+        set(9, value);
     }
 
     /**
      * Getter for <code>public.login.repertoire_permission</code>.
      */
     public String getRepertoirePermission() {
-        return (String) get(10);
+        return (String) get(9);
     }
 
     // -------------------------------------------------------------------------
@@ -197,13 +183,12 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, String password, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission) {
+    public LoginRecord(Long id, String email, String name, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission) {
         super(Login.LOGIN);
 
         setId(id);
         setEmail(email);
         setName(name);
-        setPassword(password);
         setActive(active);
         setLastLogin(lastLogin);
         setUsersPermission(usersPermission);
@@ -224,7 +209,6 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setId(value.getId());
             setEmail(value.getEmail());
             setName(value.getName());
-            setPassword(value.getPassword());
             setActive(value.getActive());
             setLastLogin(value.getLastLogin());
             setUsersPermission(value.getUsersPermission());

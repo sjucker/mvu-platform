@@ -118,21 +118,6 @@ public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.pla
     }
 
     /**
-     * Fetch records that have <code>password BETWEEN lowerInclusive AND
-     * upperInclusive</code>
-     */
-    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfPassword(String lowerInclusive, String upperInclusive) {
-        return fetchRange(Login.LOGIN.PASSWORD, lowerInclusive, upperInclusive);
-    }
-
-    /**
-     * Fetch records that have <code>password IN (values)</code>
-     */
-    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByPassword(String... values) {
-        return fetch(Login.LOGIN.PASSWORD, values);
-    }
-
-    /**
      * Fetch records that have <code>active BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */

@@ -59,9 +59,12 @@ public class UserDialog extends Dialog {
         var formLayout = new FormLayout();
 
         email = new EmailField("E-Mail");
+        email.setRequired(true);
+        email.setEnabled(mode == CREATE);
         formLayout.add(email);
 
         name = new TextField("Name");
+        name.setRequired(true);
         formLayout.add(name);
 
         instrumentPermissions = new CheckboxGroup<>("Instrument", Instrument.values());

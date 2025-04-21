@@ -42,7 +42,7 @@ public class LoginService implements UserDetailsService {
             loginDao.update(login);
 
             var active = login.getActive();
-            return new User(login.getEmail(), login.getPassword(), active, active, active, active, getAuthorities(login));
+            return new User(login.getEmail(), "", active, active, active, active, getAuthorities(login));
         }
     }
 

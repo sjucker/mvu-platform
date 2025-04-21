@@ -19,7 +19,6 @@ public class Login implements Serializable {
     private Long id;
     private String email;
     private String name;
-    private String password;
     private Boolean active;
     private LocalDateTime lastLogin;
     private String usersPermission;
@@ -34,7 +33,6 @@ public class Login implements Serializable {
         this.id = value.id;
         this.email = value.email;
         this.name = value.name;
-        this.password = value.password;
         this.active = value.active;
         this.lastLogin = value.lastLogin;
         this.usersPermission = value.usersPermission;
@@ -48,7 +46,6 @@ public class Login implements Serializable {
         Long id,
         String email,
         String name,
-        String password,
         Boolean active,
         LocalDateTime lastLogin,
         String usersPermission,
@@ -60,7 +57,6 @@ public class Login implements Serializable {
         this.id = id;
         this.email = email;
         this.name = name;
-        this.password = password;
         this.active = active;
         this.lastLogin = lastLogin;
         this.usersPermission = usersPermission;
@@ -110,20 +106,6 @@ public class Login implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Getter for <code>public.login.password</code>.
-     */
-    public String getPassword() {
-        return this.password;
-    }
-
-    /**
-     * Setter for <code>public.login.password</code>.
-     */
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     /**
@@ -251,12 +233,6 @@ public class Login implements Serializable {
         }
         else if (!this.name.equals(other.name))
             return false;
-        if (this.password == null) {
-            if (other.password != null)
-                return false;
-        }
-        else if (!this.password.equals(other.password))
-            return false;
         if (this.active == null) {
             if (other.active != null)
                 return false;
@@ -309,7 +285,6 @@ public class Login implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.email == null) ? 0 : this.email.hashCode());
         result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
-        result = prime * result + ((this.password == null) ? 0 : this.password.hashCode());
         result = prime * result + ((this.active == null) ? 0 : this.active.hashCode());
         result = prime * result + ((this.lastLogin == null) ? 0 : this.lastLogin.hashCode());
         result = prime * result + ((this.usersPermission == null) ? 0 : this.usersPermission.hashCode());
@@ -327,7 +302,6 @@ public class Login implements Serializable {
         sb.append(id);
         sb.append(", ").append(email);
         sb.append(", ").append(name);
-        sb.append(", ").append(password);
         sb.append(", ").append(active);
         sb.append(", ").append(lastLogin);
         sb.append(", ").append(usersPermission);

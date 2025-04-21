@@ -1,17 +1,17 @@
 package ch.mvurdorf.platform.security;
 
+import ch.mvurdorf.platform.service.FirebaseService;
 import ch.mvurdorf.platform.ui.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -30,12 +30,6 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         this.rememberMeKey = rememberMeKey;
     }
 
-    @Bean
-    @Deprecated
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
@@ -49,6 +43,13 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
         super.configure(http);
         setLoginView(http, LoginView.class);
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(LoginService loginService, FirebaseService firebaseService) {
+        var provider = new FirebaseAuthenticationProvider(firebaseService);
+        provider.setUserDetailsService(loginService);
+        return provider;
     }
 
     @Bean
