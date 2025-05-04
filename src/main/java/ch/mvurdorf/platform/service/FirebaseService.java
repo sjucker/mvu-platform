@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
+import java.util.Optional;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Slf4j
@@ -50,6 +52,10 @@ public class FirebaseService {
     private record FirebaseSignInResponse(String idToken, String refreshToken) {}
 
     public boolean verifyUsernamePassword(String email, String password) {
+        return signIn(email, password).isPresent();
+    }
+
+    private Optional<FirebaseSignInResponse> signIn(String email, String password) {
         var signInRequest = new FirebaseSignInRequest(email, password, true);
         try {
             var response = RestClient.create("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword")
@@ -59,9 +65,9 @@ public class FirebaseService {
                                      .contentType(APPLICATION_JSON)
                                      .retrieve()
                                      .body(FirebaseSignInResponse.class);
-            return response != null;
+            return response == null || response.idToken() == null ? Optional.empty() : Optional.of(response);
         } catch (RestClientResponseException e) {
-            return false;
+            return Optional.empty();
         }
     }
 
@@ -74,21 +80,13 @@ public class FirebaseService {
     public boolean changePassword(String email, String currentPassword, String newPassword) {
         log.info("changing password for {}", email);
 
-        var signInRequest = new FirebaseSignInRequest(email, currentPassword, true);
         try {
-            var signInResponse = RestClient.create("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword")
-                                           .post()
-                                           .uri(uriBuilder -> uriBuilder.queryParam("key", firebaseApiKey).build())
-                                           .body(signInRequest)
-                                           .contentType(APPLICATION_JSON)
-                                           .retrieve()
-                                           .body(FirebaseSignInResponse.class);
-
-            if (signInResponse == null || signInResponse.idToken() == null) {
+            var signInResponse = signIn(email, currentPassword);
+            if (signInResponse.isEmpty()) {
                 return false;
             }
 
-            var changePasswordRequest = new FirebaseChangePasswordRequest(signInResponse.idToken(), newPassword, true);
+            var changePasswordRequest = new FirebaseChangePasswordRequest(signInResponse.get().idToken(), newPassword, true);
             var response = RestClient.create("https://identitytoolkit.googleapis.com/v1/accounts:update")
                                      .post()
                                      .uri(uriBuilder -> uriBuilder.queryParam("key", firebaseApiKey).build())
