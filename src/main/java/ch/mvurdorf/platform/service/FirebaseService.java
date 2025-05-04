@@ -65,4 +65,42 @@ public class FirebaseService {
         }
     }
 
+    // see https://cloud.google.com/identity-platform/docs/reference/rest/v1/accounts/update
+
+    private record FirebaseChangePasswordRequest(String idToken, String password, boolean returnSecureToken) {}
+
+    private record FirebaseChangePasswordResponse(String idToken, String refreshToken) {}
+
+    public boolean changePassword(String email, String currentPassword, String newPassword) {
+        log.info("changing password for {}", email);
+
+        var signInRequest = new FirebaseSignInRequest(email, currentPassword, true);
+        try {
+            var signInResponse = RestClient.create("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword")
+                                           .post()
+                                           .uri(uriBuilder -> uriBuilder.queryParam("key", firebaseApiKey).build())
+                                           .body(signInRequest)
+                                           .contentType(APPLICATION_JSON)
+                                           .retrieve()
+                                           .body(FirebaseSignInResponse.class);
+
+            if (signInResponse == null || signInResponse.idToken() == null) {
+                return false;
+            }
+
+            var changePasswordRequest = new FirebaseChangePasswordRequest(signInResponse.idToken(), newPassword, true);
+            var response = RestClient.create("https://identitytoolkit.googleapis.com/v1/accounts:update")
+                                     .post()
+                                     .uri(uriBuilder -> uriBuilder.queryParam("key", firebaseApiKey).build())
+                                     .body(changePasswordRequest)
+                                     .contentType(APPLICATION_JSON)
+                                     .retrieve()
+                                     .body(FirebaseChangePasswordResponse.class);
+
+            return response != null;
+        } catch (RestClientResponseException e) {
+            return false;
+        }
+    }
+
 }

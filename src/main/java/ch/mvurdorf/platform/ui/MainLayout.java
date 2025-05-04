@@ -1,16 +1,15 @@
 package ch.mvurdorf.platform.ui;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import ch.mvurdorf.platform.users.PasswordChangeView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Header;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.SvgIcon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
@@ -27,6 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.info.BuildProperties;
 
 import static ch.mvurdorf.platform.utils.FormatUtil.formatInstant;
+import static com.vaadin.flow.component.button.ButtonVariant.LUMO_SMALL;
+import static com.vaadin.flow.component.icon.VaadinIcon.EXIT_O;
+import static com.vaadin.flow.component.icon.VaadinIcon.KEY;
 
 @Slf4j
 @Layout
@@ -91,12 +93,20 @@ public class MainLayout extends AppLayout {
         var maybeUser = authenticatedUser.get();
         if (maybeUser.isPresent()) {
             var user = maybeUser.get();
+
+            var passwordChangeButton = new Button("Passwort ändern",
+                                                  _ -> getUI().ifPresent(ui -> ui.navigate(PasswordChangeView.class)));
+            passwordChangeButton.addThemeVariants(LUMO_SMALL);
+            passwordChangeButton.setIcon(KEY.create());
+            passwordChangeButton.setWidthFull();
+
             var logoutButton = new Button("Logout %s".formatted(user.getName()),
                                           _ -> authenticatedUser.logout());
-            logoutButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
-            logoutButton.setIcon(VaadinIcon.EXIT_O.create());
+            logoutButton.addThemeVariants(LUMO_SMALL);
+            logoutButton.setIcon(EXIT_O.create());
             logoutButton.setWidthFull();
-            layout.add(logoutButton);
+
+            layout.add(passwordChangeButton, logoutButton);
         }
 
         if (buildProperties != null) {
