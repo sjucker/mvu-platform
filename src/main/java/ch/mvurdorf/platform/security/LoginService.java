@@ -42,7 +42,8 @@ public class LoginService implements UserDetailsService {
             loginDao.update(login);
 
             var active = login.getActive();
-            return new User(login.getEmail(), "", active, active, active, active, getAuthorities(login));
+            // just return a password so TokenBasedRememberMeServices sets an actual remember-me cookie
+            return new User(login.getEmail(), "not-actual-password", active, active, active, active, getAuthorities(login));
         }
     }
 
