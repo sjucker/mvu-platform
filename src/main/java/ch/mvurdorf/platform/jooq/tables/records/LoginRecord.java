@@ -160,6 +160,20 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         return (String) get(9);
     }
 
+    /**
+     * Setter for <code>public.login.document_permission</code>.
+     */
+    public void setDocumentPermission(String value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for <code>public.login.document_permission</code>.
+     */
+    public String getDocumentPermission() {
+        return (String) get(10);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -183,7 +197,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission) {
+    public LoginRecord(Long id, String email, String name, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission, String documentPermission) {
         super(Login.LOGIN);
 
         setId(id);
@@ -196,6 +210,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         setSupporterPermission(supporterPermission);
         setKonzertePermission(konzertePermission);
         setRepertoirePermission(repertoirePermission);
+        setDocumentPermission(documentPermission);
         resetChangedOnNotNull();
     }
 
@@ -216,6 +231,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setSupporterPermission(value.getSupporterPermission());
             setKonzertePermission(value.getKonzertePermission());
             setRepertoirePermission(value.getRepertoirePermission());
+            setDocumentPermission(value.getDocumentPermission());
             resetChangedOnNotNull();
         }
     }

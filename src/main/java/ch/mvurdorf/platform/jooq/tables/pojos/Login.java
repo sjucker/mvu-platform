@@ -26,6 +26,7 @@ public class Login implements Serializable {
     private String supporterPermission;
     private String konzertePermission;
     private String repertoirePermission;
+    private String documentPermission;
 
     public Login() {}
 
@@ -40,6 +41,7 @@ public class Login implements Serializable {
         this.supporterPermission = value.supporterPermission;
         this.konzertePermission = value.konzertePermission;
         this.repertoirePermission = value.repertoirePermission;
+        this.documentPermission = value.documentPermission;
     }
 
     public Login(
@@ -52,7 +54,8 @@ public class Login implements Serializable {
         String notenPermission,
         String supporterPermission,
         String konzertePermission,
-        String repertoirePermission
+        String repertoirePermission,
+        String documentPermission
     ) {
         this.id = id;
         this.email = email;
@@ -64,6 +67,7 @@ public class Login implements Serializable {
         this.supporterPermission = supporterPermission;
         this.konzertePermission = konzertePermission;
         this.repertoirePermission = repertoirePermission;
+        this.documentPermission = documentPermission;
     }
 
     /**
@@ -206,6 +210,20 @@ public class Login implements Serializable {
         this.repertoirePermission = repertoirePermission;
     }
 
+    /**
+     * Getter for <code>public.login.document_permission</code>.
+     */
+    public String getDocumentPermission() {
+        return this.documentPermission;
+    }
+
+    /**
+     * Setter for <code>public.login.document_permission</code>.
+     */
+    public void setDocumentPermission(String documentPermission) {
+        this.documentPermission = documentPermission;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -275,6 +293,12 @@ public class Login implements Serializable {
         }
         else if (!this.repertoirePermission.equals(other.repertoirePermission))
             return false;
+        if (this.documentPermission == null) {
+            if (other.documentPermission != null)
+                return false;
+        }
+        else if (!this.documentPermission.equals(other.documentPermission))
+            return false;
         return true;
     }
 
@@ -292,6 +316,7 @@ public class Login implements Serializable {
         result = prime * result + ((this.supporterPermission == null) ? 0 : this.supporterPermission.hashCode());
         result = prime * result + ((this.konzertePermission == null) ? 0 : this.konzertePermission.hashCode());
         result = prime * result + ((this.repertoirePermission == null) ? 0 : this.repertoirePermission.hashCode());
+        result = prime * result + ((this.documentPermission == null) ? 0 : this.documentPermission.hashCode());
         return result;
     }
 
@@ -309,6 +334,7 @@ public class Login implements Serializable {
         sb.append(", ").append(supporterPermission);
         sb.append(", ").append(konzertePermission);
         sb.append(", ").append(repertoirePermission);
+        sb.append(", ").append(documentPermission);
 
         sb.append(")");
         return sb.toString();

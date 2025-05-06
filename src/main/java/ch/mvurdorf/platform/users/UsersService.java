@@ -85,6 +85,7 @@ class UsersService {
                                  NONE.name(),
                                  NONE.name(),
                                  NONE.name(),
+                                 NONE.name(),
                                  NONE.name());
         loginDao.insert(newLogin);
 

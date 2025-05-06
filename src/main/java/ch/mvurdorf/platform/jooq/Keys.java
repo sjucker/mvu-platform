@@ -4,6 +4,7 @@
 package ch.mvurdorf.platform.jooq;
 
 
+import ch.mvurdorf.platform.jooq.tables.Document;
 import ch.mvurdorf.platform.jooq.tables.InstrumentPermission;
 import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Konzert;
@@ -17,6 +18,7 @@ import ch.mvurdorf.platform.jooq.tables.Supporter;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
+import ch.mvurdorf.platform.jooq.tables.records.DocumentRecord;
 import ch.mvurdorf.platform.jooq.tables.records.InstrumentPermissionRecord;
 import ch.mvurdorf.platform.jooq.tables.records.KompositionRecord;
 import ch.mvurdorf.platform.jooq.tables.records.KonzertEntryRecord;
@@ -49,6 +51,7 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<DocumentRecord> DOCUMENT_PKEY = Internal.createUniqueKey(Document.DOCUMENT, DSL.name("document_pkey"), new TableField[] { Document.DOCUMENT.ID }, true);
     public static final UniqueKey<InstrumentPermissionRecord> PK__INSTRUMENTS_PERMISSION = Internal.createUniqueKey(InstrumentPermission.INSTRUMENT_PERMISSION, DSL.name("pk__instruments_permission"), new TableField[] { InstrumentPermission.INSTRUMENT_PERMISSION.FK_LOGIN, InstrumentPermission.INSTRUMENT_PERMISSION.INSTRUMENT }, true);
     public static final UniqueKey<KompositionRecord> PK__KOMPOSITION = Internal.createUniqueKey(Komposition.KOMPOSITION, DSL.name("pk__komposition"), new TableField[] { Komposition.KOMPOSITION.ID }, true);
     public static final UniqueKey<KonzertRecord> PK__KONZERT = Internal.createUniqueKey(Konzert.KONZERT, DSL.name("pk__konzert"), new TableField[] { Konzert.KONZERT.ID }, true);
