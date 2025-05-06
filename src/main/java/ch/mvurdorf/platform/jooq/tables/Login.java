@@ -6,6 +6,8 @@ package ch.mvurdorf.platform.jooq.tables;
 
 import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
+import ch.mvurdorf.platform.jooq.tables.AbsenzStatus.AbsenzStatusPath;
+import ch.mvurdorf.platform.jooq.tables.Event.EventPath;
 import ch.mvurdorf.platform.jooq.tables.records.LoginRecord;
 
 import java.time.LocalDateTime;
@@ -15,10 +17,14 @@ import java.util.List;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
 import org.jooq.Identity;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -103,6 +109,11 @@ public class Login extends TableImpl<LoginRecord> {
      */
     public final TableField<LoginRecord, String> REPERTOIRE_PERMISSION = createField(DSL.name("repertoire_permission"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::character varying"), SQLDataType.VARCHAR)), this, "");
 
+    /**
+     * The column <code>public.login.event_permission</code>.
+     */
+    public final TableField<LoginRecord, String> EVENT_PERMISSION = createField(DSL.name("event_permission"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::character varying"), SQLDataType.VARCHAR)), this, "");
+
     private Login(Name alias, Table<LoginRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
@@ -132,6 +143,39 @@ public class Login extends TableImpl<LoginRecord> {
         this(DSL.name("login"), null);
     }
 
+    public <O extends Record> Login(Table<O> path, ForeignKey<O, LoginRecord> childPath, InverseForeignKey<O, LoginRecord> parentPath) {
+        super(path, childPath, parentPath, LOGIN);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class LoginPath extends Login implements Path<LoginRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> LoginPath(Table<O> path, ForeignKey<O, LoginRecord> childPath, InverseForeignKey<O, LoginRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private LoginPath(Name alias, Table<LoginRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public LoginPath as(String alias) {
+            return new LoginPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public LoginPath as(Name alias) {
+            return new LoginPath(alias, this);
+        }
+
+        @Override
+        public LoginPath as(Table<?> alias) {
+            return new LoginPath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
@@ -150,6 +194,27 @@ public class Login extends TableImpl<LoginRecord> {
     @Override
     public List<UniqueKey<LoginRecord>> getUniqueKeys() {
         return Arrays.asList(Keys.UQ__LOGIN_EMAIL);
+    }
+
+    private transient AbsenzStatusPath _absenzStatus;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.absenz_status</code> table
+     */
+    public AbsenzStatusPath absenzStatus() {
+        if (_absenzStatus == null)
+            _absenzStatus = new AbsenzStatusPath(this, null, Keys.ABSENZ_STATUS__FK__ABSENZ_STATUS_LOGIN.getInverseKey());
+
+        return _absenzStatus;
+    }
+
+    /**
+     * Get the implicit many-to-many join path to the <code>public.event</code>
+     * table
+     */
+    public EventPath event() {
+        return absenzStatus().event();
     }
 
     @Override

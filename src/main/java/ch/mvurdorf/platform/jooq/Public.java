@@ -4,6 +4,8 @@
 package ch.mvurdorf.platform.jooq;
 
 
+import ch.mvurdorf.platform.jooq.tables.AbsenzStatus;
+import ch.mvurdorf.platform.jooq.tables.Event;
 import ch.mvurdorf.platform.jooq.tables.InstrumentPermission;
 import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Konzert;
@@ -39,6 +41,16 @@ public class Public extends SchemaImpl {
      * The reference instance of <code>public</code>
      */
     public static final Public PUBLIC = new Public();
+
+    /**
+     * The table <code>public.absenz_status</code>.
+     */
+    public final AbsenzStatus ABSENZ_STATUS = AbsenzStatus.ABSENZ_STATUS;
+
+    /**
+     * The table <code>public.event</code>.
+     */
+    public final Event EVENT = Event.EVENT;
 
     /**
      * The table <code>public.instrument_permission</code>.
@@ -131,6 +143,8 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
+            AbsenzStatus.ABSENZ_STATUS,
+            Event.EVENT,
             InstrumentPermission.INSTRUMENT_PERMISSION,
             Komposition.KOMPOSITION,
             Konzert.KONZERT,

@@ -4,6 +4,8 @@
 package ch.mvurdorf.platform.jooq;
 
 
+import ch.mvurdorf.platform.jooq.tables.AbsenzStatus;
+import ch.mvurdorf.platform.jooq.tables.Event;
 import ch.mvurdorf.platform.jooq.tables.InstrumentPermission;
 import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Konzert;
@@ -17,6 +19,8 @@ import ch.mvurdorf.platform.jooq.tables.Supporter;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
+import ch.mvurdorf.platform.jooq.tables.records.AbsenzStatusRecord;
+import ch.mvurdorf.platform.jooq.tables.records.EventRecord;
 import ch.mvurdorf.platform.jooq.tables.records.InstrumentPermissionRecord;
 import ch.mvurdorf.platform.jooq.tables.records.KompositionRecord;
 import ch.mvurdorf.platform.jooq.tables.records.KonzertEntryRecord;
@@ -49,6 +53,8 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<AbsenzStatusRecord> PK__ABSENZ_STATUS = Internal.createUniqueKey(AbsenzStatus.ABSENZ_STATUS, DSL.name("pk__absenz_status"), new TableField[] { AbsenzStatus.ABSENZ_STATUS.FK_LOGIN, AbsenzStatus.ABSENZ_STATUS.FK_EVENT }, true);
+    public static final UniqueKey<EventRecord> PK__EVENT = Internal.createUniqueKey(Event.EVENT, DSL.name("pk__event"), new TableField[] { Event.EVENT.ID }, true);
     public static final UniqueKey<InstrumentPermissionRecord> PK__INSTRUMENTS_PERMISSION = Internal.createUniqueKey(InstrumentPermission.INSTRUMENT_PERMISSION, DSL.name("pk__instruments_permission"), new TableField[] { InstrumentPermission.INSTRUMENT_PERMISSION.FK_LOGIN, InstrumentPermission.INSTRUMENT_PERMISSION.INSTRUMENT }, true);
     public static final UniqueKey<KompositionRecord> PK__KOMPOSITION = Internal.createUniqueKey(Komposition.KOMPOSITION, DSL.name("pk__komposition"), new TableField[] { Komposition.KOMPOSITION.ID }, true);
     public static final UniqueKey<KonzertRecord> PK__KONZERT = Internal.createUniqueKey(Konzert.KONZERT, DSL.name("pk__konzert"), new TableField[] { Konzert.KONZERT.ID }, true);
@@ -69,6 +75,9 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<AbsenzStatusRecord, EventRecord> ABSENZ_STATUS__FK__ABSENZ_STATUS_EVENT = Internal.createForeignKey(AbsenzStatus.ABSENZ_STATUS, DSL.name("fk__absenz_status_event"), new TableField[] { AbsenzStatus.ABSENZ_STATUS.FK_EVENT }, Keys.PK__EVENT, new TableField[] { Event.EVENT.ID }, true);
+    public static final ForeignKey<AbsenzStatusRecord, LoginRecord> ABSENZ_STATUS__FK__ABSENZ_STATUS_LOGIN = Internal.createForeignKey(AbsenzStatus.ABSENZ_STATUS, DSL.name("fk__absenz_status_login"), new TableField[] { AbsenzStatus.ABSENZ_STATUS.FK_LOGIN }, Keys.PK__LOGIN, new TableField[] { Login.LOGIN.ID }, true);
+    public static final ForeignKey<EventRecord, EventRecord> EVENT__FK__EVENT_VERSION = Internal.createForeignKey(Event.EVENT, DSL.name("fk__event_version"), new TableField[] { Event.EVENT.NEXT_VERSION }, Keys.PK__EVENT, new TableField[] { Event.EVENT.ID }, true);
     public static final ForeignKey<KonzertEntryRecord, KompositionRecord> KONZERT_ENTRY__KONZERT_ENTRY_FK_KOMPOSITION_FKEY = Internal.createForeignKey(KonzertEntry.KONZERT_ENTRY, DSL.name("konzert_entry_fk_komposition_fkey"), new TableField[] { KonzertEntry.KONZERT_ENTRY.FK_KOMPOSITION }, Keys.PK__KOMPOSITION, new TableField[] { Komposition.KOMPOSITION.ID }, true);
     public static final ForeignKey<KonzertEntryRecord, KonzertRecord> KONZERT_ENTRY__KONZERT_ENTRY_FK_KONZERT_FKEY = Internal.createForeignKey(KonzertEntry.KONZERT_ENTRY, DSL.name("konzert_entry_fk_konzert_fkey"), new TableField[] { KonzertEntry.KONZERT_ENTRY.FK_KONZERT }, Keys.PK__KONZERT, new TableField[] { Konzert.KONZERT.ID }, true);
     public static final ForeignKey<NotenPdfRecord, KompositionRecord> NOTEN_PDF__NOTEN_FK_KOMPOSITION_FKEY = Internal.createForeignKey(NotenPdf.NOTEN_PDF, DSL.name("noten_fk_komposition_fkey"), new TableField[] { NotenPdf.NOTEN_PDF.FK_KOMPOSITION }, Keys.PK__KOMPOSITION, new TableField[] { Komposition.KOMPOSITION.ID }, true);

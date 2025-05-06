@@ -4,6 +4,8 @@
 package ch.mvurdorf.platform.jooq;
 
 
+import ch.mvurdorf.platform.jooq.tables.AbsenzStatus;
+import ch.mvurdorf.platform.jooq.tables.Event;
 import ch.mvurdorf.platform.jooq.tables.InstrumentPermission;
 import ch.mvurdorf.platform.jooq.tables.Komposition;
 import ch.mvurdorf.platform.jooq.tables.Konzert;
@@ -24,6 +26,16 @@ import ch.mvurdorf.platform.jooq.tables.Voucher;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
+
+    /**
+     * The table <code>public.absenz_status</code>.
+     */
+    public static final AbsenzStatus ABSENZ_STATUS = AbsenzStatus.ABSENZ_STATUS;
+
+    /**
+     * The table <code>public.event</code>.
+     */
+    public static final Event EVENT = Event.EVENT;
 
     /**
      * The table <code>public.instrument_permission</code>.
