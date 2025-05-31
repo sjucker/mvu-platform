@@ -13,12 +13,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.time.Duration;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @EnableWebSecurity
 @Configuration
@@ -33,9 +31,9 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(new AntPathRequestMatcher("/images/*.png")).permitAll());
+                .requestMatchers("/images/**").permitAll());
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(new AntPathRequestMatcher("/line-awesome/**/*.svg")).permitAll());
+                .requestMatchers("/line-awesome/**").permitAll());
 
         http.rememberMe(configurer -> configurer.key(rememberMeKey)
                                                 .tokenValiditySeconds((int) Duration.ofDays(365).toSeconds())
@@ -47,15 +45,13 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(LoginService loginService, FirebaseService firebaseService) {
-        var provider = new FirebaseAuthenticationProvider(firebaseService);
-        provider.setUserDetailsService(loginService);
-        return provider;
+        return new FirebaseAuthenticationProvider(loginService, firebaseService);
     }
 
     @Bean
     @Order(10)
     public SecurityFilterChain configureSecuredApi(HttpSecurity http) throws Exception {
-        return http.securityMatcher(antMatcher("/api/secured/**"))
+        return http.securityMatcher("/api/secured/**")
                    .csrf(AbstractHttpConfigurer::disable)
                    .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                    .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
@@ -66,7 +62,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     @Bean
     @Order(11)
     public SecurityFilterChain configurePublicApi(HttpSecurity http) throws Exception {
-        return http.securityMatcher(antMatcher("/api/**"))
+        return http.securityMatcher("/api/**")
                    .csrf(AbstractHttpConfigurer::disable)
                    .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                    .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

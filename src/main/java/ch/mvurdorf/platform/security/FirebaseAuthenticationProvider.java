@@ -6,13 +6,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 public class FirebaseAuthenticationProvider extends DaoAuthenticationProvider {
 
     private final FirebaseService firebaseService;
 
-    public FirebaseAuthenticationProvider(FirebaseService firebaseService) {
-        super();
+    public FirebaseAuthenticationProvider(UserDetailsService userDetailsService, FirebaseService firebaseService) {
+        super(userDetailsService);
         this.firebaseService = firebaseService;
     }
 
