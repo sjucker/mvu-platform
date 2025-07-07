@@ -14,9 +14,9 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.server.InputStreamFactory;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
 import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
 import lombok.RequiredArgsConstructor;
 
@@ -89,8 +89,10 @@ public class ExportAllPdfDialog extends Dialog {
     private void export(RepertoireDto repertoire, Instrument instrument, Set<Stimme> stimmen, Set<Stimmlage> stimmlagen, Set<Notenschluessel> noteneschluessel) {
         var bytes = notenService.exportNotenToPdf(repertoire.kompositionIds(), instrument, stimmen, stimmlagen, noteneschluessel);
 
-        var resource = new StreamResource(repertoire.type().getDescription() + ".pdf", (InputStreamFactory) () -> new ByteArrayInputStream(bytes));
-        var registration = VaadinSession.getCurrent().getResourceRegistry().registerResource(resource);
+        var registration = VaadinSession.getCurrent()
+                                        .getResourceRegistry()
+                                        .registerResource(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(bytes),
+                                                                                                                    repertoire.type().getDescription() + ".pdf", null, -1)));
         UI.getCurrent().getPage().open(registration.getResourceUri().toString());
     }
 

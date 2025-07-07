@@ -12,7 +12,8 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.TextRenderer;
-import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
 import com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
 
 import java.io.ByteArrayInputStream;
@@ -71,7 +72,8 @@ public final class RendererUtil {
         return new ComponentRenderer<>(dto -> {
             var icon = vaadinIcon.create();
             var anchor = new Anchor("", icon);
-            anchor.setHref(new StreamResource(nameGetter.apply(dto), () -> new ByteArrayInputStream(byteGetter.apply(dto))));
+            anchor.setHref(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(byteGetter.apply(dto)),
+                                                                                     nameGetter.apply(dto), null, -1)));
             anchor.setTarget(BLANK);
             return anchor;
         });

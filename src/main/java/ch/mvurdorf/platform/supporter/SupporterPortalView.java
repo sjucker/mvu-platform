@@ -25,8 +25,9 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
 import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 
@@ -70,15 +71,11 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
         var content = new VerticalLayout();
         content.setSizeFull();
 
-        content.add(new Anchor(new StreamResource("qr-rechnung.pdf", () -> {
-            var pdfBytes = supporterService.qrBillPdf(supporter.externalId()).orElseThrow();
-            return new ByteArrayInputStream(pdfBytes);
-        }), "Rechnung als PDF herunterladen"));
+        content.add(new Anchor(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(supporterService.qrBillPdf(supporter.externalId()).orElseThrow()),
+                                                                                         "qr-rechnung.pdf", null, -1)), "Rechnung als PDF herunterladen"));
 
-        var qrBillImage = new Image(new StreamResource("qr-bill.png", () -> {
-            var imgBytes = supporterService.qrBill(supporter.externalId()).orElseThrow();
-            return new ByteArrayInputStream(imgBytes);
-        }), "QR Rechnung");
+        var qrBillImage = new Image(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(supporterService.qrBill(supporter.externalId()).orElseThrow()),
+                                                                                              "qr-bill.png", null, -1)), "QR-Rechnung");
         qrBillImage.addClassName(MaxWidth.FULL);
         content.add(qrBillImage);
 

@@ -8,7 +8,8 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.function.ValueProvider;
-import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
 import com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
 
 import java.io.ByteArrayInputStream;
@@ -70,8 +71,7 @@ public final class ComponentUtil {
     }
 
     public static <T> ValueProvider<T, Image> image(Function<T, String> name, Function<T, byte[]> bytes) {
-        return t -> new Image(new StreamResource(name.apply(t),
-                                                 () -> new ByteArrayInputStream(bytes.apply(t))),
-                              "");
+        return t -> new Image(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(bytes.apply(t)),
+                                                                                        name.apply(t), null, -1)), "");
     }
 }

@@ -19,14 +19,16 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
-import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
+import com.vaadin.flow.server.streams.UploadHandler;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.Loader;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +52,7 @@ public class NotenPdfUploadDialog extends Dialog {
     private Scroller scroller;
     private NotenPdfAssignmentContainer notenPdfAssignmentContainer;
     private Button save;
-    private MemoryBuffer buffer;
-    private Upload upload;
+    private byte[] uploadedFile;
 
     public static void show(NotenPdfUploadService notenPdfUploadService, KompositionDto komposition) {
         var dialog = new NotenPdfUploadDialog(notenPdfUploadService);
@@ -66,25 +67,27 @@ public class NotenPdfUploadDialog extends Dialog {
     private void init(KompositionDto komposition) {
         setHeaderTitle(komposition.titel());
 
-        buffer = new MemoryBuffer();
-        upload = new Upload(buffer);
+        var upload = new Upload(UploadHandler.inMemory((metadata, data) -> {
+            pdfUploaded = true;
+            uploadedFile = data;
+            save.setEnabled(true);
+            scroller.setVisible(true);
+            pdfViewer.setSrc(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(data),
+                                                                                       metadata.fileName(), metadata.contentType(), metadata.contentLength())));
+            pdfViewer.setCustomTitle(metadata.fileName());
+            pageCount = getPdfPageCount();
+            notenPdfAssignmentContainer.add("%d-%d".formatted(1, pageCount));
+        }));
         upload.setI18n(new UploadGermanI18N());
         upload.setAcceptedFileTypes(".pdf");
         upload.setMaxFiles(1);
         upload.setMaxFileSize(1024 * 1024 * 100);
-        upload.addSucceededListener(_ -> {
-            pdfUploaded = true;
-            save.setEnabled(true);
-            scroller.setVisible(true);
-            pdfViewer.setSrc(new StreamResource(buffer.getFileName(), buffer::getInputStream));
-            pageCount = getPdfPageCount();
-            notenPdfAssignmentContainer.add("%d-%d".formatted(1, pageCount));
-        });
         upload.addFileRemovedListener(_ -> {
             pdfUploaded = false;
             save.setEnabled(false);
             scroller.setVisible(false);
             pdfViewer.setSrc("");
+            pdfViewer.setCustomTitle(null);
         });
         upload.setWidthFull();
 
@@ -98,6 +101,7 @@ public class NotenPdfUploadDialog extends Dialog {
 
         pdfViewer = new PdfViewer();
         pdfViewer.setSizeFull();
+        pdfViewer.setAddDownloadButton(false);
 
         var splitLayout = new SplitLayout(content, pdfViewer);
         splitLayout.setSizeFull();
@@ -119,7 +123,7 @@ public class NotenPdfUploadDialog extends Dialog {
                 try {
                     notenPdfUploadService.upload(komposition.id(),
                                                  assignments,
-                                                 buffer.getInputStream().readAllBytes());
+                                                 uploadedFile);
                     Notification.show("Noten erfolgreich hochgeladen!");
                     close();
                 } catch (Exception e) {
@@ -134,18 +138,9 @@ public class NotenPdfUploadDialog extends Dialog {
     }
 
     private int getPdfPageCount() {
-        try {
-            return getPdfPageCount(buffer.getInputStream().readAllBytes());
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-            return 0;
-        }
-    }
-
-    public int getPdfPageCount(byte[] pdfBytes) {
-        try (var pdDocument = Loader.loadPDF(pdfBytes)) {
+        try (var pdDocument = Loader.loadPDF(uploadedFile)) {
             return pdDocument.getNumberOfPages();
-        } catch (IOException e) {
+        } catch (IOException _) {
             return 0;
         }
     }
@@ -153,8 +148,7 @@ public class NotenPdfUploadDialog extends Dialog {
     @Override
     public void close() {
         // make sure memory is released
-        buffer = new MemoryBuffer();
-        upload.setReceiver(buffer);
+        uploadedFile = null;
         super.close();
     }
 
