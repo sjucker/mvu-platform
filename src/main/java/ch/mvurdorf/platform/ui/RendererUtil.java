@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -36,7 +37,11 @@ public final class RendererUtil {
     }
 
     public static <T> LocalDateTimeRenderer<T> dateTimeRenderer(Function<T, LocalDateTime> getter) {
-        return new LocalDateTimeRenderer<>(getter::apply, "dd.MM.yyyy hh:mm");
+        return new LocalDateTimeRenderer<>(getter::apply, "dd.MM.yyyy HH:mm");
+    }
+
+    public static <T> LocalTimeRenderer<T> timeRenderer(Function<T, LocalTime> getter) {
+        return new LocalTimeRenderer<>(getter::apply);
     }
 
     public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler, String tooltipText) {

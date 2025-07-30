@@ -24,6 +24,7 @@ public class LoginService implements UserDetailsService {
     public static final String SUPPORTER_GROUP = "SUPPORTER";
     public static final String KONZERTE_GROUP = "KONZERTE";
     public static final String REPERTOIRE_GROUP = "REPERTOIRE";
+    public static final String EVENTS_GROUP = "EVENTS";
 
     private final LoginDao loginDao;
 
@@ -55,6 +56,7 @@ public class LoginService implements UserDetailsService {
         Permission.of(SUPPORTER_GROUP, login.getSupporterPermission()).ifPresent(roles::addAll);
         Permission.of(KONZERTE_GROUP, login.getKonzertePermission()).ifPresent(roles::addAll);
         Permission.of(REPERTOIRE_GROUP, login.getRepertoirePermission()).ifPresent(roles::addAll);
+        Permission.of(EVENTS_GROUP, login.getEventPermission()).ifPresent(roles::addAll);
 
         return roles;
     }

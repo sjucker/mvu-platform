@@ -31,11 +31,7 @@ public class KompositionDialog extends Dialog {
     }
 
     public static void show(Consumer<KompositionDto> callback) {
-        var dialog = new KompositionDialog(callback);
-        dialog.init(null);
-        dialog.setModal(true);
-        dialog.setMinWidth(66, PERCENTAGE);
-        dialog.open();
+        show(null, callback);
     }
 
     private void init(KompositionDto existingKomposition) {
