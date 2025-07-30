@@ -88,6 +88,7 @@ public class NotenPdfUploadDialog extends Dialog {
             scroller.setVisible(false);
             pdfViewer.setSrc("");
             pdfViewer.setCustomTitle(null);
+            notenPdfAssignmentContainer.reset();
         });
         upload.setWidthFull();
 
@@ -181,6 +182,11 @@ public class NotenPdfUploadDialog extends Dialog {
             var notenPdfAssignment = new NotenPdfAssignment(pages);
             assignments.add(notenPdfAssignment);
             getContent().addComponentAtIndex(assignments.size() - 1, notenPdfAssignment);
+        }
+
+        public void reset() {
+            getContent().removeAll();
+            assignments.clear();
         }
     }
 
