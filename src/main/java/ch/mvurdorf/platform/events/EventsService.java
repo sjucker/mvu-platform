@@ -14,7 +14,6 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import static ch.mvurdorf.platform.jooq.tables.Event.EVENT;
@@ -103,7 +102,7 @@ public class EventsService {
                          event.getType(),
                          event.isRelevantForAbsenz(),
                          event.isRelevantForWebsite(),
-                         LocalDateTime.now(), user,
+                         DateUtil.now(), user,
                          null, null);
     }
 
