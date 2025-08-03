@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,10 +23,20 @@ public class EventsEndpoint {
     private final EventsService eventsService;
 
     @GetMapping
-    public ResponseEntity<List<EventAbsenzStatusDto>> ping(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<List<EventAbsenzStatusDto>> getEvents(@AuthenticationPrincipal Jwt jwt) {
         log.info("GET /api/secured/event");
 
         return ResponseEntity.ok(eventsService.findEventAbsenzenForUser(jwt.getClaim("email")));
+    }
+
+    @PutMapping("/{eventId}")
+    public ResponseEntity<Void> ping(@AuthenticationPrincipal Jwt jwt,
+                                     @PathVariable Long eventId,
+                                     @RequestBody EventAbsenzStatusDto body) {
+        log.info("PUT /api/secured/event {}", body);
+
+        eventsService.updateEventAbsenzenForUser(jwt.getClaim("email"), eventId, body);
+        return ResponseEntity.ok().build();
     }
 
 }

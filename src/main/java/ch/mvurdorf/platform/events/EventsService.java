@@ -1,7 +1,9 @@
 package ch.mvurdorf.platform.events;
 
+import ch.mvurdorf.platform.jooq.tables.daos.AbsenzStatusDao;
 import ch.mvurdorf.platform.jooq.tables.daos.EventDao;
 import ch.mvurdorf.platform.jooq.tables.daos.LoginDao;
+import ch.mvurdorf.platform.jooq.tables.pojos.AbsenzStatus;
 import ch.mvurdorf.platform.jooq.tables.pojos.Event;
 import ch.mvurdorf.platform.jooq.tables.records.EventRecord;
 import ch.mvurdorf.platform.utils.DateUtil;
@@ -19,8 +21,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import static ch.mvurdorf.platform.events.AbsenzState.UNKNOWN;
 import static ch.mvurdorf.platform.jooq.Tables.ABSENZ_STATUS;
 import static ch.mvurdorf.platform.jooq.tables.Event.EVENT;
 import static ch.mvurdorf.platform.utils.FormatUtil.DATE_FORMAT_SHORT;
@@ -36,6 +40,7 @@ public class EventsService {
     private final DSLContext jooqDsl;
     private final EventDao eventDao;
     private final LoginDao loginDao;
+    private final AbsenzStatusDao absenzStatusDao;
 
     public ConfigurableFilterDataProvider<EventDto, Void, String> dataProvider() {
         var dataProvider = DataProvider.<EventDto, String>fromFilteringCallbacks(
@@ -198,5 +203,18 @@ public class EventsService {
             subtitle += " (" + location + ")";
         }
         return subtitle;
+    }
+
+    public void updateEventAbsenzenForUser(String email, Long eventId, EventAbsenzStatusDto dto) {
+        var login = loginDao.fetchOptionalByEmail(email).orElseThrow(() -> new NoSuchElementException("No login found for email " + email));
+        var status = Optional.ofNullable(dto.status()).orElse(UNKNOWN).name();
+        absenzStatusDao.findOptionalById(jooqDsl.newRecord(ABSENZ_STATUS.FK_LOGIN, ABSENZ_STATUS.FK_EVENT).values(login.getId(), eventId))
+                       .ifPresentOrElse(pojo -> {
+                                            pojo.setRemark(dto.remark());
+                                            pojo.setStatus(status);
+                                            absenzStatusDao.update(pojo);
+                                        },
+                                        () -> absenzStatusDao.insert(new AbsenzStatus(login.getId(), eventId, dto.remark(), status)));
+
     }
 }
