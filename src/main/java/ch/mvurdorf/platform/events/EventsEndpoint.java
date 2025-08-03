@@ -17,8 +17,7 @@ public class EventsEndpoint {
     public ResponseEntity<String> ping(@AuthenticationPrincipal Jwt jwt) {
         log.info("GET /api/secured/event");
 
-        log.info("JWT subject: {}", jwt.getSubject());
-        log.info("JWT claims: {}", jwt.getClaims());
+        log.info("JWT email: {}", jwt.getClaims().get("email"));
 
         return ResponseEntity.ok("pong");
     }
