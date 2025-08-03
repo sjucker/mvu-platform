@@ -139,11 +139,12 @@ public class EventsService {
                               ABSENZ_STATUS.STATUS,
                               ABSENZ_STATUS.REMARK)
                       .from(EVENT)
-                      .leftJoin(ABSENZ_STATUS).on(ABSENZ_STATUS.FK_EVENT.eq(EVENT.ID))
-                      .where(ABSENZ_STATUS.FK_LOGIN.eq(login.getId()),
-                             EVENT.NEXT_VERSION.isNull(),
+                      .leftJoin(ABSENZ_STATUS).on(ABSENZ_STATUS.FK_EVENT.eq(EVENT.ID),
+                                                  ABSENZ_STATUS.FK_LOGIN.eq(login.getId()))
+                      .where(EVENT.NEXT_VERSION.isNull(),
                              EVENT.DELETED_AT.isNull(),
-                             EVENT.FROM_DATE.ge(DateUtil.today())
+                             EVENT.FROM_DATE.ge(DateUtil.today()),
+                             EVENT.RELEVANT_FOR_ABSENZ.isTrue()
                       )
                       .orderBy(EVENT.FROM_DATE.asc(), EVENT.FROM_TIME.asc(), EVENT.TO_DATE.asc(), EVENT.TO_TIME.asc())
                       .fetch(it -> new EventAbsenzStatusDto(login.getId(),
