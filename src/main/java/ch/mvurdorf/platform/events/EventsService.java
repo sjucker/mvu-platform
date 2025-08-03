@@ -135,7 +135,15 @@ public class EventsService {
 
     public List<EventAbsenzStatusDto> findEventAbsenzenForUser(String email) {
         var login = loginDao.fetchOptionalByEmail(email).orElseThrow(() -> new NoSuchElementException("No login found for email " + email));
-        return jooqDsl.select(EVENT,
+        return jooqDsl.select(EVENT.ID,
+                              EVENT.FROM_DATE,
+                              EVENT.FROM_TIME,
+                              EVENT.TO_DATE,
+                              EVENT.TO_TIME,
+                              EVENT.APPROXIMATELY,
+                              EVENT.TITLE,
+                              EVENT.LOCATION,
+                              EVENT.INTERNA,
                               ABSENZ_STATUS.STATUS,
                               ABSENZ_STATUS.REMARK)
                       .from(EVENT)
