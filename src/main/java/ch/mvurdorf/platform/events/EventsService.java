@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.events;
 
 import ch.mvurdorf.platform.jooq.tables.daos.EventDao;
+import ch.mvurdorf.platform.jooq.tables.daos.LoginDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.Event;
 import ch.mvurdorf.platform.jooq.tables.records.EventRecord;
 import ch.mvurdorf.platform.utils.DateUtil;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 import static ch.mvurdorf.platform.jooq.Tables.ABSENZ_STATUS;
@@ -33,6 +35,7 @@ public class EventsService {
 
     private final DSLContext jooqDsl;
     private final EventDao eventDao;
+    private final LoginDao loginDao;
 
     public ConfigurableFilterDataProvider<EventDto, Void, String> dataProvider() {
         var dataProvider = DataProvider.<EventDto, String>fromFilteringCallbacks(
@@ -130,19 +133,20 @@ public class EventsService {
     }
     // TODO delete
 
-    public List<EventAbsenzStatusDto> findEventAbsenzenForUser(Long loginId) {
+    public List<EventAbsenzStatusDto> findEventAbsenzenForUser(String email) {
+        var login = loginDao.fetchOptionalByEmail(email).orElseThrow(() -> new NoSuchElementException("No login found for email " + email));
         return jooqDsl.select(EVENT,
                               ABSENZ_STATUS.STATUS,
                               ABSENZ_STATUS.REMARK)
                       .from(EVENT)
                       .leftJoin(ABSENZ_STATUS).on(ABSENZ_STATUS.FK_EVENT.eq(EVENT.ID))
-                      .where(ABSENZ_STATUS.FK_LOGIN.eq(loginId),
+                      .where(ABSENZ_STATUS.FK_LOGIN.eq(login.getId()),
                              EVENT.NEXT_VERSION.isNull(),
                              EVENT.DELETED_AT.isNull(),
                              EVENT.FROM_DATE.ge(DateUtil.today())
                       )
                       .orderBy(EVENT.FROM_DATE.asc(), EVENT.FROM_TIME.asc(), EVENT.TO_DATE.asc(), EVENT.TO_TIME.asc())
-                      .fetch(it -> new EventAbsenzStatusDto(loginId,
+                      .fetch(it -> new EventAbsenzStatusDto(login.getId(),
                                                             it.get(EVENT.ID),
                                                             title(it.get(EVENT.FROM_DATE), it.get(EVENT.FROM_TIME), it.get(EVENT.TO_DATE), it.get(EVENT.TO_TIME), it.get(EVENT.APPROXIMATELY)),
                                                             subtitle(it.get(EVENT.TITLE), it.get(EVENT.LOCATION)),
