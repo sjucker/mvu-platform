@@ -18,21 +18,21 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/secured/event")
-public class EventsEndpoint {
+public class SecuredEventsEndpoint {
 
     private final EventsService eventsService;
 
     @GetMapping
-    public ResponseEntity<List<EventAbsenzStatusDto>> getEvents(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<List<EventAbsenzStatusDto>> getEventAbsenzen(@AuthenticationPrincipal Jwt jwt) {
         log.info("GET /api/secured/event");
 
         return ResponseEntity.ok(eventsService.findEventAbsenzenForUser(jwt.getClaim("email")));
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<Void> ping(@AuthenticationPrincipal Jwt jwt,
-                                     @PathVariable Long eventId,
-                                     @RequestBody EventAbsenzStatusDto body) {
+    public ResponseEntity<Void> updateEventAbsenzStatus(@AuthenticationPrincipal Jwt jwt,
+                                                        @PathVariable Long eventId,
+                                                        @RequestBody EventAbsenzStatusDto body) {
         log.info("PUT /api/secured/event {}", body);
 
         eventsService.updateEventAbsenzenForUser(jwt.getClaim("email"), eventId, body);

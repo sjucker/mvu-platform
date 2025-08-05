@@ -44,23 +44,30 @@ public class EventsService {
 
     public ConfigurableFilterDataProvider<EventDto, Void, String> dataProvider() {
         var dataProvider = DataProvider.<EventDto, String>fromFilteringCallbacks(
-                query -> fetch(query.getFilter().orElse(null), query.getOffset(), query.getLimit()),
-                query -> count(query.getFilter().orElse(null))
+                query -> fetch(filterCondition(query.getFilter().orElse(null)), query.getOffset(), query.getLimit()),
+                query -> count(filterCondition(query.getFilter().orElse(null)))
         );
         return dataProvider.withConfigurableFilter();
     }
 
-    private Stream<EventDto> fetch(String filter, int offset, int limit) {
+    private Stream<EventDto> fetch(Condition condition, int offset, int limit) {
         return jooqDsl.selectFrom(EVENT)
                       .where(EVENT.NEXT_VERSION.isNull(),
                              EVENT.DELETED_AT.isNull(),
                              EVENT.FROM_DATE.ge(DateUtil.today()),
-                             filterCondition(filter))
+                             condition)
                       .orderBy(EVENT.FROM_DATE.asc(), EVENT.FROM_TIME.asc(), EVENT.TO_DATE.asc(), EVENT.TO_TIME.asc())
                       .offset(offset)
                       .limit(limit)
                       .fetch(EventsService::toDto)
                       .stream();
+    }
+
+    public List<EventDto> findAllFutureEventsForWebsite(Integer limit) {
+        if (limit == null) {
+            limit = Integer.MAX_VALUE;
+        }
+        return fetch(EVENT.RELEVANT_FOR_WEBSITE.isTrue(), 0, limit).toList();
     }
 
     private static EventDto toDto(EventRecord it) {
@@ -82,11 +89,11 @@ public class EventsService {
                             it.getCreatedBy());
     }
 
-    private int count(String filter) {
+    private int count(Condition condition) {
         return jooqDsl.fetchCount(EVENT, EVENT.NEXT_VERSION.isNull(),
                                   EVENT.DELETED_AT.isNull(),
                                   EVENT.FROM_DATE.ge(DateUtil.today()),
-                                  filterCondition(filter));
+                                  condition);
     }
 
     private static Condition filterCondition(String filter) {
@@ -132,6 +139,8 @@ public class EventsService {
 
             currentVersion.setNextVersion(nextVersion.getId());
             eventDao.update(currentVersion);
+
+            // TODO migrate all existing absenz_status to new version!
         } else {
             eventDao.update(toEvent(event, user));
         }
