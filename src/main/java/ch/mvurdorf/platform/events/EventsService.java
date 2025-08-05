@@ -272,7 +272,7 @@ public class EventsService {
 
     private EventRecord findFirstVersion(EventRecord currentVersion, Map<Long, EventRecord> previousPerSuccessorId, LocalDate cutoffDate) {
         var previousVersion = previousPerSuccessorId.get(currentVersion.getId());
-        if (previousVersion != null && !previousVersion.getFromDate().isBefore(cutoffDate)) {
+        if (previousVersion != null && !previousVersion.getCreatedAt().isBefore(cutoffDate.atStartOfDay())) {
             return findFirstVersion(previousVersion, previousPerSuccessorId, cutoffDate);
         }
         return currentVersion;
