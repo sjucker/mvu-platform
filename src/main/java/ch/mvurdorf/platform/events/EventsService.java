@@ -7,6 +7,7 @@ import ch.mvurdorf.platform.jooq.tables.pojos.AbsenzStatus;
 import ch.mvurdorf.platform.jooq.tables.pojos.Event;
 import ch.mvurdorf.platform.jooq.tables.records.EventRecord;
 import ch.mvurdorf.platform.utils.DateUtil;
+import ch.mvurdorf.platform.utils.FormatUtil;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -31,6 +33,12 @@ import static ch.mvurdorf.platform.utils.FormatUtil.DATE_FORMAT_SHORT;
 import static ch.mvurdorf.platform.utils.FormatUtil.dayOfWeek;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDate;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatTime;
+import static java.time.format.TextStyle.FULL_STANDALONE;
+import static java.time.format.TextStyle.SHORT_STANDALONE;
+import static java.util.Locale.GERMAN;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+import static org.apache.commons.lang3.StringUtils.stripToNull;
 
 @Slf4j
 @Service
@@ -225,5 +233,74 @@ public class EventsService {
                                         },
                                         () -> absenzStatusDao.insert(new AbsenzStatus(login.getId(), eventId, dto.remark(), status)));
 
+    }
+
+    public List<ProbeplanEntryDto> getProbeplan(LocalDate cutoffDate) {
+        var events = jooqDsl.selectFrom(EVENT)
+                            .where(EVENT.FROM_DATE.ge(DateUtil.today()))
+                            .orderBy(EVENT.FROM_DATE.asc(), EVENT.FROM_TIME.asc(), EVENT.TO_DATE.asc(), EVENT.TO_TIME.asc())
+                            .fetch();
+
+        var previousPerSuccessorId = events.stream()
+                                           .filter(it -> it.getNextVersion() != null)
+                                           .collect(toMap(EventRecord::getNextVersion, identity()));
+
+        return events.stream()
+                     .filter(it -> it.getNextVersion() == null)
+                     .map(it -> {
+                         // might be the same as the current version
+                         var firstVersion = findFirstVersion(it, previousPerSuccessorId, cutoffDate);
+                         return new ProbeplanEntryDto(it.getFromDate().getYear(),
+                                                      it.getFromDate().getMonth().getDisplayName(FULL_STANDALONE, GERMAN),
+                                                      it.getType(),
+                                                      getDayOfMonth(it),
+                                                      getDayOfWeek(it),
+                                                      getTime(it),
+                                                      it.getTitle(),
+                                                      it.getLocation(),
+                                                      it.getLiterature(),
+                                                      it.getDeletedAt(),
+                                                      it.getFromDate() != firstVersion.getFromDate() || it.getToDate() != firstVersion.getToDate(),
+                                                      it.getFromTime() != firstVersion.getFromTime() || it.getToTime() != firstVersion.getToTime(),
+                                                      !StringUtils.equals(it.getTitle(), firstVersion.getTitle()),
+                                                      !StringUtils.equals(it.getLocation(), firstVersion.getLocation()),
+                                                      !StringUtils.equals(stripToNull(it.getLiterature()), stripToNull(firstVersion.getLiterature())));
+                     })
+                     .toList();
+    }
+
+    private EventRecord findFirstVersion(EventRecord currentVersion, Map<Long, EventRecord> previousPerSuccessorId, LocalDate cutoffDate) {
+        var previousVersion = previousPerSuccessorId.get(currentVersion.getId());
+        if (previousVersion != null && !previousVersion.getFromDate().isBefore(cutoffDate)) {
+            return findFirstVersion(previousVersion, previousPerSuccessorId, cutoffDate);
+        }
+        return currentVersion;
+    }
+
+    private static String getTime(EventRecord it) {
+        if (it.getFromTime() != null && it.getToTime() != null) {
+            return "%s-%s".formatted(FormatUtil.formatTime(it.getFromTime()), FormatUtil.formatTime(it.getToTime()));
+        }
+        if (it.getFromTime() != null) {
+            return FormatUtil.formatTime(it.getFromTime());
+        }
+        return "";
+    }
+
+    private static String getDayOfWeek(EventRecord it) {
+        var from = it.getFromDate().getDayOfWeek().getDisplayName(SHORT_STANDALONE, GERMAN);
+        if (it.getToDate() != null && it.getToDate().isAfter(it.getFromDate())) {
+            return "%s-%s".formatted(from, it.getToDate().getDayOfWeek().getDisplayName(SHORT_STANDALONE, GERMAN));
+        }
+        return from;
+    }
+
+    private static String getDayOfMonth(EventRecord it) {
+        var from = it.getFromDate().getDayOfMonth();
+        if (it.getToDate() != null && it.getToDate().isAfter(it.getFromDate())) {
+            return "%02d.-%02d.".formatted(from, it.getToDate().getDayOfMonth());
+        }
+
+        return "%02d.".formatted(from);
     }
 }
