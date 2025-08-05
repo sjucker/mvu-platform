@@ -20,6 +20,8 @@ public class PublicEventsEndpoint {
 
     @GetMapping
     public ResponseEntity<List<EventDto>> getEvents(@RequestParam(required = false) Integer limit) {
+        log.info("GET /api/event?limit={}", limit);
+        
         return ResponseEntity.ok(eventsService.findAllFutureEventsForWebsite(limit));
     }
 
