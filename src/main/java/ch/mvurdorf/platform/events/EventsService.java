@@ -250,6 +250,7 @@ public class EventsService {
                      .map(it -> {
                          // might be the same as the current version
                          var firstVersion = findFirstVersion(it, previousPerSuccessorId, cutoffDate);
+                         var created = firstVersion.getCreatedAt().isAfter(cutoffDate.atStartOfDay());
                          return new ProbeplanEntryDto(it.getFromDate().getYear(),
                                                       it.getFromDate().getMonth().getDisplayName(FULL_STANDALONE, GERMAN),
                                                       it.getType(),
@@ -260,11 +261,11 @@ public class EventsService {
                                                       it.getLocation(),
                                                       it.getLiterature(),
                                                       it.getDeletedAt(),
-                                                      it.getFromDate() != firstVersion.getFromDate() || it.getToDate() != firstVersion.getToDate(),
-                                                      it.getFromTime() != firstVersion.getFromTime() || it.getToTime() != firstVersion.getToTime(),
-                                                      !StringUtils.equals(it.getTitle(), firstVersion.getTitle()),
-                                                      !StringUtils.equals(it.getLocation(), firstVersion.getLocation()),
-                                                      !StringUtils.equals(stripToNull(it.getLiterature()), stripToNull(firstVersion.getLiterature())));
+                                                      created || it.getFromDate() != firstVersion.getFromDate() || it.getToDate() != firstVersion.getToDate(),
+                                                      created || it.getFromTime() != firstVersion.getFromTime() || it.getToTime() != firstVersion.getToTime(),
+                                                      created || !StringUtils.equals(it.getTitle(), firstVersion.getTitle()),
+                                                      created || !StringUtils.equals(it.getLocation(), firstVersion.getLocation()),
+                                                      created || !StringUtils.equals(stripToNull(it.getLiterature()), stripToNull(firstVersion.getLiterature())));
                      })
                      .toList();
     }
