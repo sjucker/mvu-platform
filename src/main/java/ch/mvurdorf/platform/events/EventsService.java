@@ -148,7 +148,11 @@ public class EventsService {
             currentVersion.setNextVersion(nextVersion.getId());
             eventDao.update(currentVersion);
 
-            // TODO migrate all existing absenz_status to new version!
+            // make sure the existing AbsenzenStatus are transferred to the latest version
+            jooqDsl.update(ABSENZ_STATUS)
+                   .set(ABSENZ_STATUS.FK_EVENT, nextVersion.getId())
+                   .where(ABSENZ_STATUS.FK_EVENT.eq(currentVersion.getId()))
+                   .execute();
         } else {
             eventDao.update(toEvent(event, user));
         }
