@@ -2,6 +2,7 @@ package ch.mvurdorf.platform.events;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,6 +20,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.timeRenderer;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
+import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.CALENDAR;
 
@@ -51,6 +53,7 @@ public class EventsView extends VerticalLayout {
         grid.setDataProvider(dataProvider);
 
         grid.addColumn(clickableIcon(EDIT, this::edit, "Bearbeiten")).setWidth("60px").setFlexGrow(0);
+        grid.addColumn(clickableIcon(TRASH, this::delete, "Löschen")).setWidth("60px").setFlexGrow(0);
         grid.addColumn(EventDto::title).setHeader("Titel");
         grid.addColumn(dateRenderer(EventDto::fromDate)).setHeader("Datum von");
         grid.addColumn(timeRenderer(EventDto::fromTime)).setHeader("Zeit von");
@@ -84,5 +87,20 @@ public class EventsView extends VerticalLayout {
             eventsService.update(event, authenticatedUser.getName());
             dataProvider.refreshAll();
         });
+    }
+
+    private void delete(EventDto item) {
+        new ConfirmDialog("Event löschen?", "Soll der Event gelöscht werden? Permanent heisst, dass es nicht nachvollziehbar ist im Probeplan.",
+                          "Permanent löschen",
+                          _ -> {
+                              eventsService.delete(item, true);
+                              dataProvider.refreshAll();
+                          },
+                          "Nachvollziehbar löschen",
+                          _ -> {
+                              eventsService.delete(item, false);
+                              dataProvider.refreshAll();
+                          },
+                          "Abbrechen", _ -> {}).open();
     }
 }

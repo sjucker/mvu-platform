@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import static ch.mvurdorf.platform.events.AbsenzState.UNKNOWN;
 import static ch.mvurdorf.platform.jooq.Tables.ABSENZ_STATUS;
 import static ch.mvurdorf.platform.jooq.tables.Event.EVENT;
+import static ch.mvurdorf.platform.utils.DateUtil.now;
 import static ch.mvurdorf.platform.utils.FormatUtil.DATE_FORMAT_SHORT;
 import static ch.mvurdorf.platform.utils.FormatUtil.dayOfWeek;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDate;
@@ -133,7 +134,7 @@ public class EventsService {
                          event.getType(),
                          event.isRelevantForAbsenz(),
                          event.isRelevantForWebsite(),
-                         DateUtil.now(), user,
+                         now(), user,
                          null, null);
     }
 
@@ -157,7 +158,21 @@ public class EventsService {
             eventDao.update(toEvent(event, user));
         }
     }
-    // TODO delete
+
+    public void delete(EventDto event, boolean permanent) {
+        if (permanent) {
+            log.info("deleting event {} permanently", event);
+            jooqDsl.deleteFrom(ABSENZ_STATUS)
+                   .where(ABSENZ_STATUS.FK_EVENT.eq(event.id()))
+                   .execute();
+            eventDao.deleteById(event.id());
+        } else {
+            log.info("mark event {} as deleted", event);
+            var pojo = eventDao.findOptionalById(event.id()).orElseThrow();
+            pojo.setDeletedAt(now());
+            eventDao.update(pojo);
+        }
+    }
 
     public List<EventAbsenzStatusDto> findEventAbsenzenForUser(String email) {
         var login = loginDao.fetchOptionalByEmail(email).orElseThrow(() -> new NoSuchElementException("No login found for email " + email));
