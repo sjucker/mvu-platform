@@ -21,7 +21,7 @@
         <line-awesome.version>2.1.0</line-awesome.version>
         <!-- spring boot is behind, older version does not support postgres 16.4 -->
         <flyway.version>11.8.2</flyway.version>
-        <google-cloud-storage.version>2.54.0</google-cloud-storage.version>
+        <google-cloud-storage.version>2.55.0</google-cloud-storage.version>
         <qrbill-generator.version>3.3.1</qrbill-generator.version>
         <qrcodegen.version>1.8.0</qrcodegen.version>
         <pdfbox.version>3.0.5</pdfbox.version>
@@ -34,7 +34,7 @@
         <sonar-maven-plugin.version>5.1.0.4751</sonar-maven-plugin.version>
         <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
         <!-- downgraded, version 3.5.3 does not execute ArchUnit test -->
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
 
         <!-- start local DB using src/main/docker/postgres.yml  -->
         <db.url>jdbc:postgresql://localhost:5432/mvu</db.url>
@@ -340,6 +340,7 @@
                 <version>${versions-maven-plugin.version}</version>
                 <configuration>
                     <ignoredVersions>(?i).*-(alpha|beta|m|rc)([-.]?\d+)?</ignoredVersions>
+                    <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
             </plugin>
         </plugins>
