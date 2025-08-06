@@ -16,7 +16,11 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
+import com.vaadin.flow.theme.lumo.LumoUtility.Display;
+import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
 import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
+import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
 import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
 import jakarta.annotation.security.PermitAll;
 
@@ -69,8 +73,8 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
                                               var controls = new HorizontalLayout(lastUpdated,
                                                                                   primaryButton("Alle PDFs herunterladen", () -> ExportAllPdfDialog.show(notenService, authenticatedUser, repertoire)));
                                               controls.setWidthFull();
-                                              controls.setJustifyContentMode(JustifyContentMode.BETWEEN);
-                                              controls.setAlignItems(Alignment.BASELINE);
+                                              controls.addClassNames(Display.FLEX, FlexDirection.COLUMN, FlexDirection.Breakpoint.Medium.ROW,
+                                                                     JustifyContent.BETWEEN, AlignItems.BASELINE);
                                               add(controls);
 
                                               var entries = new Grid<RepertoireEntryDto>();

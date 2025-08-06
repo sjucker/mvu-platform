@@ -11,6 +11,10 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoUtility.Display;
+import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
+import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
 import jakarta.annotation.security.RolesAllowed;
 
 import static ch.mvurdorf.platform.security.LoginService.EVENTS_GROUP;
@@ -68,6 +72,8 @@ public class EventsView extends VerticalLayout {
 
     private void createControls() {
         controls = new HorizontalLayout();
+        controls.setWidthFull();
+        controls.addClassNames(Display.FLEX, FlexDirection.COLUMN, JustifyContent.BETWEEN, FlexDirection.Breakpoint.Medium.ROW, Gap.SMALL);
         if (authenticatedUser.hasWritePermission(NOTEN_GROUP)) {
             controls.add(new Button("Event hinzufügen", _ -> EventDialog.show(newEvent -> {
                 eventsService.insert(newEvent, authenticatedUser.getName());
