@@ -23,6 +23,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.timeRenderer;
+import static com.vaadin.flow.component.grid.ColumnTextAlign.CENTER;
 import static com.vaadin.flow.component.icon.VaadinIcon.COPY;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
@@ -57,9 +58,9 @@ public class EventsView extends VerticalLayout {
         dataProvider = eventsService.dataProvider();
         grid.setDataProvider(dataProvider);
 
-        grid.addColumn(clickableIcon(EDIT, this::edit, "Bearbeiten")).setWidth("50px").setFlexGrow(0);
-        grid.addColumn(clickableIcon(TRASH, this::delete, "Löschen")).setWidth("50px").setFlexGrow(0);
-        grid.addColumn(clickableIcon(COPY, this::copy, "Kopieren")).setWidth("50px").setFlexGrow(0);
+        grid.addColumn(clickableIcon(EDIT, this::edit, "Bearbeiten")).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
+        grid.addColumn(clickableIcon(TRASH, this::delete, "Löschen")).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
+        grid.addColumn(clickableIcon(COPY, this::copy, "Kopieren")).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
         grid.addColumn(EventDto::title).setHeader("Titel").setFlexGrow(1).setResizable(true);
         grid.addColumn(dateRenderer(EventDto::fromDate)).setHeader("Datum von").setWidth("100px").setFlexGrow(0);
         grid.addColumn(timeRenderer(EventDto::fromTime)).setHeader("Zeit von").setWidth("80px").setFlexGrow(0);
