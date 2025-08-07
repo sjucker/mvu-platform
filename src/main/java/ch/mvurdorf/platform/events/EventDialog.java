@@ -10,7 +10,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.function.Consumer;
 
 import static ch.mvurdorf.platform.ui.ComponentUtil.datePicker;
@@ -95,10 +94,10 @@ public class EventDialog extends Dialog {
         binder.forField(literature).bind(EventDataDto::getLiterature, EventDataDto::setLiterature);
         formLayout.add(literature);
 
-        var type = new Select<String>();
-        type.setLabel("Farbe");
-        // TODO enum
-        type.setItems(List.of("GREEN", "BLUE", "BLACK", "GREY", "RED", "VIOLET"));
+        var type = new Select<EventType>();
+        type.setLabel("Typ/Farbe");
+        type.setItems(EventType.values());
+        type.setItemLabelGenerator(EventType::getDescription);
         binder.forField(type).asRequired().bind(EventDataDto::getType, EventDataDto::setType);
         formLayout.add(type);
 

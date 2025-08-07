@@ -15,7 +15,7 @@ public record EventDto(Long id,
                        String location,
                        String interna,
                        String literature,
-                       String type, // TODO enum?
+                       EventType type,
                        boolean relevantForAbsenz,
                        boolean relevantForWebsite,
                        LocalDateTime createdAt,

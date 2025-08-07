@@ -25,7 +25,7 @@ public class EventDataDto {
     private String location;
     private String interna;
     private String literature;
-    private String type; // TODO enum?
+    private EventType type;
     private boolean relevantForAbsenz;
     private boolean relevantForWebsite;
 
