@@ -31,6 +31,8 @@ public class EventDialog extends Dialog {
         var dialog = new EventDialog(callback);
         dialog.init(existingEvent);
         dialog.setModal(true);
+        dialog.setCloseOnOutsideClick(false);
+        dialog.setHeaderTitle("Event");
         dialog.setMinWidth(66, PERCENTAGE);
         dialog.open();
     }
@@ -40,10 +42,6 @@ public class EventDialog extends Dialog {
     }
 
     private void init(EventDataDto event) {
-        setModal(true);
-        setCloseOnOutsideClick(false);
-        setHeaderTitle("Event");
-
         var formLayout = new FormLayout();
 
         if (event.getId() != null) {

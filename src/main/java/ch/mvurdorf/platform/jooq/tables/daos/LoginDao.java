@@ -236,4 +236,34 @@ public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.pla
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByEventPermission(String... values) {
         return fetch(Login.LOGIN.EVENT_PERMISSION, values);
     }
+
+    /**
+     * Fetch records that have <code>absenzen_permission BETWEEN lowerInclusive
+     * AND upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfAbsenzenPermission(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Login.LOGIN.ABSENZEN_PERMISSION, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>absenzen_permission IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByAbsenzenPermission(String... values) {
+        return fetch(Login.LOGIN.ABSENZEN_PERMISSION, values);
+    }
+
+    /**
+     * Fetch records that have <code>register BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfRegister(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Login.LOGIN.REGISTER, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>register IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByRegister(String... values) {
+        return fetch(Login.LOGIN.REGISTER, values);
+    }
 }

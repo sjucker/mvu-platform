@@ -36,6 +36,8 @@ public class Event implements Serializable {
     private String createdBy;
     private LocalDateTime deletedAt;
     private Long nextVersion;
+    private LocalDateTime updatedAt;
+    private String updatedBy;
 
     public Event() {}
 
@@ -58,6 +60,8 @@ public class Event implements Serializable {
         this.createdBy = value.createdBy;
         this.deletedAt = value.deletedAt;
         this.nextVersion = value.nextVersion;
+        this.updatedAt = value.updatedAt;
+        this.updatedBy = value.updatedBy;
     }
 
     public Event(
@@ -78,7 +82,9 @@ public class Event implements Serializable {
         LocalDateTime createdAt,
         String createdBy,
         LocalDateTime deletedAt,
-        Long nextVersion
+        Long nextVersion,
+        LocalDateTime updatedAt,
+        String updatedBy
     ) {
         this.id = id;
         this.fromDate = fromDate;
@@ -98,6 +104,8 @@ public class Event implements Serializable {
         this.createdBy = createdBy;
         this.deletedAt = deletedAt;
         this.nextVersion = nextVersion;
+        this.updatedAt = updatedAt;
+        this.updatedBy = updatedBy;
     }
 
     /**
@@ -352,6 +360,34 @@ public class Event implements Serializable {
         this.nextVersion = nextVersion;
     }
 
+    /**
+     * Getter for <code>public.event.updated_at</code>.
+     */
+    public LocalDateTime getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    /**
+     * Setter for <code>public.event.updated_at</code>.
+     */
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    /**
+     * Getter for <code>public.event.updated_by</code>.
+     */
+    public String getUpdatedBy() {
+        return this.updatedBy;
+    }
+
+    /**
+     * Setter for <code>public.event.updated_by</code>.
+     */
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -469,6 +505,18 @@ public class Event implements Serializable {
         }
         else if (!this.nextVersion.equals(other.nextVersion))
             return false;
+        if (this.updatedAt == null) {
+            if (other.updatedAt != null)
+                return false;
+        }
+        else if (!this.updatedAt.equals(other.updatedAt))
+            return false;
+        if (this.updatedBy == null) {
+            if (other.updatedBy != null)
+                return false;
+        }
+        else if (!this.updatedBy.equals(other.updatedBy))
+            return false;
         return true;
     }
 
@@ -494,6 +542,8 @@ public class Event implements Serializable {
         result = prime * result + ((this.createdBy == null) ? 0 : this.createdBy.hashCode());
         result = prime * result + ((this.deletedAt == null) ? 0 : this.deletedAt.hashCode());
         result = prime * result + ((this.nextVersion == null) ? 0 : this.nextVersion.hashCode());
+        result = prime * result + ((this.updatedAt == null) ? 0 : this.updatedAt.hashCode());
+        result = prime * result + ((this.updatedBy == null) ? 0 : this.updatedBy.hashCode());
         return result;
     }
 
@@ -519,6 +569,8 @@ public class Event implements Serializable {
         sb.append(", ").append(createdBy);
         sb.append(", ").append(deletedAt);
         sb.append(", ").append(nextVersion);
+        sb.append(", ").append(updatedAt);
+        sb.append(", ").append(updatedBy);
 
         sb.append(")");
         return sb.toString();

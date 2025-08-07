@@ -27,6 +27,8 @@ public class Login implements Serializable {
     private String konzertePermission;
     private String repertoirePermission;
     private String eventPermission;
+    private String absenzenPermission;
+    private String register;
 
     public Login() {}
 
@@ -42,6 +44,8 @@ public class Login implements Serializable {
         this.konzertePermission = value.konzertePermission;
         this.repertoirePermission = value.repertoirePermission;
         this.eventPermission = value.eventPermission;
+        this.absenzenPermission = value.absenzenPermission;
+        this.register = value.register;
     }
 
     public Login(
@@ -55,7 +59,9 @@ public class Login implements Serializable {
         String supporterPermission,
         String konzertePermission,
         String repertoirePermission,
-        String eventPermission
+        String eventPermission,
+        String absenzenPermission,
+        String register
     ) {
         this.id = id;
         this.email = email;
@@ -68,6 +74,8 @@ public class Login implements Serializable {
         this.konzertePermission = konzertePermission;
         this.repertoirePermission = repertoirePermission;
         this.eventPermission = eventPermission;
+        this.absenzenPermission = absenzenPermission;
+        this.register = register;
     }
 
     /**
@@ -224,6 +232,34 @@ public class Login implements Serializable {
         this.eventPermission = eventPermission;
     }
 
+    /**
+     * Getter for <code>public.login.absenzen_permission</code>.
+     */
+    public String getAbsenzenPermission() {
+        return this.absenzenPermission;
+    }
+
+    /**
+     * Setter for <code>public.login.absenzen_permission</code>.
+     */
+    public void setAbsenzenPermission(String absenzenPermission) {
+        this.absenzenPermission = absenzenPermission;
+    }
+
+    /**
+     * Getter for <code>public.login.register</code>.
+     */
+    public String getRegister() {
+        return this.register;
+    }
+
+    /**
+     * Setter for <code>public.login.register</code>.
+     */
+    public void setRegister(String register) {
+        this.register = register;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -299,6 +335,18 @@ public class Login implements Serializable {
         }
         else if (!this.eventPermission.equals(other.eventPermission))
             return false;
+        if (this.absenzenPermission == null) {
+            if (other.absenzenPermission != null)
+                return false;
+        }
+        else if (!this.absenzenPermission.equals(other.absenzenPermission))
+            return false;
+        if (this.register == null) {
+            if (other.register != null)
+                return false;
+        }
+        else if (!this.register.equals(other.register))
+            return false;
         return true;
     }
 
@@ -317,6 +365,8 @@ public class Login implements Serializable {
         result = prime * result + ((this.konzertePermission == null) ? 0 : this.konzertePermission.hashCode());
         result = prime * result + ((this.repertoirePermission == null) ? 0 : this.repertoirePermission.hashCode());
         result = prime * result + ((this.eventPermission == null) ? 0 : this.eventPermission.hashCode());
+        result = prime * result + ((this.absenzenPermission == null) ? 0 : this.absenzenPermission.hashCode());
+        result = prime * result + ((this.register == null) ? 0 : this.register.hashCode());
         return result;
     }
 
@@ -335,6 +385,8 @@ public class Login implements Serializable {
         sb.append(", ").append(konzertePermission);
         sb.append(", ").append(repertoirePermission);
         sb.append(", ").append(eventPermission);
+        sb.append(", ").append(absenzenPermission);
+        sb.append(", ").append(register);
 
         sb.append(")");
         return sb.toString();

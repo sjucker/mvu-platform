@@ -19,5 +19,15 @@ public record EventDto(Long id,
                        boolean relevantForAbsenz,
                        boolean relevantForWebsite,
                        LocalDateTime createdAt,
-                       String createdBy) {
+                       String createdBy,
+                       LocalDateTime updatedAt,
+                       String updatedBy) {
+
+    public LocalDateTime getLastUpdatedAt() {
+        return updatedAt != null ? updatedAt : createdAt;
+    }
+
+    public String getLastUpdatedBy() {
+        return updatedBy != null ? updatedBy : createdBy;
+    }
 }

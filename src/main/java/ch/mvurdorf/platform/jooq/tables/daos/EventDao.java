@@ -329,4 +329,34 @@ public class EventDao extends AbstractSpringDAOImpl<EventRecord, ch.mvurdorf.pla
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Event> fetchByNextVersion(Long... values) {
         return fetch(Event.EVENT.NEXT_VERSION, values);
     }
+
+    /**
+     * Fetch records that have <code>updated_at BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Event> fetchRangeOfUpdatedAt(LocalDateTime lowerInclusive, LocalDateTime upperInclusive) {
+        return fetchRange(Event.EVENT.UPDATED_AT, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>updated_at IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Event> fetchByUpdatedAt(LocalDateTime... values) {
+        return fetch(Event.EVENT.UPDATED_AT, values);
+    }
+
+    /**
+     * Fetch records that have <code>updated_by BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Event> fetchRangeOfUpdatedBy(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Event.EVENT.UPDATED_BY, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>updated_by IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Event> fetchByUpdatedBy(String... values) {
+        return fetch(Event.EVENT.UPDATED_BY, values);
+    }
 }

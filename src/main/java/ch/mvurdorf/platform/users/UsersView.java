@@ -14,9 +14,12 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
 import static ch.mvurdorf.platform.security.LoginService.USERS_GROUP;
+import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
+import static com.vaadin.flow.component.grid.ColumnTextAlign.CENTER;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_COLUMN_BORDERS;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_COMPACT;
 import static com.vaadin.flow.component.icon.VaadinIcon.CHECK;
+import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.USER;
 
@@ -63,16 +66,19 @@ class UsersView extends VerticalLayout {
 
         grid.setItems(usersService.findAll());
 
-        grid.addColumn(UserDto::email)
-            .setHeader("Email");
-        grid.addColumn(UserDto::name)
-            .setHeader("Name");
-        grid.addColumn(new ComponentRenderer<>(userDto -> userDto.active() ? CHECK.create() : new Div()))
-            .setHeader("Aktiv");
+        grid.addColumn(clickableIcon(EDIT, this::edit)).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
+        grid.addColumn(UserDto::email).setHeader("Email");
+        grid.addColumn(UserDto::name).setHeader("Name");
+        grid.addColumn(UserDto::register).setHeader("Register");
+        grid.addColumn(new ComponentRenderer<>(userDto -> userDto.active() ? CHECK.create() : new Div())).setHeader("Aktiv").setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
 
-        grid.addItemDoubleClickListener(event -> UserDialog.edit(event.getItem(), user -> {
+        grid.addItemDoubleClickListener(event -> edit(event.getItem()));
+    }
+
+    private void edit(UserDto item) {
+        UserDialog.edit(item, user -> {
             usersService.update(user);
             grid.setItems(usersService.findAll());
-        }));
+        });
     }
 }

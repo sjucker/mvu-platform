@@ -1,10 +1,12 @@
 package ch.mvurdorf.platform.users;
 
 import ch.mvurdorf.platform.common.Instrument;
+import ch.mvurdorf.platform.common.Register;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 
@@ -22,6 +24,7 @@ public class UserDialog extends Dialog {
     private EmailField email;
     private TextField name;
     private CheckboxGroup<Instrument> instrumentPermissions;
+    private Select<Register> register;
     private Long userId = null;
 
     private UserDialog(Mode mode, Consumer<UserDto> callback) {
@@ -52,6 +55,7 @@ public class UserDialog extends Dialog {
                                                         email.getValue(),
                                                         name.getValue(),
                                                         true,
+                                                        register.getValue(),
                                                         instrumentPermissions.getValue()));
                             close();
                         }));
@@ -67,10 +71,16 @@ public class UserDialog extends Dialog {
         name.setRequired(true);
         formLayout.add(name);
 
-        instrumentPermissions = new CheckboxGroup<>("Instrument", Instrument.values());
+        register = new Select<>();
+        register.setLabel("Register");
+        register.setItems(Register.values());
+        register.setItemLabelGenerator(Register::getDescription);
+        register.setEmptySelectionAllowed(false);
+        formLayout.add(register);
+
+        instrumentPermissions = new CheckboxGroup<>("Notenberechtigung (leer lassen, falls keine Einschränkung)", Instrument.values());
         instrumentPermissions.setItemLabelGenerator(Instrument::getDescription);
-        formLayout.add(instrumentPermissions);
-        formLayout.setColspan(instrumentPermissions, 2);
+        formLayout.add(instrumentPermissions, 2);
 
         add(formLayout);
 
@@ -78,6 +88,7 @@ public class UserDialog extends Dialog {
             userId = user.id();
             email.setValue(user.email());
             name.setValue(user.name());
+            register.setValue(user.register());
             instrumentPermissions.setValue(user.instrumentPermissions());
         }
     }

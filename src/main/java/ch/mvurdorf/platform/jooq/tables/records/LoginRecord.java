@@ -174,6 +174,34 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         return (String) get(10);
     }
 
+    /**
+     * Setter for <code>public.login.absenzen_permission</code>.
+     */
+    public void setAbsenzenPermission(String value) {
+        set(11, value);
+    }
+
+    /**
+     * Getter for <code>public.login.absenzen_permission</code>.
+     */
+    public String getAbsenzenPermission() {
+        return (String) get(11);
+    }
+
+    /**
+     * Setter for <code>public.login.register</code>.
+     */
+    public void setRegister(String value) {
+        set(12, value);
+    }
+
+    /**
+     * Getter for <code>public.login.register</code>.
+     */
+    public String getRegister() {
+        return (String) get(12);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -197,7 +225,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission, String eventPermission) {
+    public LoginRecord(Long id, String email, String name, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission, String eventPermission, String absenzenPermission, String register) {
         super(Login.LOGIN);
 
         setId(id);
@@ -211,6 +239,8 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         setKonzertePermission(konzertePermission);
         setRepertoirePermission(repertoirePermission);
         setEventPermission(eventPermission);
+        setAbsenzenPermission(absenzenPermission);
+        setRegister(register);
         resetChangedOnNotNull();
     }
 
@@ -232,6 +262,8 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setKonzertePermission(value.getKonzertePermission());
             setRepertoirePermission(value.getRepertoirePermission());
             setEventPermission(value.getEventPermission());
+            setAbsenzenPermission(value.getAbsenzenPermission());
+            setRegister(value.getRegister());
             resetChangedOnNotNull();
         }
     }

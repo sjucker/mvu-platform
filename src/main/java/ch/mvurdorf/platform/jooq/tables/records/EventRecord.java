@@ -274,6 +274,34 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
         return (Long) get(17);
     }
 
+    /**
+     * Setter for <code>public.event.updated_at</code>.
+     */
+    public void setUpdatedAt(LocalDateTime value) {
+        set(18, value);
+    }
+
+    /**
+     * Getter for <code>public.event.updated_at</code>.
+     */
+    public LocalDateTime getUpdatedAt() {
+        return (LocalDateTime) get(18);
+    }
+
+    /**
+     * Setter for <code>public.event.updated_by</code>.
+     */
+    public void setUpdatedBy(String value) {
+        set(19, value);
+    }
+
+    /**
+     * Getter for <code>public.event.updated_by</code>.
+     */
+    public String getUpdatedBy() {
+        return (String) get(19);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -297,7 +325,7 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
     /**
      * Create a detached, initialised EventRecord
      */
-    public EventRecord(Long id, LocalDate fromDate, LocalTime fromTime, LocalDate toDate, LocalTime toTime, Boolean approximately, String title, String description, String location, String interna, String literature, String type, Boolean relevantForAbsenz, Boolean relevantForWebsite, LocalDateTime createdAt, String createdBy, LocalDateTime deletedAt, Long nextVersion) {
+    public EventRecord(Long id, LocalDate fromDate, LocalTime fromTime, LocalDate toDate, LocalTime toTime, Boolean approximately, String title, String description, String location, String interna, String literature, String type, Boolean relevantForAbsenz, Boolean relevantForWebsite, LocalDateTime createdAt, String createdBy, LocalDateTime deletedAt, Long nextVersion, LocalDateTime updatedAt, String updatedBy) {
         super(Event.EVENT);
 
         setId(id);
@@ -318,6 +346,8 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
         setCreatedBy(createdBy);
         setDeletedAt(deletedAt);
         setNextVersion(nextVersion);
+        setUpdatedAt(updatedAt);
+        setUpdatedBy(updatedBy);
         resetChangedOnNotNull();
     }
 
@@ -346,6 +376,8 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
             setCreatedBy(value.getCreatedBy());
             setDeletedAt(value.getDeletedAt());
             setNextVersion(value.getNextVersion());
+            setUpdatedAt(value.getUpdatedAt());
+            setUpdatedBy(value.getUpdatedBy());
             resetChangedOnNotNull();
         }
     }

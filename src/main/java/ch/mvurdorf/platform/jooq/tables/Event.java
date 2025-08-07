@@ -140,7 +140,7 @@ public class Event extends TableImpl<EventRecord> {
     /**
      * The column <code>public.event.created_by</code>.
      */
-    public final TableField<EventRecord, String> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<EventRecord, String> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'system'::character varying"), SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>public.event.deleted_at</code>.
@@ -151,6 +151,16 @@ public class Event extends TableImpl<EventRecord> {
      * The column <code>public.event.next_version</code>.
      */
     public final TableField<EventRecord, Long> NEXT_VERSION = createField(DSL.name("next_version"), SQLDataType.BIGINT, this, "");
+
+    /**
+     * The column <code>public.event.updated_at</code>.
+     */
+    public final TableField<EventRecord, LocalDateTime> UPDATED_AT = createField(DSL.name("updated_at"), SQLDataType.LOCALDATETIME(6), this, "");
+
+    /**
+     * The column <code>public.event.updated_by</code>.
+     */
+    public final TableField<EventRecord, String> UPDATED_BY = createField(DSL.name("updated_by"), SQLDataType.VARCHAR(255), this, "");
 
     private Event(Name alias, Table<EventRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

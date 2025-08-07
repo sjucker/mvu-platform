@@ -62,13 +62,13 @@ public class EventsView extends VerticalLayout {
         grid.addColumn(clickableIcon(TRASH, this::delete, "Löschen")).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
         grid.addColumn(clickableIcon(COPY, this::copy, "Kopieren")).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
         grid.addColumn(EventDto::title).setHeader("Titel").setFlexGrow(1).setResizable(true);
-        grid.addColumn(dateRenderer(EventDto::fromDate)).setHeader("Datum von").setWidth("100px").setFlexGrow(0);
-        grid.addColumn(timeRenderer(EventDto::fromTime)).setHeader("Zeit von").setWidth("80px").setFlexGrow(0);
-        grid.addColumn(dateRenderer(EventDto::toDate)).setHeader("Datum bis").setWidth("100px").setFlexGrow(0);
-        grid.addColumn(timeRenderer(EventDto::toTime)).setHeader("Zeit bis").setWidth("80px").setFlexGrow(0);
-        grid.addColumn(EventDto::location).setHeader("Räumlichkeiten");
-        grid.addColumn(dateTimeRenderer(EventDto::createdAt)).setHeader("Zuletzt aktualisiert");
-        grid.addColumn(EventDto::createdBy).setHeader("Bearbeitet durch");
+        grid.addColumn(dateRenderer(EventDto::fromDate)).setHeader("Datum von").setWidth("120px").setFlexGrow(0);
+        grid.addColumn(timeRenderer(EventDto::fromTime)).setHeader("Zeit von").setWidth("100px").setFlexGrow(0);
+        grid.addColumn(dateRenderer(EventDto::toDate)).setHeader("Datum bis").setWidth("120px").setFlexGrow(0);
+        grid.addColumn(timeRenderer(EventDto::toTime)).setHeader("Zeit bis").setWidth("100px").setFlexGrow(0);
+        grid.addColumn(EventDto::location).setHeader("Räumlichkeiten").setFlexGrow(1).setResizable(true);
+        grid.addColumn(dateTimeRenderer(EventDto::getLastUpdatedAt)).setHeader("Zuletzt aktualisiert am").setWidth("180px").setFlexGrow(0);
+        grid.addColumn(EventDto::getLastUpdatedBy).setHeader("Zuletzt aktualisiert durch").setWidth("180px").setFlexGrow(0);
 
         grid.addItemDoubleClickListener(event -> edit(event.getItem()));
     }

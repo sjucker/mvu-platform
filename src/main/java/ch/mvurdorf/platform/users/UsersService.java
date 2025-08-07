@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.users;
 
 import ch.mvurdorf.platform.common.Instrument;
+import ch.mvurdorf.platform.common.Register;
 import ch.mvurdorf.platform.jooq.tables.daos.InstrumentPermissionDao;
 import ch.mvurdorf.platform.jooq.tables.daos.LoginDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.InstrumentPermission;
@@ -44,7 +45,7 @@ class UsersService {
                       .from(LOGIN)
                       .fetch(it -> {
                           var login = it.value1();
-                          return new UserDto(login.getId(), login.getEmail(), login.getName(), login.getActive(), new HashSet<>(it.value2()));
+                          return new UserDto(login.getId(), login.getEmail(), login.getName(), login.getActive(), Register.valueOf(login.getRegister()), new HashSet<>(it.value2()));
                       })
                       .stream()
                       .sorted(comparing(UserDto::name))
@@ -55,6 +56,7 @@ class UsersService {
         var login = loginDao.findOptionalById(user.id()).orElseThrow();
         login.setEmail(user.email());
         login.setName(user.name());
+        login.setRegister(user.register().name());
         loginDao.update(login);
 
         jooqDsl.execute(delete(INSTRUMENT_PERMISSION)
@@ -86,7 +88,9 @@ class UsersService {
                                  NONE.name(),
                                  NONE.name(),
                                  NONE.name(),
-                                 NONE.name());
+                                 NONE.name(),
+                                 NONE.name(),
+                                 newUser.register().name());
         loginDao.insert(newLogin);
 
         insertInstrumentPermissions(newUser.instrumentPermissions(), newLogin.getId());

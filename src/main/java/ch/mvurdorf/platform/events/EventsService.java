@@ -52,9 +52,17 @@ public class EventsService {
     private final AbsenzStatusDao absenzStatusDao;
 
     public ConfigurableFilterDataProvider<EventDto, Void, String> dataProvider() {
+        return dataProvider(DSL.trueCondition());
+    }
+
+    public ConfigurableFilterDataProvider<EventDto, Void, String> dataProviderAbsenzen() {
+        return dataProvider(EVENT.RELEVANT_FOR_ABSENZ.isTrue());
+    }
+
+    public ConfigurableFilterDataProvider<EventDto, Void, String> dataProvider(Condition additionalCondition) {
         var dataProvider = DataProvider.<EventDto, String>fromFilteringCallbacks(
-                query -> fetch(filterCondition(query.getFilter().orElse(null)), query.getOffset(), query.getLimit()),
-                query -> count(filterCondition(query.getFilter().orElse(null)))
+                query -> fetch(filterCondition(query.getFilter().orElse(null)).and(additionalCondition), query.getOffset(), query.getLimit()),
+                query -> count(filterCondition(query.getFilter().orElse(null)).and(additionalCondition))
         );
         return dataProvider.withConfigurableFilter();
     }
@@ -95,7 +103,9 @@ public class EventsService {
                             it.getRelevantForAbsenz(),
                             it.getRelevantForWebsite(),
                             it.getCreatedAt(),
-                            it.getCreatedBy());
+                            it.getCreatedBy(),
+                            it.getUpdatedAt(),
+                            it.getUpdatedBy());
     }
 
     private int count(Condition condition) {
@@ -118,10 +128,13 @@ public class EventsService {
     }
 
     public void insert(EventDataDto event, String user) {
-        eventDao.insert(toEvent(event, user));
+        var newEvent = toEvent(event);
+        newEvent.setCreatedAt(now());
+        newEvent.setCreatedBy(user);
+        eventDao.insert(newEvent);
     }
 
-    private static Event toEvent(EventDataDto event, String user) {
+    private static Event toEvent(EventDataDto event) {
         return new Event(event.getId(),
                          event.getFromDate(), event.getFromTime(),
                          event.getToDate(), event.getToTime(),
@@ -134,28 +147,32 @@ public class EventsService {
                          event.getType().name(),
                          event.isRelevantForAbsenz(),
                          event.isRelevantForWebsite(),
-                         now(), user,
-                         null, null);
+                         null, null, null, null, null, null);
     }
 
     public void update(EventDataDto event, String user) {
+        var currentVersion = eventDao.fetchOptionalById(event.getId()).orElseThrow();
+
+        var eventToUpdate = toEvent(event);
+        eventToUpdate.setCreatedAt(currentVersion.getCreatedAt());
+        eventToUpdate.setCreatedBy(currentVersion.getCreatedBy());
+        eventToUpdate.setUpdatedAt(now());
+        eventToUpdate.setUpdatedBy(user);
+
         if (event.isTrackChanges()) {
-            var currentVersion = eventDao.fetchOptionalById(event.getId()).orElseThrow();
+            eventToUpdate.setId(null);
+            eventDao.insert(eventToUpdate);
 
-            var nextVersion = toEvent(event, user);
-            nextVersion.setId(null);
-            eventDao.insert(nextVersion);
-
-            currentVersion.setNextVersion(nextVersion.getId());
+            currentVersion.setNextVersion(eventToUpdate.getId());
             eventDao.update(currentVersion);
 
             // make sure the existing AbsenzenStatus are transferred to the latest version
             jooqDsl.update(ABSENZ_STATUS)
-                   .set(ABSENZ_STATUS.FK_EVENT, nextVersion.getId())
+                   .set(ABSENZ_STATUS.FK_EVENT, eventToUpdate.getId())
                    .where(ABSENZ_STATUS.FK_EVENT.eq(currentVersion.getId()))
                    .execute();
         } else {
-            eventDao.update(toEvent(event, user));
+            eventDao.update(eventToUpdate);
         }
     }
 
