@@ -23,6 +23,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.timeRenderer;
+import static com.vaadin.flow.component.icon.VaadinIcon.COPY;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
@@ -56,16 +57,17 @@ public class EventsView extends VerticalLayout {
         dataProvider = eventsService.dataProvider();
         grid.setDataProvider(dataProvider);
 
-        grid.addColumn(clickableIcon(EDIT, this::edit, "Bearbeiten")).setWidth("60px").setFlexGrow(0);
-        grid.addColumn(clickableIcon(TRASH, this::delete, "Löschen")).setWidth("60px").setFlexGrow(0);
-        grid.addColumn(EventDto::title).setHeader("Titel");
-        grid.addColumn(dateRenderer(EventDto::fromDate)).setHeader("Datum von");
-        grid.addColumn(timeRenderer(EventDto::fromTime)).setHeader("Zeit von");
-        grid.addColumn(dateRenderer(EventDto::toDate)).setHeader("Datum bis");
-        grid.addColumn(timeRenderer(EventDto::toTime)).setHeader("Zeit bis");
+        grid.addColumn(clickableIcon(EDIT, this::edit, "Bearbeiten")).setWidth("50px").setFlexGrow(0);
+        grid.addColumn(clickableIcon(TRASH, this::delete, "Löschen")).setWidth("50px").setFlexGrow(0);
+        grid.addColumn(clickableIcon(COPY, this::copy, "Kopieren")).setWidth("50px").setFlexGrow(0);
+        grid.addColumn(EventDto::title).setHeader("Titel").setFlexGrow(1).setResizable(true);
+        grid.addColumn(dateRenderer(EventDto::fromDate)).setHeader("Datum von").setWidth("100px").setFlexGrow(0);
+        grid.addColumn(timeRenderer(EventDto::fromTime)).setHeader("Zeit von").setWidth("80px").setFlexGrow(0);
+        grid.addColumn(dateRenderer(EventDto::toDate)).setHeader("Datum bis").setWidth("100px").setFlexGrow(0);
+        grid.addColumn(timeRenderer(EventDto::toTime)).setHeader("Zeit bis").setWidth("80px").setFlexGrow(0);
         grid.addColumn(EventDto::location).setHeader("Räumlichkeiten");
         grid.addColumn(dateTimeRenderer(EventDto::createdAt)).setHeader("Zuletzt aktualisiert");
-        grid.addColumn(EventDto::createdBy).setHeader("Bearbeiter");
+        grid.addColumn(EventDto::createdBy).setHeader("Bearbeitet durch");
 
         grid.addItemDoubleClickListener(event -> edit(event.getItem()));
     }
@@ -91,6 +93,13 @@ public class EventsView extends VerticalLayout {
     private void edit(EventDto item) {
         EventDialog.show(EventDataDto.of(item), event -> {
             eventsService.update(event, authenticatedUser.getName());
+            dataProvider.refreshAll();
+        });
+    }
+
+    private void copy(EventDto item) {
+        EventDialog.show(EventDataDto.copy(item), newEvent -> {
+            eventsService.insert(newEvent, authenticatedUser.getName());
             dataProvider.refreshAll();
         });
     }

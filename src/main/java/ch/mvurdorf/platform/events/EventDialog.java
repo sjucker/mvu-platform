@@ -86,7 +86,7 @@ public class EventDialog extends Dialog {
         binder.forField(description).bind(EventDataDto::getDescription, EventDataDto::setDescription);
         formLayout.add(description);
 
-        var interna = new TextField("Interne Informationen für Musiker");
+        var interna = new TextField("Interne Informationen für Musiker (wird bei den Absenzen angezeigt)");
         binder.forField(interna).bind(EventDataDto::getInterna, EventDataDto::setInterna);
         formLayout.add(interna);
 

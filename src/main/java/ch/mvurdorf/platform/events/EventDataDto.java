@@ -50,4 +50,21 @@ public class EventDataDto {
                                 event.relevantForAbsenz(),
                                 event.relevantForWebsite());
     }
+
+    public static EventDataDto copy(EventDto event) {
+        return new EventDataDto(null, false,
+                                event.fromDate(),
+                                event.fromTime(),
+                                event.toDate(),
+                                event.toTime(),
+                                event.approximately(),
+                                event.title(),
+                                event.description(),
+                                event.location(),
+                                event.interna(),
+                                event.literature(),
+                                event.type(),
+                                event.relevantForAbsenz(),
+                                event.relevantForWebsite());
+    }
 }
