@@ -71,9 +71,9 @@ public class AbsenzStatusDialog extends Dialog {
 
     private ValueProvider<AbsenzStatusDto, ? extends Component> absenzStatusUpdater(AbsenzState state, VaadinIcon icon, Long eventId) {
         return dto -> {
-            if (dto.status() != state) {
+            if (dto.status() != state && !dto.isRegisterPlaceholder()) {
                 var result = ComponentUtil.clickableIcon(icon, () -> {
-                    absenzenService.updateStatus(eventId, dto.loginId(), state);
+                    absenzenService.upsert(eventId, dto.loginId(), state);
                     grid.setItems(getItems(eventId));
                 });
                 result.setColor("grey");

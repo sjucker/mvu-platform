@@ -2,6 +2,8 @@ package ch.mvurdorf.platform.absenzen;
 
 import ch.mvurdorf.platform.common.AbsenzState;
 import ch.mvurdorf.platform.common.Register;
+import ch.mvurdorf.platform.jooq.tables.daos.AbsenzStatusDao;
+import ch.mvurdorf.platform.jooq.tables.pojos.AbsenzStatus;
 import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -31,6 +33,7 @@ import static java.util.stream.Collectors.toList;
 public class AbsenzenService {
 
     private final DSLContext jooqDsl;
+    private final AbsenzStatusDao absenzStatusDao;
 
     public ConfigurableFilterDataProvider<EventAbsenzSummaryDto, Void, String> dataProvider() {
         var dataProvider = DataProvider.<EventAbsenzSummaryDto, String>fromFilteringCallbacks(
@@ -96,11 +99,15 @@ public class AbsenzenService {
                                           collectingAndThen(toList(), list -> list.stream().sorted(comparing(AbsenzStatusDto::name)).toList())));
     }
 
-    public void updateStatus(Long eventId, Long loginId, AbsenzState state) {
-        jooqDsl.update(ABSENZ_STATUS)
-               .set(ABSENZ_STATUS.STATUS, state.name())
-               .where(ABSENZ_STATUS.FK_LOGIN.eq(loginId),
-                      ABSENZ_STATUS.FK_EVENT.eq(eventId))
-               .execute();
+    public void upsert(Long eventId, Long loginId, AbsenzState state) {
+        absenzStatusDao.findOptionalById(jooqDsl.newRecord(ABSENZ_STATUS.FK_LOGIN, ABSENZ_STATUS.FK_EVENT).values(loginId, eventId))
+                       .ifPresentOrElse(absenzStatus -> {
+                                            absenzStatus.setStatus(state.name());
+                                            absenzStatusDao.update(absenzStatus);
+                                        },
+                                        () -> {
+                                            var absenzStatus = new AbsenzStatus(loginId, eventId, null, state.name());
+                                            absenzStatusDao.insert(absenzStatus);
+                                        });
     }
 }
