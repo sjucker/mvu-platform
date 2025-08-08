@@ -11,6 +11,7 @@ import ch.mvurdorf.platform.utils.DateUtil;
 import ch.mvurdorf.platform.utils.FormatUtil;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +21,7 @@ import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -220,7 +222,27 @@ public class EventsService {
                                                             subtitle(it.get(EVENT.TITLE), it.get(EVENT.LOCATION)),
                                                             it.get(EVENT.INTERNA),
                                                             AbsenzState.of(it.get(ABSENZ_STATUS.STATUS)),
-                                                            it.get(ABSENZ_STATUS.REMARK)));
+                                                            it.get(ABSENZ_STATUS.REMARK),
+                                                            it.get(EVENT.TITLE),
+                                                            it.get(EVENT.LOCATION),
+                                                            from(it.get(EVENT.FROM_DATE), it.get(EVENT.FROM_TIME)),
+                                                            to(it.get(EVENT.FROM_DATE), it.get(EVENT.TO_DATE), it.get(EVENT.TO_TIME))));
+    }
+
+    private LocalDateTime to(LocalDate fromDate, @Nullable LocalDate toDate, @Nullable LocalTime toTime) {
+        if (toTime != null) {
+            return LocalDateTime.of(toDate != null ? toDate : fromDate, toTime);
+        }
+
+        return LocalDateTime.of(toDate != null ? toDate : fromDate, LocalTime.MAX);
+    }
+
+    private LocalDateTime from(LocalDate fromDate, @Nullable LocalTime fromTime) {
+        if (fromTime != null) {
+            return LocalDateTime.of(fromDate, fromTime);
+        }
+
+        return LocalDateTime.of(fromDate, LocalTime.MIN);
     }
 
     private String title(LocalDate fromDate, LocalTime fromTime, LocalDate toDate, LocalTime toTime, boolean approximately) {
