@@ -6,6 +6,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
@@ -80,13 +81,13 @@ public class EventDialog extends Dialog {
         binder.forField(approximately).bind(EventDataDto::isApproximately, EventDataDto::setApproximately);
         formLayout.add(approximately, 2);
 
-        var description = new TextField("Beschreibung");
+        var description = new TextArea("Beschreibung");
         binder.forField(description).bind(EventDataDto::getDescription, EventDataDto::setDescription);
-        formLayout.add(description);
+        formLayout.add(description, 2);
 
-        var interna = new TextField("Interne Informationen für Musiker (wird bei den Absenzen angezeigt)");
+        var interna = new TextArea("Interne Informationen für Musiker (wird bei den Absenzen angezeigt)");
         binder.forField(interna).bind(EventDataDto::getInterna, EventDataDto::setInterna);
-        formLayout.add(interna);
+        formLayout.add(interna, 2);
 
         var literature = new TextField("Literatur");
         binder.forField(literature).bind(EventDataDto::getLiterature, EventDataDto::setLiterature);
