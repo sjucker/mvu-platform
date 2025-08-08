@@ -55,8 +55,8 @@ public class AbsenzStatusDialog extends Dialog {
         grid.addColumn(new LocalizedEnumRenderer<>(AbsenzStatusDto::status)).setWidth("120px").setFlexGrow(0).setHeader("Status");
 
         if (authenticatedUser.hasWritePermission(ABSENZEN_GROUP)) {
-            grid.addComponentColumn(absenzStatusUpdater(NEGATIVE, THUMBS_UP, eventId)).setWidth("70px").setFlexGrow(0).setTextAlign(CENTER);
-            grid.addComponentColumn(absenzStatusUpdater(POSITIVE, THUMBS_DOWN, eventId)).setWidth("70px").setFlexGrow(0).setTextAlign(CENTER);
+            grid.addComponentColumn(absenzStatusUpdater(NEGATIVE, THUMBS_DOWN, eventId)).setWidth("70px").setFlexGrow(0).setTextAlign(CENTER);
+            grid.addComponentColumn(absenzStatusUpdater(POSITIVE, THUMBS_UP, eventId)).setWidth("70px").setFlexGrow(0).setTextAlign(CENTER);
         }
         grid.setPartNameGenerator(dto -> "absenz-status-" + dto.status());
         grid.setItems(getItems(eventId));
@@ -71,9 +71,9 @@ public class AbsenzStatusDialog extends Dialog {
 
     private ValueProvider<AbsenzStatusDto, ? extends Component> absenzStatusUpdater(AbsenzState state, VaadinIcon icon, Long eventId) {
         return dto -> {
-            if (dto.status() == state) {
+            if (dto.status() != state) {
                 var result = ComponentUtil.clickableIcon(icon, () -> {
-                    absenzenService.updateStatus(eventId, dto.loginId(), state == NEGATIVE ? POSITIVE : NEGATIVE);
+                    absenzenService.updateStatus(eventId, dto.loginId(), state);
                     grid.setItems(getItems(eventId));
                 });
                 result.setColor("grey");
