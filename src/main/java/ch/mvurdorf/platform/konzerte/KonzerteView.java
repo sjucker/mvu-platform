@@ -1,7 +1,9 @@
 package ch.mvurdorf.platform.konzerte;
 
+import ch.mvurdorf.platform.konzerte.KonzerteService.KonzerteFilter;
 import ch.mvurdorf.platform.noten.KompositionService;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
@@ -22,6 +24,7 @@ import static ch.mvurdorf.platform.utils.DateUtil.today;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
 import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
+import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.BASELINE;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.LIST_OL_SOLID;
 
@@ -37,7 +40,7 @@ public class KonzerteView extends VerticalLayout {
 
     private HorizontalLayout controls;
     private Grid<KonzertDto> grid;
-    private ConfigurableFilterDataProvider<KonzertDto, Void, String> dataProvider;
+    private ConfigurableFilterDataProvider<KonzertDto, Void, KonzerteFilter> dataProvider;
 
     public KonzerteView(KonzerteService konzerteService, KompositionService kompositionService, AuthenticatedUser authenticatedUser) {
         this.konzerteService = konzerteService;
@@ -52,11 +55,15 @@ public class KonzerteView extends VerticalLayout {
 
     private void createControls() {
         controls = new HorizontalLayout();
-        var filter = new TextField(event -> dataProvider.setFilter(event.getValue()));
+        var includingPast = new Checkbox("Vergangene anzeigen", false);
+        var filter = new TextField();
         filter.setPlaceholder("Filter");
         filter.setValueChangeMode(TIMEOUT);
         filter.setClearButtonVisible(true);
-        controls.add(filter);
+        controls.add(filter, includingPast);
+
+        filter.addValueChangeListener(event -> dataProvider.setFilter(new KonzerteFilter(event.getValue(), includingPast.getValue())));
+        includingPast.addValueChangeListener(event -> dataProvider.setFilter(new KonzerteFilter(filter.getValue(), event.getValue())));
 
         if (authenticatedUser.hasWritePermission(KONZERTE_GROUP)) {
             var addKonzert = primaryButton("Konzert",
@@ -66,6 +73,7 @@ public class KonzerteView extends VerticalLayout {
             addKonzert.setIcon(PLUS.create());
             controls.add(addKonzert);
         }
+        controls.setAlignItems(BASELINE);
     }
 
     private void createGrid() {

@@ -1,6 +1,5 @@
 package ch.mvurdorf.platform.konzerte;
 
-import ch.mvurdorf.platform.jooq.tables.daos.KompositionDao;
 import ch.mvurdorf.platform.jooq.tables.daos.KonzertDao;
 import ch.mvurdorf.platform.jooq.tables.daos.KonzertEntryDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.Konzert;
@@ -8,6 +7,8 @@ import ch.mvurdorf.platform.jooq.tables.pojos.KonzertEntry;
 import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
@@ -25,7 +26,7 @@ import static ch.mvurdorf.platform.jooq.Tables.KOMPOSITION;
 import static ch.mvurdorf.platform.jooq.Tables.KONZERT;
 import static ch.mvurdorf.platform.jooq.Tables.KONZERT_ENTRY;
 import static java.util.Comparator.comparing;
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
@@ -38,35 +39,37 @@ public class KonzerteService {
     private final DSLContext jooqDsl;
     private final KonzertDao konzertDao;
     private final KonzertEntryDao konzertEntryDao;
-    private final KompositionDao kompositionDao;
 
-    public ConfigurableFilterDataProvider<KonzertDto, Void, String> dataProvider() {
-        var dataProvider = DataProvider.<KonzertDto, String>fromFilteringCallbacks(
-                query -> fetch(query.getFilter().orElse(null), query.getOffset(), query.getLimit()),
-                query -> count(query.getFilter().orElse(null))
+    public ConfigurableFilterDataProvider<KonzertDto, Void, KonzerteFilter> dataProvider() {
+        var dataProvider = DataProvider.<KonzertDto, KonzerteFilter>fromFilteringCallbacks(
+                query -> fetch(query.getFilter().orElse(KonzerteFilter.empty()), query.getOffset(), query.getLimit()),
+                query -> count(query.getFilter().orElse(KonzerteFilter.empty()))
         );
         return dataProvider.withConfigurableFilter();
     }
 
-    private Stream<KonzertDto> fetch(String filter, int offset, int limit) {
+    private Stream<KonzertDto> fetch(KonzerteFilter filter, int offset, int limit) {
         return fetch(filterCondition(filter), offset, limit).stream();
     }
 
-    private int count(String filter) {
+    private int count(KonzerteFilter filter) {
         return jooqDsl.fetchCount(KONZERT, filterCondition(filter));
 
     }
 
-    private static Condition filterCondition(String filter) {
-        if (isBlank(filter)) {
-            return DSL.trueCondition();
+    private static Condition filterCondition(KonzerteFilter filter) {
+        var condition = filter.isIncludingPast() ? DSL.trueCondition() : KONZERT.DATUM.greaterOrEqual(DateUtil.today());
+
+        var textFilter = filter.getTextFilter();
+        if (isNotBlank(textFilter)) {
+            condition = condition.and(DSL.or(
+                    KONZERT.NAME.containsIgnoreCase(textFilter),
+                    KONZERT.DESCRIPTION.containsIgnoreCase(textFilter),
+                    KONZERT.LOCATION.containsIgnoreCase(textFilter)
+            ));
         }
 
-        return DSL.or(
-                KONZERT.NAME.containsIgnoreCase(filter),
-                KONZERT.DESCRIPTION.containsIgnoreCase(filter),
-                KONZERT.LOCATION.containsIgnoreCase(filter)
-        );
+        return condition;
     }
 
     private List<KonzertDto> fetch(Condition condition, int offset, int limit) {
@@ -172,5 +175,16 @@ public class KonzerteService {
         }
 
         return (dto.zugabe() ? "Z%d" : "%d").formatted(number);
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static final class KonzerteFilter {
+        private String textFilter;
+        private boolean includingPast;
+
+        public static KonzerteFilter empty() {
+            return new KonzerteFilter(null, false);
+        }
     }
 }

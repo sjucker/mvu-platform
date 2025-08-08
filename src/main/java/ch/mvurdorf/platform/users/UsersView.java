@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.users;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -69,7 +70,7 @@ class UsersView extends VerticalLayout {
         grid.addColumn(clickableIcon(EDIT, this::edit)).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
         grid.addColumn(UserDto::email).setHeader("Email");
         grid.addColumn(UserDto::name).setHeader("Name");
-        grid.addColumn(UserDto::register).setHeader("Register");
+        grid.addColumn(new LocalizedEnumRenderer<>(UserDto::register)).setHeader("Register");
         grid.addColumn(new ComponentRenderer<>(userDto -> userDto.active() ? CHECK.create() : new Div())).setHeader("Aktiv").setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
 
         grid.addItemDoubleClickListener(event -> edit(event.getItem()));
