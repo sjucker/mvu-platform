@@ -42,3 +42,15 @@ html {
 .pointer {
     cursor: pointer;
 }
+
+vaadin-grid::part(absenz-status-POSITIVE) {
+    background: linear-gradient(var(--lumo-success-color-10pct), var(--lumo-success-color-10pct)) var(--lumo-base-color);
+}
+
+vaadin-grid::part(absenz-status-NEGATIVE) {
+    background: linear-gradient(var(--lumo-error-color-10pct), var(--lumo-error-color-10pct)) var(--lumo-base-color);
+}
+
+vaadin-grid::part(absenz-status-INACTIVE) {
+    background: linear-gradient(var(--lumo-shade-10pct), var(--lumo-shade-10pct)) var(--lumo-base-color);
+}

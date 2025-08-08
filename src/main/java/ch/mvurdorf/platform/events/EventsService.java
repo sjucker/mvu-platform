@@ -1,5 +1,6 @@
 package ch.mvurdorf.platform.events;
 
+import ch.mvurdorf.platform.common.AbsenzState;
 import ch.mvurdorf.platform.jooq.tables.daos.AbsenzStatusDao;
 import ch.mvurdorf.platform.jooq.tables.daos.EventDao;
 import ch.mvurdorf.platform.jooq.tables.daos.LoginDao;
@@ -26,7 +27,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static ch.mvurdorf.platform.events.AbsenzState.UNKNOWN;
+import static ch.mvurdorf.platform.common.AbsenzState.UNKNOWN;
 import static ch.mvurdorf.platform.jooq.Tables.ABSENZ_STATUS;
 import static ch.mvurdorf.platform.jooq.tables.Event.EVENT;
 import static ch.mvurdorf.platform.utils.DateUtil.now;

@@ -41,6 +41,7 @@ public class FirebaseService {
                                      .body(FirebaseSignUpResponse.class);
             return response != null;
         } catch (RestClientResponseException e) {
+            log.warn("could not create user", e);
             return false;
         }
     }
@@ -67,6 +68,7 @@ public class FirebaseService {
                                      .body(FirebaseSignInResponse.class);
             return response == null || response.idToken() == null ? Optional.empty() : Optional.of(response);
         } catch (RestClientResponseException e) {
+            log.warn("could not verify username and password", e);
             return Optional.empty();
         }
     }
@@ -97,6 +99,7 @@ public class FirebaseService {
 
             return response != null;
         } catch (RestClientResponseException e) {
+            log.warn("could not change password", e);
             return false;
         }
     }

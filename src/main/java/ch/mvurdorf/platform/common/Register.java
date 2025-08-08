@@ -1,8 +1,11 @@
 package ch.mvurdorf.platform.common;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-public enum Register {
+@Getter
+@RequiredArgsConstructor
+public enum Register implements LocalizedEnum {
     FLOETEN("Flöten"),
     KLARINETTEN("Klarinetten"),
     SAXOPHONE("Saxophone"),
@@ -14,10 +17,5 @@ public enum Register {
     SCHLAGWERK("Schlagwerk"),
     DIRIGENT("Dirigent");
 
-    @Getter
     private final String description;
-
-    Register(String description) {
-        this.description = description;
-    }
 }
