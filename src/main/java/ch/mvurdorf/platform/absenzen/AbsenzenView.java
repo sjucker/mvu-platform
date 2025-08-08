@@ -22,7 +22,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.CLIPBOARD_CHECK_SOLID;
 @PageTitle("Absenzen")
 @Route("absenzen")
 @RolesAllowed({ABSENZEN_GROUP})
-@Menu(order = 7, icon = CLIPBOARD_CHECK_SOLID)
+@Menu(order = 2, icon = CLIPBOARD_CHECK_SOLID)
 public class AbsenzenView extends VerticalLayout {
 
     private final AbsenzenService absenzenService;

@@ -33,7 +33,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.CALENDAR;
 @PageTitle("Events")
 @Route("events")
 @RolesAllowed({EVENTS_GROUP})
-@Menu(order = 6, icon = CALENDAR)
+@Menu(order = 1, icon = CALENDAR)
 public class EventsView extends VerticalLayout {
 
     private final EventsService eventsService;

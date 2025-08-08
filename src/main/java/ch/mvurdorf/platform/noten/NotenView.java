@@ -30,7 +30,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.MUSIC_SOLID;
 @PageTitle("Noten")
 @Route("noten")
 @RolesAllowed({NOTEN_GROUP})
-@Menu(order = 2, icon = MUSIC_SOLID)
+@Menu(order = 5, icon = MUSIC_SOLID)
 public class NotenView extends VerticalLayout {
 
     private final NotenService notenService;

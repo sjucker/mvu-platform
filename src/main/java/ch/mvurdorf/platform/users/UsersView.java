@@ -26,7 +26,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.USER;
 @PageTitle("Users")
 @Route("users")
 @RolesAllowed({USERS_GROUP})
-@Menu(order = 1, icon = USER)
+@Menu(order = 6, icon = USER)
 class UsersView extends VerticalLayout {
 
     private final UsersService usersService;

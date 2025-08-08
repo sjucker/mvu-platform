@@ -26,7 +26,7 @@ import static org.vaadin.lineawesome.LineAwesomeIconUrl.MONEY_BILL_ALT;
 @PageTitle("Supporter")
 @Route("supporter")
 @RolesAllowed({SUPPORTER_GROUP})
-@Menu(order = 5, icon = MONEY_BILL_ALT)
+@Menu(order = 7, icon = MONEY_BILL_ALT)
 public class SupporterView extends VerticalLayout {
 
     private final SupporterService supporterService;
