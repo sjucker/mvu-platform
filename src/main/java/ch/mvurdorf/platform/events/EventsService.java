@@ -58,10 +58,6 @@ public class EventsService {
         return dataProvider(DSL.trueCondition());
     }
 
-    public ConfigurableFilterDataProvider<EventDto, Void, String> dataProviderAbsenzen() {
-        return dataProvider(EVENT.RELEVANT_FOR_ABSENZ.isTrue());
-    }
-
     public ConfigurableFilterDataProvider<EventDto, Void, String> dataProvider(Condition additionalCondition) {
         var dataProvider = DataProvider.<EventDto, String>fromFilteringCallbacks(
                 query -> fetch(filterCondition(query.getFilter().orElse(null)).and(additionalCondition), query.getOffset(), query.getLimit()),
@@ -196,6 +192,10 @@ public class EventsService {
 
     public List<EventAbsenzStatusDto> findEventAbsenzenForUser(String email) {
         var login = loginDao.fetchOptionalByEmail(email).orElseThrow(() -> new NoSuchElementException("No login found for email " + email));
+        return findEventAbsenzenForUser(login.getId());
+    }
+
+    public List<EventAbsenzStatusDto> findEventAbsenzenForUser(Long loginId) {
         return jooqDsl.select(EVENT.ID,
                               EVENT.FROM_DATE,
                               EVENT.FROM_TIME,
@@ -209,14 +209,14 @@ public class EventsService {
                               ABSENZ_STATUS.REMARK)
                       .from(EVENT)
                       .leftJoin(ABSENZ_STATUS).on(ABSENZ_STATUS.FK_EVENT.eq(EVENT.ID),
-                                                  ABSENZ_STATUS.FK_LOGIN.eq(login.getId()))
+                                                  ABSENZ_STATUS.FK_LOGIN.eq(loginId))
                       .where(EVENT.NEXT_VERSION.isNull(),
                              EVENT.DELETED_AT.isNull(),
                              EVENT.FROM_DATE.ge(DateUtil.today()),
                              EVENT.RELEVANT_FOR_ABSENZ.isTrue()
                       )
                       .orderBy(EVENT.FROM_DATE.asc(), EVENT.FROM_TIME.asc(), EVENT.TO_DATE.asc(), EVENT.TO_TIME.asc())
-                      .fetch(it -> new EventAbsenzStatusDto(login.getId(),
+                      .fetch(it -> new EventAbsenzStatusDto(loginId,
                                                             it.get(EVENT.ID),
                                                             title(it.get(EVENT.FROM_DATE), it.get(EVENT.FROM_TIME), it.get(EVENT.TO_DATE), it.get(EVENT.TO_TIME), it.get(EVENT.APPROXIMATELY)),
                                                             subtitle(it.get(EVENT.TITLE), it.get(EVENT.LOCATION)),
@@ -283,14 +283,18 @@ public class EventsService {
 
     public void updateEventAbsenzenForUser(String email, Long eventId, EventAbsenzStatusDto dto) {
         var login = loginDao.fetchOptionalByEmail(email).orElseThrow(() -> new NoSuchElementException("No login found for email " + email));
-        var status = Optional.ofNullable(dto.status()).orElse(UNKNOWN).name();
-        absenzStatusDao.findOptionalById(jooqDsl.newRecord(ABSENZ_STATUS.FK_LOGIN, ABSENZ_STATUS.FK_EVENT).values(login.getId(), eventId))
+        updateEventAbsenzenForUser(login.getId(), eventId, dto.status(), dto.remark());
+    }
+
+    public void updateEventAbsenzenForUser(Long loginId, Long eventId, AbsenzState state, String remark) {
+        var status = Optional.ofNullable(state).orElse(UNKNOWN).name();
+        absenzStatusDao.findOptionalById(jooqDsl.newRecord(ABSENZ_STATUS.FK_LOGIN, ABSENZ_STATUS.FK_EVENT).values(loginId, eventId))
                        .ifPresentOrElse(pojo -> {
-                                            pojo.setRemark(dto.remark());
+                                            pojo.setRemark(remark);
                                             pojo.setStatus(status);
                                             absenzStatusDao.update(pojo);
                                         },
-                                        () -> absenzStatusDao.insert(new AbsenzStatus(login.getId(), eventId, dto.remark(), status)));
+                                        () -> absenzStatusDao.insert(new AbsenzStatus(loginId, eventId, remark, status)));
 
     }
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public record KonzertDto(Long id,
                          String name,
@@ -25,6 +26,9 @@ public record KonzertDto(Long id,
     }
 
     public String dateTimeAndLocation() {
-        return "%s, %s".formatted(formatDateTime(datumZeit()), location());
+        if (isBlank(location)) {
+            return formatDateTime(datumZeit());
+        }
+        return "%s, %s".formatted(formatDateTime(datumZeit()), location);
     }
 }

@@ -9,6 +9,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -26,6 +27,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static com.vaadin.flow.component.grid.dnd.GridDropLocation.BELOW;
 import static com.vaadin.flow.component.grid.dnd.GridDropMode.BETWEEN;
 import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
+import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
@@ -65,6 +67,7 @@ public class KonzertDialog extends Dialog {
 
         var formLayout = new FormLayout();
         var name = new TextField("Titel");
+        name.setRequired(true);
         name.setValue(defaultString(dto.name()));
         formLayout.add(name);
 
@@ -74,11 +77,13 @@ public class KonzertDialog extends Dialog {
 
         var datum = datePicker("Datum");
         datum.setValue(dto.datum());
+        datum.setRequired(true);
         formLayout.add(datum);
 
         var zeit = timePicker("Zeit");
         zeit.setStep(Duration.ofMinutes(15));
         zeit.setValue(dto.zeit());
+        zeit.setRequired(true);
         formLayout.add(zeit);
 
         var description = new TextArea("Details");
@@ -165,6 +170,11 @@ public class KonzertDialog extends Dialog {
 
         getFooter().add(tertiaryButton("Abbrechen", this::close));
         getFooter().add(primaryButton("Speichern", () -> {
+            if (name.isEmpty() || datum.isEmpty() || zeit.isEmpty()) {
+                Notification.show("Es gibt Validierungsfehler!", 3000, TOP_CENTER);
+                return;
+            }
+
             konzerteService.upsert(new KonzertDto(dto.id(),
                                                   name.getValue(),
                                                   datum.getValue(),

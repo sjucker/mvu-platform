@@ -26,7 +26,7 @@ public class SecuredEventsEndpoint {
     public ResponseEntity<List<EventAbsenzStatusDto>> getEventAbsenzen(@AuthenticationPrincipal Jwt jwt) {
         log.info("GET /api/secured/event");
 
-        return ResponseEntity.ok(eventsService.findEventAbsenzenForUser(jwt.getClaim("email")));
+        return ResponseEntity.ok(eventsService.findEventAbsenzenForUser(jwt.getClaimAsString("email")));
     }
 
     @PutMapping("/{eventId}")
@@ -35,7 +35,7 @@ public class SecuredEventsEndpoint {
                                                         @RequestBody EventAbsenzStatusDto body) {
         log.info("PUT /api/secured/event {}", body);
 
-        eventsService.updateEventAbsenzenForUser(jwt.getClaim("email"), eventId, body);
+        eventsService.updateEventAbsenzenForUser(jwt.getClaimAsString("email"), eventId, body);
         return ResponseEntity.ok().build();
     }
 
