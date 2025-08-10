@@ -24,8 +24,6 @@ import jakarta.annotation.security.PermitAll;
 import static ch.mvurdorf.platform.common.AbsenzState.INACTIVE;
 import static ch.mvurdorf.platform.common.AbsenzState.NEGATIVE;
 import static ch.mvurdorf.platform.common.AbsenzState.POSITIVE;
-import static ch.mvurdorf.platform.repertoire.RepertoireType.KONZERTMAPPE;
-import static ch.mvurdorf.platform.repertoire.RepertoireType.MARSCHBUCH;
 import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -99,14 +97,14 @@ public class HomeView extends VerticalLayout {
             add(konzerte);
         }
 
-        add(new Hr());
-        add(new H3("Repertoire"));
-        var repertoire = cardContainer();
-
-        repertoire.add(repertoireCard(KONZERTMAPPE));
-        repertoire.add(repertoireCard(MARSCHBUCH));
-
-        add(repertoire);
+//        add(new Hr());
+//        add(new H3("Repertoire"));
+//        var repertoire = cardContainer();
+//
+//        repertoire.add(repertoireCard(KONZERTMAPPE));
+//        repertoire.add(repertoireCard(MARSCHBUCH));
+//
+//        add(repertoire);
     }
 
     private Card repertoireCard(RepertoireType repertoireType) {
