@@ -50,14 +50,13 @@ public class AbsenzStatusDialog extends Dialog {
         grid = new Grid<>();
         grid.setSelectionMode(NONE);
         grid.addColumn(dto -> dto.isRegisterPlaceholder() ? dto.register().getDescription() : "").setWidth("120px").setFlexGrow(0).setHeader("Register");
-        grid.addColumn(AbsenzStatusDto::name).setWidth("180px").setFlexGrow(0).setHeader("Name");
-        grid.addColumn(AbsenzStatusDto::remark).setWidth("150px").setResizable(true).setHeader("Bemerkung");
-        grid.addColumn(new LocalizedEnumRenderer<>(AbsenzStatusDto::status)).setWidth("120px").setFlexGrow(0).setHeader("Status");
-
         if (authenticatedUser.hasWritePermission(ABSENZEN_GROUP)) {
             grid.addComponentColumn(absenzStatusUpdater(NEGATIVE, THUMBS_DOWN, eventId)).setWidth("70px").setFlexGrow(0).setTextAlign(CENTER);
             grid.addComponentColumn(absenzStatusUpdater(POSITIVE, THUMBS_UP, eventId)).setWidth("70px").setFlexGrow(0).setTextAlign(CENTER);
         }
+        grid.addColumn(AbsenzStatusDto::name).setWidth("180px").setFlexGrow(0).setHeader("Name");
+        grid.addColumn(AbsenzStatusDto::remark).setWidth("150px").setResizable(true).setHeader("Bemerkung");
+        grid.addColumn(new LocalizedEnumRenderer<>(AbsenzStatusDto::status)).setWidth("120px").setFlexGrow(0).setHeader("Status");
         grid.setPartNameGenerator(dto -> "absenz-status-" + dto.status());
         grid.setItems(getItems(eventId));
 
