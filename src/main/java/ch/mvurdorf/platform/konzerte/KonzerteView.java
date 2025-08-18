@@ -79,40 +79,45 @@ public class KonzerteView extends VerticalLayout {
     private void createGrid() {
         grid = new Grid<>();
 
+        if (authenticatedUser.hasWritePermission(KONZERTE_GROUP)) {
+            grid.addColumn(clickableIcon(EDIT, this::edit))
+                .setWidth("60px").setFlexGrow(0);
+
+            grid.addColumn(clickableIcon(TRASH, this::delete))
+                .setWidth("60px").setFlexGrow(0);
+        }
+
         grid.addColumn(KonzertDto::name).setHeader("Name");
         grid.addColumn(dateTimeRenderer(KonzertDto::datumZeit)).setHeader("Datum / Uhrzeit");
         grid.addColumn(KonzertDto::location).setHeader("Ort");
         grid.addColumn(KonzertDto::description).setHeader("Details");
-        if (authenticatedUser.hasWritePermission(KONZERTE_GROUP)) {
-            grid.addColumn(clickableIcon(EDIT,
-                                         dto -> KonzertDialog.edit(konzerteService, kompositionService, dto, () -> dataProvider.refreshAll())))
-                .setWidth("60px").setFlexGrow(0);
-        }
-
-        if (authenticatedUser.hasWritePermission(KONZERTE_GROUP)) {
-            grid.addColumn(clickableIcon(TRASH,
-                                         dto -> {
-                                             if (dto.datum().isBefore(today())) {
-                                                 Notification.show("Vergangene Konzerte können nicht gelöscht werden.");
-                                             } else {
-                                                 new ConfirmDialog("%s löschen?".formatted(dto.name()), "Sicher?",
-                                                                   "Löschen",
-                                                                   _ -> {
-                                                                       konzerteService.delete(dto);
-                                                                       dataProvider.refreshAll();
-                                                                   },
-                                                                   "Abbrechen",
-                                                                   _ -> {
-                                                                   })
-                                                         .open();
-
-                                             }
-                                         }))
-                .setWidth("60px").setFlexGrow(0);
-
-        }
 
         dataProvider = konzerteService.dataProvider();
         grid.setDataProvider(dataProvider);
+
+        if (authenticatedUser.hasWritePermission(KONZERTE_GROUP)) {
+            grid.addItemDoubleClickListener(event -> edit(event.getItem()));
+        }
+    }
+
+    private void delete(KonzertDto dto) {
+        if (dto.datum().isBefore(today())) {
+            Notification.show("Vergangene Konzerte können nicht gelöscht werden.");
+        } else {
+            new ConfirmDialog("%s löschen?".formatted(dto.name()), "Sicher?",
+                              "Löschen",
+                              _ -> {
+                                  konzerteService.delete(dto);
+                                  dataProvider.refreshAll();
+                              },
+                              "Abbrechen",
+                              _ -> {
+                              })
+                    .open();
+        }
+    }
+
+    private void edit(KonzertDto dto) {
+        KonzertDialog.edit(konzerteService, kompositionService, dto, () -> dataProvider.refreshAll());
     }
 }
