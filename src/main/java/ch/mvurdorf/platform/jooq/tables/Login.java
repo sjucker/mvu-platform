@@ -124,6 +124,11 @@ public class Login extends TableImpl<LoginRecord> {
      */
     public final TableField<LoginRecord, String> REGISTER = createField(DSL.name("register"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'FLOETEN'::character varying"), SQLDataType.VARCHAR)), this, "");
 
+    /**
+     * The column <code>public.login.fcm_token</code>.
+     */
+    public final TableField<LoginRecord, String> FCM_TOKEN = createField(DSL.name("fcm_token"), SQLDataType.VARCHAR(255), this, "");
+
     private Login(Name alias, Table<LoginRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

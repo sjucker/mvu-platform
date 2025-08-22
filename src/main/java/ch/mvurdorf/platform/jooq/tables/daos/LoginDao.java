@@ -266,4 +266,19 @@ public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.pla
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByRegister(String... values) {
         return fetch(Login.LOGIN.REGISTER, values);
     }
+
+    /**
+     * Fetch records that have <code>fcm_token BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfFcmToken(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Login.LOGIN.FCM_TOKEN, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>fcm_token IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByFcmToken(String... values) {
+        return fetch(Login.LOGIN.FCM_TOKEN, values);
+    }
 }

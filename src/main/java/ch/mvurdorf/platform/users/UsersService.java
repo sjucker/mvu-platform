@@ -90,7 +90,8 @@ class UsersService {
                                  NONE.name(),
                                  NONE.name(),
                                  NONE.name(),
-                                 newUser.register().name());
+                                 newUser.register().name(),
+                                 null);
         loginDao.insert(newLogin);
 
         insertInstrumentPermissions(newUser.instrumentPermissions(), newLogin.getId());

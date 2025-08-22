@@ -202,6 +202,20 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         return (String) get(12);
     }
 
+    /**
+     * Setter for <code>public.login.fcm_token</code>.
+     */
+    public void setFcmToken(String value) {
+        set(13, value);
+    }
+
+    /**
+     * Getter for <code>public.login.fcm_token</code>.
+     */
+    public String getFcmToken() {
+        return (String) get(13);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -225,7 +239,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission, String eventPermission, String absenzenPermission, String register) {
+    public LoginRecord(Long id, String email, String name, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission, String eventPermission, String absenzenPermission, String register, String fcmToken) {
         super(Login.LOGIN);
 
         setId(id);
@@ -241,6 +255,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         setEventPermission(eventPermission);
         setAbsenzenPermission(absenzenPermission);
         setRegister(register);
+        setFcmToken(fcmToken);
         resetChangedOnNotNull();
     }
 
@@ -264,6 +279,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setEventPermission(value.getEventPermission());
             setAbsenzenPermission(value.getAbsenzenPermission());
             setRegister(value.getRegister());
+            setFcmToken(value.getFcmToken());
             resetChangedOnNotNull();
         }
     }

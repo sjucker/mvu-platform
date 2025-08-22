@@ -29,6 +29,7 @@ public class Login implements Serializable {
     private String eventPermission;
     private String absenzenPermission;
     private String register;
+    private String fcmToken;
 
     public Login() {}
 
@@ -46,6 +47,7 @@ public class Login implements Serializable {
         this.eventPermission = value.eventPermission;
         this.absenzenPermission = value.absenzenPermission;
         this.register = value.register;
+        this.fcmToken = value.fcmToken;
     }
 
     public Login(
@@ -61,7 +63,8 @@ public class Login implements Serializable {
         String repertoirePermission,
         String eventPermission,
         String absenzenPermission,
-        String register
+        String register,
+        String fcmToken
     ) {
         this.id = id;
         this.email = email;
@@ -76,6 +79,7 @@ public class Login implements Serializable {
         this.eventPermission = eventPermission;
         this.absenzenPermission = absenzenPermission;
         this.register = register;
+        this.fcmToken = fcmToken;
     }
 
     /**
@@ -260,6 +264,20 @@ public class Login implements Serializable {
         this.register = register;
     }
 
+    /**
+     * Getter for <code>public.login.fcm_token</code>.
+     */
+    public String getFcmToken() {
+        return this.fcmToken;
+    }
+
+    /**
+     * Setter for <code>public.login.fcm_token</code>.
+     */
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -347,6 +365,12 @@ public class Login implements Serializable {
         }
         else if (!this.register.equals(other.register))
             return false;
+        if (this.fcmToken == null) {
+            if (other.fcmToken != null)
+                return false;
+        }
+        else if (!this.fcmToken.equals(other.fcmToken))
+            return false;
         return true;
     }
 
@@ -367,6 +391,7 @@ public class Login implements Serializable {
         result = prime * result + ((this.eventPermission == null) ? 0 : this.eventPermission.hashCode());
         result = prime * result + ((this.absenzenPermission == null) ? 0 : this.absenzenPermission.hashCode());
         result = prime * result + ((this.register == null) ? 0 : this.register.hashCode());
+        result = prime * result + ((this.fcmToken == null) ? 0 : this.fcmToken.hashCode());
         return result;
     }
 
@@ -387,6 +412,7 @@ public class Login implements Serializable {
         sb.append(", ").append(eventPermission);
         sb.append(", ").append(absenzenPermission);
         sb.append(", ").append(register);
+        sb.append(", ").append(fcmToken);
 
         sb.append(")");
         return sb.toString();
