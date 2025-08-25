@@ -55,7 +55,7 @@ public class EventDialog extends Dialog {
         binder.forField(titel).asRequired().bind(EventDataDto::getTitle, EventDataDto::setTitle);
         formLayout.add(titel);
 
-        var location = new TextField("Räumlichkeiten");
+        var location = new TextField("Räumlichkeiten/Ort");
         binder.forField(location).asRequired().bind(EventDataDto::getLocation, EventDataDto::setLocation);
         formLayout.add(location);
 
