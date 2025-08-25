@@ -26,6 +26,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -324,10 +325,10 @@ public class EventsService {
                                                       it.getLocation(),
                                                       it.getLiterature(),
                                                       it.getDeletedAt(),
-                                                      created || it.getFromDate() != firstVersion.getFromDate() || it.getToDate() != firstVersion.getToDate(),
-                                                      created || it.getFromTime() != firstVersion.getFromTime() || it.getToTime() != firstVersion.getToTime(),
-                                                      created || !StringUtils.equals(it.getTitle(), firstVersion.getTitle()),
-                                                      created || !StringUtils.equals(it.getLocation(), firstVersion.getLocation()),
+                                                      created || !Objects.equals(it.getFromDate(), firstVersion.getFromDate()) || !Objects.equals(it.getToDate(), firstVersion.getToDate()),
+                                                      created || !Objects.equals(it.getFromTime(), firstVersion.getFromTime()) || !Objects.equals(it.getToTime(), firstVersion.getToTime()),
+                                                      created || !StringUtils.equals(stripToNull(it.getTitle()), stripToNull(firstVersion.getTitle())),
+                                                      created || !StringUtils.equals(stripToNull(it.getLocation()), stripToNull(firstVersion.getLocation())),
                                                       created || !StringUtils.equals(stripToNull(it.getLiterature()), stripToNull(firstVersion.getLiterature())));
                      })
                      .toList();
@@ -335,10 +336,18 @@ public class EventsService {
 
     private EventRecord findFirstVersion(EventRecord currentVersion, Map<Long, EventRecord> previousPerSuccessorId, LocalDate cutoffDate) {
         var previousVersion = previousPerSuccessorId.get(currentVersion.getId());
-        if (previousVersion != null && !previousVersion.getCreatedAt().isBefore(cutoffDate.atStartOfDay())) {
-            return findFirstVersion(previousVersion, previousPerSuccessorId, cutoffDate);
+        if (previousVersion != null) {
+            if (!getRelevantDate(previousVersion).isBefore(cutoffDate.atStartOfDay())) {
+                return findFirstVersion(previousVersion, previousPerSuccessorId, cutoffDate);
+            } else {
+                return previousVersion;
+            }
         }
         return currentVersion;
+    }
+
+    private static LocalDateTime getRelevantDate(EventRecord previousVersion) {
+        return previousVersion.getUpdatedAt() != null ? previousVersion.getUpdatedAt() : previousVersion.getCreatedAt();
     }
 
     private static String getTime(EventRecord it) {
