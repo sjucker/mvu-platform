@@ -77,7 +77,7 @@ public class EventsView extends VerticalLayout {
         controls = new HorizontalLayout();
         controls.setWidthFull();
         controls.addClassNames(Display.FLEX, FlexDirection.COLUMN, JustifyContent.BETWEEN, FlexDirection.Breakpoint.Medium.ROW, Gap.SMALL);
-        if (authenticatedUser.hasWritePermission(NOTEN_GROUP)) {
+        if (authenticatedUser.hasWritePermission(EVENTS_GROUP)) {
             controls.add(new Button("Event hinzufügen", _ -> EventDialog.show(newEvent -> {
                 eventsService.insert(newEvent, authenticatedUser.getName());
                 dataProvider.refreshAll();
