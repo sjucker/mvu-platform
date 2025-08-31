@@ -31,7 +31,7 @@
         <archunit.version>1.4.1</archunit.version>
 
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
-        <sonar-maven-plugin.version>5.1.0.4751</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>5.2.0.4988</sonar-maven-plugin.version>
         <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
         <!-- downgraded, version 3.5.3 does not execute ArchUnit test -->
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
