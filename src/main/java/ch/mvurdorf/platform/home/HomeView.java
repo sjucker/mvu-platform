@@ -1,12 +1,13 @@
 package ch.mvurdorf.platform.home;
 
-import ch.mvurdorf.platform.common.AbsenzState;
-import ch.mvurdorf.platform.common.LocalizedEnum;
+import ch.mvurdorf.platform.events.AllEventsView;
 import ch.mvurdorf.platform.events.EventsService;
 import ch.mvurdorf.platform.konzerte.KonzerteService;
 import ch.mvurdorf.platform.repertoire.RepertoireService;
 import ch.mvurdorf.platform.repertoire.RepertoireType;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import ch.mvurdorf.platform.ui.CardContainer;
+import ch.mvurdorf.platform.ui.EventCard;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.card.Card;
 import com.vaadin.flow.component.html.Div;
@@ -14,19 +15,13 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 
-import static ch.mvurdorf.platform.common.AbsenzState.INACTIVE;
-import static ch.mvurdorf.platform.common.AbsenzState.NEGATIVE;
-import static ch.mvurdorf.platform.common.AbsenzState.POSITIVE;
 import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
-import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.HOME_SOLID;
 
 @PageTitle("Home")
@@ -52,33 +47,12 @@ public class HomeView extends VerticalLayout {
 
     private void create() {
         add(new H3("Nächste Termine"));
-        var absenzen = cardContainer();
-        eventsService.findEventAbsenzenForUser(authenticatedUser.getId()).stream().limit(4).forEach(event -> {
-            var card = new Card();
-            card.setTitle(new Div(event.title()));
-            card.setSubtitle(new Div(event.subtitle()));
-            var absenzStatus = new RadioButtonGroup<AbsenzState>();
-            absenzStatus.setItems(POSITIVE, NEGATIVE, INACTIVE);
-            absenzStatus.setItemLabelGenerator(LocalizedEnum::getDescription);
-            absenzStatus.setValue(event.status());
-            absenzStatus.setWidthFull();
-
-            var remark = new TextField();
-            remark.setPlaceholder("Bemerkung");
-            remark.setValue(defaultString(event.remark()));
-            remark.setWidthFull();
-
-            absenzStatus.addValueChangeListener(e -> eventsService.updateEventAbsenzenForUser(event.loginId(), event.eventId(), e.getValue(), remark.getValue()));
-            remark.addValueChangeListener(e -> eventsService.updateEventAbsenzenForUser(event.loginId(), event.eventId(), absenzStatus.getValue(), e.getValue()));
-
-            var verticalLayout = new VerticalLayout(absenzStatus, remark);
-            verticalLayout.setPadding(false);
-            verticalLayout.setSpacing(false);
-            card.addToFooter(verticalLayout);
-
-            absenzen.add(card);
-        });
+        var absenzen = new CardContainer();
+        eventsService.findEventAbsenzenForUser(authenticatedUser.getId()).stream()
+                     .limit(4)
+                     .forEach(event -> absenzen.add(new EventCard(event, eventsService)));
         add(absenzen);
+        add(secondaryButton("Alle anzeigen", () -> UI.getCurrent().navigate(AllEventsView.class)));
 
         add(new Hr());
         add(new H3("Nächste Konzerte"));
@@ -86,7 +60,7 @@ public class HomeView extends VerticalLayout {
         if (futureKonzerte.isEmpty()) {
             add(new Paragraph("Momentan keine zukünftige Konzerte erfasst."));
         } else {
-            var konzerte = cardContainer();
+            var konzerte = new CardContainer();
             for (var konzert : futureKonzerte) {
                 var card = new Card();
                 card.setTitle(new Div(konzert.name()));
@@ -115,15 +89,6 @@ public class HomeView extends VerticalLayout {
                                                   .orElse("")));
         card.addToFooter(secondaryButton("Details", () -> UI.getCurrent().navigate(RepertoireDetailView.class, repertoireType.name())));
         return card;
-    }
-
-    private Div cardContainer() {
-        var div = new Div();
-        div.setWidthFull();
-        div.getStyle().set("display", "grid")
-           .set("grid-template-columns", "repeat(auto-fill, minmax(350px, 1fr))")
-           .set("gap", "1em");
-        return div;
     }
 
 }
