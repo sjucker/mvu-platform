@@ -18,12 +18,14 @@ public enum Instrument implements LocalizedEnum {
     BARITON_SAXOPHON("Baritonsaxophon"),
     TROMPETE("Trompete"),
     HORN("Horn"),
+    TENORHORN("Tenorhorn"),
     EUPHONIUM("Euphonium"),
     POSAUNE("Posaune"),
     BASSPOSAUNE("Bass Posaune"),
     TUBA("Tuba"),
     E_BASS("E-Bass"),
     E_GUITAR("E-Guitar"),
+    PIANO("Piano/Keyboard"),
     PERKUSSION("Perkusion"),
     PARTITUR("Partitur");
 
