@@ -31,9 +31,9 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/images/**").permitAll());
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/line-awesome/**").permitAll());
+                .requestMatchers("/images/**").permitAll()
+                .requestMatchers("/line-awesome/**").permitAll()
+                .requestMatchers("/actuator/health/**", "/actuator/info").permitAll());
 
         http.rememberMe(configurer -> configurer.key(rememberMeKey)
                                                 .tokenValiditySeconds((int) Duration.ofDays(365).toSeconds())
