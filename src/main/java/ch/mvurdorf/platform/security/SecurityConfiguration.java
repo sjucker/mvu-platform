@@ -2,10 +2,12 @@ package ch.mvurdorf.platform.security;
 
 import ch.mvurdorf.platform.service.FirebaseService;
 import ch.mvurdorf.platform.ui.LoginView;
-import com.vaadin.flow.spring.security.VaadinWebSecurity;
+import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
+import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -20,7 +22,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfiguration extends VaadinWebSecurity {
+@Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
+public class SecurityConfiguration {
 
     private final String rememberMeKey;
 
@@ -28,19 +31,17 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         this.rememberMeKey = rememberMeKey;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/images/**").permitAll()
-                .requestMatchers("/line-awesome/**").permitAll()
-                .requestMatchers("/actuator/health/**", "/actuator/info").permitAll());
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/images/**").permitAll()
+                                                         .requestMatchers("/line-awesome/**").permitAll()
+                                                         .requestMatchers("/actuator/health/**", "/actuator/info").permitAll());
 
         http.rememberMe(configurer -> configurer.key(rememberMeKey)
                                                 .tokenValiditySeconds((int) Duration.ofDays(365).toSeconds())
                                                 .alwaysRemember(true));
 
-        super.configure(http);
-        setLoginView(http, LoginView.class);
+        return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class)).build();
     }
 
     @Bean

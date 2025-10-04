@@ -6,22 +6,22 @@
     <groupId>ch.mvurdorf</groupId>
     <artifactId>platform</artifactId>
     <name>Musikverein Harmonie Urdorf Platform</name>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.5</version>
+        <version>3.5.6</version>
     </parent>
 
     <properties>
         <java.version>24</java.version>
-        <vaadin.version>24.8.8</vaadin.version>
+        <vaadin.version>24.9.2</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
         <!-- spring boot is behind, older version does not support postgres 16.8 -->
-        <flyway.version>11.12.0</flyway.version>
-        <google-cloud-storage.version>2.57.0</google-cloud-storage.version>
+        <flyway.version>11.13.2</flyway.version>
+        <google-cloud-storage.version>2.58.0</google-cloud-storage.version>
         <qrbill-generator.version>3.3.1</qrbill-generator.version>
         <qrcodegen.version>1.8.0</qrcodegen.version>
         <pdfbox.version>3.0.5</pdfbox.version>
@@ -32,9 +32,8 @@
 
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>5.2.0.4988</sonar-maven-plugin.version>
-        <versions-maven-plugin.version>2.19.0</versions-maven-plugin.version>
-        <!-- downgraded, version 3.5.3 does not execute ArchUnit test -->
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <versions-maven-plugin.version>2.19.1</versions-maven-plugin.version>
+        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
 
         <!-- start local DB using src/main/docker/postgres.yml  -->
         <db.url>jdbc:postgresql://localhost:5432/mvu</db.url>

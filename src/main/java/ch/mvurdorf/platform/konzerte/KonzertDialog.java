@@ -139,13 +139,16 @@ public class KonzertDialog extends Dialog {
 
         var addButton = secondaryButton("Hinzufügen",
                                         () -> kompositionSelection.getOptionalValue()
-                                                                  .ifPresent(selection -> entriesDataView.addItem(new KonzertEntryDto(null, null,
-                                                                                                                                      selection.id(),
-                                                                                                                                      selection.titel(),
-                                                                                                                                      selection.komponist(),
-                                                                                                                                      selection.arrangeur(),
-                                                                                                                                      selection.audioSample(),
-                                                                                                                                      zugabe.getValue()))));
+                                                                  .ifPresent(selection -> {
+                                                                      entriesDataView.addItem(new KonzertEntryDto(null, null,
+                                                                                                                  selection.id(),
+                                                                                                                  selection.titel(),
+                                                                                                                  selection.komponist(),
+                                                                                                                  selection.arrangeur(),
+                                                                                                                  selection.audioSample(),
+                                                                                                                  zugabe.getValue()));
+                                                                      kompositionSelection.clear();
+                                                                  }));
 
         var kompositionSelectionControls = new HorizontalLayout(kompositionSelection, zugabe, addButton);
         kompositionSelectionControls.setAlignItems(CENTER);
