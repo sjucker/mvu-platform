@@ -14,7 +14,6 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
 import jakarta.annotation.security.PermitAll;
 
 import static ch.mvurdorf.platform.konzerte.KonzerteService.getNumber;
@@ -22,6 +21,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
+import static com.vaadin.flow.theme.lumo.LumoUtility.Whitespace.PRE_WRAP;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @PageTitle("Konzert")
@@ -51,8 +51,13 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                     add(new H3(konzertDto.dateTimeAndLocation()));
                     if (isNotBlank(konzertDto.description())) {
                         var description = new Paragraph(konzertDto.description());
-                        description.addClassName(Whitespace.PRE_WRAP);
+                        description.addClassName(PRE_WRAP);
                         add(description);
+                    }
+                    if (isNotBlank(konzertDto.tenu())) {
+                        var tenu = new Paragraph("Tenü: " + konzertDto.tenu());
+                        tenu.addClassName(PRE_WRAP);
+                        add(tenu);
                     }
                     var entries = new Grid<KonzertEntryDto>();
                     entries.addColumn(dto -> getNumber(dto, konzertDto.entries()))

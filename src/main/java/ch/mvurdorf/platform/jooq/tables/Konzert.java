@@ -87,6 +87,11 @@ public class Konzert extends TableImpl<KonzertRecord> {
      */
     public final TableField<KonzertRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB, this, "");
 
+    /**
+     * The column <code>public.konzert.tenu</code>.
+     */
+    public final TableField<KonzertRecord, String> TENU = createField(DSL.name("tenu"), SQLDataType.VARCHAR(255), this, "");
+
     private Konzert(Name alias, Table<KonzertRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

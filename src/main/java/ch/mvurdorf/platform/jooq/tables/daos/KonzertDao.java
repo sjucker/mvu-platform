@@ -148,4 +148,19 @@ public class KonzertDao extends AbstractSpringDAOImpl<KonzertRecord, ch.mvurdorf
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Konzert> fetchByDescription(String... values) {
         return fetch(Konzert.KONZERT.DESCRIPTION, values);
     }
+
+    /**
+     * Fetch records that have <code>tenu BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Konzert> fetchRangeOfTenu(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Konzert.KONZERT.TENU, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>tenu IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Konzert> fetchByTenu(String... values) {
+        return fetch(Konzert.KONZERT.TENU, values);
+    }
 }

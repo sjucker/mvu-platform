@@ -105,6 +105,20 @@ public class KonzertRecord extends UpdatableRecordImpl<KonzertRecord> {
         return (String) get(5);
     }
 
+    /**
+     * Setter for <code>public.konzert.tenu</code>.
+     */
+    public void setTenu(String value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for <code>public.konzert.tenu</code>.
+     */
+    public String getTenu() {
+        return (String) get(6);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -128,7 +142,7 @@ public class KonzertRecord extends UpdatableRecordImpl<KonzertRecord> {
     /**
      * Create a detached, initialised KonzertRecord
      */
-    public KonzertRecord(Long id, String name, LocalDate datum, LocalTime zeit, String location, String description) {
+    public KonzertRecord(Long id, String name, LocalDate datum, LocalTime zeit, String location, String description, String tenu) {
         super(Konzert.KONZERT);
 
         setId(id);
@@ -137,6 +151,7 @@ public class KonzertRecord extends UpdatableRecordImpl<KonzertRecord> {
         setZeit(zeit);
         setLocation(location);
         setDescription(description);
+        setTenu(tenu);
         resetChangedOnNotNull();
     }
 
@@ -153,6 +168,7 @@ public class KonzertRecord extends UpdatableRecordImpl<KonzertRecord> {
             setZeit(value.getZeit());
             setLocation(value.getLocation());
             setDescription(value.getDescription());
+            setTenu(value.getTenu());
             resetChangedOnNotNull();
         }
     }

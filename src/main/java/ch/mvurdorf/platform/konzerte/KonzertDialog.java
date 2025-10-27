@@ -91,6 +91,11 @@ public class KonzertDialog extends Dialog {
         formLayout.add(description);
         formLayout.setColspan(description, 2);
 
+        var tenu = new TextField("Tenü");
+        tenu.setValue(defaultString(dto.tenu()));
+        formLayout.add(tenu);
+        formLayout.setColspan(tenu, 2);
+
         var kompositionSelection = new ComboBox<KompositionDto>();
         kompositionSelection.setPlaceholder("Komposition");
         kompositionSelection.setItems(kompositionService.findAllSorted());
@@ -184,6 +189,7 @@ public class KonzertDialog extends Dialog {
                                                   zeit.getValue(),
                                                   location.getValue(),
                                                   description.getValue(),
+                                                  tenu.getValue(),
                                                   entriesDataView.getItems().toList()));
             onSuccess.run();
             close();

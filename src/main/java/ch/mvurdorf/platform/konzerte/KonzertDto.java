@@ -15,10 +15,11 @@ public record KonzertDto(Long id,
                          LocalTime zeit,
                          String location,
                          String description,
+                         String tenu,
                          List<KonzertEntryDto> entries) {
 
     public static KonzertDto empty() {
-        return new KonzertDto(null, null, null, null, null, null, new ArrayList<>());
+        return new KonzertDto(null, null, null, null, null, null, null, new ArrayList<>());
     }
 
     public LocalDateTime datumZeit() {

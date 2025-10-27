@@ -116,6 +116,7 @@ public class KonzerteService {
                                   konzertRecord.getZeit(),
                                   konzertRecord.getLocation(),
                                   konzertRecord.getDescription(),
+                                  konzertRecord.getTenu(),
                                   it.value2()
                           );
                       });
@@ -131,6 +132,7 @@ public class KonzerteService {
             konzert.setZeit(dto.zeit());
             konzert.setLocation(dto.location());
             konzert.setDescription(dto.description());
+            konzert.setTenu(dto.tenu());
             konzertDao.update(konzert);
             konzertId = konzert.getId();
             // delete all existing entries and re-insert new
@@ -138,7 +140,7 @@ public class KonzerteService {
                    .where(KONZERT_ENTRY.FK_KONZERT.eq(konzertId))
                    .execute();
         } else {
-            var konzert = new Konzert(null, dto.name(), dto.datum(), dto.zeit(), dto.location(), dto.description());
+            var konzert = new Konzert(null, dto.name(), dto.datum(), dto.zeit(), dto.location(), dto.description(), dto.tenu());
             konzertDao.insert(konzert);
             konzertId = konzert.getId();
         }

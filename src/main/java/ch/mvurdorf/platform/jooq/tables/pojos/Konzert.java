@@ -23,6 +23,7 @@ public class Konzert implements Serializable {
     private LocalTime zeit;
     private String location;
     private String description;
+    private String tenu;
 
     public Konzert() {}
 
@@ -33,6 +34,7 @@ public class Konzert implements Serializable {
         this.zeit = value.zeit;
         this.location = value.location;
         this.description = value.description;
+        this.tenu = value.tenu;
     }
 
     public Konzert(
@@ -41,7 +43,8 @@ public class Konzert implements Serializable {
         LocalDate datum,
         LocalTime zeit,
         String location,
-        String description
+        String description,
+        String tenu
     ) {
         this.id = id;
         this.name = name;
@@ -49,6 +52,7 @@ public class Konzert implements Serializable {
         this.zeit = zeit;
         this.location = location;
         this.description = description;
+        this.tenu = tenu;
     }
 
     /**
@@ -135,6 +139,20 @@ public class Konzert implements Serializable {
         this.description = description;
     }
 
+    /**
+     * Getter for <code>public.konzert.tenu</code>.
+     */
+    public String getTenu() {
+        return this.tenu;
+    }
+
+    /**
+     * Setter for <code>public.konzert.tenu</code>.
+     */
+    public void setTenu(String tenu) {
+        this.tenu = tenu;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -180,6 +198,12 @@ public class Konzert implements Serializable {
         }
         else if (!this.description.equals(other.description))
             return false;
+        if (this.tenu == null) {
+            if (other.tenu != null)
+                return false;
+        }
+        else if (!this.tenu.equals(other.tenu))
+            return false;
         return true;
     }
 
@@ -193,6 +217,7 @@ public class Konzert implements Serializable {
         result = prime * result + ((this.zeit == null) ? 0 : this.zeit.hashCode());
         result = prime * result + ((this.location == null) ? 0 : this.location.hashCode());
         result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.tenu == null) ? 0 : this.tenu.hashCode());
         return result;
     }
 
@@ -206,6 +231,7 @@ public class Konzert implements Serializable {
         sb.append(", ").append(zeit);
         sb.append(", ").append(location);
         sb.append(", ").append(description);
+        sb.append(", ").append(tenu);
 
         sb.append(")");
         return sb.toString();
