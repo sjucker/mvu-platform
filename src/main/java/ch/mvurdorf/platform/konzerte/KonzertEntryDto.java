@@ -2,10 +2,13 @@ package ch.mvurdorf.platform.konzerte;
 
 import ch.mvurdorf.platform.noten.KompositionDto;
 
+import java.math.BigDecimal;
+
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 // either placeholder or komposition details are set
 public record KonzertEntryDto(Integer index,
+                              BigDecimal marschbuchNumber,
                               String placeholder,
                               Long kompositionId,
                               String kompositionTitel,

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
+import static ch.mvurdorf.platform.repertoire.RepertoireType.MARSCHBUCH;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static lombok.AccessLevel.PRIVATE;
@@ -19,13 +20,13 @@ public class RepertoireEntryAddDialog extends Dialog {
 
     private final KompositionService kompositionService;
 
-    public static void show(KompositionService kompositionService, Consumer<RepertoireEntryDto> callback) {
+    public static void show(KompositionService kompositionService, RepertoireType repertoireType, Consumer<RepertoireEntryDto> callback) {
         var dialog = new RepertoireEntryAddDialog(kompositionService);
-        dialog.init(callback);
+        dialog.init(repertoireType, callback);
         dialog.open();
     }
 
-    private void init(Consumer<RepertoireEntryDto> callback) {
+    private void init(RepertoireType repertoireType, Consumer<RepertoireEntryDto> callback) {
         setHeaderTitle("Komposition zu Repertoire hinzufügen");
 
         var kompositionen = new ComboBox<KompositionDto>();
@@ -37,6 +38,7 @@ public class RepertoireEntryAddDialog extends Dialog {
 
         var nummer = new BigDecimalField("Nummer");
         nummer.setPlaceholder("z.B. 1 oder 13.1");
+        nummer.setVisible(repertoireType == MARSCHBUCH);
         add(nummer);
 
         getFooter().add(secondaryButton("Abbrechen", this::close));

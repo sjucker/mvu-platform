@@ -13,10 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,9 +27,13 @@ import java.util.stream.Stream;
 import static ch.mvurdorf.platform.jooq.Tables.KOMPOSITION;
 import static ch.mvurdorf.platform.jooq.Tables.KONZERT;
 import static ch.mvurdorf.platform.jooq.Tables.KONZERT_ENTRY;
+import static ch.mvurdorf.platform.jooq.Tables.REPERTOIRE;
+import static ch.mvurdorf.platform.jooq.Tables.REPERTOIRE_ENTRY;
+import static ch.mvurdorf.platform.repertoire.RepertoireType.MARSCHBUCH;
 import static java.util.Comparator.comparing;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.jooq.Records.mapping;
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
 
@@ -73,10 +79,16 @@ public class KonzerteService {
     }
 
     private List<KonzertDto> fetch(Condition condition, int offset, int limit) {
+        Field<BigDecimal> marschbuchNumber = select(max(REPERTOIRE_ENTRY.NUMBER)).from(REPERTOIRE_ENTRY)
+                                                                                 .join(REPERTOIRE).on(REPERTOIRE_ENTRY.FK_REPERTOIRE.eq(REPERTOIRE.ID),
+                                                                                                      REPERTOIRE.ID.eq(select(max(REPERTOIRE.ID)).from(REPERTOIRE).where(REPERTOIRE.TYPE.eq(MARSCHBUCH.name()))))
+                                                                                 .where(REPERTOIRE_ENTRY.FK_KOMPOSITION.eq(KOMPOSITION.ID))
+                                                                                 .asField();
         return jooqDsl.select(
                               KONZERT,
                               multiset(
                                       select(KONZERT_ENTRY.INDEX,
+                                             marschbuchNumber,
                                              KONZERT_ENTRY.PLACEHOLDER,
                                              KOMPOSITION.ID,
                                              KOMPOSITION.TITEL,

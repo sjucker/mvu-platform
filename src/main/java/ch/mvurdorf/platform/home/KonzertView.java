@@ -56,8 +56,13 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                     }
                     var entries = new Grid<KonzertEntryDto>();
                     entries.addColumn(dto -> getNumber(dto, konzertDto.entries()))
+                           .setHeader("#")
                            .setWidth("60px").setFlexGrow(0);
-                    entries.addColumn(KonzertEntryDto::titel);
+                    entries.addColumn(KonzertEntryDto::marschbuchNumber)
+                           .setHeader("Marschbuch")
+                           .setWidth("120px").setFlexGrow(0);
+                    entries.addColumn(KonzertEntryDto::titel)
+                           .setHeader("Titel");
                     entries.addColumn(clickableIcon(MUSIC,
                                                     dto -> NotenDownloadDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.kompositionId(), dto.kompositionTitel()),
                                                     dto -> !dto.isPlaceholder(),

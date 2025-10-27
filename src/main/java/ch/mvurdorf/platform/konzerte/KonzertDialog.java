@@ -140,7 +140,7 @@ public class KonzertDialog extends Dialog {
         var addButton = secondaryButton("Hinzufügen",
                                         () -> kompositionSelection.getOptionalValue()
                                                                   .ifPresent(selection -> {
-                                                                      entriesDataView.addItem(new KonzertEntryDto(null, null,
+                                                                      entriesDataView.addItem(new KonzertEntryDto(null, null, null,
                                                                                                                   selection.id(),
                                                                                                                   selection.titel(),
                                                                                                                   selection.komponist(),
@@ -161,7 +161,7 @@ public class KonzertDialog extends Dialog {
         var addPlaceholderButton = secondaryButton("Platzhalter hinzufügen",
                                                    () -> placeholder.getOptionalValue()
                                                                     .ifPresent(value -> {
-                                                                        entriesDataView.addItem(new KonzertEntryDto(null, value, null, null, null, null, null, false));
+                                                                        entriesDataView.addItem(new KonzertEntryDto(null, null, value, null, null, null, null, null, false));
                                                                         placeholder.clear();
                                                                     }));
         var placeholderControls = new HorizontalLayout(placeholder, addPlaceholderButton);
