@@ -73,7 +73,7 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                                                     dto -> !dto.isPlaceholder(),
                                                     "Noten-Download"))
                            .setWidth("60px").setFlexGrow(0);
-                    entries.addColumn(externalLink(FILE_SOUND, KonzertEntryDto::kompositionAudioSample))
+                    entries.addColumn(externalLink(FILE_SOUND, KonzertEntryDto::kompositionAudioSample, "Hörprobe"))
                            .setWidth("60px").setFlexGrow(0);
                     entries.setItems(konzertDto.entries());
                     add(entries);

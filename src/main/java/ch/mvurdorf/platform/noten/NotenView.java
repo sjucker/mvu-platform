@@ -68,7 +68,7 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(KompositionDto::komponist).setHeader("Komponist");
         grid.addColumn(KompositionDto::arrangeur).setHeader("Arrangeur");
         grid.addColumn(new LocalizedEnumRenderer<>(KompositionDto::format)).setHeader("Format");
-        grid.addColumn(externalLink(FILE_SOUND, KompositionDto::audioSample)).setHeader("Hörprobe");
+        grid.addColumn(externalLink(FILE_SOUND, KompositionDto::audioSample, "Hörprobe")).setHeader("Hörprobe");
         grid.addItemDoubleClickListener(event -> edit(event.getItem()));
     }
 

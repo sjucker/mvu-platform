@@ -85,11 +85,13 @@ public final class RendererUtil {
     }
 
     public static <T> ComponentRenderer<HtmlContainer, T> externalLink(VaadinIcon vaadinIcon,
-                                                                       Function<T, String> urlGetter) {
+                                                                       Function<T, String> urlGetter,
+                                                                       String tooltipText) {
         return new ComponentRenderer<>(dto -> {
             if (isNotBlank(urlGetter.apply(dto))) {
                 var icon = vaadinIcon.create();
                 icon.addClassNames(IconSize.SMALL, IconStyle.CLICKABLE);
+                icon.setTooltipText(tooltipText);
                 var anchor = new Anchor(urlGetter.apply(dto), icon);
                 anchor.setTarget(BLANK);
                 return anchor;

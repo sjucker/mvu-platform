@@ -84,7 +84,7 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
                                               entries.addColumn(repertoireNumber(RepertoireEntryDto::number))
                                                      .setWidth("100px").setFlexGrow(0);
                                               entries.addColumn(RepertoireEntryDto::label);
-                                              entries.addColumn(externalLink(FILE_SOUND, RepertoireEntryDto::kompositionAudioSample))
+                                              entries.addColumn(externalLink(FILE_SOUND, RepertoireEntryDto::kompositionAudioSample, "Hörprobe"))
                                                      .setWidth("60px").setFlexGrow(0);
                                               entries.setItems(repertoire.entries());
                                               add(entries);
