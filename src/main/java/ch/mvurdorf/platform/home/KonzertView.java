@@ -63,9 +63,11 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                     entries.addColumn(dto -> getNumber(dto, konzertDto.entries()))
                            .setHeader("#")
                            .setWidth("60px").setFlexGrow(0);
-                    entries.addColumn(KonzertEntryDto::marschbuchNumber)
-                           .setHeader("Marschbuch")
-                           .setWidth("120px").setFlexGrow(0);
+                    if (konzertDto.hasMarschbuchEntry()) {
+                        entries.addColumn(KonzertEntryDto::marschbuchNumber)
+                               .setHeader("Marschbuch")
+                               .setWidth("120px").setFlexGrow(0);
+                    }
                     entries.addColumn(KonzertEntryDto::titel)
                            .setHeader("Titel");
                     entries.addColumn(clickableIcon(MUSIC,

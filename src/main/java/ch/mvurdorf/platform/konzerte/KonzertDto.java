@@ -32,4 +32,8 @@ public record KonzertDto(Long id,
         }
         return "%s, %s".formatted(formatDateTime(datumZeit()), location);
     }
+
+    public boolean hasMarschbuchEntry() {
+        return entries.stream().anyMatch(e -> e.marschbuchNumber() != null);
+    }
 }
