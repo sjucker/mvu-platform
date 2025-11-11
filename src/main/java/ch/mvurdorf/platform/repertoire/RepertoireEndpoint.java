@@ -17,7 +17,7 @@ public class RepertoireEndpoint {
     private final RepertoireService repertoireService;
 
     @GetMapping("/{type}")
-    public ResponseEntity<RepertoireDto> ping(@PathVariable RepertoireType type) {
+    public ResponseEntity<RepertoireDto> repertoireByType(@PathVariable RepertoireType type) {
         log.info("GET /api/secured/repertoire/{}", type);
         return ResponseEntity.of(repertoireService.findRepertoireByType(type));
     }
