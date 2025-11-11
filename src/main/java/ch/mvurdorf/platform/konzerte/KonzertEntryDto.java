@@ -1,7 +1,6 @@
 package ch.mvurdorf.platform.konzerte;
 
 import ch.mvurdorf.platform.noten.KompositionDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.math.BigDecimal;
 
@@ -18,7 +17,6 @@ public record KonzertEntryDto(Integer index,
                               String kompositionAudioSample,
                               boolean zugabe) {
 
-    @JsonIgnore
     public String titel() {
         if (kompositionId != null) {
             return KompositionDto.getLabel(kompositionTitel, kompositionKomponist, kompositionArrangeur);
@@ -27,8 +25,7 @@ public record KonzertEntryDto(Integer index,
         }
     }
 
-    @JsonIgnore
-    public boolean isPlaceholder() {
+    public boolean isPlaceholderEntry() {
         return isNotBlank(placeholder);
     }
 }

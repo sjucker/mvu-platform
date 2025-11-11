@@ -168,7 +168,7 @@ public class KonzerteService {
     }
 
     public static String getNumber(KonzertEntryDto dto, List<KonzertEntryDto> entries) {
-        if (dto.isPlaceholder()) {
+        if (dto.isPlaceholderEntry()) {
             return null;
         }
 
@@ -177,7 +177,7 @@ public class KonzerteService {
             if (Objects.equals(entry.index(), dto.index())) {
                 break;
             }
-            if (!entry.isPlaceholder()) {
+            if (!entry.isPlaceholderEntry()) {
                 if (dto.zugabe()) {
                     if (entry.zugabe()) {
                         number++;
