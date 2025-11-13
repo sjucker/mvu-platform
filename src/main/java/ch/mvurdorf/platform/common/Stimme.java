@@ -9,10 +9,10 @@ import java.util.Optional;
 @Getter
 @RequiredArgsConstructor
 public enum Stimme implements LocalizedEnum {
-    STIMME_1("1."),
-    STIMME_2("2."),
-    STIMME_3("3."),
-    STIMME_4("4.");
+    STIMME_1("1"),
+    STIMME_2("2"),
+    STIMME_3("3"),
+    STIMME_4("4");
 
     private final String description;
 

@@ -26,6 +26,7 @@ import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Set;
 
+import static ch.mvurdorf.platform.jooq.Tables.KOMPOSITION;
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF;
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF_ASSIGNMENT;
 import static java.util.Comparator.comparing;
@@ -63,6 +64,7 @@ public class NotenService {
 
     public List<NotenPdfDto> findByKomposition(Long kompositionId) {
         return jooqDsl.select(NOTEN_PDF.ID,
+                              KOMPOSITION.TITEL,
                               NOTEN_PDF.STIMMLAGE,
                               NOTEN_PDF.NOTENSCHLUESSEL,
                               multiset(
@@ -72,13 +74,15 @@ public class NotenService {
                                               .where(NOTEN_PDF_ASSIGNMENT.FK_NOTEN_PDF.eq(NOTEN_PDF.ID))
                               ).convertFrom(it -> it.map(Records.mapping(NotenAssignmentDto::of))))
                       .from(NOTEN_PDF)
+                      .join(KOMPOSITION).on(KOMPOSITION.ID.eq(NOTEN_PDF.FK_KOMPOSITION))
                       .where(NOTEN_PDF.FK_KOMPOSITION.eq(kompositionId))
                       .fetch(it -> new NotenPdfDto(it.value1(),
-                                                   it.value4().stream()
+                                                   it.value2(),
+                                                   it.value5().stream()
                                                      .sorted(comparing(NotenAssignmentDto::instrument))
                                                      .toList(),
-                                                   Stimmlage.of(it.value2()).orElse(null),
-                                                   Notenschluessel.of(it.value3()).orElse(null)))
+                                                   Stimmlage.of(it.value3()).orElse(null),
+                                                   Notenschluessel.of(it.value4()).orElse(null)))
                       .stream()
                       .sorted()
                       .toList();

@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-import static java.util.Locale.ROOT;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public record NotenPdfDto(Long id,
+                          String kompositionTitel,
                           @NotNull List<NotenAssignmentDto> assignments,
                           @Nullable Stimmlage stimmlage,
                           @Nullable Notenschluessel notenschluessel) implements Comparable<NotenPdfDto> {
@@ -56,13 +56,10 @@ public record NotenPdfDto(Long id,
     }
 
     public String filename() {
-        // TODO
-        var joiner = new StringJoiner("-");
+        var joiner = new StringJoiner(" ");
+        joiner.add(kompositionTitel);
         if (assignments.size() == 1) {
-            joiner.add(assignments.getFirst().getDescription().toLowerCase(ROOT));
-        }
-        if (stimmlage != null) {
-            joiner.add(stimmlage.name().toLowerCase(ROOT));
+            joiner.add("(" + assignments.getFirst().getDescription() + ")");
         }
         return joiner + ".pdf";
     }

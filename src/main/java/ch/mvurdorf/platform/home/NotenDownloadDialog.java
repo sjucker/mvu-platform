@@ -33,7 +33,11 @@ public class NotenDownloadDialog extends Dialog {
 
     private void init(Long kompositionId, String kompositionTitel, Set<Instrument> instrumentPermissions) {
         setHeaderTitle(kompositionTitel);
-        var noten = notenService.findByKomposition(kompositionId);
+        var noten = notenService.findByKomposition(kompositionId)
+                                .stream()
+                                .filter(dto -> instrumentPermissions.isEmpty() || instrumentPermissions.stream().anyMatch(dto::allowed))
+                                .toList();
+
         if (noten.isEmpty()) {
             add(new Paragraph("Keine Noten vorhanden..."));
         } else {
@@ -44,13 +48,8 @@ public class NotenDownloadDialog extends Dialog {
                                             NotenPdfDto::filename))
                 .setWidth("60px")
                 .setFlexGrow(0);
-            if (instrumentPermissions.isEmpty()) {
-                grid.setItems(noten);
-            } else {
-                grid.setItems(noten.stream()
-                                   .filter(dto -> instrumentPermissions.stream().anyMatch(dto::allowed))
-                                   .toList());
-            }
+
+            grid.setItems(noten);
             add(grid);
         }
         getFooter().add(new Button("Schliessen", _ -> close()));

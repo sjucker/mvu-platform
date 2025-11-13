@@ -10,7 +10,7 @@ public record NotenAssignmentDto(@NotNull Instrument instrument,
 
     public String getDescription() {
         if (stimme != null) {
-            return "%s %s".formatted(stimme.getDescription(), instrument.getDescription());
+            return "%s %s".formatted(instrument.getDescription(), stimme.getDescription());
         } else {
             return instrument.getDescription();
         }
