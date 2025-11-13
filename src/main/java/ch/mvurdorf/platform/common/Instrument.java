@@ -3,6 +3,10 @@ package ch.mvurdorf.platform.common;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
 @Getter
 @RequiredArgsConstructor
 public enum Instrument implements LocalizedEnum {
@@ -33,5 +37,11 @@ public enum Instrument implements LocalizedEnum {
     PARTITUR("Partitur");
 
     private final String description;
+
+    public static List<Instrument> allowed(Set<Instrument> instrumentPermissions) {
+        return Arrays.stream(Instrument.values())
+                     .filter(i -> instrumentPermissions.isEmpty() || instrumentPermissions.contains(i))
+                     .toList();
+    }
 
 }

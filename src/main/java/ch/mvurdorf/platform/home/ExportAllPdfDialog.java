@@ -46,7 +46,7 @@ public class ExportAllPdfDialog extends Dialog {
     private void init() {
         setHeaderTitle(repertoire.type().getDescription());
 
-        var instrument = new ComboBox<>("Instrument", Instrument.values());
+        var instrument = new ComboBox<>("Instrument", Instrument.allowed(authenticatedUser.getInstrumentPermissions()));
         instrument.setRequired(true);
         instrument.setItemLabelGenerator(Instrument::getDescription);
         if (authenticatedUser.getInstrumentPermissions().size() == 1) {
@@ -82,18 +82,24 @@ public class ExportAllPdfDialog extends Dialog {
                                        stimme.getValue(),
                                        stimmlage.getValue(),
                                        noteneschluessel.getValue());
+                                close();
                             }
                         }));
     }
 
     private void export(RepertoireDto repertoire, Instrument instrument, Set<Stimme> stimmen, Set<Stimmlage> stimmlagen, Set<Notenschluessel> noteneschluessel) {
-        var bytes = notenService.exportNotenToPdf(repertoire.kompositionIds(), instrument, stimmen, stimmlagen, noteneschluessel);
+        try {
 
-        var registration = VaadinSession.getCurrent()
-                                        .getResourceRegistry()
-                                        .registerResource(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(bytes),
-                                                                                                                    repertoire.type().getDescription() + ".pdf", null, -1)));
-        UI.getCurrent().getPage().open(registration.getResourceUri().toString());
+            var bytes = notenService.exportNotenToPdf(repertoire.kompositionIds(), instrument, stimmen, stimmlagen, noteneschluessel);
+
+            var registration = VaadinSession.getCurrent()
+                                            .getResourceRegistry()
+                                            .registerResource(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(bytes),
+                                                                                                                        repertoire.type().getDescription() + " (" + instrument.getDescription() + ").pdf", null, -1)));
+            UI.getCurrent().getPage().open(registration.getResourceUri().toString());
+        } catch (Exception _) {
+            Notification.show("Export fehlgeschlagen...");
+        }
     }
 
 }
