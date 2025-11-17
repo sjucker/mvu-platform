@@ -19,6 +19,7 @@ import jakarta.annotation.security.PermitAll;
 import static ch.mvurdorf.platform.konzerte.KonzerteService.getNumber;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
+import static ch.mvurdorf.platform.ui.RendererUtil.repertoireNumber;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
 import static com.vaadin.flow.theme.lumo.LumoUtility.Whitespace.PRE_WRAP;
@@ -64,7 +65,7 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                            .setHeader("#")
                            .setWidth("60px").setFlexGrow(0);
                     if (konzertDto.hasMarschbuchEntry()) {
-                        entries.addColumn(KonzertEntryDto::marschbuchNumber)
+                        entries.addColumn(repertoireNumber(KonzertEntryDto::marschbuchNumber))
                                .setHeader("Marschbuch")
                                .setWidth("120px").setFlexGrow(0);
                     }
