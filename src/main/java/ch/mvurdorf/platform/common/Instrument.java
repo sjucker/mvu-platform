@@ -34,7 +34,8 @@ public enum Instrument implements LocalizedEnum {
     E_GUITAR("E-Guitar"),
     PIANO("Piano/Keyboard"),
     PERKUSSION("Perkusion"),
-    PARTITUR("Partitur");
+    PARTITUR("Partitur"),
+    VOCALS("Vocals");
 
     private final String description;
 
