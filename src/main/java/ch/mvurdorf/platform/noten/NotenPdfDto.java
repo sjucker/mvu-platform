@@ -37,8 +37,8 @@ public record NotenPdfDto(Long id,
                                                          .filter(Objects::nonNull)
                                                          .sorted()
                                                          .map(Stimme::getDescription)
-                                                         .collect(joining(" / "));
-                                       joiner.add("%s %s".formatted(stimmen, instrument.getDescription()));
+                                                         .collect(joining("/"));
+                                       joiner.add("%s %s".formatted(instrument.getDescription(), stimmen));
                                    } else {
                                        joiner.add(dtos.getFirst().getDescription());
                                    }
