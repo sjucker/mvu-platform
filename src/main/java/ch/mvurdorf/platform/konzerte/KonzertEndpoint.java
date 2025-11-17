@@ -19,13 +19,13 @@ public class KonzertEndpoint {
     private final KonzerteService konzerteService;
 
     @GetMapping
-    public ResponseEntity<List<KonzertDto>> ping() {
+    public ResponseEntity<List<KonzertDto>> getFutureKonzerte() {
         log.info("GET /api/secured/konzert");
         return ResponseEntity.ok(konzerteService.getFutureKonzerte());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<KonzertDto> ping(@PathVariable Long id) {
+    public ResponseEntity<KonzertDto> findById(@PathVariable Long id) {
         log.info("GET /api/secured/konzert/{}", id);
         return ResponseEntity.of(konzerteService.findById(id));
     }

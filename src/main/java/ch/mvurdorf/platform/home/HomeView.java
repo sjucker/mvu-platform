@@ -20,6 +20,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 
+import static ch.mvurdorf.platform.repertoire.RepertoireType.KONZERTMAPPE;
 import static ch.mvurdorf.platform.repertoire.RepertoireType.MARSCHBUCH;
 import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
@@ -75,7 +76,7 @@ public class HomeView extends VerticalLayout {
         add(new Hr());
         add(new H3("Repertoire"));
         var repertoire = new CardContainer();
-//        repertoire.add(repertoireCard(KONZERTMAPPE));
+        repertoire.add(repertoireCard(KONZERTMAPPE));
         repertoire.add(repertoireCard(MARSCHBUCH));
 
         add(repertoire);
