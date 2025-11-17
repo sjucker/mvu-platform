@@ -30,6 +30,7 @@ public enum Instrument implements LocalizedEnum {
     POSAUNE("Posaune"),
     BASSPOSAUNE("Bass Posaune"),
     TUBA("Tuba"),
+    KONTRABASS("Kontrabass"),
     E_BASS("E-Bass"),
     E_GUITAR("E-Guitar"),
     PIANO("Piano/Keyboard"),
