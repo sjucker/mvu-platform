@@ -104,7 +104,7 @@ public class NotenPdfAssignmentRecord extends UpdatableRecordImpl<NotenPdfAssign
         setFkNotenPdf(fkNotenPdf);
         setInstrument(instrument);
         setStimme(stimme);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -118,7 +118,7 @@ public class NotenPdfAssignmentRecord extends UpdatableRecordImpl<NotenPdfAssign
             setFkNotenPdf(value.getFkNotenPdf());
             setInstrument(value.getInstrument());
             setStimme(value.getStimme());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

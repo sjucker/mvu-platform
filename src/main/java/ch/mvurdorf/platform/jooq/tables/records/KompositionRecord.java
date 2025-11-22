@@ -149,7 +149,7 @@ public class KompositionRecord extends UpdatableRecordImpl<KompositionRecord> {
         setFormat(format);
         setAudioSample(audioSample);
         setComment(comment);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -166,7 +166,7 @@ public class KompositionRecord extends UpdatableRecordImpl<KompositionRecord> {
             setFormat(value.getFormat());
             setAudioSample(value.getAudioSample());
             setComment(value.getComment());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

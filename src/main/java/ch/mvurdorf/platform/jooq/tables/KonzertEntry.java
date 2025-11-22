@@ -17,7 +17,6 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -26,13 +25,14 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -61,7 +61,7 @@ public class KonzertEntry extends TableImpl<KonzertEntryRecord> {
     /**
      * The column <code>public.konzert_entry.id</code>.
      */
-    public final TableField<KonzertEntryRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<KonzertEntryRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.konzert_entry.fk_konzert</code>.
@@ -161,11 +161,6 @@ public class KonzertEntry extends TableImpl<KonzertEntryRecord> {
     }
 
     @Override
-    public Identity<KonzertEntryRecord, Long> getIdentity() {
-        return (Identity<KonzertEntryRecord, Long>) super.getIdentity();
-    }
-
-    @Override
     public UniqueKey<KonzertEntryRecord> getPrimaryKey() {
         return Keys.PK__KONZERT_ENTRY;
     }
@@ -243,7 +238,7 @@ public class KonzertEntry extends TableImpl<KonzertEntryRecord> {
      */
     @Override
     public KonzertEntry where(Condition condition) {
-        return new KonzertEntry(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new KonzertEntry(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -310,7 +305,7 @@ public class KonzertEntry extends TableImpl<KonzertEntryRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public KonzertEntry whereExists(Select<?> select) {
+    public KonzertEntry whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -318,7 +313,7 @@ public class KonzertEntry extends TableImpl<KonzertEntryRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public KonzertEntry whereNotExists(Select<?> select) {
+    public KonzertEntry whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

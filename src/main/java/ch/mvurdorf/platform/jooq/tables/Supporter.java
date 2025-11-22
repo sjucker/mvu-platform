@@ -18,7 +18,6 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -27,13 +26,14 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -62,7 +62,7 @@ public class Supporter extends TableImpl<SupporterRecord> {
     /**
      * The column <code>public.supporter.id</code>.
      */
-    public final TableField<SupporterRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<SupporterRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.supporter.vorname</code>.
@@ -212,11 +212,6 @@ public class Supporter extends TableImpl<SupporterRecord> {
     }
 
     @Override
-    public Identity<SupporterRecord, Long> getIdentity() {
-        return (Identity<SupporterRecord, Long>) super.getIdentity();
-    }
-
-    @Override
     public UniqueKey<SupporterRecord> getPrimaryKey() {
         return Keys.PK__PASSIVMITGLIED;
     }
@@ -296,7 +291,7 @@ public class Supporter extends TableImpl<SupporterRecord> {
      */
     @Override
     public Supporter where(Condition condition) {
-        return new Supporter(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new Supporter(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -363,7 +358,7 @@ public class Supporter extends TableImpl<SupporterRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Supporter whereExists(Select<?> select) {
+    public Supporter whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -371,7 +366,7 @@ public class Supporter extends TableImpl<SupporterRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Supporter whereNotExists(Select<?> select) {
+    public Supporter whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

@@ -104,7 +104,7 @@ public class AbsenzStatusRecord extends UpdatableRecordImpl<AbsenzStatusRecord> 
         setFkEvent(fkEvent);
         setRemark(remark);
         setStatus(status);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -118,7 +118,7 @@ public class AbsenzStatusRecord extends UpdatableRecordImpl<AbsenzStatusRecord> 
             setFkEvent(value.getFkEvent());
             setRemark(value.getRemark());
             setStatus(value.getStatus());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

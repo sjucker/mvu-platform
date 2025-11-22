@@ -74,7 +74,7 @@ public class InstrumentPermissionRecord extends UpdatableRecordImpl<InstrumentPe
 
         setFkLogin(fkLogin);
         setInstrument(instrument);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -86,7 +86,7 @@ public class InstrumentPermissionRecord extends UpdatableRecordImpl<InstrumentPe
         if (value != null) {
             setFkLogin(value.getFkLogin());
             setInstrument(value.getInstrument());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

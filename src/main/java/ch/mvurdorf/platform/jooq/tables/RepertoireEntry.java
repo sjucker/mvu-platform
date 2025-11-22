@@ -18,7 +18,6 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -27,13 +26,14 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -62,7 +62,7 @@ public class RepertoireEntry extends TableImpl<RepertoireEntryRecord> {
     /**
      * The column <code>public.repertoire_entry.id</code>.
      */
-    public final TableField<RepertoireEntryRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<RepertoireEntryRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.repertoire_entry.fk_repertoire</code>.
@@ -147,11 +147,6 @@ public class RepertoireEntry extends TableImpl<RepertoireEntryRecord> {
     }
 
     @Override
-    public Identity<RepertoireEntryRecord, Long> getIdentity() {
-        return (Identity<RepertoireEntryRecord, Long>) super.getIdentity();
-    }
-
-    @Override
     public UniqueKey<RepertoireEntryRecord> getPrimaryKey() {
         return Keys.PK__REPERTOIRE_ENTRY;
     }
@@ -229,7 +224,7 @@ public class RepertoireEntry extends TableImpl<RepertoireEntryRecord> {
      */
     @Override
     public RepertoireEntry where(Condition condition) {
-        return new RepertoireEntry(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new RepertoireEntry(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -296,7 +291,7 @@ public class RepertoireEntry extends TableImpl<RepertoireEntryRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public RepertoireEntry whereExists(Select<?> select) {
+    public RepertoireEntry whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -304,7 +299,7 @@ public class RepertoireEntry extends TableImpl<RepertoireEntryRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public RepertoireEntry whereNotExists(Select<?> select) {
+    public RepertoireEntry whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

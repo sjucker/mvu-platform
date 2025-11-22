@@ -153,7 +153,7 @@ public class SupporterPaymentRecord extends UpdatableRecordImpl<SupporterPayment
         setBemerkung(bemerkung);
         setCreatedAt(createdAt);
         setCreatedBy(createdBy);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -170,7 +170,7 @@ public class SupporterPaymentRecord extends UpdatableRecordImpl<SupporterPayment
             setBemerkung(value.getBemerkung());
             setCreatedAt(value.getCreatedAt());
             setCreatedBy(value.getCreatedBy());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

@@ -17,6 +17,7 @@ import java.util.Set;
 
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.iconDownloadLink;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.Unit.PIXELS;
 import static com.vaadin.flow.component.icon.VaadinIcon.DOWNLOAD;
 import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
@@ -38,7 +39,7 @@ public class NotenDownloadDialog extends Dialog {
                             boolean allowDeletion) {
         var dialog = new NotenDownloadDialog(notenService, storageService);
         dialog.init(kompositionId, kompositionTitel, instrumentPermissions, allowDeletion);
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
         dialog.setWidth(500, PIXELS);
         dialog.open();
     }

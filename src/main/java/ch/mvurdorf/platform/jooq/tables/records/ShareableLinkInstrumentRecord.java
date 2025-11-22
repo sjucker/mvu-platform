@@ -91,7 +91,7 @@ public class ShareableLinkInstrumentRecord extends UpdatableRecordImpl<Shareable
         setId(id);
         setShareableLinkId(shareableLinkId);
         setInstrument(instrument);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -104,7 +104,7 @@ public class ShareableLinkInstrumentRecord extends UpdatableRecordImpl<Shareable
             setId(value.getId());
             setShareableLinkId(value.getShareableLinkId());
             setInstrument(value.getInstrument());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

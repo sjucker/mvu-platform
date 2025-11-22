@@ -121,7 +121,7 @@ public class RepertoireRecord extends UpdatableRecordImpl<RepertoireRecord> {
         setCreatedAt(createdAt);
         setDetails(details);
         setCreatedBy(createdBy);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -136,7 +136,7 @@ public class RepertoireRecord extends UpdatableRecordImpl<RepertoireRecord> {
             setCreatedAt(value.getCreatedAt());
             setDetails(value.getDetails());
             setCreatedBy(value.getCreatedBy());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

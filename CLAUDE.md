@@ -35,7 +35,7 @@ mvn clean test-compile -Djooq-codegen-skip=false
 
 | Task | Command |
 |------|---------|
-| Production build | `mvn clean package -Pproduction` |
+| Production build | `mvn clean package` |
 | Run all tests | `./mvnw clean verify` |
 | Check dependency updates | `mvn -U versions:display-property-updates` |
 

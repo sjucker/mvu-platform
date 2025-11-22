@@ -91,7 +91,7 @@ public class ShareableLinkKompositionRecord extends UpdatableRecordImpl<Shareabl
         setId(id);
         setShareableLinkId(shareableLinkId);
         setKompositionId(kompositionId);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -104,7 +104,7 @@ public class ShareableLinkKompositionRecord extends UpdatableRecordImpl<Shareabl
             setId(value.getId());
             setShareableLinkId(value.getShareableLinkId());
             setKompositionId(value.getKompositionId());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

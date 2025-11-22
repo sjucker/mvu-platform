@@ -363,7 +363,7 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
         setUpdatedAt(updatedAt);
         setUpdatedBy(updatedBy);
         setInfoOnly(infoOnly);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -394,7 +394,7 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
             setUpdatedAt(value.getUpdatedAt());
             setUpdatedBy(value.getUpdatedBy());
             setInfoOnly(value.getInfoOnly());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

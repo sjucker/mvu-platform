@@ -3,6 +3,7 @@ package ch.mvurdorf.platform.common;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public enum Stimmlage implements LocalizedEnum {
 
     public static Optional<Stimmlage> parse(String value) {
         return Arrays.stream(values())
-                     .filter(v -> StringUtils.equalsIgnoreCase(v.getExternalId(), value))
+                     .filter(v -> Strings.CI.equals(v.getExternalId(), value))
                      .findFirst();
     }
 }

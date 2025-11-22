@@ -13,19 +13,19 @@ import java.util.Collection;
 
 import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -54,7 +54,7 @@ public class Voucher extends TableImpl<VoucherRecord> {
     /**
      * The column <code>public.voucher.id</code>.
      */
-    public final TableField<VoucherRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<VoucherRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.voucher.code_prefix</code>.
@@ -111,11 +111,6 @@ public class Voucher extends TableImpl<VoucherRecord> {
     }
 
     @Override
-    public Identity<VoucherRecord, Long> getIdentity() {
-        return (Identity<VoucherRecord, Long>) super.getIdentity();
-    }
-
-    @Override
     public UniqueKey<VoucherRecord> getPrimaryKey() {
         return Keys.PK__VOUCHER;
     }
@@ -164,7 +159,7 @@ public class Voucher extends TableImpl<VoucherRecord> {
      */
     @Override
     public Voucher where(Condition condition) {
-        return new Voucher(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new Voucher(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -231,7 +226,7 @@ public class Voucher extends TableImpl<VoucherRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Voucher whereExists(Select<?> select) {
+    public Voucher whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -239,7 +234,7 @@ public class Voucher extends TableImpl<VoucherRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Voucher whereNotExists(Select<?> select) {
+    public Voucher whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

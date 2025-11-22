@@ -25,6 +25,7 @@ import java.util.Set;
 
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor(access = PRIVATE)
@@ -37,7 +38,7 @@ public class ExportAllPdfDialog extends Dialog {
     public static void show(NotenService notenService, AuthenticatedUser authenticatedUser, RepertoireDto repertoire) {
         var dialog = new ExportAllPdfDialog(notenService, authenticatedUser, repertoire);
         dialog.init();
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
         dialog.setCloseOnEsc(false);
         dialog.setCloseOnOutsideClick(false);
         dialog.open();

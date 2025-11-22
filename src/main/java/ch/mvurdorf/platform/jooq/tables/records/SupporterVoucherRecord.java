@@ -152,7 +152,7 @@ public class SupporterVoucherRecord extends UpdatableRecordImpl<SupporterVoucher
         setValidUntil(validUntil);
         setRedeemedAt(redeemedAt);
         setRedeemedBy(redeemedBy);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -169,7 +169,7 @@ public class SupporterVoucherRecord extends UpdatableRecordImpl<SupporterVoucher
             setValidUntil(value.getValidUntil());
             setRedeemedAt(value.getRedeemedAt());
             setRedeemedBy(value.getRedeemedBy());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

@@ -301,7 +301,7 @@ public class SupporterRecord extends UpdatableRecordImpl<SupporterRecord> {
         setStrasseNr(strasseNr);
         setCountryCode(countryCode);
         setType(type);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -328,7 +328,7 @@ public class SupporterRecord extends UpdatableRecordImpl<SupporterRecord> {
             setStrasseNr(value.getStrasseNr());
             setCountryCode(value.getCountryCode());
             setType(value.getType());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

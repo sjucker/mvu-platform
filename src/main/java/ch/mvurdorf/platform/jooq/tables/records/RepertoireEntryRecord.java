@@ -106,7 +106,7 @@ public class RepertoireEntryRecord extends UpdatableRecordImpl<RepertoireEntryRe
         setFkRepertoire(fkRepertoire);
         setFkKomposition(fkKomposition);
         setNumber(number);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -120,7 +120,7 @@ public class RepertoireEntryRecord extends UpdatableRecordImpl<RepertoireEntryRe
             setFkRepertoire(value.getFkRepertoire());
             setFkKomposition(value.getFkKomposition());
             setNumber(value.getNumber());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

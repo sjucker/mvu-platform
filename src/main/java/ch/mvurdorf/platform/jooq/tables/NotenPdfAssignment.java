@@ -16,7 +16,6 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -25,13 +24,14 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -60,7 +60,7 @@ public class NotenPdfAssignment extends TableImpl<NotenPdfAssignmentRecord> {
     /**
      * The column <code>public.noten_pdf_assignment.id</code>.
      */
-    public final TableField<NotenPdfAssignmentRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<NotenPdfAssignmentRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.noten_pdf_assignment.fk_noten_pdf</code>.
@@ -147,11 +147,6 @@ public class NotenPdfAssignment extends TableImpl<NotenPdfAssignmentRecord> {
     }
 
     @Override
-    public Identity<NotenPdfAssignmentRecord, Long> getIdentity() {
-        return (Identity<NotenPdfAssignmentRecord, Long>) super.getIdentity();
-    }
-
-    @Override
     public UniqueKey<NotenPdfAssignmentRecord> getPrimaryKey() {
         return Keys.PK__NOTEN_PDF_ASSIGNMENT;
     }
@@ -217,7 +212,7 @@ public class NotenPdfAssignment extends TableImpl<NotenPdfAssignmentRecord> {
      */
     @Override
     public NotenPdfAssignment where(Condition condition) {
-        return new NotenPdfAssignment(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new NotenPdfAssignment(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -284,7 +279,7 @@ public class NotenPdfAssignment extends TableImpl<NotenPdfAssignmentRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public NotenPdfAssignment whereExists(Select<?> select) {
+    public NotenPdfAssignment whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -292,7 +287,7 @@ public class NotenPdfAssignment extends TableImpl<NotenPdfAssignmentRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public NotenPdfAssignment whereNotExists(Select<?> select) {
+    public NotenPdfAssignment whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

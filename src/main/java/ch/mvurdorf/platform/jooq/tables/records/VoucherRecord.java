@@ -121,7 +121,7 @@ public class VoucherRecord extends UpdatableRecordImpl<VoucherRecord> {
         setDescription(description);
         setValidUntil(validUntil);
         setType(type);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -136,7 +136,7 @@ public class VoucherRecord extends UpdatableRecordImpl<VoucherRecord> {
             setDescription(value.getDescription());
             setValidUntil(value.getValidUntil());
             setType(value.getType());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

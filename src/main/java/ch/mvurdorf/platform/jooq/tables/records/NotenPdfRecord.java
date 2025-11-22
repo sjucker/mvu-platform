@@ -104,7 +104,7 @@ public class NotenPdfRecord extends UpdatableRecordImpl<NotenPdfRecord> {
         setFkKomposition(fkKomposition);
         setStimmlage(stimmlage);
         setNotenschluessel(notenschluessel);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -118,7 +118,7 @@ public class NotenPdfRecord extends UpdatableRecordImpl<NotenPdfRecord> {
             setFkKomposition(value.getFkKomposition());
             setStimmlage(value.getStimmlage());
             setNotenschluessel(value.getNotenschluessel());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

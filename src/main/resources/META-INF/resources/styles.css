@@ -1,9 +1,3 @@
-/*
-   CSS styling examples for the Vaadin app.
-
-   Visit https://vaadin.com/docs/styling/application-theme/ for more information.
-*/
-
 html {
     --lumo-shade-5pct: rgba(33, 33, 33, 0.05);
     --lumo-shade-10pct: rgba(33, 33, 33, 0.1);

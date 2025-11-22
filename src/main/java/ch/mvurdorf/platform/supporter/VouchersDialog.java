@@ -10,6 +10,7 @@ import org.apache.commons.lang3.function.BooleanConsumer;
 import static ch.mvurdorf.platform.supporter.SupporterType.PASSIVMITGLIED;
 import static ch.mvurdorf.platform.ui.ComponentUtil.datePicker;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 
 public class VouchersDialog extends Dialog {
 
@@ -22,7 +23,7 @@ public class VouchersDialog extends Dialog {
     public static void show(SupporterService service, BooleanConsumer callback) {
         var dialog = new VouchersDialog(service);
         dialog.init(callback);
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
         dialog.setResizable(true);
         dialog.setCloseOnOutsideClick(false);
         dialog.setMinWidth("66%");

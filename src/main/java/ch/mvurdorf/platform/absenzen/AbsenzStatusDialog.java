@@ -16,6 +16,7 @@ import java.util.List;
 import static ch.mvurdorf.platform.common.AbsenzState.NEGATIVE;
 import static ch.mvurdorf.platform.common.AbsenzState.POSITIVE;
 import static ch.mvurdorf.platform.security.LoginService.ABSENZEN_GROUP;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.Unit.PERCENTAGE;
 import static com.vaadin.flow.component.Unit.PIXELS;
 import static com.vaadin.flow.component.grid.ColumnTextAlign.CENTER;
@@ -38,7 +39,7 @@ public class AbsenzStatusDialog extends Dialog {
     public static void show(AbsenzenService absenzenService, AuthenticatedUser authenticatedUser, EventAbsenzSummaryDto event, Runnable callback) {
         var dialog = new AbsenzStatusDialog(absenzenService, authenticatedUser);
         dialog.init(event.id(), callback);
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
         dialog.setCloseOnOutsideClick(false);
         dialog.setHeaderTitle(event.getTitleWithDate());
         dialog.setMaxWidth(100, PERCENTAGE);

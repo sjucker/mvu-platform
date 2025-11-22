@@ -149,7 +149,7 @@ public class KonzertEntryRecord extends UpdatableRecordImpl<KonzertEntryRecord> 
         setPlaceholder(placeholder);
         setZugabe(zugabe);
         setAdditionalInfo(additionalInfo);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -166,7 +166,7 @@ public class KonzertEntryRecord extends UpdatableRecordImpl<KonzertEntryRecord> 
             setPlaceholder(value.getPlaceholder());
             setZugabe(value.getZugabe());
             setAdditionalInfo(value.getAdditionalInfo());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

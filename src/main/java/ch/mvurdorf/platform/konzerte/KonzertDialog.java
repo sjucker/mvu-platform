@@ -31,6 +31,7 @@ import static com.vaadin.flow.component.Unit.PIXELS;
 import static com.vaadin.flow.component.grid.ColumnTextAlign.CENTER;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_COLUMN_BORDERS;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_ROW_STRIPES;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.grid.dnd.GridDropLocation.BELOW;
 import static com.vaadin.flow.component.grid.dnd.GridDropMode.BETWEEN;
 import static com.vaadin.flow.component.icon.VaadinIcon.ARROWS_LONG_V;
@@ -54,7 +55,7 @@ public class KonzertDialog extends Dialog {
     public static void edit(KonzerteService konzerteService, KompositionService kompositionService, KonzertDto dto, Runnable onSuccess) {
         var dialog = new KonzertDialog(konzerteService, kompositionService);
         dialog.init(dto, onSuccess);
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
         dialog.setResizable(true);
         dialog.setCloseOnOutsideClick(false);
         dialog.setMinWidth("66%");

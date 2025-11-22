@@ -15,6 +15,7 @@ import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -46,6 +47,7 @@ import static java.util.Locale.GERMAN;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.stripToNull;
 
@@ -296,6 +298,7 @@ public class EventsService {
     }
 
     public void updateEventAbsenzenForUser(Long loginId, Long eventId, AbsenzState state, String remark) {
+        log.info("updating absenz status for login {} and event {} to {} with remark {}", loginId, eventId, state, defaultIfBlank(remark, "-"));
         var status = ofNullable(state).orElse(UNKNOWN).name();
         absenzStatusDao.findOptionalById(jooqDsl.newRecord(ABSENZ_STATUS.FK_LOGIN, ABSENZ_STATUS.FK_EVENT).values(loginId, eventId))
                        .ifPresentOrElse(pojo -> {
@@ -351,9 +354,9 @@ public class EventsService {
                                                       it.getDeletedAt(),
                                                       created || !Objects.equals(it.getFromDate(), firstVersion.getFromDate()) || !Objects.equals(it.getToDate(), firstVersion.getToDate()),
                                                       created || !Objects.equals(it.getFromTime(), firstVersion.getFromTime()) || !Objects.equals(it.getToTime(), firstVersion.getToTime()),
-                                                      created || !StringUtils.equals(stripToNull(it.getTitle()), stripToNull(firstVersion.getTitle())),
-                                                      created || !StringUtils.equals(stripToNull(it.getLocation()), stripToNull(firstVersion.getLocation())),
-                                                      created || !StringUtils.equals(stripToNull(it.getLiterature()), stripToNull(firstVersion.getLiterature())));
+                                                      created || !Strings.CS.equals(stripToNull(it.getTitle()), stripToNull(firstVersion.getTitle())),
+                                                      created || !Strings.CS.equals(stripToNull(it.getLocation()), stripToNull(firstVersion.getLocation())),
+                                                      created || !Strings.CS.equals(stripToNull(it.getLiterature()), stripToNull(firstVersion.getLiterature())));
                      })
                      .toList();
     }

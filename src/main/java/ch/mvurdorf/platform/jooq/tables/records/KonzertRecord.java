@@ -152,7 +152,7 @@ public class KonzertRecord extends UpdatableRecordImpl<KonzertRecord> {
         setLocation(location);
         setDescription(description);
         setTenu(tenu);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -169,7 +169,7 @@ public class KonzertRecord extends UpdatableRecordImpl<KonzertRecord> {
             setLocation(value.getLocation());
             setDescription(value.getDescription());
             setTenu(value.getTenu());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

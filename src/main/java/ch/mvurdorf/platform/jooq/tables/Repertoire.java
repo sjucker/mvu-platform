@@ -15,7 +15,6 @@ import java.util.Collection;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -24,13 +23,14 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -59,7 +59,7 @@ public class Repertoire extends TableImpl<RepertoireRecord> {
     /**
      * The column <code>public.repertoire.id</code>.
      */
-    public final TableField<RepertoireRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<RepertoireRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.repertoire.type</code>.
@@ -149,11 +149,6 @@ public class Repertoire extends TableImpl<RepertoireRecord> {
     }
 
     @Override
-    public Identity<RepertoireRecord, Long> getIdentity() {
-        return (Identity<RepertoireRecord, Long>) super.getIdentity();
-    }
-
-    @Override
     public UniqueKey<RepertoireRecord> getPrimaryKey() {
         return Keys.PK__REPERTOIRE;
     }
@@ -215,7 +210,7 @@ public class Repertoire extends TableImpl<RepertoireRecord> {
      */
     @Override
     public Repertoire where(Condition condition) {
-        return new Repertoire(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new Repertoire(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -282,7 +277,7 @@ public class Repertoire extends TableImpl<RepertoireRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Repertoire whereExists(Select<?> select) {
+    public Repertoire whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -290,7 +285,7 @@ public class Repertoire extends TableImpl<RepertoireRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Repertoire whereNotExists(Select<?> select) {
+    public Repertoire whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

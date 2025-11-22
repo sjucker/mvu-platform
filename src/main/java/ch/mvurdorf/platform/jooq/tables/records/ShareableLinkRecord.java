@@ -106,7 +106,7 @@ public class ShareableLinkRecord extends UpdatableRecordImpl<ShareableLinkRecord
         setUuid(uuid);
         setDescription(description);
         setValidUntil(validUntil);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -120,7 +120,7 @@ public class ShareableLinkRecord extends UpdatableRecordImpl<ShareableLinkRecord
             setUuid(value.getUuid());
             setDescription(value.getDescription());
             setValidUntil(value.getValidUntil());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

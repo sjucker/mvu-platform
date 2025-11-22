@@ -17,7 +17,6 @@ import java.util.Collection;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -26,13 +25,14 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -61,7 +61,7 @@ public class Komposition extends TableImpl<KompositionRecord> {
     /**
      * The column <code>public.komposition.id</code>.
      */
-    public final TableField<KompositionRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<KompositionRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.komposition.titel</code>.
@@ -158,11 +158,6 @@ public class Komposition extends TableImpl<KompositionRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
-    }
-
-    @Override
-    public Identity<KompositionRecord, Long> getIdentity() {
-        return (Identity<KompositionRecord, Long>) super.getIdentity();
     }
 
     @Override
@@ -266,7 +261,7 @@ public class Komposition extends TableImpl<KompositionRecord> {
      */
     @Override
     public Komposition where(Condition condition) {
-        return new Komposition(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new Komposition(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -333,7 +328,7 @@ public class Komposition extends TableImpl<KompositionRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Komposition whereExists(Select<?> select) {
+    public Komposition whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -341,7 +336,7 @@ public class Komposition extends TableImpl<KompositionRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public Komposition whereNotExists(Select<?> select) {
+    public Komposition whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }
