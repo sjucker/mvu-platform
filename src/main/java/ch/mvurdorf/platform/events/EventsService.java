@@ -15,6 +15,7 @@ import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -332,9 +333,9 @@ public class EventsService {
                                                       it.getDeletedAt(),
                                                       created || !Objects.equals(it.getFromDate(), firstVersion.getFromDate()) || !Objects.equals(it.getToDate(), firstVersion.getToDate()),
                                                       created || !Objects.equals(it.getFromTime(), firstVersion.getFromTime()) || !Objects.equals(it.getToTime(), firstVersion.getToTime()),
-                                                      created || !StringUtils.equals(stripToNull(it.getTitle()), stripToNull(firstVersion.getTitle())),
-                                                      created || !StringUtils.equals(stripToNull(it.getLocation()), stripToNull(firstVersion.getLocation())),
-                                                      created || !StringUtils.equals(stripToNull(it.getLiterature()), stripToNull(firstVersion.getLiterature())));
+                                                      created || !Strings.CS.equals(stripToNull(it.getTitle()), stripToNull(firstVersion.getTitle())),
+                                                      created || !Strings.CS.equals(stripToNull(it.getLocation()), stripToNull(firstVersion.getLocation())),
+                                                      created || !Strings.CS.equals(stripToNull(it.getLiterature()), stripToNull(firstVersion.getLiterature())));
                      })
                      .toList();
     }
