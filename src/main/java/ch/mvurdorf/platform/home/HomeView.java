@@ -10,14 +10,20 @@ import ch.mvurdorf.platform.ui.CardContainer;
 import ch.mvurdorf.platform.ui.EventCard;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.card.Card;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
+import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
 import jakarta.annotation.security.PermitAll;
 
 import static ch.mvurdorf.platform.repertoire.RepertoireType.KONZERTMAPPE;
@@ -78,8 +84,23 @@ public class HomeView extends VerticalLayout {
         var repertoire = new CardContainer();
         repertoire.add(repertoireCard(KONZERTMAPPE));
         repertoire.add(repertoireCard(MARSCHBUCH));
-
         add(repertoire);
+
+        add(new Hr());
+        add(new H3("App"));
+
+        var android = getAppDownloadButton("images/google-play.png", "Google Play", "https://play.google.com/store/apps/details?id=ch.mvurdorf.platform");
+        var ios = getAppDownloadButton("images/apple-store.png", "App Store", "https://apps.apple.com/app/musikverein-harmonie-urdorf/id6749552122");
+
+        var appContainer = new FlexLayout(android, ios);
+        appContainer.addClassNames(FlexDirection.COLUMN, FlexDirection.Breakpoint.Medium.ROW, JustifyContent.CENTER, Gap.MEDIUM);
+        add(appContainer);
+    }
+
+    private Anchor getAppDownloadButton(String src, String alt, String url) {
+        var img = new Image(src, alt);
+        img.setHeight("65px");
+        return new Anchor(url, img);
     }
 
     private Card repertoireCard(RepertoireType repertoireType) {
