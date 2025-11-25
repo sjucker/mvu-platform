@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 import static ch.mvurdorf.platform.jooq.Tables.SUPPORTER;
 import static ch.mvurdorf.platform.jooq.Tables.SUPPORTER_PAYMENT;
 import static ch.mvurdorf.platform.jooq.Tables.SUPPORTER_VOUCHER;
+import static java.lang.Integer.MAX_VALUE;
 import static java.util.Locale.ROOT;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.math.NumberUtils.toLong;
@@ -60,6 +61,10 @@ public class SupporterService {
                 query -> count(query.getFilter().orElse(null))
         );
         return dataProvider.withConfigurableFilter();
+    }
+
+    public List<SupporterDto> fetchAll() {
+        return fetch(DSL.trueCondition(), 0, MAX_VALUE);
     }
 
     private Stream<SupporterDto> fetch(String filter, int offset, int limit) {

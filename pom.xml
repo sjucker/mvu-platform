@@ -25,6 +25,7 @@
         <qrbill-generator.version>3.3.1</qrbill-generator.version>
         <qrcodegen.version>1.8.0</qrcodegen.version>
         <pdfbox.version>3.0.6</pdfbox.version>
+        <poi.version>5.5.0</poi.version>
         <vcf-pdf-viewer.version>5.0.0</vcf-pdf-viewer.version>
 
         <testcontainers-jooq-codegen-maven-plugin.version>0.0.4</testcontainers-jooq-codegen-maven-plugin.version>
@@ -141,6 +142,11 @@
             <version>${pdfbox.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.vaadin.addons.componentfactory</groupId>
             <artifactId>vcf-pdf-viewer</artifactId>
             <version>${vcf-pdf-viewer.version}</version>
@@ -195,7 +201,6 @@
             <version>${sonar-maven-plugin.version}</version>
         </dependency>
     </dependencies>
-
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>

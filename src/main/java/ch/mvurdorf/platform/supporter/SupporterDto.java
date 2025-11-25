@@ -57,4 +57,12 @@ public record SupporterDto(Long id,
     public SupporterEditDto edit() {
         return new SupporterEditDto(id, anrede, vorname, nachname, strasse, strasseNr, plz, ort, email, bemerkung, kommunikationPost, kommunikationEmail);
     }
+
+    public String getStrasseWithNr() {
+        return "%s %s".formatted(strasse, strasseNr);
+    }
+
+   public String getPlzOrt() {
+        return "%s %s".formatted(plz, ort);
+    }
 }
