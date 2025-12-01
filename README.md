@@ -36,6 +36,7 @@
 ### Database Backup
 
 * Prod:  
+  `heroku pg:backups:schedule DATABASE_URL --at '03:00 CET' --app mvu`
   `heroku pg:backups:capture --app mvu`  
   `heroku pg:backups:download --app mvu`
 

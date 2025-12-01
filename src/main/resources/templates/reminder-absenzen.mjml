@@ -1,0 +1,26 @@
+<mjml>
+    <mj-head>
+        <mj-attributes>
+            <mj-all padding="0"/>
+            <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto"/>
+            <mj-section background-color="white"/>
+        </mj-attributes>
+    </mj-head>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-text color="#d60323">
+                    <h1>Erinnerung Absenzen</h1>
+                </mj-text>
+                <mj-text>
+                    <p>
+                        Du hast noch offene Absenzen-Einträge in den nächsten 4 Wochen.
+                    </p>
+                    <p>
+                        Bitte trage deine Absenzen <a th:href="${link}" target="_blank">im Web</a> oder in der App ein.
+                    </p>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

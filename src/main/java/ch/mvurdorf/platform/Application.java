@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * The entry point of the Spring Boot application.
@@ -19,6 +20,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @PWA(name = "Musikverein Harmonie Urdorf Platform", shortName = "MVU Platform")
 @Theme("my-theme")
 @EnableAsync
+@EnableScheduling
 @EnableConfigurationProperties(Application.PlatformProperties.class)
 public class Application implements AppShellConfigurator {
 
@@ -27,7 +29,8 @@ public class Application implements AppShellConfigurator {
     }
 
     @ConfigurationProperties(prefix = "platform")
-    public record PlatformProperties(String supportUrl,
+    public record PlatformProperties(String url,
+                                     String supportUrl,
                                      boolean overrideRecipients,
                                      String bccMail) {
     }

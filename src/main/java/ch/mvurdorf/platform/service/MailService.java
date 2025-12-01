@@ -54,6 +54,26 @@ public class MailService {
         }
     }
 
+    @Async
+    public void sendReminderEmail(String email) {
+        log.info("sending reminder mail to {}", email);
+        try {
+            var variables = new HashMap<String, Object>();
+            variables.put("link", "%s/termine".formatted(platformProperties.url()));
+
+            var mjml = templateEngine.process("reminder-absenzen", new Context(GERMAN, variables));
+
+            var mimeMessage = mailSender.createMimeMessage();
+            var helper = setSenderReceiverMetadata(mimeMessage, email);
+            helper.setSubject("%s%s".formatted(getSubjectPrefix(), "[MVU] Erinnerung Absenzen"));
+            helper.setText(mjmlService.render(mjml), true);
+
+            mailSender.send(mimeMessage);
+        } catch (RuntimeException | MessagingException e) {
+            log.error("could not send reminder mail %s".formatted(email), e);
+        }
+    }
+
     private MimeMessageHelper setSenderReceiverMetadata(MimeMessage mimeMessage, String email) throws MessagingException {
         var helper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
         var from = environment.getRequiredProperty("spring.mail.username");
