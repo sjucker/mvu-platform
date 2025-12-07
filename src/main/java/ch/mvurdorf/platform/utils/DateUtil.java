@@ -13,8 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
 public final class DateUtil {
 
     public static final LocalDate MAX_DATE = LocalDate.of(9999, 12, 31);
-
-    private static final String ZURICH = "Europe/Zurich";
+    public static final String ZURICH = "Europe/Zurich";
 
     public static LocalDateTime now() {
         return LocalDateTime.now(ZoneId.of(ZURICH));

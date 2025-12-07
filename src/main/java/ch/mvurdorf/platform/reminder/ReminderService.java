@@ -13,6 +13,7 @@ import static ch.mvurdorf.platform.common.AbsenzState.UNKNOWN;
 import static ch.mvurdorf.platform.jooq.Tables.ABSENZ_STATUS;
 import static ch.mvurdorf.platform.jooq.Tables.EVENT;
 import static ch.mvurdorf.platform.jooq.Tables.LOGIN;
+import static ch.mvurdorf.platform.utils.DateUtil.ZURICH;
 
 @Slf4j
 @Service
@@ -22,7 +23,7 @@ public class ReminderService {
     private final DSLContext jooqDsl;
     private final MailService mailService;
 
-    @Scheduled(cron = "0 0 8 * * Sun", zone = "Europe/Zurich")
+    @Scheduled(cron = "0 0 8 * * Sun", zone = ZURICH)
     public void sendReminders() {
         jooqDsl.selectDistinct(LOGIN.EMAIL)
                .from(EVENT)
@@ -38,10 +39,6 @@ public class ReminderService {
                       LOGIN.SEND_REMINDER.isTrue(),
                       DSL.or(ABSENZ_STATUS.STATUS.isNull(),
                              ABSENZ_STATUS.STATUS.eq(UNKNOWN.name())))
-               .forEach(it -> {
-                   log.info("Sending reminder email to {}", it.get(LOGIN.EMAIL));
-                   // TODO replace with actual email address
-                   mailService.sendReminderEmail("stefan.jucker@gmail.com");
-               });
+               .forEach(it -> mailService.sendReminderEmail(it.get(LOGIN.EMAIL)));
     }
 }
