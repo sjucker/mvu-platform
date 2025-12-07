@@ -1,7 +1,9 @@
 package ch.mvurdorf.platform.service;
 
 import com.google.cloud.storage.Bucket;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CloudStorageService implements StorageService {
 
     private final Bucket bucket;
@@ -17,6 +19,7 @@ public class CloudStorageService implements StorageService {
 
     @Override
     public byte[] read(String blob) {
+        log.info("reading blob {}", blob);
         return bucket.get(blob).getContent();
     }
 }
