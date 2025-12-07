@@ -56,7 +56,7 @@ public class EventDialog extends Dialog {
         formLayout.add(titel);
 
         var location = new TextField("Räumlichkeiten/Ort");
-        binder.forField(location).asRequired().bind(EventDataDto::getLocation, EventDataDto::setLocation);
+        binder.forField(location).bind(EventDataDto::getLocation, EventDataDto::setLocation);
         formLayout.add(location);
 
         var fromDate = datePicker("Datum von");
@@ -104,11 +104,13 @@ public class EventDialog extends Dialog {
         binder.forField(relevantForAbsenz).bind(EventDataDto::isRelevantForAbsenz, EventDataDto::setRelevantForAbsenz);
         formLayout.add(relevantForAbsenz, 2);
 
+        var infoOnly = new Checkbox("Nur Information (keine Absenzen erforderlich)", false);
+        binder.forField(infoOnly).bind(EventDataDto::isInfoOnly, EventDataDto::setInfoOnly);
+        formLayout.add(infoOnly, 2);
+
         var relevantForWebsite = new Checkbox("Auf Website darstellen", false);
         binder.forField(relevantForWebsite).bind(EventDataDto::isRelevantForWebsite, EventDataDto::setRelevantForWebsite);
         formLayout.add(relevantForWebsite, 2);
-
-        // TODO nur info, nicht relevant für absenzen, e.g. Ostermontag
 
         binder.setBean(event);
 

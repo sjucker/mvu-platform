@@ -359,4 +359,19 @@ public class EventDao extends AbstractSpringDAOImpl<EventRecord, ch.mvurdorf.pla
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Event> fetchByUpdatedBy(String... values) {
         return fetch(Event.EVENT.UPDATED_BY, values);
     }
+
+    /**
+     * Fetch records that have <code>info_only BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Event> fetchRangeOfInfoOnly(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(Event.EVENT.INFO_ONLY, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>info_only IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Event> fetchByInfoOnly(Boolean... values) {
+        return fetch(Event.EVENT.INFO_ONLY, values);
+    }
 }

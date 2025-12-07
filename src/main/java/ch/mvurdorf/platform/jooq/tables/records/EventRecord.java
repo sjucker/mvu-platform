@@ -302,6 +302,20 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
         return (String) get(19);
     }
 
+    /**
+     * Setter for <code>public.event.info_only</code>.
+     */
+    public void setInfoOnly(Boolean value) {
+        set(20, value);
+    }
+
+    /**
+     * Getter for <code>public.event.info_only</code>.
+     */
+    public Boolean getInfoOnly() {
+        return (Boolean) get(20);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -325,7 +339,7 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
     /**
      * Create a detached, initialised EventRecord
      */
-    public EventRecord(Long id, LocalDate fromDate, LocalTime fromTime, LocalDate toDate, LocalTime toTime, Boolean approximately, String title, String description, String location, String interna, String literature, String type, Boolean relevantForAbsenz, Boolean relevantForWebsite, LocalDateTime createdAt, String createdBy, LocalDateTime deletedAt, Long nextVersion, LocalDateTime updatedAt, String updatedBy) {
+    public EventRecord(Long id, LocalDate fromDate, LocalTime fromTime, LocalDate toDate, LocalTime toTime, Boolean approximately, String title, String description, String location, String interna, String literature, String type, Boolean relevantForAbsenz, Boolean relevantForWebsite, LocalDateTime createdAt, String createdBy, LocalDateTime deletedAt, Long nextVersion, LocalDateTime updatedAt, String updatedBy, Boolean infoOnly) {
         super(Event.EVENT);
 
         setId(id);
@@ -348,6 +362,7 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
         setNextVersion(nextVersion);
         setUpdatedAt(updatedAt);
         setUpdatedBy(updatedBy);
+        setInfoOnly(infoOnly);
         resetChangedOnNotNull();
     }
 
@@ -378,6 +393,7 @@ public class EventRecord extends UpdatableRecordImpl<EventRecord> {
             setNextVersion(value.getNextVersion());
             setUpdatedAt(value.getUpdatedAt());
             setUpdatedBy(value.getUpdatedBy());
+            setInfoOnly(value.getInfoOnly());
             resetChangedOnNotNull();
         }
     }

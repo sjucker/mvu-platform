@@ -162,6 +162,11 @@ public class Event extends TableImpl<EventRecord> {
      */
     public final TableField<EventRecord, String> UPDATED_BY = createField(DSL.name("updated_by"), SQLDataType.VARCHAR(255), this, "");
 
+    /**
+     * The column <code>public.event.info_only</code>.
+     */
+    public final TableField<EventRecord, Boolean> INFO_ONLY = createField(DSL.name("info_only"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("false"), SQLDataType.BOOLEAN)), this, "");
+
     private Event(Name alias, Table<EventRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

@@ -14,5 +14,6 @@ public record EventAbsenzStatusDto(Long loginId,
                                    String simpleTitle,
                                    String location,
                                    LocalDateTime from,
-                                   LocalDateTime to) {
+                                   LocalDateTime to,
+                                   boolean infoOnly) {
 }

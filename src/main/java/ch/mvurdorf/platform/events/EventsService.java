@@ -43,6 +43,7 @@ import static java.time.format.TextStyle.SHORT_STANDALONE;
 import static java.util.Locale.GERMAN;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.stripToNull;
 
 @Slf4j
@@ -100,6 +101,7 @@ public class EventsService {
                             it.getInterna(),
                             it.getLiterature(),
                             EventType.valueOf(it.getType()),
+                            it.getInfoOnly(),
                             it.getRelevantForAbsenz(),
                             it.getRelevantForWebsite(),
                             it.getCreatedAt(),
@@ -147,7 +149,8 @@ public class EventsService {
                          event.getType().name(),
                          event.isRelevantForAbsenz(),
                          event.isRelevantForWebsite(),
-                         null, null, null, null, null, null);
+                         null, null, null, null, null, null,
+                         event.isInfoOnly());
     }
 
     public void update(EventDataDto event, String user) {
@@ -206,6 +209,7 @@ public class EventsService {
                               EVENT.TITLE,
                               EVENT.LOCATION,
                               EVENT.INTERNA,
+                              EVENT.INFO_ONLY,
                               ABSENZ_STATUS.STATUS,
                               ABSENZ_STATUS.REMARK)
                       .from(EVENT)
@@ -227,7 +231,8 @@ public class EventsService {
                                                             it.get(EVENT.TITLE),
                                                             it.get(EVENT.LOCATION),
                                                             from(it.get(EVENT.FROM_DATE), it.get(EVENT.FROM_TIME)),
-                                                            to(it.get(EVENT.FROM_DATE), it.get(EVENT.TO_DATE), it.get(EVENT.TO_TIME))));
+                                                            to(it.get(EVENT.FROM_DATE), it.get(EVENT.TO_DATE), it.get(EVENT.TO_TIME)),
+                                                            it.get(EVENT.INFO_ONLY)));
     }
 
     private LocalDateTime to(LocalDate fromDate, @Nullable LocalDate toDate, @Nullable LocalTime toTime) {
@@ -276,7 +281,7 @@ public class EventsService {
 
     private String subtitle(String title, String location) {
         var subtitle = title;
-        if (StringUtils.isNotBlank(location)) {
+        if (isNotBlank(location)) {
             subtitle += " (" + location + ")";
         }
         return subtitle;

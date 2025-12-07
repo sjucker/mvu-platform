@@ -26,11 +26,12 @@ public class EventDataDto {
     private String interna;
     private String literature;
     private EventType type;
+    private boolean infoOnly;
     private boolean relevantForAbsenz;
     private boolean relevantForWebsite;
 
     public static EventDataDto newEvent() {
-        return new EventDataDto(null, false, null, null, null, null, false, null, null, null, null, null, null, true, false);
+        return new EventDataDto(null, false, null, null, null, null, false, null, null, null, null, null, null, false, true, false);
     }
 
     public static EventDataDto of(EventDto event) {
@@ -47,6 +48,7 @@ public class EventDataDto {
                                 event.interna(),
                                 event.literature(),
                                 event.type(),
+                                event.infoOnly(),
                                 event.relevantForAbsenz(),
                                 event.relevantForWebsite());
     }
@@ -64,6 +66,7 @@ public class EventDataDto {
                                 event.interna(),
                                 event.literature(),
                                 event.type(),
+                                event.infoOnly(),
                                 event.relevantForAbsenz(),
                                 event.relevantForWebsite());
     }

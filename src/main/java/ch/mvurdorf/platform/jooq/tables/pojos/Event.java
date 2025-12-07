@@ -38,6 +38,7 @@ public class Event implements Serializable {
     private Long nextVersion;
     private LocalDateTime updatedAt;
     private String updatedBy;
+    private Boolean infoOnly;
 
     public Event() {}
 
@@ -62,6 +63,7 @@ public class Event implements Serializable {
         this.nextVersion = value.nextVersion;
         this.updatedAt = value.updatedAt;
         this.updatedBy = value.updatedBy;
+        this.infoOnly = value.infoOnly;
     }
 
     public Event(
@@ -84,7 +86,8 @@ public class Event implements Serializable {
         LocalDateTime deletedAt,
         Long nextVersion,
         LocalDateTime updatedAt,
-        String updatedBy
+        String updatedBy,
+        Boolean infoOnly
     ) {
         this.id = id;
         this.fromDate = fromDate;
@@ -106,6 +109,7 @@ public class Event implements Serializable {
         this.nextVersion = nextVersion;
         this.updatedAt = updatedAt;
         this.updatedBy = updatedBy;
+        this.infoOnly = infoOnly;
     }
 
     /**
@@ -388,6 +392,20 @@ public class Event implements Serializable {
         this.updatedBy = updatedBy;
     }
 
+    /**
+     * Getter for <code>public.event.info_only</code>.
+     */
+    public Boolean getInfoOnly() {
+        return this.infoOnly;
+    }
+
+    /**
+     * Setter for <code>public.event.info_only</code>.
+     */
+    public void setInfoOnly(Boolean infoOnly) {
+        this.infoOnly = infoOnly;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -517,6 +535,12 @@ public class Event implements Serializable {
         }
         else if (!this.updatedBy.equals(other.updatedBy))
             return false;
+        if (this.infoOnly == null) {
+            if (other.infoOnly != null)
+                return false;
+        }
+        else if (!this.infoOnly.equals(other.infoOnly))
+            return false;
         return true;
     }
 
@@ -544,6 +568,7 @@ public class Event implements Serializable {
         result = prime * result + ((this.nextVersion == null) ? 0 : this.nextVersion.hashCode());
         result = prime * result + ((this.updatedAt == null) ? 0 : this.updatedAt.hashCode());
         result = prime * result + ((this.updatedBy == null) ? 0 : this.updatedBy.hashCode());
+        result = prime * result + ((this.infoOnly == null) ? 0 : this.infoOnly.hashCode());
         return result;
     }
 
@@ -571,6 +596,7 @@ public class Event implements Serializable {
         sb.append(", ").append(nextVersion);
         sb.append(", ").append(updatedAt);
         sb.append(", ").append(updatedBy);
+        sb.append(", ").append(infoOnly);
 
         sb.append(")");
         return sb.toString();
