@@ -45,7 +45,13 @@ class UsersService {
                       .from(LOGIN)
                       .fetch(it -> {
                           var login = it.value1();
-                          return new UserDto(login.getId(), login.getEmail(), login.getName(), login.getActive(), Register.valueOf(login.getRegister()), new HashSet<>(it.value2()));
+                          return new UserDto(login.getId(),
+                                             login.getEmail(),
+                                             login.getName(),
+                                             login.getActive(),
+                                             Register.valueOf(login.getRegister()),
+                                             new HashSet<>(it.value2()),
+                                             login.getSendReminder());
                       })
                       .stream()
                       .sorted(comparing(UserDto::name))
@@ -57,6 +63,7 @@ class UsersService {
         login.setEmail(user.email());
         login.setName(user.name());
         login.setRegister(user.register().name());
+        login.setSendReminder(user.sendReminder());
         loginDao.update(login);
 
         jooqDsl.execute(delete(INSTRUMENT_PERMISSION)
@@ -91,7 +98,8 @@ class UsersService {
                                  NONE.name(),
                                  NONE.name(),
                                  newUser.register().name(),
-                                 null);
+                                 null,
+                                 true);
         loginDao.insert(newLogin);
 
         insertInstrumentPermissions(newUser.instrumentPermissions(), newLogin.getId());

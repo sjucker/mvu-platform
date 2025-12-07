@@ -10,5 +10,6 @@ public record UserDto(Long id,
                       String name,
                       boolean active,
                       Register register,
-                      Set<Instrument> instrumentPermissions) {
+                      Set<Instrument> instrumentPermissions,
+                      boolean sendReminder) {
 }

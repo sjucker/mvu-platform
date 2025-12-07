@@ -26,6 +26,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.vaadin.flow.component.html.AnchorTarget.BLANK;
+import static com.vaadin.flow.component.icon.VaadinIcon.CHECK;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class RendererUtil {
@@ -42,6 +43,14 @@ public final class RendererUtil {
 
     public static <T> LocalTimeRenderer<T> timeRenderer(Function<T, LocalTime> getter) {
         return new LocalTimeRenderer<>(getter::apply);
+    }
+
+    public static <T> ComponentRenderer<Component, T> checkboxRenderer(Predicate<T> getter) {
+        return checkboxRenderer(getter, CHECK);
+    }
+
+    public static <T> ComponentRenderer<Component, T> checkboxRenderer(Predicate<T> getter, VaadinIcon icon) {
+        return new ComponentRenderer<>(dto -> getter.test(dto) ? icon.create() : new Div());
     }
 
     public static <T> ComponentRenderer<Component, T> clickableIcon(VaadinIcon vaadinIcon, Consumer<T> clickHandler, String tooltipText) {

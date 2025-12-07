@@ -281,4 +281,19 @@ public class LoginDao extends AbstractSpringDAOImpl<LoginRecord, ch.mvurdorf.pla
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchByFcmToken(String... values) {
         return fetch(Login.LOGIN.FCM_TOKEN, values);
     }
+
+    /**
+     * Fetch records that have <code>send_reminder BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchRangeOfSendReminder(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(Login.LOGIN.SEND_REMINDER, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>send_reminder IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Login> fetchBySendReminder(Boolean... values) {
+        return fetch(Login.LOGIN.SEND_REMINDER, values);
+    }
 }

@@ -35,6 +35,7 @@ public class ReminderService {
                       EVENT.FROM_DATE.le(DateUtil.today().plusMonths(1)),
                       EVENT.RELEVANT_FOR_ABSENZ.isTrue(),
                       LOGIN.ACTIVE.isTrue(),
+                      LOGIN.SEND_REMINDER.isTrue(),
                       DSL.or(ABSENZ_STATUS.STATUS.isNull(),
                              ABSENZ_STATUS.STATUS.eq(UNKNOWN.name())))
                .forEach(it -> {

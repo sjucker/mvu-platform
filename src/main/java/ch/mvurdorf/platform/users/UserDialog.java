@@ -3,6 +3,7 @@ package ch.mvurdorf.platform.users;
 import ch.mvurdorf.platform.common.Instrument;
 import ch.mvurdorf.platform.common.Register;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -25,6 +26,7 @@ public class UserDialog extends Dialog {
     private TextField name;
     private CheckboxGroup<Instrument> instrumentPermissions;
     private Select<Register> register;
+    private Checkbox sendReminder;
     private Long userId = null;
 
     private UserDialog(Mode mode, Consumer<UserDto> callback) {
@@ -56,7 +58,8 @@ public class UserDialog extends Dialog {
                                                         name.getValue(),
                                                         true,
                                                         register.getValue(),
-                                                        instrumentPermissions.getValue()));
+                                                        instrumentPermissions.getValue(),
+                                                        sendReminder.getValue()));
                             close();
                         }));
 
@@ -78,6 +81,9 @@ public class UserDialog extends Dialog {
         register.setEmptySelectionAllowed(false);
         formLayout.add(register);
 
+        sendReminder = new Checkbox("Erinnerung senden");
+        formLayout.add(sendReminder);
+
         instrumentPermissions = new CheckboxGroup<>("Notenberechtigung (leer lassen, falls keine Einschränkung)", Instrument.values());
         instrumentPermissions.setItemLabelGenerator(Instrument::getDescription);
         formLayout.add(instrumentPermissions, 2);
@@ -90,6 +96,7 @@ public class UserDialog extends Dialog {
             name.setValue(user.name());
             register.setValue(user.register());
             instrumentPermissions.setValue(user.instrumentPermissions());
+            sendReminder.setValue(user.sendReminder());
         }
     }
 

@@ -129,6 +129,11 @@ public class Login extends TableImpl<LoginRecord> {
      */
     public final TableField<LoginRecord, String> FCM_TOKEN = createField(DSL.name("fcm_token"), SQLDataType.VARCHAR(255), this, "");
 
+    /**
+     * The column <code>public.login.send_reminder</code>.
+     */
+    public final TableField<LoginRecord, Boolean> SEND_REMINDER = createField(DSL.name("send_reminder"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("true"), SQLDataType.BOOLEAN)), this, "");
+
     private Login(Name alias, Table<LoginRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

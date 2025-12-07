@@ -216,6 +216,20 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         return (String) get(13);
     }
 
+    /**
+     * Setter for <code>public.login.send_reminder</code>.
+     */
+    public void setSendReminder(Boolean value) {
+        set(14, value);
+    }
+
+    /**
+     * Getter for <code>public.login.send_reminder</code>.
+     */
+    public Boolean getSendReminder() {
+        return (Boolean) get(14);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -239,7 +253,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
     /**
      * Create a detached, initialised LoginRecord
      */
-    public LoginRecord(Long id, String email, String name, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission, String eventPermission, String absenzenPermission, String register, String fcmToken) {
+    public LoginRecord(Long id, String email, String name, Boolean active, LocalDateTime lastLogin, String usersPermission, String notenPermission, String supporterPermission, String konzertePermission, String repertoirePermission, String eventPermission, String absenzenPermission, String register, String fcmToken, Boolean sendReminder) {
         super(Login.LOGIN);
 
         setId(id);
@@ -256,6 +270,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
         setAbsenzenPermission(absenzenPermission);
         setRegister(register);
         setFcmToken(fcmToken);
+        setSendReminder(sendReminder);
         resetChangedOnNotNull();
     }
 
@@ -280,6 +295,7 @@ public class LoginRecord extends UpdatableRecordImpl<LoginRecord> {
             setAbsenzenPermission(value.getAbsenzenPermission());
             setRegister(value.getRegister());
             setFcmToken(value.getFcmToken());
+            setSendReminder(value.getSendReminder());
             resetChangedOnNotNull();
         }
     }

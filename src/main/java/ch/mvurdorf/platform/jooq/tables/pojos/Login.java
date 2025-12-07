@@ -30,6 +30,7 @@ public class Login implements Serializable {
     private String absenzenPermission;
     private String register;
     private String fcmToken;
+    private Boolean sendReminder;
 
     public Login() {}
 
@@ -48,6 +49,7 @@ public class Login implements Serializable {
         this.absenzenPermission = value.absenzenPermission;
         this.register = value.register;
         this.fcmToken = value.fcmToken;
+        this.sendReminder = value.sendReminder;
     }
 
     public Login(
@@ -64,7 +66,8 @@ public class Login implements Serializable {
         String eventPermission,
         String absenzenPermission,
         String register,
-        String fcmToken
+        String fcmToken,
+        Boolean sendReminder
     ) {
         this.id = id;
         this.email = email;
@@ -80,6 +83,7 @@ public class Login implements Serializable {
         this.absenzenPermission = absenzenPermission;
         this.register = register;
         this.fcmToken = fcmToken;
+        this.sendReminder = sendReminder;
     }
 
     /**
@@ -278,6 +282,20 @@ public class Login implements Serializable {
         this.fcmToken = fcmToken;
     }
 
+    /**
+     * Getter for <code>public.login.send_reminder</code>.
+     */
+    public Boolean getSendReminder() {
+        return this.sendReminder;
+    }
+
+    /**
+     * Setter for <code>public.login.send_reminder</code>.
+     */
+    public void setSendReminder(Boolean sendReminder) {
+        this.sendReminder = sendReminder;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -371,6 +389,12 @@ public class Login implements Serializable {
         }
         else if (!this.fcmToken.equals(other.fcmToken))
             return false;
+        if (this.sendReminder == null) {
+            if (other.sendReminder != null)
+                return false;
+        }
+        else if (!this.sendReminder.equals(other.sendReminder))
+            return false;
         return true;
     }
 
@@ -392,6 +416,7 @@ public class Login implements Serializable {
         result = prime * result + ((this.absenzenPermission == null) ? 0 : this.absenzenPermission.hashCode());
         result = prime * result + ((this.register == null) ? 0 : this.register.hashCode());
         result = prime * result + ((this.fcmToken == null) ? 0 : this.fcmToken.hashCode());
+        result = prime * result + ((this.sendReminder == null) ? 0 : this.sendReminder.hashCode());
         return result;
     }
 
@@ -413,6 +438,7 @@ public class Login implements Serializable {
         sb.append(", ").append(absenzenPermission);
         sb.append(", ").append(register);
         sb.append(", ").append(fcmToken);
+        sb.append(", ").append(sendReminder);
 
         sb.append(")");
         return sb.toString();
