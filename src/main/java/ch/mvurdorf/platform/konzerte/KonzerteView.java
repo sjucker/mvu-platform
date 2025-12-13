@@ -102,6 +102,13 @@ public class KonzerteView extends VerticalLayout {
 
             grid.addColumn(clickableIcon(com.vaadin.flow.component.icon.VaadinIcon.LINK, this::share))
                 .setWidth("60px").setFlexGrow(0);
+
+            grid.addColumn(clickableIcon(
+                            com.vaadin.flow.component.icon.VaadinIcon.LIST,
+                            this::viewLinks,
+                            dto -> !notenShareService.listActiveLinksForKonzert(dto.id()).isEmpty(),
+                            "Aktive Links anzeigen"))
+                .setWidth("60px").setFlexGrow(0);
         }
 
         grid.addColumn(KonzertDto::name).setHeader("Name");
@@ -190,6 +197,59 @@ public class KonzerteView extends VerticalLayout {
         var footer = new HorizontalLayout(cancel, create);
         footer.setWidthFull();
         footer.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        dialog.getFooter().add(footer);
+
+        dialog.open();
+    }
+
+    private void viewLinks(KonzertDto dto) {
+        var dialog = new Dialog();
+        dialog.setHeaderTitle("Aktive Noten-Links: " + dto.name());
+
+        var content = new VerticalLayout();
+        content.setPadding(false);
+        content.setSpacing(true);
+
+        try {
+            var links = notenShareService.listActiveLinksForKonzert(dto.id());
+            if (links.isEmpty()) {
+                var empty = new H3("Keine aktiven Links vorhanden");
+                content.add(empty);
+            } else {
+                links.forEach(link -> {
+                    var instrumentAndExpiry = new H3(link.getInstrument().name() + (link.getExpiresAt() != null ? " (bis " + link.getExpiresAt() + ")" : ""));
+
+                    var tokenField = new TextField("Token");
+                    tokenField.setWidthFull();
+                    tokenField.setValue(link.getToken().toString());
+                    tokenField.setReadOnly(true);
+
+                    var url = "/noten-share/" + link.getToken();
+                    var urlField = new TextField("URL");
+                    urlField.setWidthFull();
+                    urlField.setValue(url);
+                    urlField.setReadOnly(true);
+
+                    var copyToken = new Button("Token kopieren", e -> UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0)", tokenField.getValue()));
+                    var copyUrl = new Button("URL kopieren", e -> UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0)", urlField.getValue()));
+                    var actions = new HorizontalLayout(copyToken, copyUrl);
+
+                    var block = new VerticalLayout(instrumentAndExpiry, tokenField, urlField, actions);
+                    block.setPadding(false);
+                    block.setSpacing(false);
+                    content.add(block);
+                });
+            }
+        } catch (Exception e) {
+            Notification.show("Fehler beim Laden der Links");
+        }
+
+        dialog.add(content);
+
+        var close = primaryButton("Schliessen", dialog::close);
+        var footer = new HorizontalLayout(close);
+        footer.setWidthFull();
+        footer.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         dialog.getFooter().add(footer);
 
         dialog.open();

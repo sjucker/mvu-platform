@@ -17,6 +17,7 @@ import static ch.mvurdorf.platform.jooq.Tables.KOMPOSITION;
 import static ch.mvurdorf.platform.jooq.Tables.KONZERT_ENTRY;
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF;
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF_ASSIGNMENT;
+import static ch.mvurdorf.platform.jooq.Tables.NOTEN_SHARE_LINK;
 import static org.jooq.impl.DSL.*;
 
 @Service
@@ -29,25 +30,44 @@ public class NotenShareService {
 
     public UUID createLink(Long konzertId, Instrument instrument, LocalDateTime expiresAt) {
         var token = UUID.randomUUID();
-        jooqDsl.insertInto(table("noten_share_link"))
-               .columns(field("fk_konzert"), field("instrument"), field("token"), field("expires_at"))
+        jooqDsl.insertInto(NOTEN_SHARE_LINK)
+               .columns(NOTEN_SHARE_LINK.FK_KONZERT,
+                        NOTEN_SHARE_LINK.INSTRUMENT,
+                        NOTEN_SHARE_LINK.TOKEN,
+                        NOTEN_SHARE_LINK.EXPIRES_AT)
                .values(konzertId, instrument.name(), token, expiresAt)
                .execute();
         return token;
     }
 
+    public List<Link> listActiveLinksForKonzert(Long konzertId) {
+        var now = LocalDateTime.now();
+        return jooqDsl.select(NOTEN_SHARE_LINK.ID,
+                              NOTEN_SHARE_LINK.FK_KONZERT,
+                              NOTEN_SHARE_LINK.INSTRUMENT,
+                              NOTEN_SHARE_LINK.TOKEN,
+                              NOTEN_SHARE_LINK.EXPIRES_AT,
+                              NOTEN_SHARE_LINK.ACTIVE)
+                      .from(NOTEN_SHARE_LINK)
+                      .where(NOTEN_SHARE_LINK.FK_KONZERT.eq(konzertId)
+                             .and(NOTEN_SHARE_LINK.ACTIVE.eq(true))
+                             .and(NOTEN_SHARE_LINK.EXPIRES_AT.isNull().or(NOTEN_SHARE_LINK.EXPIRES_AT.gt(now))))
+                      .orderBy(NOTEN_SHARE_LINK.INSTRUMENT.asc())
+                      .fetch(r -> new Link(r.value1(), r.value2(), Instrument.valueOf(r.value3()), r.value4(), r.value5(), r.value6()));
+    }
+
     public Optional<Link> findByToken(UUID token) {
         var now = LocalDateTime.now();
-        return jooqDsl.select(field("id", Long.class),
-                              field("fk_konzert", Long.class),
-                              field("instrument", String.class),
-                              field("token", UUID.class),
-                              field("expires_at", LocalDateTime.class),
-                              field("active", Boolean.class))
-                      .from(table("noten_share_link"))
-                      .where(field("token", UUID.class).eq(token)
-                             .and(field("active", Boolean.class).eq(true))
-                             .and(coalesce(field("expires_at", LocalDateTime.class).gt(now), true)))
+        return jooqDsl.select(NOTEN_SHARE_LINK.ID,
+                              NOTEN_SHARE_LINK.FK_KONZERT,
+                              NOTEN_SHARE_LINK.INSTRUMENT,
+                              NOTEN_SHARE_LINK.TOKEN,
+                              NOTEN_SHARE_LINK.EXPIRES_AT,
+                              NOTEN_SHARE_LINK.ACTIVE)
+                      .from(NOTEN_SHARE_LINK)
+                      .where(NOTEN_SHARE_LINK.TOKEN.eq(token)
+                             .and(NOTEN_SHARE_LINK.ACTIVE.eq(true))
+                             .and(NOTEN_SHARE_LINK.EXPIRES_AT.isNull().or(NOTEN_SHARE_LINK.EXPIRES_AT.gt(now))))
                       .fetchOptional(r -> new Link(r.value1(), r.value2(), Instrument.valueOf(r.value3()), r.value4(), r.value5(), r.value6()));
     }
 
