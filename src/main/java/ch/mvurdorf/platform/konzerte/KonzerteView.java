@@ -1,12 +1,21 @@
 package ch.mvurdorf.platform.konzerte;
 
+import ch.mvurdorf.platform.common.Instrument;
 import ch.mvurdorf.platform.konzerte.KonzerteService.KonzerteFilter;
 import ch.mvurdorf.platform.noten.KompositionService;
+import ch.mvurdorf.platform.noten.NotenShareService;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -37,15 +46,20 @@ public class KonzerteView extends VerticalLayout {
     private final KonzerteService konzerteService;
     private final KompositionService kompositionService;
     private final AuthenticatedUser authenticatedUser;
+    private final NotenShareService notenShareService;
 
     private HorizontalLayout controls;
     private Grid<KonzertDto> grid;
     private ConfigurableFilterDataProvider<KonzertDto, Void, KonzerteFilter> dataProvider;
 
-    public KonzerteView(KonzerteService konzerteService, KompositionService kompositionService, AuthenticatedUser authenticatedUser) {
+    public KonzerteView(KonzerteService konzerteService,
+                        KompositionService kompositionService,
+                        AuthenticatedUser authenticatedUser,
+                        NotenShareService notenShareService) {
         this.konzerteService = konzerteService;
         this.kompositionService = kompositionService;
         this.authenticatedUser = authenticatedUser;
+        this.notenShareService = notenShareService;
 
         setSizeFull();
         createControls();
@@ -85,6 +99,9 @@ public class KonzerteView extends VerticalLayout {
 
             grid.addColumn(clickableIcon(TRASH, this::delete))
                 .setWidth("60px").setFlexGrow(0);
+
+            grid.addColumn(clickableIcon(com.vaadin.flow.component.icon.VaadinIcon.LINK, this::share))
+                .setWidth("60px").setFlexGrow(0);
         }
 
         grid.addColumn(KonzertDto::name).setHeader("Name");
@@ -119,5 +136,62 @@ public class KonzerteView extends VerticalLayout {
 
     private void edit(KonzertDto dto) {
         KonzertDialog.edit(konzerteService, kompositionService, dto, () -> dataProvider.refreshAll());
+    }
+
+    private void share(KonzertDto dto) {
+        var dialog = new Dialog();
+        dialog.setHeaderTitle("Noten-Link teilen: " + dto.name());
+
+        var instrument = new ComboBox<Instrument>("Instrument");
+        instrument.setItems(Instrument.values());
+        instrument.setItemLabelGenerator(Enum::name);
+        instrument.setWidthFull();
+
+        var expires = new DateTimePicker("Gültig bis (optional)");
+        expires.setWidthFull();
+
+        var content = new VerticalLayout(new H3("Link-Einstellungen"), instrument, expires);
+        content.setPadding(false);
+        content.setSpacing(true);
+        dialog.add(content);
+
+        var cancel = new Button("Abbrechen", e -> dialog.close());
+        var create = primaryButton("Link erstellen", () -> {
+            if (instrument.getValue() == null) {
+                Notification.show("Bitte ein Instrument auswählen.");
+                return;
+            }
+            try {
+                var token = notenShareService.createLink(dto.id(), instrument.getValue(), expires.getValue());
+                dialog.removeAll();
+
+                var link = "/noten-share/" + token;
+                var linkField = new TextField("Öffentlicher Link");
+                linkField.setWidthFull();
+                linkField.setValue(link);
+                linkField.setReadOnly(true);
+
+                var copyBtn = new Button("Kopieren", ev -> UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0)", linkField.getValue()));
+
+                var done = primaryButton("Fertig", dialog::close);
+
+                var actions = new HorizontalLayout(copyBtn, done);
+                actions.setWidthFull();
+                actions.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+
+                var doneLayout = new VerticalLayout(new H3("Link erstellt"), linkField, actions);
+                doneLayout.setPadding(false);
+                dialog.add(doneLayout);
+            } catch (Exception ex) {
+                Notification.show("Fehler beim Erstellen des Links");
+            }
+        });
+
+        var footer = new HorizontalLayout(cancel, create);
+        footer.setWidthFull();
+        footer.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        dialog.getFooter().add(footer);
+
+        dialog.open();
     }
 }
