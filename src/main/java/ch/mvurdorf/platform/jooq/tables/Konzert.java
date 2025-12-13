@@ -7,6 +7,7 @@ package ch.mvurdorf.platform.jooq.tables;
 import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry.KonzertEntryPath;
+import ch.mvurdorf.platform.jooq.tables.NotenShareLink.NotenShareLinkPath;
 import ch.mvurdorf.platform.jooq.tables.records.KonzertRecord;
 
 import java.time.LocalDate;
@@ -180,6 +181,19 @@ public class Konzert extends TableImpl<KonzertRecord> {
             _konzertEntry = new KonzertEntryPath(this, null, Keys.KONZERT_ENTRY__KONZERT_ENTRY_FK_KONZERT_FKEY.getInverseKey());
 
         return _konzertEntry;
+    }
+
+    private transient NotenShareLinkPath _notenShareLink;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.noten_share_link</code> table
+     */
+    public NotenShareLinkPath notenShareLink() {
+        if (_notenShareLink == null)
+            _notenShareLink = new NotenShareLinkPath(this, null, Keys.NOTEN_SHARE_LINK__NOTEN_SHARE_LINK_FK_KONZERT_FKEY.getInverseKey());
+
+        return _notenShareLink;
     }
 
     @Override
