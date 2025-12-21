@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import static ch.mvurdorf.platform.ui.ComponentUtil.datePicker;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.timePicker;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.Unit.PERCENTAGE;
 import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
 
@@ -31,7 +32,7 @@ public class EventDialog extends Dialog {
     public static void show(EventDataDto existingEvent, Consumer<EventDataDto> callback) {
         var dialog = new EventDialog(callback);
         dialog.init(existingEvent);
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
         dialog.setCloseOnOutsideClick(false);
         dialog.setHeaderTitle("Event");
         dialog.setMinWidth(66, PERCENTAGE);

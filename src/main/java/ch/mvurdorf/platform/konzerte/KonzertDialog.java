@@ -24,6 +24,7 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.tertiaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.timePicker;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.grid.dnd.GridDropLocation.BELOW;
 import static com.vaadin.flow.component.grid.dnd.GridDropMode.BETWEEN;
 import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
@@ -47,7 +48,7 @@ public class KonzertDialog extends Dialog {
     public static void edit(KonzerteService konzerteService, KompositionService kompositionService, KonzertDto dto, Runnable onSuccess) {
         var dialog = new KonzertDialog(konzerteService, kompositionService);
         dialog.init(dto, onSuccess);
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
         dialog.setResizable(true);
         dialog.setCloseOnOutsideClick(false);
         dialog.setMinWidth("66%");

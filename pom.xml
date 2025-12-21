@@ -26,6 +26,7 @@
         <qrcodegen.version>1.8.0</qrcodegen.version>
         <pdfbox.version>3.0.6</pdfbox.version>
         <poi.version>5.5.0</poi.version>
+        <!-- TODO does not yet support vaadin 25? -->
         <vcf-pdf-viewer.version>5.0.0</vcf-pdf-viewer.version>
 
         <testcontainers-jooq-codegen-maven-plugin.version>0.0.4</testcontainers-jooq-codegen-maven-plugin.version>
@@ -125,6 +126,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security-oauth2-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-flyway</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

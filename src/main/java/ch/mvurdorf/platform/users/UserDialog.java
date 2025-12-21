@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.users.UserDialog.Mode.CREATE;
 import static ch.mvurdorf.platform.users.UserDialog.Mode.EDIT;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 
 public class UserDialog extends Dialog {
 
@@ -47,7 +48,7 @@ public class UserDialog extends Dialog {
     }
 
     private void init(UserDto user) {
-        setModal(true);
+        setModality(STRICT);
         setCloseOnOutsideClick(false);
 
         setHeaderTitle(mode == CREATE ? "User erstellen" : "User bearbeiten");

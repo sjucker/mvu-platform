@@ -8,7 +8,6 @@ import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import ch.mvurdorf.platform.ui.i18n.UploadGermanI18N;
 import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.ScrollOptions;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -36,7 +35,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
-import static com.vaadin.flow.component.ScrollOptions.Behavior.SMOOTH;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
+import static com.vaadin.flow.component.ScrollIntoViewOption.Behavior.SMOOTH;
 import static com.vaadin.flow.component.Unit.PIXELS;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
 import static lombok.AccessLevel.PRIVATE;
@@ -59,7 +59,7 @@ public class NotenPdfUploadDialog extends Dialog {
     public static void show(NotenPdfUploadService notenPdfUploadService, KompositionDto komposition) {
         var dialog = new NotenPdfUploadDialog(notenPdfUploadService);
         dialog.init(komposition);
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
         dialog.setCloseOnEsc(false);
         dialog.setCloseOnOutsideClick(false);
         dialog.setSizeFull();
@@ -170,7 +170,7 @@ public class NotenPdfUploadDialog extends Dialog {
                 var notenPdfAssignment = new NotenPdfAssignment(nextPages);
                 assignments.add(notenPdfAssignment);
                 getContent().addComponentAtIndex(assignments.size() - 1, notenPdfAssignment);
-                notenPdfAssignment.scrollIntoView(new ScrollOptions(SMOOTH));
+                notenPdfAssignment.scrollIntoView(SMOOTH);
             });
             getContent().add(add);
         }

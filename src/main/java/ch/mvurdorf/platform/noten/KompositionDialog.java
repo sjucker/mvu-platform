@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 import static ch.mvurdorf.platform.noten.NotenFormat.KONZERTMAPPE;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.Unit.PERCENTAGE;
 import static java.util.Optional.ofNullable;
 
@@ -25,7 +26,8 @@ public class KompositionDialog extends Dialog {
     public static void show(KompositionDto existingKomposition, Consumer<KompositionDto> callback) {
         var dialog = new KompositionDialog(callback);
         dialog.init(existingKomposition);
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
+        dialog.setCloseOnOutsideClick(false);
         dialog.setMinWidth(66, PERCENTAGE);
         dialog.open();
     }
@@ -35,9 +37,6 @@ public class KompositionDialog extends Dialog {
     }
 
     private void init(KompositionDto existingKomposition) {
-        setModal(true);
-        setCloseOnOutsideClick(false);
-
         var formLayout = new FormLayout();
         var titel = new TextField("Titel");
         titel.setRequired(true);

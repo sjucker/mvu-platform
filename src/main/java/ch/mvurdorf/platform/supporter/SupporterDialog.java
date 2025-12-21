@@ -20,6 +20,7 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.datePicker;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;
+import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.Unit.PERCENTAGE;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS_CIRCLE;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
@@ -50,7 +51,7 @@ public class SupporterDialog extends Dialog {
     private static void show(SupporterDto dto, boolean readOnly, Consumer<List<SupporterPaymentDto>> callback) {
         var dialog = new SupporterDialog(dto, readOnly);
         dialog.init(callback);
-        dialog.setModal(true);
+        dialog.setModality(STRICT);
         dialog.setResizable(true);
         dialog.setCloseOnOutsideClick(false);
         dialog.setMinWidth(66, PERCENTAGE);
