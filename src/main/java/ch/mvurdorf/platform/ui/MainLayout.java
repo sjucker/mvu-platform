@@ -14,6 +14,8 @@ import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.server.menu.MenuConfiguration;
@@ -25,7 +27,6 @@ import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.info.BuildProperties;
 
-import static ch.mvurdorf.platform.utils.FormatUtil.formatInstant;
 import static com.vaadin.flow.component.button.ButtonVariant.LUMO_SMALL;
 import static com.vaadin.flow.component.icon.VaadinIcon.EXIT_O;
 import static com.vaadin.flow.component.icon.VaadinIcon.KEY;
@@ -33,7 +34,7 @@ import static com.vaadin.flow.component.icon.VaadinIcon.KEY;
 @Slf4j
 @Layout
 @AnonymousAllowed
-public class MainLayout extends AppLayout {
+public class MainLayout extends AppLayout implements AfterNavigationObserver {
 
     private final BuildProperties buildProperties;
     private final AuthenticatedUser authenticatedUser;
@@ -120,8 +121,7 @@ public class MainLayout extends AppLayout {
     }
 
     @Override
-    protected void afterNavigation() {
-        super.afterNavigation();
+    public void afterNavigation(AfterNavigationEvent event) {
         viewTitle.setText(getCurrentPageTitle());
     }
 

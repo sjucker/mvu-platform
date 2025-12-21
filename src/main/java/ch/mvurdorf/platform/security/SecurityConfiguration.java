@@ -5,6 +5,7 @@ import ch.mvurdorf.platform.ui.LoginView;
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,6 +36,8 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/images/**").permitAll()
                                                          .requestMatchers("/line-awesome/**").permitAll()
+                                                         .requestMatchers(PathRequest.toStaticResources()
+                                                                                     .atCommonLocations()).permitAll()
                                                          .requestMatchers("/actuator/health/**", "/actuator/info").permitAll());
 
         http.rememberMe(configurer -> configurer.key(rememberMeKey)

@@ -1,8 +1,10 @@
 package ch.mvurdorf.platform;
 
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,7 +20,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @PWA(name = "Musikverein Harmonie Urdorf Platform", shortName = "MVU Platform")
-@Theme("my-theme")
+@StyleSheet(Lumo.STYLESHEET)
+@StyleSheet(Lumo.UTILITY_STYLESHEET)
+@Theme("my-theme") // TODO
 @EnableAsync
 @EnableScheduling
 @EnableConfigurationProperties(Application.PlatformProperties.class)
