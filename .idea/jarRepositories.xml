@@ -17,6 +17,11 @@
       <option name="url" value="https://maven.vaadin.com/vaadin-addons" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="vaadin-directory" />
+      <option name="name" value="vaadin-directory" />
+      <option name="url" value="https://maven.vaadin.com/vaadin-addons" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
