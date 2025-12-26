@@ -20,22 +20,22 @@
         <vaadin.version>25.0.2</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
         <!-- spring boot is behind, older version does not support postgres 16.8 -->
-        <flyway.version>11.17.0</flyway.version>
-        <google-cloud-storage.version>2.60.0</google-cloud-storage.version>
+        <flyway.version>11.20.0</flyway.version>
+        <google-cloud-storage.version>2.61.0</google-cloud-storage.version>
         <qrbill-generator.version>3.3.1</qrbill-generator.version>
         <qrcodegen.version>1.8.0</qrcodegen.version>
         <pdfbox.version>3.0.6</pdfbox.version>
-        <poi.version>5.5.0</poi.version>
+        <poi.version>5.5.1</poi.version>
         <!-- TODO does not yet support vaadin 25? -->
         <vcf-pdf-viewer.version>5.0.0</vcf-pdf-viewer.version>
 
         <testcontainers-jooq-codegen-maven-plugin.version>0.0.4</testcontainers-jooq-codegen-maven-plugin.version>
-        <testcontainers-jooq-codegen.version>2.0.2</testcontainers-jooq-codegen.version>
+        <testcontainers-jooq-codegen.version>2.0.3</testcontainers-jooq-codegen.version>
         <archunit.version>1.4.1</archunit.version>
 
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
-        <sonar-maven-plugin.version>5.3.0.6276</sonar-maven-plugin.version>
-        <versions-maven-plugin.version>2.19.1</versions-maven-plugin.version>
+        <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+        <versions-maven-plugin.version>2.20.1</versions-maven-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
 
         <!-- start local DB using src/main/docker/postgres.yml  -->
