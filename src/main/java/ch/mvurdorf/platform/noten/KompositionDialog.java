@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import static ch.mvurdorf.platform.noten.NotenFormat.KONZERTMAPPE;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static com.vaadin.flow.component.Unit.PERCENTAGE;
+import static com.vaadin.flow.component.textfield.Autocomplete.OFF;
 import static java.util.Optional.ofNullable;
 
 public class KompositionDialog extends Dialog {
@@ -41,12 +42,15 @@ public class KompositionDialog extends Dialog {
         var formLayout = new FormLayout();
         var titel = new TextField("Titel");
         titel.setRequired(true);
+        titel.setAutocomplete(OFF);
         formLayout.add(titel, 2);
 
         var komponist = new TextField("Komponist");
+        komponist.setAutocomplete(OFF);
         formLayout.add(komponist);
 
         var arrangeur = new TextField("Arrangeur");
+        arrangeur.setAutocomplete(OFF);
         formLayout.add(arrangeur);
 
         var format = new Select<NotenFormat>();
@@ -57,6 +61,7 @@ public class KompositionDialog extends Dialog {
         formLayout.add(format);
 
         var audioSample = new TextField("Hörprobe (URL)");
+        audioSample.setAutocomplete(OFF);
         formLayout.add(audioSample);
 
         var comment = new TextArea("Kommentar");
