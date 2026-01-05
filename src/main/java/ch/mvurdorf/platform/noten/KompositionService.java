@@ -13,13 +13,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF;
 import static ch.mvurdorf.platform.jooq.tables.Komposition.KOMPOSITION;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsLast;
+import static org.jooq.impl.DSL.selectCount;
 
 @Service
 public class KompositionService {
+
+    private static final String NOTEN_COUNT_FIELD = "noten_count";
+
     private final DSLContext jooqDsl;
     private final KompositionDao kompositionDao;
 
@@ -39,7 +44,7 @@ public class KompositionService {
     public List<KompositionDto> findAllSorted() {
         return kompositionDao.findAll().stream()
                              .map(komposition -> new KompositionDto(komposition.getId(), komposition.getTitel(), komposition.getKomponist(), komposition.getArrangeur(),
-                                                                    NotenFormat.valueOf(komposition.getFormat()), komposition.getAudioSample(), komposition.getComment()))
+                                                                    NotenFormat.valueOf(komposition.getFormat()), komposition.getAudioSample(), komposition.getComment(), 0))
                              .sorted(comparing(KompositionDto::titel)
                                              .thenComparing(KompositionDto::komponist, nullsLast(naturalOrder()))
                                              .thenComparing(KompositionDto::arrangeur, nullsLast(naturalOrder())))
@@ -55,23 +60,29 @@ public class KompositionService {
     }
 
     private Stream<KompositionDto> fetch(String filter, int offset, int limit) {
+        var select = jooqDsl.select(KOMPOSITION.ID,
+                                    KOMPOSITION.TITEL,
+                                    KOMPOSITION.KOMPONIST,
+                                    KOMPOSITION.ARRANGEUR,
+                                    KOMPOSITION.FORMAT,
+                                    KOMPOSITION.AUDIO_SAMPLE,
+                                    KOMPOSITION.COMMENT,
+                                    selectCount().from(NOTEN_PDF).where(KOMPOSITION.ID.eq(NOTEN_PDF.FK_KOMPOSITION)).asField(NOTEN_COUNT_FIELD));
         if (StringUtils.isBlank(filter)) {
-            return jooqDsl.select()
-                          .from(KOMPOSITION)
-                          .orderBy(KOMPOSITION.TITEL.asc())
-                          .offset(offset)
-                          .limit(limit)
-                          .fetch(KompositionService::toDto)
-                          .stream();
+            return select.from(KOMPOSITION)
+                         .orderBy(KOMPOSITION.TITEL.asc())
+                         .offset(offset)
+                         .limit(limit)
+                         .fetch(KompositionService::toDto)
+                         .stream();
         } else {
-            return jooqDsl.select()
-                          .from(KOMPOSITION)
-                          .where(filterCondition(filter))
-                          .orderBy(KOMPOSITION.TITEL.asc())
-                          .offset(offset)
-                          .limit(limit)
-                          .fetch(KompositionService::toDto)
-                          .stream();
+            return select.from(KOMPOSITION)
+                         .where(filterCondition(filter))
+                         .orderBy(KOMPOSITION.TITEL.asc())
+                         .offset(offset)
+                         .limit(limit)
+                         .fetch(KompositionService::toDto)
+                         .stream();
         }
     }
 
@@ -82,7 +93,8 @@ public class KompositionService {
                                   it.get(KOMPOSITION.ARRANGEUR),
                                   NotenFormat.valueOf(it.get(KOMPOSITION.FORMAT)),
                                   it.get(KOMPOSITION.AUDIO_SAMPLE),
-                                  it.get(KOMPOSITION.COMMENT));
+                                  it.get(KOMPOSITION.COMMENT),
+                                  it.get(NOTEN_COUNT_FIELD, Integer.class));
     }
 
     private int count(String filter) {

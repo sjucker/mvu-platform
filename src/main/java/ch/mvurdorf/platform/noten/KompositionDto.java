@@ -8,7 +8,8 @@ public record KompositionDto(Long id,
                              String arrangeur,
                              NotenFormat format,
                              String audioSample,
-                             String comment) {
+                             String comment,
+                             int notenCount) {
 
     public String label() {
         return getLabel(titel, komponist, arrangeur);

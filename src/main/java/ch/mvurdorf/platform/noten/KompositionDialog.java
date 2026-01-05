@@ -86,7 +86,8 @@ public class KompositionDialog extends Dialog {
                                                                arrangeur.getOptionalValue().orElse(null),
                                                                format.getValue(),
                                                                audioSample.getOptionalValue().orElse(null),
-                                                               comment.getOptionalValue().orElse(null)));
+                                                               comment.getOptionalValue().orElse(null),
+                                                               0));
                             close();
                         }));
     }

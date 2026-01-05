@@ -20,6 +20,7 @@ import java.util.Set;
 import static ch.mvurdorf.platform.security.LoginService.NOTEN_GROUP;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
+import static com.vaadin.flow.component.grid.ColumnTextAlign.END;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
@@ -64,6 +65,7 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(clickableIcon(UPLOAD, dto -> NotenPdfUploadDialog.show(notenPdfUploadService, dto), "Noten-Upload")).setWidth("60px").setFlexGrow(0);
         grid.addColumn(clickableIcon(MUSIC, dto -> NotenDownloadDialog.show(notenService, storageService, Set.of(), dto.id(), dto.titel()), "Noten-Download")).setWidth("60px").setFlexGrow(0);
         grid.addColumn(clickableIcon(EDIT, this::edit, "Bearbeiten")).setWidth("60px").setFlexGrow(0);
+        grid.addColumn(KompositionDto::notenCount).setHeader("# Noten").setTextAlign(END).setWidth("90px").setFlexGrow(0);
         grid.addColumn(KompositionDto::titel).setHeader("Titel");
         grid.addColumn(KompositionDto::komponist).setHeader("Komponist");
         grid.addColumn(KompositionDto::arrangeur).setHeader("Arrangeur");
