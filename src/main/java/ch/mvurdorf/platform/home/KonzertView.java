@@ -6,6 +6,7 @@ import ch.mvurdorf.platform.noten.NotenService;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.service.StorageService;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
@@ -19,8 +20,10 @@ import jakarta.annotation.security.PermitAll;
 import static ch.mvurdorf.platform.konzerte.KonzerteService.getNumber;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
+import static ch.mvurdorf.platform.ui.RendererUtil.iconPopover;
 import static ch.mvurdorf.platform.ui.RendererUtil.repertoireNumber;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
+import static com.vaadin.flow.component.icon.VaadinIcon.INFO_CIRCLE;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
 import static com.vaadin.flow.theme.lumo.LumoUtility.Whitespace.PRE_WRAP;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -61,23 +64,34 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                         add(tenu);
                     }
                     var entries = new Grid<KonzertEntryDto>();
+                    entries.setSelectionMode(SelectionMode.NONE);
+
                     entries.addColumn(dto -> getNumber(dto, konzertDto.entries()))
                            .setHeader("#")
                            .setWidth("60px").setFlexGrow(0);
+
                     if (konzertDto.hasMarschbuchEntry()) {
-                        entries.addColumn(repertoireNumber(KonzertEntryDto::marschbuchNumber))
+                        entries.addColumn(repertoireNumber(KonzertEntryDto::getMarschbuchNumber))
                                .setHeader("Marschbuch")
                                .setWidth("120px").setFlexGrow(0);
                     }
+
                     entries.addColumn(KonzertEntryDto::titel)
-                           .setHeader("Titel");
+                           .setHeader("Titel")
+                           .setFlexGrow(1);
+
+                    entries.addColumn(iconPopover(INFO_CIRCLE, KonzertEntryDto::getAdditionalInfo))
+                           .setWidth("60px").setFlexGrow(0);
+
                     entries.addColumn(clickableIcon(MUSIC,
-                                                    dto -> NotenDownloadDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.kompositionId(), dto.kompositionTitel()),
+                                                    dto -> NotenDownloadDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.getKompositionId(), dto.getKompositionTitel()),
                                                     dto -> !dto.isPlaceholderEntry(),
                                                     "Noten-Download"))
                            .setWidth("60px").setFlexGrow(0);
-                    entries.addColumn(externalLink(FILE_SOUND, KonzertEntryDto::kompositionAudioSample, "Hörprobe"))
+
+                    entries.addColumn(externalLink(FILE_SOUND, KonzertEntryDto::getKompositionAudioSample, "Hörprobe"))
                            .setWidth("60px").setFlexGrow(0);
+
                     entries.setItems(konzertDto.entries());
                     add(entries);
                 },

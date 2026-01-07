@@ -6,8 +6,10 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HtmlContainer;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
@@ -114,4 +116,31 @@ public final class RendererUtil {
         return new TextRenderer<>(dto -> BigDecimalUtil.formatBigDecimal(getter.apply(dto)));
     }
 
+    public static <T> ComponentRenderer<Component, T> icon(VaadinIcon vaadinIcon) {
+        return new ComponentRenderer<>(_ -> {
+            var icon = new Icon(vaadinIcon);
+            icon.addClassNames(IconSize.SMALL);
+            return icon;
+        });
+    }
+
+    public static <T> ComponentRenderer<Component, T> iconPopover(VaadinIcon vaadinIcon,
+                                                                  Function<T, String> getter) {
+        return new ComponentRenderer<>(dto -> {
+            var text = getter.apply(dto);
+            if (isNotBlank(text)) {
+                var icon = new Icon(vaadinIcon);
+                icon.addClassNames(IconSize.SMALL);
+
+                var popover = new Popover();
+                popover.setTarget(icon);
+                popover.add(new Paragraph(text));
+                popover.setOpenOnHover(true);
+
+                return icon;
+            } else {
+                return new Div();
+            }
+        });
+    }
 }

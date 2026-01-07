@@ -146,4 +146,19 @@ public class KonzertEntryDao extends AbstractSpringDAOImpl<KonzertEntryRecord, c
     public List<ch.mvurdorf.platform.jooq.tables.pojos.KonzertEntry> fetchByZugabe(Boolean... values) {
         return fetch(KonzertEntry.KONZERT_ENTRY.ZUGABE, values);
     }
+
+    /**
+     * Fetch records that have <code>additional_info BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.KonzertEntry> fetchRangeOfAdditionalInfo(String lowerInclusive, String upperInclusive) {
+        return fetchRange(KonzertEntry.KONZERT_ENTRY.ADDITIONAL_INFO, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>additional_info IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.KonzertEntry> fetchByAdditionalInfo(String... values) {
+        return fetch(KonzertEntry.KONZERT_ENTRY.ADDITIONAL_INFO, values);
+    }
 }
