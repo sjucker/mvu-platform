@@ -95,7 +95,8 @@ public class KonzerteService {
                                              KOMPOSITION.KOMPONIST,
                                              KOMPOSITION.ARRANGEUR,
                                              KOMPOSITION.AUDIO_SAMPLE,
-                                             KONZERT_ENTRY.ZUGABE)
+                                             KONZERT_ENTRY.ZUGABE,
+                                             KONZERT_ENTRY.ADDITIONAL_INFO)
                                               .from(KONZERT_ENTRY)
                                               .leftJoin(KOMPOSITION).on(KONZERT_ENTRY.FK_KOMPOSITION.eq(KOMPOSITION.ID))
                                               .where(KONZERT_ENTRY.FK_KONZERT.eq(KONZERT.ID))
@@ -147,7 +148,7 @@ public class KonzerteService {
 
         var index = 1;
         for (var entry : dto.entries()) {
-            konzertEntryDao.insert(new KonzertEntry(null, konzertId, index++, entry.kompositionId(), entry.placeholder(), entry.zugabe()));
+            konzertEntryDao.insert(new KonzertEntry(null, konzertId, index++, entry.getKompositionId(), entry.getPlaceholder(), entry.isZugabe(), entry.getAdditionalInfo()));
         }
     }
 
@@ -174,12 +175,12 @@ public class KonzerteService {
 
         int number = 1;
         for (var entry : entries) {
-            if (Objects.equals(entry.index(), dto.index())) {
+            if (Objects.equals(entry.getIndex(), dto.getIndex())) {
                 break;
             }
             if (!entry.isPlaceholderEntry()) {
-                if (dto.zugabe()) {
-                    if (entry.zugabe()) {
+                if (dto.isZugabe()) {
+                    if (entry.isZugabe()) {
                         number++;
                     }
                 } else {
@@ -188,7 +189,7 @@ public class KonzerteService {
             }
         }
 
-        return (dto.zugabe() ? "Z%d" : "%d").formatted(number);
+        return (dto.isZugabe() ? "Z%d" : "%d").formatted(number);
     }
 
     @Data

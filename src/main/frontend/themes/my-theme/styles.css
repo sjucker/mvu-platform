@@ -54,3 +54,8 @@ vaadin-grid::part(absenz-status-NEGATIVE) {
 vaadin-grid::part(absenz-status-INACTIVE) {
     background: linear-gradient(var(--lumo-shade-10pct), var(--lumo-shade-10pct)) var(--lumo-base-color);
 }
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--lumo-contrast-20pct);
+}

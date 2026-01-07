@@ -10,10 +10,12 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
@@ -24,11 +26,15 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.tertiaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.timePicker;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
+import static ch.mvurdorf.platform.ui.RendererUtil.icon;
+import static com.vaadin.flow.component.grid.ColumnTextAlign.CENTER;
+import static com.vaadin.flow.component.grid.GridVariant.LUMO_COLUMN_BORDERS;
+import static com.vaadin.flow.component.grid.GridVariant.LUMO_ROW_STRIPES;
 import static com.vaadin.flow.component.grid.dnd.GridDropLocation.BELOW;
 import static com.vaadin.flow.component.grid.dnd.GridDropMode.BETWEEN;
+import static com.vaadin.flow.component.icon.VaadinIcon.ARROWS_LONG_V;
 import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
 import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
-import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 @Slf4j
@@ -107,12 +113,32 @@ public class KonzertDialog extends Dialog {
         var entriesGrid = new Grid<KonzertEntryDto>();
         var entriesDataView = entriesGrid.setItems(dto.entries());
         entriesGrid.setSizeFull();
+        entriesGrid.addThemeVariants(LUMO_COLUMN_BORDERS, LUMO_ROW_STRIPES);
+
+        Binder<KonzertEntryDto> editorBinder = new Binder<>(KonzertEntryDto.class);
+        entriesGrid.getEditor().setBinder(editorBinder);
+
+        var additionalInfoField = new TextField();
+        additionalInfoField.setWidthFull();
+        editorBinder.forField(additionalInfoField).bind(KonzertEntryDto::getAdditionalInfo, KonzertEntryDto::setAdditionalInfo);
+
+        entriesGrid.addColumn(icon(ARROWS_LONG_V)).setTextAlign(CENTER).setWidth("60px").setFlexGrow(0);
         entriesGrid.addColumn(KonzertEntryDto::titel).setHeader("Titel").setFlexGrow(1);
-        entriesGrid.addColumn(new CheckboxRenderer<>(KonzertEntryDto::zugabe)).setHeader("Zugabe");
-        entriesGrid.addColumn(clickableIcon(TRASH, entriesDataView::removeItem)).setFlexGrow(0);
+
+        var additionalInfoColumn = entriesGrid.addColumn(KonzertEntryDto::getAdditionalInfo).setHeader("Zusatzinfo").setFlexGrow(1);
+        additionalInfoColumn.setEditorComponent(additionalInfoField);
+
+        entriesGrid.addColumn(new CheckboxRenderer<>(KonzertEntryDto::isZugabe)).setHeader("Zugabe").setWidth("90px").setFlexGrow(0);
+        entriesGrid.addColumn(clickableIcon(TRASH, entriesDataView::removeItem)).setTextAlign(CENTER).setWidth("60px").setFlexGrow(0);
         entriesGrid.setAllRowsVisible(true);
         entriesGrid.setMinHeight("300px");
         entriesGrid.setRowsDraggable(true);
+
+        entriesGrid.addItemDoubleClickListener(e -> {
+            if (!e.getItem().isPlaceholderEntry()) {
+                entriesGrid.getEditor().editItem(e.getItem());
+            }
+        });
 
         entriesGrid.addDragStartListener(e -> {
             draggedItem = e.getDraggedItems().getFirst();
@@ -142,6 +168,9 @@ public class KonzertDialog extends Dialog {
             entriesGrid.setDropMode(null);
         });
 
+        var additionalInfo = new TextField("Zusatzinfo");
+        additionalInfo.setWidthFull();
+
         var addButton = secondaryButton("Hinzufügen",
                                         () -> kompositionSelection.getOptionalValue()
                                                                   .ifPresent(selection -> {
@@ -151,12 +180,14 @@ public class KonzertDialog extends Dialog {
                                                                                                                   selection.komponist(),
                                                                                                                   selection.arrangeur(),
                                                                                                                   selection.audioSample(),
-                                                                                                                  zugabe.getValue()));
+                                                                                                                  zugabe.getValue(),
+                                                                                                                  additionalInfo.getValue()));
                                                                       kompositionSelection.clear();
+                                                                      additionalInfo.clear();
                                                                   }));
 
         var kompositionSelectionControls = new HorizontalLayout(kompositionSelection, zugabe, addButton);
-        kompositionSelectionControls.setAlignItems(CENTER);
+        kompositionSelectionControls.setAlignItems(Alignment.CENTER);
         kompositionSelectionControls.setWidthFull();
 
         var placeholder = new TextField();
@@ -166,13 +197,14 @@ public class KonzertDialog extends Dialog {
         var addPlaceholderButton = secondaryButton("Platzhalter hinzufügen",
                                                    () -> placeholder.getOptionalValue()
                                                                     .ifPresent(value -> {
-                                                                        entriesDataView.addItem(new KonzertEntryDto(null, null, value, null, null, null, null, null, false));
+                                                                        entriesDataView.addItem(new KonzertEntryDto(null, null, value, null, null, null, null, null, false, null));
                                                                         placeholder.clear();
+                                                                        additionalInfo.clear();
                                                                     }));
         var placeholderControls = new HorizontalLayout(placeholder, addPlaceholderButton);
         placeholderControls.setWidthFull();
 
-        content.add(formLayout, kompositionSelectionControls, new Hr(), placeholderControls, entriesGrid);
+        content.add(formLayout, new Hr(), kompositionSelectionControls, additionalInfo, new Hr(), placeholderControls, new Hr(), entriesGrid);
 
         add(content);
 
