@@ -34,7 +34,7 @@ public class SupporterEndpoint {
     }
 
     @GetMapping(value = "/{externalId}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getQrBill(@PathVariable("externalId") Long externalId) {
+    public ResponseEntity<byte[]> getQrBill(@PathVariable Long externalId) {
         return ResponseEntity.of(supporterService.qrBill(externalId));
     }
 
