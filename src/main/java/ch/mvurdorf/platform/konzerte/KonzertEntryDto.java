@@ -17,6 +17,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KonzertEntryDto {
+    // either placeholder or komposition details are set
     private Integer index;
     private BigDecimal marschbuchNumber;
     private String placeholder;
