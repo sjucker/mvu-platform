@@ -199,7 +199,6 @@ public class KonzertDialog extends Dialog {
                                                                     .ifPresent(value -> {
                                                                         entriesDataView.addItem(new KonzertEntryDto(null, null, value, null, null, null, null, null, false, null));
                                                                         placeholder.clear();
-                                                                        additionalInfo.clear();
                                                                     }));
         var placeholderControls = new HorizontalLayout(placeholder, addPlaceholderButton);
         placeholderControls.setWidthFull();
