@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord.UpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
@@ -21,8 +22,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Slf4j
+@Profile("!local")
 @Service
-public class FirebaseService {
+public class FirebaseService implements BaseFirebaseService {
 
     private final String firebaseApiKey;
 
@@ -46,6 +48,7 @@ public class FirebaseService {
     /**
      * @return whether the user could be created
      */
+    @Override
     public boolean createUser(String email, String name, String password) {
         var signUpRequest = new FirebaseSignUpRequest(email, name, password, true);
         try {
@@ -63,6 +66,7 @@ public class FirebaseService {
         }
     }
 
+    @Override
     public void updateUser(String oldEmail, UserDto user) throws FirebaseAuthException {
         log.info("updating user {} to {}", oldEmail, user);
         var userRecord = FirebaseAuth.getInstance().getUserByEmail(oldEmail);
@@ -77,6 +81,7 @@ public class FirebaseService {
 
     private record FirebaseSignInResponse(String idToken, String refreshToken) {}
 
+    @Override
     public boolean verifyUsernamePassword(String email, String password) {
         return signIn(email, password).isPresent();
     }
@@ -104,6 +109,7 @@ public class FirebaseService {
 
     private record FirebaseChangePasswordResponse(String idToken, String refreshToken) {}
 
+    @Override
     public boolean changePassword(String email, String currentPassword, String newPassword) {
         log.info("changing password for {}", email);
 

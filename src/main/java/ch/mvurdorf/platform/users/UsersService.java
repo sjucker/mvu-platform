@@ -6,7 +6,7 @@ import ch.mvurdorf.platform.jooq.tables.daos.InstrumentPermissionDao;
 import ch.mvurdorf.platform.jooq.tables.daos.LoginDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.InstrumentPermission;
 import ch.mvurdorf.platform.jooq.tables.pojos.Login;
-import ch.mvurdorf.platform.service.FirebaseService;
+import ch.mvurdorf.platform.service.BaseFirebaseService;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -34,7 +34,7 @@ class UsersService {
     private final DSLContext jooqDsl;
     private final LoginDao loginDao;
     private final InstrumentPermissionDao instrumentPermissionDao;
-    private final FirebaseService firebaseService;
+    private final BaseFirebaseService firebaseService;
 
     List<UserDto> findAll() {
         return jooqDsl.select(LOGIN,

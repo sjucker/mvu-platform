@@ -1,6 +1,6 @@
 package ch.mvurdorf.platform.security;
 
-import ch.mvurdorf.platform.service.FirebaseService;
+import ch.mvurdorf.platform.service.BaseFirebaseService;
 import ch.mvurdorf.platform.ui.LoginView;
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
@@ -45,7 +45,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(LoginService loginService, FirebaseService firebaseService) {
+    public DaoAuthenticationProvider authenticationProvider(LoginService loginService, BaseFirebaseService firebaseService) {
         return new FirebaseAuthenticationProvider(loginService, firebaseService);
     }
 

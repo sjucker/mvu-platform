@@ -1,7 +1,7 @@
 package ch.mvurdorf.platform.users;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
-import ch.mvurdorf.platform.service.FirebaseService;
+import ch.mvurdorf.platform.service.BaseFirebaseService;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -18,13 +18,13 @@ import static com.vaadin.flow.component.notification.Notification.Position.TOP_C
 public class PasswordChangeView extends VerticalLayout {
 
     private final AuthenticatedUser authenticatedUser;
-    private final FirebaseService firebaseService;
+    private final BaseFirebaseService firebaseService;
 
     private PasswordField currentPasswordField;
     private PasswordField newPasswordField;
     private PasswordField confirmPasswordField;
 
-    public PasswordChangeView(AuthenticatedUser authenticatedUser, FirebaseService firebaseService) {
+    public PasswordChangeView(AuthenticatedUser authenticatedUser, BaseFirebaseService firebaseService) {
         this.authenticatedUser = authenticatedUser;
         this.firebaseService = firebaseService;
 
