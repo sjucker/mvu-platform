@@ -49,6 +49,10 @@ public final class ComponentUtil {
         return button;
     }
 
+    public static DatePicker datePicker() {
+        return datePicker("");
+    }
+
     public static DatePicker datePicker(String label) {
         var germanI18n = new DatePicker.DatePickerI18n();
         germanI18n.setMonthNames(List.of("Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"));
@@ -62,6 +66,10 @@ public final class ComponentUtil {
         datePicker.setLocale(LOCALE);
         datePicker.setI18n(germanI18n);
         return datePicker;
+    }
+
+    public static TimePicker timePicker() {
+        return timePicker("");
     }
 
     public static TimePicker timePicker(String label) {

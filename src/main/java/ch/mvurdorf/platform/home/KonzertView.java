@@ -77,12 +77,12 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                                .setWidth("120px").setFlexGrow(0);
                     }
 
+                    entries.addColumn(iconPopover(INFO_CIRCLE, KonzertEntryDto::getAdditionalInfo))
+                           .setWidth("60px").setFlexGrow(0);
+
                     entries.addColumn(KonzertEntryDto::titel)
                            .setHeader("Titel")
                            .setFlexGrow(1);
-
-                    entries.addColumn(iconPopover(INFO_CIRCLE, KonzertEntryDto::getAdditionalInfo))
-                           .setWidth("60px").setFlexGrow(0);
 
                     entries.addColumn(clickableIcon(MUSIC,
                                                     dto -> NotenDownloadDialog.show(notenService, storageService, authenticatedUser.getInstrumentPermissions(), dto.getKompositionId(), dto.getKompositionTitel()),

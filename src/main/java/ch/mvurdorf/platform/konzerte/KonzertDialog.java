@@ -27,6 +27,7 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.tertiaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.timePicker;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.icon;
+import static com.vaadin.flow.component.Unit.PIXELS;
 import static com.vaadin.flow.component.grid.ColumnTextAlign.CENTER;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_COLUMN_BORDERS;
 import static com.vaadin.flow.component.grid.GridVariant.LUMO_ROW_STRIPES;
@@ -72,34 +73,44 @@ public class KonzertDialog extends Dialog {
         content.setPadding(false);
 
         var formLayout = new FormLayout();
-        var name = new TextField("Titel");
+        formLayout.setColumnSpacing(16, PIXELS);
+        formLayout.setRowSpacing(4, PIXELS);
+        formLayout.setLabelWidth(80, PIXELS);
+
+        var name = new TextField();
+        name.setWidthFull();
         name.setRequired(true);
         name.setValue(defaultString(dto.name()));
-        formLayout.add(name);
+        formLayout.addFormItem(name, "Titel");
 
-        var location = new TextField("Ort");
+        var location = new TextField();
+        location.setWidthFull();
         location.setValue(defaultString(dto.location()));
-        formLayout.add(location);
+        formLayout.addFormItem(location, "Ort");
 
-        var datum = datePicker("Datum");
+        var datum = datePicker();
+        datum.setWidthFull();
         datum.setValue(dto.datum());
         datum.setRequired(true);
-        formLayout.add(datum);
+        formLayout.addFormItem(datum, "Datum");
 
-        var zeit = timePicker("Zeit");
+        var zeit = timePicker();
+        zeit.setWidthFull();
         zeit.setStep(Duration.ofMinutes(15));
         zeit.setValue(dto.zeit());
         zeit.setRequired(true);
-        formLayout.add(zeit);
+        formLayout.addFormItem(zeit, "Zeit");
 
-        var description = new TextArea("Details");
+        var description = new TextArea();
+        description.setWidthFull();
         description.setValue(defaultString(dto.description()));
-        formLayout.add(description);
+        formLayout.addFormItem(description, "Details");
         formLayout.setColspan(description, 2);
 
-        var tenu = new TextField("Tenü");
+        var tenu = new TextField();
+        tenu.setWidthFull();
         tenu.setValue(defaultString(dto.tenu()));
-        formLayout.add(tenu);
+        formLayout.addFormItem(tenu, "Tenü");
         formLayout.setColspan(tenu, 2);
 
         var kompositionSelection = new ComboBox<KompositionDto>();
@@ -168,7 +179,8 @@ public class KonzertDialog extends Dialog {
             entriesGrid.setDropMode(null);
         });
 
-        var additionalInfo = new TextField("Zusatzinfo");
+        var additionalInfo = new TextField();
+        additionalInfo.setPlaceholder("Zusatzinfo");
         additionalInfo.setWidthFull();
 
         var addButton = secondaryButton("Hinzufügen",
@@ -189,6 +201,7 @@ public class KonzertDialog extends Dialog {
         var kompositionSelectionControls = new HorizontalLayout(kompositionSelection, zugabe, addButton);
         kompositionSelectionControls.setAlignItems(Alignment.CENTER);
         kompositionSelectionControls.setWidthFull();
+        kompositionSelectionControls.setPadding(false);
 
         var placeholder = new TextField();
         placeholder.setPlaceholder("Platzhalter");
