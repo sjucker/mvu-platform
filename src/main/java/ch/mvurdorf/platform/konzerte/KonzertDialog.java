@@ -131,7 +131,7 @@ public class KonzertDialog extends Dialog {
         entriesGrid.addColumn(new CheckboxRenderer<>(KonzertEntryDto::isZugabe)).setHeader("Zugabe").setWidth("90px").setFlexGrow(0);
         entriesGrid.addColumn(clickableIcon(TRASH, entriesDataView::removeItem)).setTextAlign(CENTER).setWidth("60px").setFlexGrow(0);
         entriesGrid.setAllRowsVisible(true);
-        entriesGrid.setMinHeight("300px");
+        entriesGrid.setMinHeight("400px");
         entriesGrid.setRowsDraggable(true);
 
         entriesGrid.addItemDoubleClickListener(e -> {
