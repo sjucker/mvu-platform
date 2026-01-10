@@ -67,7 +67,6 @@ public class UserDialog extends Dialog {
 
         email = new EmailField("E-Mail");
         email.setRequired(true);
-        email.setEnabled(mode == CREATE);
         formLayout.add(email);
 
         name = new TextField("Name");

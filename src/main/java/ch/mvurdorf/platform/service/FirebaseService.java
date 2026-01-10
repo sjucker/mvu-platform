@@ -1,13 +1,23 @@
 package ch.mvurdorf.platform.service;
 
+import ch.mvurdorf.platform.users.UserDto;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord.UpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Optional;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Slf4j
@@ -16,8 +26,15 @@ public class FirebaseService {
 
     private final String firebaseApiKey;
 
-    public FirebaseService(@Value("${firebase.api-key}") String firebaseApiKey) {
+    public FirebaseService(@Value("${firebase.api-key}") String firebaseApiKey,
+                           @Value("${firebase.service-account-json}") String serviceAccountJson) throws IOException {
         this.firebaseApiKey = firebaseApiKey;
+
+        var options = FirebaseOptions.builder()
+                                     .setCredentials(GoogleCredentials.fromStream(new ByteArrayInputStream(serviceAccountJson.getBytes(UTF_8))))
+                                     .build();
+
+        FirebaseApp.initializeApp(options);
     }
 
     // https://cloud.google.com/identity-platform/docs/reference/rest/v1/accounts/signUp
@@ -44,6 +61,14 @@ public class FirebaseService {
             log.warn("could not create user", e);
             return false;
         }
+    }
+
+    public void updateUser(String oldEmail, UserDto user) throws FirebaseAuthException {
+        log.info("updating user {} to {}", oldEmail, user);
+        var userRecord = FirebaseAuth.getInstance().getUserByEmail(oldEmail);
+        var request = new UpdateRequest(userRecord.getUid()).setEmail(user.email())
+                                                            .setDisplayName(user.name());
+        FirebaseAuth.getInstance().updateUser(request);
     }
 
     // see https://cloud.google.com/identity-platform/docs/reference/rest/v1/accounts/signInWithPassword

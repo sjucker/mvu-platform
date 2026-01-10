@@ -7,6 +7,7 @@ import ch.mvurdorf.platform.jooq.tables.daos.LoginDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.InstrumentPermission;
 import ch.mvurdorf.platform.jooq.tables.pojos.Login;
 import ch.mvurdorf.platform.service.FirebaseService;
+import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jooq.DSLContext;
@@ -58,8 +59,12 @@ class UsersService {
                       .toList();
     }
 
-    public void update(UserDto user) {
+    public void update(UserDto user) throws FirebaseAuthException {
         var login = loginDao.findOptionalById(user.id()).orElseThrow();
+        var oldEmail = login.getEmail();
+
+        firebaseService.updateUser(oldEmail, user);
+
         login.setEmail(user.email());
         login.setName(user.name());
         login.setRegister(user.register().name());

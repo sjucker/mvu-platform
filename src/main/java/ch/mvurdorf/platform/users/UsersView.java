@@ -2,6 +2,7 @@ package ch.mvurdorf.platform.users;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
@@ -14,6 +15,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import lombok.extern.slf4j.Slf4j;
 
 import static ch.mvurdorf.platform.security.LoginService.USERS_GROUP;
 import static ch.mvurdorf.platform.ui.RendererUtil.checkboxRenderer;
@@ -25,6 +27,7 @@ import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.USER;
 
+@Slf4j
 @PageTitle("Users")
 @Route("users")
 @RolesAllowed({USERS_GROUP})
@@ -96,8 +99,13 @@ class UsersView extends VerticalLayout {
 
     private void edit(UserDto item) {
         UserDialog.edit(item, user -> {
-            usersService.update(user);
-            setGridItems();
+            try {
+                usersService.update(user);
+                setGridItems();
+            } catch (FirebaseAuthException e) {
+                Notification.show("Fehler beim Aktualisieren des Users: " + e.getMessage(), 0, TOP_CENTER);
+                log.error("could not update user %s".formatted(user), e);
+            }
         });
     }
 

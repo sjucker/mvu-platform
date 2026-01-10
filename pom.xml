@@ -22,6 +22,7 @@
         <!-- spring boot is behind, older version does not support postgres 16.8 -->
         <flyway.version>11.17.0</flyway.version>
         <google-cloud-storage.version>2.60.0</google-cloud-storage.version>
+        <firebase-admin.version>9.7.0</firebase-admin.version>
         <qrbill-generator.version>3.3.1</qrbill-generator.version>
         <qrcodegen.version>1.8.0</qrcodegen.version>
         <pdfbox.version>3.0.6</pdfbox.version>
@@ -127,6 +128,12 @@
             <artifactId>google-cloud-storage</artifactId>
             <version>${google-cloud-storage.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>${firebase-admin.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>net.codecrete.qrbill</groupId>
             <artifactId>qrbill-generator</artifactId>
