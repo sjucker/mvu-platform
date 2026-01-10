@@ -63,9 +63,11 @@ class UsersService {
         var login = loginDao.findOptionalById(user.id()).orElseThrow();
         var oldEmail = login.getEmail();
 
-        firebaseService.updateUser(oldEmail, user);
+        if (!oldEmail.equals(user.email())) {
+            firebaseService.updateUser(oldEmail, user);
+            login.setEmail(user.email());
+        }
 
-        login.setEmail(user.email());
         login.setName(user.name());
         login.setRegister(user.register().name());
         login.setSendReminder(user.sendReminder());
