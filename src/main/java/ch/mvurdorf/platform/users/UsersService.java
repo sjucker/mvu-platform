@@ -59,13 +59,15 @@ class UsersService {
                       .toList();
     }
 
-    public void update(UserDto user) throws FirebaseAuthException {
+    public boolean update(UserDto user) throws FirebaseAuthException {
         var login = loginDao.findOptionalById(user.id()).orElseThrow();
         var oldEmail = login.getEmail();
 
+        boolean emailUpdated = false;
         if (!oldEmail.equals(user.email())) {
             firebaseService.updateUser(oldEmail, user);
             login.setEmail(user.email());
+            emailUpdated = true;
         }
 
         login.setName(user.name());
@@ -77,6 +79,8 @@ class UsersService {
                                 .where(INSTRUMENT_PERMISSION.FK_LOGIN.eq(login.getId())));
 
         insertInstrumentPermissions(user.instrumentPermissions(), login.getId());
+
+        return emailUpdated;
     }
 
     private void insertInstrumentPermissions(Set<Instrument> instruments, Long loginId) {

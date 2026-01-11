@@ -100,8 +100,11 @@ class UsersView extends VerticalLayout {
     private void edit(UserDto item) {
         UserDialog.edit(item, user -> {
             try {
-                usersService.update(user);
+                var emailUpdated = usersService.update(user);
                 setGridItems();
+                if (emailUpdated) {
+                    Notification.show("Nicht vergessen die Email auch in der Mailingliste im Netconfig anzupassen!", 0, TOP_CENTER);
+                }
             } catch (FirebaseAuthException e) {
                 Notification.show("Fehler beim Aktualisieren des Users: " + e.getMessage(), 0, TOP_CENTER);
                 log.error("could not update user %s".formatted(user), e);
