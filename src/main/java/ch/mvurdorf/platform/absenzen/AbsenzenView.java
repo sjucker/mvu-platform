@@ -103,6 +103,7 @@ public class AbsenzenView extends VerticalLayout {
                 Notification.show("Ein Fehler ist aufgetreten.");
             }
         });
+        exportButton.setDisableOnClick(true);
 
         fromDate.addValueChangeListener(_ -> validateForm());
         toDate.addValueChangeListener(_ -> validateForm());

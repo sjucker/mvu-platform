@@ -7,6 +7,7 @@ import ch.mvurdorf.platform.jooq.tables.records.LoginRecord;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.map.HashedMap;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jooq.DSLContext;
@@ -27,6 +28,8 @@ import static ch.mvurdorf.platform.jooq.Tables.EVENT;
 import static ch.mvurdorf.platform.jooq.Tables.LOGIN;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
+import static org.apache.poi.ss.usermodel.FillPatternType.SOLID_FOREGROUND;
+import static org.apache.poi.ss.usermodel.IndexedColors.LIGHT_GREEN;
 
 @Slf4j
 @Service
@@ -35,14 +38,20 @@ public class AbsenzenExportService {
     private final DSLContext jooqDsl;
 
     public InputStream export(LocalDate fromDate, LocalDate toDate) throws IOException {
+        log.info("exporting absenzen from {} to {}", fromDate, toDate);
+
         var users = findActiveUsers();
         var events = findEvents(fromDate, toDate);
         var absenzen = findAbsenzenPerEventThenPerUser(users, events);
 
         try (var workbook = new XSSFWorkbook()) {
+            var activeCellStyle = workbook.createCellStyle();
+            activeCellStyle.setFillForegroundColor(LIGHT_GREEN.getIndex());
+            activeCellStyle.setFillPattern(SOLID_FOREGROUND);
+
             var sheet = workbook.createSheet("Absenzen");
             createHeader(sheet, events);
-            createRows(sheet, users, events, absenzen);
+            createRows(sheet, users, events, absenzen, activeCellStyle);
 
             var stream = new ByteArrayOutputStream();
             workbook.write(stream);
@@ -50,7 +59,7 @@ public class AbsenzenExportService {
         }
     }
 
-    private void createRows(XSSFSheet sheet, List<LoginRecord> users, List<EventRecord> events, Map<Long, Map<Long, AbsenzState>> absenzen) {
+    private void createRows(XSSFSheet sheet, List<LoginRecord> users, List<EventRecord> events, Map<Long, Map<Long, AbsenzState>> absenzen, CellStyle lightGreenStyle) {
         var rowNum = 1;
         for (var user : users) {
             var row = sheet.createRow(rowNum++);
@@ -65,6 +74,7 @@ public class AbsenzenExportService {
                 var absenzStatus = eventAbsenzen.getOrDefault(user.getId(), UNKNOWN);
                 cell.setCellValue(absenzStatus.getDescription());
                 if (absenzStatus == POSITIVE) {
+                    cell.setCellStyle(lightGreenStyle);
                     total++;
                 }
             }
