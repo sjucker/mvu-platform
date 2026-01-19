@@ -62,8 +62,8 @@ public class NotenView extends VerticalLayout {
         dataProvider = kompositionService.dataProvider();
         grid.setDataProvider(dataProvider);
 
-        grid.addColumn(clickableIcon(UPLOAD, dto -> NotenPdfUploadDialog.show(notenPdfUploadService, dto), "Noten-Upload")).setWidth("60px").setFlexGrow(0);
-        grid.addColumn(clickableIcon(MUSIC, dto -> NotenDownloadDialog.show(notenService, storageService, Set.of(), dto.id(), dto.titel()), "Noten-Download")).setWidth("60px").setFlexGrow(0);
+        grid.addColumn(clickableIcon(UPLOAD, dto -> NotenPdfUploadDialog.show(notenPdfUploadService, dto, uploaded -> refreshItemIfNeeded(dto, uploaded)), "Noten-Upload")).setWidth("60px").setFlexGrow(0);
+        grid.addColumn(clickableIcon(MUSIC, dto -> NotenDownloadDialog.show(notenService, storageService, Set.of(), dto.id(), dto.titel(), authenticatedUser.hasWritePermission(NOTEN_GROUP)), "Noten-Download")).setWidth("60px").setFlexGrow(0);
         grid.addColumn(clickableIcon(EDIT, this::edit, "Bearbeiten")).setWidth("60px").setFlexGrow(0);
         grid.addColumn(KompositionDto::notenCount).setHeader("# Noten").setTextAlign(END).setWidth("90px").setFlexGrow(0);
         grid.addColumn(KompositionDto::titel).setHeader("Titel");
@@ -72,6 +72,12 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(new LocalizedEnumRenderer<>(KompositionDto::format)).setHeader("Format");
         grid.addColumn(externalLink(FILE_SOUND, KompositionDto::audioSample, "Hörprobe")).setHeader("Hörprobe");
         grid.addItemDoubleClickListener(event -> edit(event.getItem()));
+    }
+
+    private void refreshItemIfNeeded(KompositionDto dto, Boolean uploaded) {
+        if (uploaded) {
+            dataProvider.refreshAll();
+        }
     }
 
     private void edit(KompositionDto item) {

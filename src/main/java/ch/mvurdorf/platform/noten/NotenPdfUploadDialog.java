@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static com.vaadin.flow.component.ScrollOptions.Behavior.SMOOTH;
@@ -47,6 +48,7 @@ import static org.apache.commons.lang3.math.NumberUtils.toInt;
 public class NotenPdfUploadDialog extends Dialog {
 
     private final NotenPdfUploadService notenPdfUploadService;
+    private final Consumer<Boolean> uploadedCallback;
 
     private boolean pdfUploaded = false;
     private int pageCount = 0;
@@ -56,8 +58,9 @@ public class NotenPdfUploadDialog extends Dialog {
     private Button save;
     private byte[] uploadedFile;
 
-    public static void show(NotenPdfUploadService notenPdfUploadService, KompositionDto komposition) {
-        var dialog = new NotenPdfUploadDialog(notenPdfUploadService);
+    public static void show(NotenPdfUploadService notenPdfUploadService, KompositionDto komposition,
+                            Consumer<Boolean> uploadedCallback) {
+        var dialog = new NotenPdfUploadDialog(notenPdfUploadService, uploadedCallback);
         dialog.init(komposition);
         dialog.setModal(true);
         dialog.setCloseOnEsc(false);
@@ -110,7 +113,7 @@ public class NotenPdfUploadDialog extends Dialog {
         splitLayout.setSizeFull();
         add(splitLayout);
 
-        getFooter().add(new Button("Verwerfen", _ -> close()));
+        getFooter().add(new Button("Verwerfen", _ -> close(false)));
         save = primaryButton("Speichern", () -> {
             if (!pdfUploaded) {
                 Notification.show("Zuerst ein PDF hochladen!");
@@ -128,7 +131,7 @@ public class NotenPdfUploadDialog extends Dialog {
                                                  assignments,
                                                  uploadedFile);
                     Notification.show("Noten erfolgreich hochgeladen!");
-                    close();
+                    close(true);
                 } catch (Exception e) {
                     save.setEnabled(true);
                     Notification.show("Fehler: " + e.getMessage());
@@ -146,6 +149,11 @@ public class NotenPdfUploadDialog extends Dialog {
         } catch (IOException _) {
             return 0;
         }
+    }
+
+    public void close(boolean uploaded) {
+        close();
+        uploadedCallback.accept(uploaded);
     }
 
     @Override

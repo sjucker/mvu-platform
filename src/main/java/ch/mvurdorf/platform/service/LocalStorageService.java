@@ -40,4 +40,14 @@ public class LocalStorageService implements StorageService {
             throw new StorageException(e);
         }
     }
+
+    @Override
+    public boolean delete(String blob) {
+        try {
+            Files.delete(getPath(blob));
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
 }

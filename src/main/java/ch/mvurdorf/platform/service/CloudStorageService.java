@@ -22,4 +22,11 @@ public class CloudStorageService implements StorageService {
         log.info("reading blob {}", blob);
         return bucket.get(blob).getContent();
     }
+
+    @Override
+    public boolean delete(String blob) {
+        log.info("deleting blob {}", blob);
+        return bucket.get(blob).delete();
+    }
+
 }

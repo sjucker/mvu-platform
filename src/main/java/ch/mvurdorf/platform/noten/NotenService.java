@@ -6,8 +6,6 @@ import ch.mvurdorf.platform.common.Stimme;
 import ch.mvurdorf.platform.common.Stimmlage;
 import ch.mvurdorf.platform.jooq.tables.daos.NotenPdfAssignmentDao;
 import ch.mvurdorf.platform.jooq.tables.daos.NotenPdfDao;
-import ch.mvurdorf.platform.jooq.tables.pojos.NotenPdf;
-import ch.mvurdorf.platform.jooq.tables.pojos.NotenPdfAssignment;
 import ch.mvurdorf.platform.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +28,6 @@ import static ch.mvurdorf.platform.jooq.Tables.KOMPOSITION;
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF;
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF_ASSIGNMENT;
 import static java.util.Comparator.comparing;
-import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.pdfbox.io.IOUtils.createMemoryOnlyStreamCache;
 import static org.jooq.impl.DSL.multiset;
@@ -47,19 +44,9 @@ public class NotenService {
     private final NotenPdfAssignmentDao notenPdfAssignmentDao;
     private final StorageService storageService;
 
-    public void insert(Long kompositionId, NotenPdfDto noten, byte[] file) {
-        var notenPdf = new NotenPdf(null,
-                                    kompositionId,
-                                    ofNullable(noten.stimmlage()).map(Enum::name).orElse(null),
-                                    ofNullable(noten.notenschluessel()).map(Enum::name).orElse(null));
-        notenPdfDao.insert(notenPdf);
-        noten.assignments().forEach(notenAssignment ->
-                                            notenPdfAssignmentDao.insert(new NotenPdfAssignment(null,
-                                                                                                notenPdf.getId(),
-                                                                                                notenAssignment.instrument().name(),
-                                                                                                ofNullable(notenAssignment.stimme()).map(Enum::name).orElse(null))));
-
-        storageService.write(notenPdf.getId(), file);
+    public boolean deleteNotenPdf(Long notenPdfId) {
+        notenPdfDao.deleteById(notenPdfId);
+        return storageService.delete(notenPdfId);
     }
 
     public List<NotenPdfDto> findByKomposition(Long kompositionId) {
