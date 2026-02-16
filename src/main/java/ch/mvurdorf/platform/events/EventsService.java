@@ -27,13 +27,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static ch.mvurdorf.platform.common.AbsenzState.UNKNOWN;
 import static ch.mvurdorf.platform.jooq.Tables.ABSENZ_STATUS;
 import static ch.mvurdorf.platform.jooq.tables.Event.EVENT;
 import static ch.mvurdorf.platform.utils.DateUtil.now;
+import static ch.mvurdorf.platform.utils.DateUtil.today;
 import static ch.mvurdorf.platform.utils.FormatUtil.DATE_FORMAT_SHORT;
 import static ch.mvurdorf.platform.utils.FormatUtil.dayOfWeek;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDate;
@@ -41,6 +41,7 @@ import static ch.mvurdorf.platform.utils.FormatUtil.formatTime;
 import static java.time.format.TextStyle.FULL_STANDALONE;
 import static java.time.format.TextStyle.SHORT_STANDALONE;
 import static java.util.Locale.GERMAN;
+import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -293,7 +294,7 @@ public class EventsService {
     }
 
     public void updateEventAbsenzenForUser(Long loginId, Long eventId, AbsenzState state, String remark) {
-        var status = Optional.ofNullable(state).orElse(UNKNOWN).name();
+        var status = ofNullable(state).orElse(UNKNOWN).name();
         absenzStatusDao.findOptionalById(jooqDsl.newRecord(ABSENZ_STATUS.FK_LOGIN, ABSENZ_STATUS.FK_EVENT).values(loginId, eventId))
                        .ifPresentOrElse(pojo -> {
                                             pojo.setRemark(remark);
@@ -304,9 +305,25 @@ public class EventsService {
 
     }
 
+    public List<ProbeplanEntryDto> getProbeplan(LocalDate from, LocalDate to, LocalDate cutoffDate) {
+        if (from != null && to != null) {
+            return getProbeplan(from, to);
+        } else {
+            return getProbeplan(ofNullable(cutoffDate).orElse(today()));
+        }
+    }
+
     public List<ProbeplanEntryDto> getProbeplan(LocalDate cutoffDate) {
+        return getProbeplan(cutoffDate, EVENT.FROM_DATE.ge(today()), DSL.trueCondition());
+    }
+
+    public List<ProbeplanEntryDto> getProbeplan(LocalDate from, LocalDate to) {
+        return getProbeplan(today(), EVENT.FROM_DATE.ge(from), EVENT.FROM_DATE.le(to));
+    }
+
+    public List<ProbeplanEntryDto> getProbeplan(LocalDate cutoffDate, Condition minDate, Condition maxDate) {
         var events = jooqDsl.selectFrom(EVENT)
-                            .where(EVENT.FROM_DATE.ge(DateUtil.today()))
+                            .where(minDate, maxDate)
                             .orderBy(EVENT.FROM_DATE.asc(), EVENT.FROM_TIME.asc(), EVENT.TO_DATE.asc(), EVENT.TO_TIME.asc())
                             .fetch();
 

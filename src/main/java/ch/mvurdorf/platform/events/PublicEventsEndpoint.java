@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-
-import static ch.mvurdorf.platform.utils.DateUtil.today;
 
 @Slf4j
 @RestController
@@ -30,10 +27,12 @@ public class PublicEventsEndpoint {
     }
 
     @GetMapping("/probeplan")
-    public ResponseEntity<List<ProbeplanEntryDto>> probeplan(@RequestParam(required = false) LocalDate cutoffDate) {
-        log.info("GET /api/event/probeplan?cutoffDate={}", cutoffDate);
+    public ResponseEntity<List<ProbeplanEntryDto>> probeplan(@RequestParam(required = false) LocalDate cutoffDate,
+                                                             @RequestParam(required = false) LocalDate from,
+                                                             @RequestParam(required = false) LocalDate to) {
+        log.info("GET /api/event/probeplan?cutoffDate={}&from={}&to={}", cutoffDate, from, to);
 
-        return ResponseEntity.ok(eventsService.getProbeplan(Optional.ofNullable(cutoffDate).orElse(today())));
+        return ResponseEntity.ok(eventsService.getProbeplan(from, to, cutoffDate));
     }
 
 }
