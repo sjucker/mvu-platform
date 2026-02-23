@@ -12,12 +12,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.10</version>
+        <version>3.5.11</version>
     </parent>
 
     <properties>
         <java.version>25</java.version>
-        <vaadin.version>24.9.5</vaadin.version>
+        <vaadin.version>24.9.11</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
         <!-- spring boot is behind, older version does not support postgres 16.8 -->
         <flyway.version>11.17.0</flyway.version>
