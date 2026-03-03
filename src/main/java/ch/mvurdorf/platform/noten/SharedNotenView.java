@@ -4,7 +4,6 @@ import ch.mvurdorf.platform.home.NotenDownloadDialog;
 import ch.mvurdorf.platform.service.StorageService;
 import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEvent;
@@ -17,6 +16,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
+import static com.vaadin.flow.theme.lumo.LumoUtility.TextColor.ERROR;
 
 @AnonymousAllowed
 @PageTitle("Noten-Download")
@@ -59,7 +59,9 @@ public class SharedNotenView extends VerticalLayout implements HasUrlParameter<S
 
         if (optionalLink.isEmpty() || (optionalLink.get().validUntil().isBefore(DateUtil.today()))) {
             removeAll();
-            add(new H1("Link ungültig oder abgelaufen"));
+            var error = new H3("Link ungültig oder abgelaufen");
+            error.addClassName(ERROR);
+            add(error);
             return;
         }
 
