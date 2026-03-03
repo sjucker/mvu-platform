@@ -15,6 +15,9 @@ import ch.mvurdorf.platform.jooq.tables.NotenPdf;
 import ch.mvurdorf.platform.jooq.tables.NotenPdfAssignment;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
+import ch.mvurdorf.platform.jooq.tables.ShareableLink;
+import ch.mvurdorf.platform.jooq.tables.ShareableLinkInstrument;
+import ch.mvurdorf.platform.jooq.tables.ShareableLinkKomposition;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
@@ -98,6 +101,21 @@ public class Public extends SchemaImpl {
     public final RepertoireEntry REPERTOIRE_ENTRY = RepertoireEntry.REPERTOIRE_ENTRY;
 
     /**
+     * The table <code>public.shareable_link</code>.
+     */
+    public final ShareableLink SHAREABLE_LINK = ShareableLink.SHAREABLE_LINK;
+
+    /**
+     * The table <code>public.shareable_link_instrument</code>.
+     */
+    public final ShareableLinkInstrument SHAREABLE_LINK_INSTRUMENT = ShareableLinkInstrument.SHAREABLE_LINK_INSTRUMENT;
+
+    /**
+     * The table <code>public.shareable_link_komposition</code>.
+     */
+    public final ShareableLinkKomposition SHAREABLE_LINK_KOMPOSITION = ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION;
+
+    /**
      * The table <code>public.supporter</code>.
      */
     public final Supporter SUPPORTER = Supporter.SUPPORTER;
@@ -154,6 +172,9 @@ public class Public extends SchemaImpl {
             NotenPdfAssignment.NOTEN_PDF_ASSIGNMENT,
             Repertoire.REPERTOIRE,
             RepertoireEntry.REPERTOIRE_ENTRY,
+            ShareableLink.SHAREABLE_LINK,
+            ShareableLinkInstrument.SHAREABLE_LINK_INSTRUMENT,
+            ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION,
             Supporter.SUPPORTER,
             SupporterPayment.SUPPORTER_PAYMENT,
             SupporterVoucher.SUPPORTER_VOUCHER,

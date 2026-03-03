@@ -1,11 +1,13 @@
 package ch.mvurdorf.platform.noten;
 
+import ch.mvurdorf.platform.Application.PlatformProperties;
 import ch.mvurdorf.platform.home.NotenDownloadDialog;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.service.StorageService;
 import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -15,12 +17,14 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import static ch.mvurdorf.platform.security.LoginService.NOTEN_GROUP;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
 import static com.vaadin.flow.component.grid.ColumnTextAlign.END;
+import static com.vaadin.flow.component.grid.Grid.SelectionMode.MULTI;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
@@ -38,17 +42,27 @@ public class NotenView extends VerticalLayout {
     private final StorageService storageService;
     private final KompositionService kompositionService;
     private final NotenPdfUploadService notenPdfUploadService;
+    private final ShareableLinkService shareableLinkService;
+    private final PlatformProperties platformProperties;
     private final AuthenticatedUser authenticatedUser;
 
     private HorizontalLayout controls;
     private Grid<KompositionDto> grid;
     private ConfigurableFilterDataProvider<KompositionDto, Void, String> dataProvider;
 
-    public NotenView(NotenService notenService, StorageService storageService, KompositionService kompositionService, NotenPdfUploadService notenPdfUploadService, AuthenticatedUser authenticatedUser) {
+    public NotenView(NotenService notenService,
+                     StorageService storageService,
+                     KompositionService kompositionService,
+                     NotenPdfUploadService notenPdfUploadService,
+                     ShareableLinkService shareableLinkService,
+                     PlatformProperties platformProperties,
+                     AuthenticatedUser authenticatedUser) {
         this.notenService = notenService;
         this.storageService = storageService;
         this.kompositionService = kompositionService;
         this.notenPdfUploadService = notenPdfUploadService;
+        this.shareableLinkService = shareableLinkService;
+        this.platformProperties = platformProperties;
         this.authenticatedUser = authenticatedUser;
 
         setSizeFull();
@@ -59,6 +73,7 @@ public class NotenView extends VerticalLayout {
 
     private void createGrid() {
         grid = new Grid<>();
+        grid.setSelectionMode(MULTI);
         dataProvider = kompositionService.dataProvider();
         grid.setDataProvider(dataProvider);
 
@@ -94,6 +109,15 @@ public class NotenView extends VerticalLayout {
                 kompositionService.insert(kompositionDto);
                 dataProvider.refreshAll();
             })));
+
+            controls.add(new Button("Freigabe-Link erstellen", _ -> {
+                var selected = grid.getSelectedItems();
+                if (selected.isEmpty()) {
+                    Notification.show("Bitte mindestens eine Komposition auswählen.");
+                } else {
+                    ShareableLinkDialog.show(shareableLinkService, platformProperties, new ArrayList<>(selected));
+                }
+            }));
         }
 
         var filter = new TextField(event -> dataProvider.setFilter(event.getValue()));

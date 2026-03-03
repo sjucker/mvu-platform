@@ -15,6 +15,9 @@ import ch.mvurdorf.platform.jooq.tables.NotenPdf;
 import ch.mvurdorf.platform.jooq.tables.NotenPdfAssignment;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
+import ch.mvurdorf.platform.jooq.tables.ShareableLink;
+import ch.mvurdorf.platform.jooq.tables.ShareableLinkInstrument;
+import ch.mvurdorf.platform.jooq.tables.ShareableLinkKomposition;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
@@ -81,6 +84,21 @@ public class Tables {
      * The table <code>public.repertoire_entry</code>.
      */
     public static final RepertoireEntry REPERTOIRE_ENTRY = RepertoireEntry.REPERTOIRE_ENTRY;
+
+    /**
+     * The table <code>public.shareable_link</code>.
+     */
+    public static final ShareableLink SHAREABLE_LINK = ShareableLink.SHAREABLE_LINK;
+
+    /**
+     * The table <code>public.shareable_link_instrument</code>.
+     */
+    public static final ShareableLinkInstrument SHAREABLE_LINK_INSTRUMENT = ShareableLinkInstrument.SHAREABLE_LINK_INSTRUMENT;
+
+    /**
+     * The table <code>public.shareable_link_komposition</code>.
+     */
+    public static final ShareableLinkKomposition SHAREABLE_LINK_KOMPOSITION = ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION;
 
     /**
      * The table <code>public.supporter</code>.

@@ -9,6 +9,7 @@ import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.KonzertEntry.KonzertEntryPath;
 import ch.mvurdorf.platform.jooq.tables.NotenPdf.NotenPdfPath;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry.RepertoireEntryPath;
+import ch.mvurdorf.platform.jooq.tables.ShareableLinkKomposition.ShareableLinkKompositionPath;
 import ch.mvurdorf.platform.jooq.tables.records.KompositionRecord;
 
 import java.util.Collection;
@@ -167,6 +168,19 @@ public class Komposition extends TableImpl<KompositionRecord> {
     @Override
     public UniqueKey<KompositionRecord> getPrimaryKey() {
         return Keys.PK__KOMPOSITION;
+    }
+
+    private transient ShareableLinkKompositionPath _shareableLinkKomposition;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.shareable_link_komposition</code> table
+     */
+    public ShareableLinkKompositionPath shareableLinkKomposition() {
+        if (_shareableLinkKomposition == null)
+            _shareableLinkKomposition = new ShareableLinkKompositionPath(this, null, Keys.SHAREABLE_LINK_KOMPOSITION__FK__SHAREABLE_LINK_KOMPOSITION_KOMP.getInverseKey());
+
+        return _shareableLinkKomposition;
     }
 
     private transient KonzertEntryPath _konzertEntry;
