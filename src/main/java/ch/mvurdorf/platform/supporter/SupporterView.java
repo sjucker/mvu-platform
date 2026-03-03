@@ -26,9 +26,11 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;
+import static ch.mvurdorf.platform.ui.RendererUtil.iconPopover;
 import static com.vaadin.flow.component.icon.VaadinIcon.DOWNLOAD_ALT;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.EYE;
+import static com.vaadin.flow.component.icon.VaadinIcon.INFO_CIRCLE;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
 import static com.vaadin.flow.server.streams.DownloadHandler.fromInputStream;
@@ -108,6 +110,7 @@ public class SupporterView extends VerticalLayout {
         grid.addColumn(dateTimeRenderer(SupporterDto::registeredAt)).setHeader("Registriert am");
         grid.addColumn(SupporterDto::numberOfPayments).setHeader("# Bezahlungen");
         grid.addColumn(dateRenderer(dto -> dto.lastPayment().orElse(null))).setHeader("Letzte Bezahlung");
+        grid.addColumn(iconPopover(INFO_CIRCLE, SupporterDto::bemerkung)).setHeader("Info");
         if (authenticatedUser.hasWritePermission(SUPPORTER_GROUP)) {
             grid.addColumn(clickableIcon(EDIT,
                                          dto -> SupporterDialog.show(dto, newPayments -> {
