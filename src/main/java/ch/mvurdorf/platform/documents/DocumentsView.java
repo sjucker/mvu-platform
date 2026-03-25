@@ -30,7 +30,10 @@ public class DocumentsView extends VerticalLayout {
     }
 
     private void create() {
-        add(new UnorderedList(new ListItem(downloadAnchor("documents/mvu-statuten.pdf", "mvu-statuten.pdf", "MVU-Statuten (Stand 13. März 2025)"))));
+        add(new UnorderedList(
+                new ListItem(downloadAnchor("documents/mvu-statuten.pdf", "mvu-statuten.pdf", "MVU-Statuten (Stand 13. März 2025)")),
+                new ListItem(downloadAnchor("documents/protokoll-gv-2026.pdf", "protokoll-gv-2026.pdf", "Protokoll GV 2026 (12. März 2026)"))
+        ));
     }
 
     private Component downloadAnchor(String path, String filename, String text) {
