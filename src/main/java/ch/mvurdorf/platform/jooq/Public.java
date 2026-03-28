@@ -13,6 +13,7 @@ import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.NotenPdf;
 import ch.mvurdorf.platform.jooq.tables.NotenPdfAssignment;
+import ch.mvurdorf.platform.jooq.tables.NotenShareLink;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
 import ch.mvurdorf.platform.jooq.tables.ShareableLink;
@@ -89,6 +90,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.noten_pdf_assignment</code>.
      */
     public final NotenPdfAssignment NOTEN_PDF_ASSIGNMENT = NotenPdfAssignment.NOTEN_PDF_ASSIGNMENT;
+
+    /**
+     * The table <code>public.noten_share_link</code>.
+     */
+    public final NotenShareLink NOTEN_SHARE_LINK = NotenShareLink.NOTEN_SHARE_LINK;
 
     /**
      * The table <code>public.repertoire</code>.
@@ -170,6 +176,7 @@ public class Public extends SchemaImpl {
             Login.LOGIN,
             NotenPdf.NOTEN_PDF,
             NotenPdfAssignment.NOTEN_PDF_ASSIGNMENT,
+            NotenShareLink.NOTEN_SHARE_LINK,
             Repertoire.REPERTOIRE,
             RepertoireEntry.REPERTOIRE_ENTRY,
             ShareableLink.SHAREABLE_LINK,
