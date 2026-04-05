@@ -294,8 +294,10 @@ public class NotenPdfUploadDialog extends Dialog {
         var split = StringUtils.split(pages, '-');
         if (split.length == 2) {
             return new Pages(toInt(split[0]), toInt(split[1]));
-        } else {
+        } else if (split.length == 1) {
             return new Pages(toInt(split[0]), toInt(split[0]));
+        } else {
+            return Pages.invalid();
         }
     }
 
