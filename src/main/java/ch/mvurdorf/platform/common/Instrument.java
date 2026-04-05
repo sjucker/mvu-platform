@@ -10,7 +10,7 @@ import java.util.Set;
 @Getter
 @RequiredArgsConstructor
 public enum Instrument implements LocalizedEnum {
-    PICOLLO("Picollo"),
+    PICOLLO("Piccolo"),
     FLOETE("Flöte"),
     OBOE("Oboe"),
     KLARINETTE("Klarinette"),
