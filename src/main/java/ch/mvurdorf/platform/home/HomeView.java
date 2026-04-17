@@ -2,6 +2,7 @@ package ch.mvurdorf.platform.home;
 
 import ch.mvurdorf.platform.events.AllEventsView;
 import ch.mvurdorf.platform.events.EventsService;
+import ch.mvurdorf.platform.jooq.tables.pojos.Login;
 import ch.mvurdorf.platform.konzerte.KonzerteService;
 import ch.mvurdorf.platform.repertoire.RepertoireService;
 import ch.mvurdorf.platform.repertoire.RepertoireType;
@@ -95,10 +96,10 @@ public class HomeView extends VerticalLayout {
         repertoire.add(repertoireCard(KONZERTMAPPE));
         repertoire.add(repertoireCard(MARSCHBUCH));
         add(repertoire);
-// disable for now as it not yet correct
-//        authenticatedUser.get()
-//                         .map(Login::getCalendarToken)
-//                         .ifPresent(this::addCalendarSection);
+
+        authenticatedUser.get()
+                         .map(Login::getCalendarToken)
+                         .ifPresent(this::addCalendarSection);
 
         add(new Hr());
         add(new H3("App"));
