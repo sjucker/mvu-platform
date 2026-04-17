@@ -24,10 +24,13 @@ public class ICalUtil {
         var sb = new StringBuilder();
         append(sb, "BEGIN:VCALENDAR");
         append(sb, "VERSION:2.0");
-        append(sb, "PRODID:-//MV Harmonie Urdorf//MVU Platform//DE");
-        append(sb, "CALSCALE:GREGORIAN");
+        append(sb, "PRODID:-//MV Harmonie Urdorf//DE");
         append(sb, "METHOD:PUBLISH");
+        append(sb, "NAME:MV Harmonie Urdorf");
         append(sb, "X-WR-CALNAME:MV Harmonie Urdorf");
+        append(sb, "CALSCALE:GREGORIAN");
+        append(sb, "X-PUBLISHED-TTL:PT2H");
+        append(sb, "REFRESH-INTERVAL;VALUE=DURATION:PT2H");
 
         for (var event : events) {
             appendEvent(sb, event, dtstamp);
