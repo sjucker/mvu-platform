@@ -1,9 +1,12 @@
 package ch.mvurdorf.platform.events;
 
+import ch.mvurdorf.platform.utils.DateUtil;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -79,7 +82,9 @@ public class ICalUtil {
     }
 
     static String formatDateTime(LocalDate date, LocalTime time) {
-        return date.format(DATE_FORMAT) + "T" + time.format(TIME_FORMAT);
+        var utc = ZonedDateTime.of(date, time, DateUtil.ZONE_ID)
+                               .withZoneSameInstant(ZoneOffset.UTC);
+        return utc.format(DATE_FORMAT) + "T" + utc.format(TIME_FORMAT) + "Z";
     }
 
     static String formatDate(LocalDate date) {
