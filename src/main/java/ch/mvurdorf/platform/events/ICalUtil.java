@@ -21,10 +21,10 @@ public class ICalUtil {
         var sb = new StringBuilder();
         append(sb, "BEGIN:VCALENDAR");
         append(sb, "VERSION:2.0");
-        append(sb, "PRODID:-//MVU Urdorf//MVU Platform//DE");
+        append(sb, "PRODID:-//MV Harmonie Urdorf//MVU Platform//DE");
         append(sb, "CALSCALE:GREGORIAN");
         append(sb, "METHOD:PUBLISH");
-        append(sb, "X-WR-CALNAME:MVU Urdorf");
+        append(sb, "X-WR-CALNAME:MV Harmonie Urdorf");
 
         for (var event : events) {
             appendEvent(sb, event, dtstamp);

@@ -117,7 +117,7 @@ public class HomeView extends VerticalLayout {
         add(new H3("Mein Kalender"));
         add(new Paragraph("Deine persönlichen Termine (bei denen du als «anwesend» eingetragen bist) können als Kalender-Abo eingebunden werden. Kopiere die URL und füge sie in deiner Kalender-App ein:"));
         add(new UnorderedList(
-                new ListItem("Google Calendar: Andere Kalender → + → Per URL"),
+                new ListItem("Google Calendar: Weitere Kalender → + → Per URL"),
                 new ListItem("Outlook: Kalender hinzufügen → Aus dem Internet abonnieren → URL einfügen"),
                 new ListItem("Apple Kalender: Ablage → Neues Kalenderabonnement → URL einfügen")
         ));
