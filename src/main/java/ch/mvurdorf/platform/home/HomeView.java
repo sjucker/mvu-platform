@@ -113,14 +113,14 @@ public class HomeView extends VerticalLayout {
     }
 
     private void addCalendarSection(String calendarToken) {
-        add(new Hr());
-        add(new H3("Mein Kalender"));
-        add(new Paragraph("Deine persönlichen Termine (bei denen du als «anwesend» eingetragen bist) können als Kalender-Abo eingebunden werden. Kopiere die URL und füge sie in deiner Kalender-App ein:"));
-        add(new UnorderedList(
-                new ListItem("Google Calendar: Weitere Kalender → + → Per URL"),
-                new ListItem("Outlook: Kalender hinzufügen → Aus dem Internet abonnieren → URL einfügen"),
-                new ListItem("Apple Kalender: Ablage → Neues Kalenderabonnement → URL einfügen")
-        ));
+        var container = new Div(new Hr(),
+                                new H3("Mein Kalender"),
+                                new Paragraph("Deine persönlichen Termine (bei denen du als «anwesend» eingetragen bist) können als Kalender-Abo eingebunden werden. Kopiere die URL und füge sie in deiner Kalender-App ein:"),
+                                new UnorderedList(
+                                        new ListItem("Google Calendar: Weitere Kalender → + → Per URL"),
+                                        new ListItem("Outlook: Kalender hinzufügen → Aus dem Internet abonnieren → URL einfügen"),
+                                        new ListItem("Apple Kalender: Ablage → Neues Kalenderabonnement → URL einfügen")
+                                ));
 
         var urlField = new TextField();
         urlField.setReadOnly(true);
@@ -137,12 +137,14 @@ public class HomeView extends VerticalLayout {
         var urlRow = new HorizontalLayout(urlField, copyButton);
         urlRow.setWidthFull();
         urlRow.setAlignItems(Alignment.BASELINE);
-        add(urlRow);
+        container.add(urlRow);
 
         UI.getCurrent().getPage().fetchCurrentURL(url -> {
             var origin = url.getProtocol() + "://" + url.getHost() + (url.getPort() != -1 ? ":" + url.getPort() : "");
             urlField.setValue(origin + "/api/calendar/" + calendarToken + "/events.ics");
         });
+
+        add(container);
     }
 
     private Anchor getAppDownloadButton(String src, String alt, String url) {
