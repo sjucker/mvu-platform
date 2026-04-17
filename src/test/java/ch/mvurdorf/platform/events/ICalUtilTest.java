@@ -52,37 +52,47 @@ class ICalUtilTest {
 
     @Test
     void timedEventWithoutEndTime() {
-        // 19:30 and 21:30 CEST (UTC+2) → 17:30 and 19:30 UTC
         var result = ICalUtil.buildIcal(List.of(event(1L, DATE, TIME, null, null, "Konzert", null, null)));
 
         assertThat(lines(result)).contains(
-                "DTSTART:20250615T173000Z",
-                "DTEND:20250615T193000Z"
+                "DTSTART;TZID=Europe/Zurich:20250615T193000",
+                "DTEND;TZID=Europe/Zurich:20250615T213000"
         );
     }
 
     @Test
     void timedEventWithEndTime() {
-        // 19:30 and 21:45 CEST (UTC+2) → 17:30 and 19:45 UTC
         var endTime = LocalTime.of(21, 45);
         var result = ICalUtil.buildIcal(List.of(event(1L, DATE, TIME, null, endTime, "Konzert", null, null)));
 
         assertThat(lines(result)).contains(
-                "DTSTART:20250615T173000Z",
-                "DTEND:20250615T194500Z"
+                "DTSTART;TZID=Europe/Zurich:20250615T193000",
+                "DTEND;TZID=Europe/Zurich:20250615T214500"
         );
     }
 
     @Test
     void timedEventWithEndDate() {
-        // 19:30 CEST → 17:30 UTC; 00:30 CEST next day → 22:30 UTC same day
         var toDate = DATE.plusDays(1);
         var endTime = LocalTime.of(0, 30);
         var result = ICalUtil.buildIcal(List.of(event(1L, DATE, TIME, toDate, endTime, "Event", null, null)));
 
         assertThat(lines(result)).contains(
-                "DTSTART:20250615T173000Z",
-                "DTEND:20250615T223000Z"
+                "DTSTART;TZID=Europe/Zurich:20250615T193000",
+                "DTEND;TZID=Europe/Zurich:20250616T003000"
+        );
+    }
+
+    @Test
+    void vtimezoneBlock() {
+        var result = ICalUtil.buildIcal(List.of());
+
+        assertThat(lines(result)).contains(
+                "BEGIN:VTIMEZONE",
+                "TZID:Europe/Zurich",
+                "TZNAME:CET",
+                "TZNAME:CEST",
+                "END:VTIMEZONE"
         );
     }
 
@@ -153,8 +163,7 @@ class ICalUtilTest {
 
     @Test
     void formatDateTimeValue() {
-        // 09:05:03 CET (UTC+1, January is winter) → 08:05:03 UTC
-        assertThat(formatDateTime(LocalDate.of(2025, 1, 5), LocalTime.of(9, 5, 3))).isEqualTo("20250105T080503Z");
+        assertThat(formatDateTime(LocalDate.of(2025, 1, 5), LocalTime.of(9, 5, 3))).isEqualTo("20250105T090503");
     }
 
     private static String[] lines(String ical) {
