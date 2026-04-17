@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static ch.mvurdorf.platform.jooq.Tables.INSTRUMENT_PERMISSION;
 import static ch.mvurdorf.platform.jooq.Tables.LOGIN;
@@ -110,7 +111,8 @@ class UsersService {
                                  NONE.name(),
                                  newUser.register().name(),
                                  null,
-                                 true);
+                                 true,
+                                 UUID.randomUUID().toString());
         loginDao.insert(newLogin);
 
         insertInstrumentPermissions(newUser.instrumentPermissions(), newLogin.getId());

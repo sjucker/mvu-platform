@@ -29,8 +29,10 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static ch.mvurdorf.platform.common.AbsenzState.POSITIVE;
 import static ch.mvurdorf.platform.common.AbsenzState.UNKNOWN;
 import static ch.mvurdorf.platform.jooq.Tables.ABSENZ_STATUS;
+import static ch.mvurdorf.platform.jooq.Tables.LOGIN;
 import static ch.mvurdorf.platform.jooq.tables.Event.EVENT;
 import static ch.mvurdorf.platform.utils.DateUtil.now;
 import static ch.mvurdorf.platform.utils.DateUtil.today;
@@ -397,5 +399,20 @@ public class EventsService {
         }
 
         return "%02d.".formatted(from);
+    }
+
+    public List<EventDto> findPositiveEventsForCalendar(String token) {
+        return jooqDsl.select(EVENT.fields())
+                      .from(EVENT)
+                      .join(ABSENZ_STATUS).on(ABSENZ_STATUS.FK_EVENT.eq(EVENT.ID))
+                      .join(LOGIN).on(LOGIN.ID.eq(ABSENZ_STATUS.FK_LOGIN))
+                      .where(LOGIN.CALENDAR_TOKEN.eq(token),
+                             LOGIN.ACTIVE.isTrue(),
+                             ABSENZ_STATUS.STATUS.eq(POSITIVE.name()),
+                             EVENT.FROM_DATE.ge(today()),
+                             EVENT.NEXT_VERSION.isNull(),
+                             EVENT.DELETED_AT.isNull())
+                      .orderBy(EVENT.FROM_DATE.asc(), EVENT.FROM_TIME.asc())
+                      .fetch(r -> toDto(r.into(EVENT)));
     }
 }
