@@ -110,6 +110,13 @@ class ICalUtilTest {
     }
 
     @Test
+    void dtstampPresentAndUtc() {
+        var result = ICalUtil.buildIcal(List.of(event(1L, DATE, null, null, null, "Probe", null, null)));
+
+        assertThat(result).containsPattern("DTSTAMP:\\d{8}T\\d{6}Z");
+    }
+
+    @Test
     void escapeTextCommaAndSemicolon() {
         assertThat(escapeText("a,b;c")).isEqualTo("a\\,b\\;c");
     }

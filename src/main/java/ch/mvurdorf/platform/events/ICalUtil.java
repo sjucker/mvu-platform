@@ -1,7 +1,9 @@
 package ch.mvurdorf.platform.events;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -9,11 +11,13 @@ public class ICalUtil {
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HHmmss");
+    private static final DateTimeFormatter DTSTAMP_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC);
 
     private ICalUtil() {
     }
 
     public static String buildIcal(List<EventDto> events) {
+        var dtstamp = DTSTAMP_FORMAT.format(Instant.now());
         var sb = new StringBuilder();
         append(sb, "BEGIN:VCALENDAR");
         append(sb, "VERSION:2.0");
@@ -23,16 +27,17 @@ public class ICalUtil {
         append(sb, "X-WR-CALNAME:MVU Urdorf");
 
         for (var event : events) {
-            appendEvent(sb, event);
+            appendEvent(sb, event, dtstamp);
         }
 
         append(sb, "END:VCALENDAR");
         return sb.toString();
     }
 
-    private static void appendEvent(StringBuilder sb, EventDto event) {
+    private static void appendEvent(StringBuilder sb, EventDto event, String dtstamp) {
         append(sb, "BEGIN:VEVENT");
         append(sb, "UID:mvu-event-%d@mvurdorf.ch".formatted(event.id()));
+        append(sb, "DTSTAMP:" + dtstamp);
 
         if (event.fromTime() != null) {
             append(sb, "DTSTART:" + formatDateTime(event.fromDate(), event.fromTime()));
