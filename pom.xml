@@ -12,14 +12,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.11</version>
+        <version>3.5.14</version>
     </parent>
 
     <properties>
         <java.version>25</java.version>
-        <vaadin.version>24.9.11</vaadin.version>
+        <vaadin.version>24.10.6</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
-        <!-- spring boot is behind, older version does not support postgres 16.10 -->
+        <!-- spring boot is behind, older version does not support postgres 16.13 -->
         <flyway.version>12.0.0</flyway.version>
         <google-cloud-storage.version>2.63.0</google-cloud-storage.version>
         <firebase-admin.version>9.7.1</firebase-admin.version>
@@ -298,7 +298,7 @@
                             <skip>${jooq-codegen-skip}</skip>
                             <database>
                                 <type>POSTGRES</type>
-                                <containerImage>postgres:16.10</containerImage>
+                                <containerImage>postgres:16.13</containerImage>
                             </database>
                             <flyway/>
                             <jooq>

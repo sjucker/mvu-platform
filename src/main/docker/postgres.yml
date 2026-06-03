@@ -1,6 +1,6 @@
 services:
   mvu-platform-db:
-    image: postgres:16.10
+    image: postgres:16.13
     environment:
       - POSTGRES_USER=mvu
       - POSTGRES_PASSWORD=mvu
