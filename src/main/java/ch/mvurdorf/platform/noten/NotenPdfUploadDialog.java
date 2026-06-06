@@ -39,7 +39,11 @@ import java.util.function.Consumer;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static com.vaadin.flow.component.ScrollOptions.Behavior.SMOOTH;
 import static com.vaadin.flow.component.Unit.PIXELS;
+import static com.vaadin.flow.component.button.ButtonVariant.LUMO_ICON;
+import static com.vaadin.flow.component.button.ButtonVariant.LUMO_TERTIARY;
+import static com.vaadin.flow.component.icon.VaadinIcon.CHEVRON_CIRCLE_RIGHT;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
+import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.END;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 
@@ -97,7 +101,7 @@ public class NotenPdfUploadDialog extends Dialog {
         });
         upload.setWidthFull();
 
-        notenPdfAssignmentContainer = new NotenPdfAssignmentContainer();
+        notenPdfAssignmentContainer = new NotenPdfAssignmentContainer(pdfViewer::setPage);
         scroller = new Scroller(notenPdfAssignmentContainer);
         scroller.setSizeFull();
         scroller.setVisible(false);
@@ -166,8 +170,10 @@ public class NotenPdfUploadDialog extends Dialog {
     private static class NotenPdfAssignmentContainer extends Composite<VerticalLayout> {
 
         private final List<NotenPdfAssignment> assignments = new ArrayList<>();
+        private final Consumer<Integer> jumpToPage;
 
-        public NotenPdfAssignmentContainer() {
+        public NotenPdfAssignmentContainer(Consumer<Integer> jumpToPage) {
+            this.jumpToPage = jumpToPage;
             getContent().setSizeFull();
             getContent().setMargin(false);
             getContent().setPadding(false);
@@ -175,7 +181,7 @@ public class NotenPdfUploadDialog extends Dialog {
             var add = new Button(PLUS.create(), _ -> {
                 var pages = assignments.getLast().getPages();
                 var nextPages = pages.isValid() ? "%d-%d".formatted(pages.to + 1, pages.to + 1 + (pages.to - pages.from)) : "";
-                var notenPdfAssignment = new NotenPdfAssignment(nextPages);
+                var notenPdfAssignment = new NotenPdfAssignment(nextPages, jumpToPage);
                 assignments.add(notenPdfAssignment);
                 getContent().addComponentAtIndex(assignments.size() - 1, notenPdfAssignment);
                 notenPdfAssignment.scrollIntoView(new ScrollOptions(SMOOTH));
@@ -190,7 +196,7 @@ public class NotenPdfUploadDialog extends Dialog {
         }
 
         public void add(String pages) {
-            var notenPdfAssignment = new NotenPdfAssignment(pages);
+            var notenPdfAssignment = new NotenPdfAssignment(pages, jumpToPage);
             assignments.add(notenPdfAssignment);
             getContent().addComponentAtIndex(assignments.size() - 1, notenPdfAssignment);
         }
@@ -209,7 +215,7 @@ public class NotenPdfUploadDialog extends Dialog {
         private final MultiSelectComboBox<Stimme> stimmen;
         private final TextField pages;
 
-        public NotenPdfAssignment(String pagesValue) {
+        public NotenPdfAssignment(String pagesValue, Consumer<Integer> jumpToPage) {
             notenschluessel = new Select<>();
             notenschluessel.setEmptySelectionAllowed(true);
             notenschluessel.setLabel("Notenschlüssel");
@@ -241,12 +247,22 @@ public class NotenPdfUploadDialog extends Dialog {
             pages.setRequired(true);
             pages.setWidth(100, PIXELS);
 
+            var jumpButton = new Button(CHEVRON_CIRCLE_RIGHT.create(), _ -> {
+                var p = parsePages(pages.getValue());
+                if (p.isValid()) {
+                    jumpToPage.accept(p.from());
+                }
+            });
+            jumpButton.setTooltipText("Zur Seite springen");
+            jumpButton.addThemeVariants(LUMO_TERTIARY, LUMO_ICON);
+
             getContent().setWidthFull();
             getContent().setMargin(false);
             getContent().setPadding(false);
             getContent().setWrap(true);
             getContent().addClassNames(Gap.Row.XSMALL, Gap.Column.MEDIUM);
-            getContent().add(notenschluessel, stimmlage, instrumente, stimmen, pages);
+            getContent().add(notenschluessel, stimmlage, instrumente, stimmen, pages, jumpButton);
+            getContent().setAlignSelf(END, jumpButton);
         }
 
         public Optional<CreateNotenPdfDto> get() {
