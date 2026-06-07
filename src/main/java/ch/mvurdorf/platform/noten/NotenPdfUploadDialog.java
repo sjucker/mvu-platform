@@ -101,7 +101,7 @@ public class NotenPdfUploadDialog extends Dialog {
         });
         upload.setWidthFull();
 
-        notenPdfAssignmentContainer = new NotenPdfAssignmentContainer(pdfViewer::setPage);
+        notenPdfAssignmentContainer = new NotenPdfAssignmentContainer(currentPage -> pdfViewer.setPage(currentPage));
         scroller = new Scroller(notenPdfAssignmentContainer);
         scroller.setSizeFull();
         scroller.setVisible(false);
