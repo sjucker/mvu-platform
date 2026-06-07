@@ -147,6 +147,110 @@ public class NotenPdfUploadDialog extends Dialog {
         getFooter().add(save);
     }
 
+    private void importFromCsv(byte[] data) {
+        try {
+            try (var reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data), UTF_8))) {
+                var lines = reader.lines()
+                                  .filter(line -> !line.isBlank())
+                                  .toList();
+
+                if (lines.size() < 2) {
+                    Notification.show("CSV-Datei enthält keine Datenzeilen.");
+                    csvUpload.clearFileList();
+                    return;
+                }
+
+                record CsvRow(Set<Instrument> instruments, Set<Stimme> stimmen, String pages,
+                              Stimmlage stimmlage, Notenschluessel notenschluessel) {}
+
+                var errors = new ArrayList<String>();
+                var rows = new ArrayList<CsvRow>();
+
+                for (int i = 1; i < lines.size(); i++) {
+                    var parts = lines.get(i).split(";", -1);
+                    if (parts.length < 3) {
+                        errors.add("Zeile " + i + ": Zu wenige Spalten");
+                        continue;
+                    }
+
+                    var rowValid = true;
+
+                    var instruments = new LinkedHashSet<Instrument>();
+                    for (var part : parts[0].split("&")) {
+                        var trimmed = part.trim();
+                        var parsed = Instrument.parse(trimmed);
+                        if (parsed.isPresent()) {
+                            instruments.add(parsed.get());
+                        } else {
+                            errors.add("Zeile " + i + ": Unbekanntes Instrument: \"" + trimmed + "\"");
+                            rowValid = false;
+                        }
+                    }
+
+                    var stimmen = new LinkedHashSet<Stimme>();
+                    if (!parts[1].isBlank()) {
+                        for (var part : parts[1].split("&")) {
+                            var trimmed = part.trim();
+                            if (!trimmed.isBlank()) {
+                                var parsed = Stimme.parse(trimmed);
+                                if (parsed.isPresent()) {
+                                    stimmen.add(parsed.get());
+                                } else {
+                                    errors.add("Zeile " + i + ": Unbekannte Stimme: \"" + trimmed + "\"");
+                                    rowValid = false;
+                                }
+                            }
+                        }
+                    }
+
+                    var pages = parts[2].trim();
+
+                    Stimmlage stimmlage = null;
+                    if (parts.length > 3 && !parts[3].isBlank()) {
+                        var parsed = Stimmlage.parse(parts[3].trim());
+                        if (parsed.isPresent()) {
+                            stimmlage = parsed.get();
+                        } else {
+                            errors.add("Zeile " + i + ": Unbekannte Stimmlage: \"" + parts[3].trim() + "\"");
+                            rowValid = false;
+                        }
+                    }
+
+                    Notenschluessel notenschluessel = null;
+                    if (parts.length > 4 && !parts[4].isBlank()) {
+                        var parsed = Notenschluessel.parse(parts[4].trim());
+                        if (parsed.isPresent()) {
+                            notenschluessel = parsed.get();
+                        } else {
+                            errors.add("Zeile " + i + ": Unbekannter Notenschlüssel: \"" + parts[4].trim() + "\"");
+                            rowValid = false;
+                        }
+                    }
+
+                    if (rowValid) {
+                        rows.add(new CsvRow(instruments, stimmen, pages, stimmlage, notenschluessel));
+                    }
+                }
+
+                if (!errors.isEmpty()) {
+                    Notification.show("CSV-Importfehler:\n" + String.join("\n", errors), 5000, Notification.Position.MIDDLE);
+                    csvUpload.clearFileList();
+                    return;
+                }
+
+                notenPdfAssignmentContainer.reset();
+                for (var row : rows) {
+                    notenPdfAssignmentContainer.addFromCsv(row.instruments(), row.stimmen(), row.pages(), row.stimmlage(), row.notenschluessel());
+                }
+                csvUpload.clearFileList();
+            }
+        } catch (Exception e) {
+            log.error("CSV import failed", e);
+            Notification.show("Fehler beim CSV-Import: " + e.getMessage());
+            csvUpload.clearFileList();
+        }
+    }
+
     private int getPdfPageCount() {
         try (var pdDocument = Loader.loadPDF(uploadedFile)) {
             return pdDocument.getNumberOfPages();

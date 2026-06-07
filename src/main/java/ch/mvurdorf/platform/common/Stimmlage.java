@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Getter
 @RequiredArgsConstructor
-public enum Stimmlage implements LocalizedEnum, ParsableEnum<Stimmlage> {
+public enum Stimmlage implements LocalizedEnum {
     B("B♭", "Bb"),
     C("C", "C"),
     ES("E♭", "Eb"),
@@ -26,8 +26,7 @@ public enum Stimmlage implements LocalizedEnum, ParsableEnum<Stimmlage> {
         return Optional.of(Stimmlage.valueOf(stimmlage));
     }
 
-    @Override
-    public Optional<Stimmlage> parse(String value) {
+    public static Optional<Stimmlage> parse(String value) {
         return Arrays.stream(values())
                      .filter(v -> StringUtils.equalsIgnoreCase(v.getExternalId(), value))
                      .findFirst();

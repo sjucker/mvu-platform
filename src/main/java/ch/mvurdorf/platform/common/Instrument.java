@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Getter
 @RequiredArgsConstructor
-public enum Instrument implements LocalizedEnum, ParsableEnum<Instrument> {
+public enum Instrument implements LocalizedEnum {
     PICOLLO("Piccolo"),
     FLOETE("Flöte"),
     OBOE("Oboe"),
@@ -50,8 +50,7 @@ public enum Instrument implements LocalizedEnum, ParsableEnum<Instrument> {
                      .toList();
     }
 
-    @Override
-    public Optional<Instrument> parse(String value) {
+    public static Optional<Instrument> parse(String value) {
         return Arrays.stream(values())
                      .filter(v -> StringUtils.equalsIgnoreCase(v.getDescription(), value))
                      .findFirst();
