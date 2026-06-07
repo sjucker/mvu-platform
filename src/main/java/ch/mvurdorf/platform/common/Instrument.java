@@ -2,14 +2,16 @@ package ch.mvurdorf.platform.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
 @RequiredArgsConstructor
-public enum Instrument implements LocalizedEnum {
+public enum Instrument implements LocalizedEnum, ParsableEnum<Instrument> {
     PICOLLO("Piccolo"),
     FLOETE("Flöte"),
     OBOE("Oboe"),
@@ -48,4 +50,10 @@ public enum Instrument implements LocalizedEnum {
                      .toList();
     }
 
+    @Override
+    public Optional<Instrument> parse(String value) {
+        return Arrays.stream(values())
+                     .filter(v -> StringUtils.equalsIgnoreCase(v.getDescription(), value))
+                     .findFirst();
+    }
 }

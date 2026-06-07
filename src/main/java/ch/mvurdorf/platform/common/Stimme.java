@@ -4,11 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Getter
 @RequiredArgsConstructor
-public enum Stimme implements LocalizedEnum {
+public enum Stimme implements LocalizedEnum, ParsableEnum<Stimme> {
     STIMME_1("1"),
     STIMME_2("2"),
     STIMME_3("3"),
@@ -22,5 +23,12 @@ public enum Stimme implements LocalizedEnum {
         }
 
         return Optional.of(Stimme.valueOf(stimme));
+    }
+
+    @Override
+    public Optional<Stimme> parse(String value) {
+        return Arrays.stream(values())
+                     .filter(v -> StringUtils.equalsIgnoreCase(v.getDescription(), value))
+                     .findFirst();
     }
 }
