@@ -18,7 +18,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
 import jakarta.annotation.security.RolesAllowed;
 
 import static ch.mvurdorf.platform.security.LoginService.EVENTS_GROUP;
-import static ch.mvurdorf.platform.security.LoginService.NOTEN_GROUP;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;

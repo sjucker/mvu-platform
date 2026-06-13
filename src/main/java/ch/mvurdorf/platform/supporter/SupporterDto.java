@@ -62,7 +62,7 @@ public record SupporterDto(Long id,
         return "%s %s".formatted(strasse, strasseNr);
     }
 
-   public String getPlzOrt() {
+    public String getPlzOrt() {
         return "%s %s".formatted(plz, ort);
     }
 }

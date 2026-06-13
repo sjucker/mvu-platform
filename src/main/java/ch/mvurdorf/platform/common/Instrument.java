@@ -2,7 +2,6 @@ package ch.mvurdorf.platform.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 
 import java.util.Arrays;
