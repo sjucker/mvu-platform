@@ -126,13 +126,14 @@ public class HomeView extends VerticalLayout {
         urlField.setReadOnly(true);
         urlField.setWidthFull();
 
-        var copyButton = new Button(new Icon(VaadinIcon.CLIPBOARD), _ -> {
-            UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0)", urlField.getValue());
-            Notification.show("URL kopiert!", 2000, Notification.Position.BOTTOM_CENTER)
-                        .addThemeVariants(LUMO_SUCCESS);
-        });
+        var copyButton = new Button(new Icon(VaadinIcon.CLIPBOARD), _ ->
+                Notification.show("URL kopiert!", 2000, Notification.Position.BOTTOM_CENTER)
+                            .addThemeVariants(LUMO_SUCCESS));
         copyButton.addThemeVariants(LUMO_TERTIARY);
         copyButton.setTooltipText("URL kopieren");
+        // Copy synchronously inside the browser click gesture. Safari rejects clipboard
+        // writes that happen after a server round-trip (lost transient activation).
+        copyButton.getElement().executeJs("this.addEventListener('click', () => navigator.clipboard.writeText($0.value))", urlField.getElement());
 
         var urlRow = new HorizontalLayout(urlField, copyButton);
         urlRow.setWidthFull();
