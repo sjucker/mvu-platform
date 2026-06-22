@@ -17,10 +17,10 @@
 
     <properties>
         <java.version>25</java.version>
-        <vaadin.version>25.1.7</vaadin.version>
+        <vaadin.version>25.1.8</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
         <!-- spring boot is behind, older version does not support postgres 16.8 -->
-        <flyway.version>12.8.1</flyway.version>
+        <flyway.version>12.9.0</flyway.version>
         <google-cloud-storage.version>2.69.0</google-cloud-storage.version>
         <firebase-admin.version>9.9.0</firebase-admin.version>
         <qrbill-generator.version>3.4.0</qrbill-generator.version>
