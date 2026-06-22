@@ -8,7 +8,8 @@ You are given a multi-page PDF of a wind band music score. Your task is to analy
 2. Identify instrument labels at the top of each page (e.g. "Klarinette 1", "Trompete in Bb", "Altsaxophon 2. Stimme").
 3. Group consecutive pages that belong to the same instrument part.
 4. For each group, produce exactly one CSV row.
-5. Write all rows into a file named `noten.csv`, encoded as **UTF-8**.
+5. If the same instrument + voice combination (same column 1 and column 2) appears more than once, keep only the **first** occurrence and skip all subsequent copies.
+6. Write all rows into a file named `noten.csv`, encoded as **UTF-8**.
 
 ## Output
 
@@ -91,7 +92,8 @@ Leave blank if not clearly distinguishable.
 
 ## Rules
 
-- Every instrument part that appears in the PDF must have exactly one row.
+- Every unique instrument + voice combination must appear in the CSV **exactly once**.
+- If the same instrument + voice combination occurs multiple times in the PDF (duplicate copies of a part), use the page range of the **first** occurrence and ignore all later copies.
 - If two instruments are printed on the same set of pages (e.g. a combined "Flöte / Piccolo" part), list both in column 1 separated by `&`.
 - Do **not** merge different instruments into one row unless they literally share the same physical pages.
 - Do **not** add rows for instruments not present in the PDF.
