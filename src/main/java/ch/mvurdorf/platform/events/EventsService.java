@@ -405,14 +405,21 @@ public class EventsService {
     }
 
     public List<EventDto> findPositiveEventsForCalendar(String token) {
+        var loginId = jooqDsl.select(LOGIN.ID)
+                             .from(LOGIN)
+                             .where(LOGIN.CALENDAR_TOKEN.eq(token),
+                                    LOGIN.ACTIVE.isTrue())
+                             .fetchOne(LOGIN.ID);
+        if (loginId == null) {
+            return List.of();
+        }
+
         return jooqDsl.select(EVENT.fields())
                       .from(EVENT)
-                      .join(ABSENZ_STATUS).on(ABSENZ_STATUS.FK_EVENT.eq(EVENT.ID))
-                      .join(LOGIN).on(LOGIN.ID.eq(ABSENZ_STATUS.FK_LOGIN))
-                      .where(LOGIN.CALENDAR_TOKEN.eq(token),
-                             LOGIN.ACTIVE.isTrue(),
-                             ABSENZ_STATUS.STATUS.eq(POSITIVE.name()),
-                             EVENT.FROM_DATE.ge(today()),
+                      .leftJoin(ABSENZ_STATUS).on(ABSENZ_STATUS.FK_EVENT.eq(EVENT.ID),
+                                                  ABSENZ_STATUS.FK_LOGIN.eq(loginId))
+                      .where(DSL.or(ABSENZ_STATUS.STATUS.eq(POSITIVE.name()),
+                                    EVENT.INFO_ONLY.isTrue()),
                              EVENT.NEXT_VERSION.isNull(),
                              EVENT.DELETED_AT.isNull())
                       .orderBy(EVENT.FROM_DATE.asc(), EVENT.FROM_TIME.asc())
