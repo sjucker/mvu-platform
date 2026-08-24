@@ -24,3 +24,9 @@ src/main/bundles/
 etc/cloudstorage/*
 
 *.dump
+
+# IntelliJ IDEA local files
+.idea/workspace.xml
+.idea/dataSources.local.xml
+.idea/db-forest-config.xml
+

@@ -96,7 +96,7 @@ public class NotenPdfUploadDialog extends Dialog {
             notenPdfAssignmentContainer.add("%d-%d".formatted(1, pageCount));
         }));
         upload.setI18n(new UploadGermanI18N());
-        upload.setAcceptedFileTypes(".pdf");
+        upload.setAcceptedFileExtensions(".pdf");
         upload.setMaxFiles(1);
         upload.setMaxFileSize(1024 * 1024 * 100);
         upload.addFileRemovedListener(_ -> {
@@ -113,7 +113,7 @@ public class NotenPdfUploadDialog extends Dialog {
 
         csvUpload = new Upload(UploadHandler.inMemory((_, data) -> importFromCsv(data)));
         csvUpload.setI18n(new UploadGermanI18N());
-        csvUpload.setAcceptedFileTypes(".csv");
+        csvUpload.setAcceptedFileExtensions(".csv");
         csvUpload.setMaxFiles(1);
         csvUpload.setVisible(false);
         csvUpload.setWidthFull();
