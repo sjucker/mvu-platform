@@ -8,7 +8,7 @@ You are given a multi-page PDF of a wind band music score. Your task is to analy
 2. Identify instrument labels at the top of each page (e.g. "Klarinette 1", "Trompete in Bb", "Altsaxophon 2. Stimme").
 3. Group consecutive pages that belong to the same instrument part.
 4. For each group, produce exactly one CSV row.
-5. If the same instrument + voice combination (same column 1 and column 2) appears more than once, keep only the **first** occurrence and skip all subsequent copies.
+5. If the same instrument + voice + transposition + clef combination (same columns 1, 2, 4 and 5) appears more than once, keep only the **first** occurrence and skip all subsequent copies.
 6. Write all rows into a file named `noten.csv`, encoded as **UTF-8**.
 
 ## Output
@@ -92,8 +92,10 @@ Leave blank if not clearly distinguishable.
 
 ## Rules
 
-- Every unique instrument + voice combination must appear in the CSV **exactly once**.
-- If the same instrument + voice combination occurs multiple times in the PDF (duplicate copies of a part), use the page range of the **first** occurrence and ignore all later copies.
+- The dedup key is the combination of **Instrumente + Stimmen + Stimmlage + Notenschlüssel** (columns 1, 2, 4 and 5). Every unique combination of these four fields must appear in the CSV **exactly once**.
+- If the same combination occurs multiple times in the PDF (duplicate copies of the very same part), use the page range of the **first** occurrence and ignore all later copies.
+- Rows that share instrument and voice but differ in Stimmlage or Notenschlüssel are **different parts, not duplicates** — keep both. A typical case is the same part printed once in `Bb`/`Violinschlüssel` and once in `C`/`Bassschlüssel` (e.g. Bariton, Tenorhorn, Posaune, Euphonium).
+- Treat a blank Stimmlage or Notenschlüssel as a value of its own: a blank does **not** match a filled-in value. Therefore determine columns 4 and 5 consistently for identical parts, so that genuine duplicate copies are still recognised as duplicates.
 - If two instruments are printed on the same set of pages (e.g. a combined "Flöte / Piccolo" part), list both in column 1 separated by `&`.
 - Do **not** merge different instruments into one row unless they literally share the same physical pages.
 - Do **not** add rows for instruments not present in the PDF.
@@ -125,6 +127,10 @@ Trompete;2;23-24;Bb;Violinschlüssel
 Horn;1&2;25-26;F;Violinschlüssel
 Posaune;1;27-28;C;Bassschlüssel
 Posaune;2;29-30;C;Bassschlüssel
-Tuba;;31-32;C;Bassschlüssel
-Perkussion;;33-39;;
+Bariton;;31-32;C;Bassschlüssel
+Bariton;;33-34;Bb;Violinschlüssel
+Tuba;;35-36;C;Bassschlüssel
+Perkussion;;37-43;;
 ```
+
+Note the two `Bariton` rows: same instrument, same (blank) voice, but a different Stimmlage and Notenschlüssel — these are two separate parts and both are kept.
