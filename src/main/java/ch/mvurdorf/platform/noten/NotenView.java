@@ -6,6 +6,7 @@ import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.service.StorageService;
 import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -28,6 +29,7 @@ import static com.vaadin.flow.component.grid.Grid.SelectionMode.MULTI;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
+import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
 import static com.vaadin.flow.component.icon.VaadinIcon.UPLOAD;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.MUSIC_SOLID;
@@ -80,6 +82,9 @@ public class NotenView extends VerticalLayout {
         grid.addColumn(clickableIcon(UPLOAD, dto -> NotenPdfUploadDialog.show(notenPdfUploadService, dto, uploaded -> refreshItemIfNeeded(dto, uploaded)), "Noten-Upload")).setWidth("60px").setFlexGrow(0);
         grid.addColumn(clickableIcon(MUSIC, dto -> NotenDownloadDialog.show(notenService, storageService, Set.of(), dto.id(), dto.titel(), authenticatedUser.hasWritePermission(NOTEN_GROUP)), "Noten-Download")).setWidth("60px").setFlexGrow(0);
         grid.addColumn(clickableIcon(EDIT, this::edit, "Bearbeiten")).setWidth("60px").setFlexGrow(0);
+        if (authenticatedUser.hasWritePermission(NOTEN_GROUP)) {
+            grid.addColumn(clickableIcon(TRASH, this::delete, "Löschen")).setWidth("60px").setFlexGrow(0);
+        }
         grid.addColumn(KompositionDto::notenCount).setHeader("# Noten").setTextAlign(END).setWidth("90px").setFlexGrow(0);
         grid.addColumn(KompositionDto::titel).setHeader("Titel");
         grid.addColumn(KompositionDto::komponist).setHeader("Komponist");
@@ -93,6 +98,24 @@ public class NotenView extends VerticalLayout {
         if (uploaded) {
             dataProvider.refreshAll();
         }
+    }
+
+    private void delete(KompositionDto item) {
+        var usage = kompositionService.findUsage(item.id());
+        var message = usage.isEmpty()
+                ? "Die Komposition wird unwiderruflich gelöscht. Sicher?"
+                : "Zusammen mit der Komposition wird unwiderruflich gelöscht: %s. Sicher?".formatted(usage.description());
+        new ConfirmDialog("%s löschen?".formatted(item.label()), message,
+                          "Löschen",
+                          _ -> {
+                              kompositionService.delete(item.id());
+                              grid.deselect(item);
+                              dataProvider.refreshAll();
+                          },
+                          "Abbrechen",
+                          _ -> {
+                          })
+                .open();
     }
 
     private void edit(KompositionDto item) {

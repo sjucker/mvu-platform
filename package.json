@@ -3,7 +3,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
-    "@vaadin-component-factory/vcf-pdf-viewer": "4.1.0",
+    "@vaadin-component-factory/vcf-pdf-viewer": "4.2.0",
     "@vaadin/aura": "25.2.7",
     "@vaadin/common-frontend": "0.0.24",
     "@vaadin/react-components": "25.2.7",
@@ -128,7 +128,7 @@
   },
   "vaadin": {
     "dependencies": {
-      "@vaadin-component-factory/vcf-pdf-viewer": "4.1.0",
+      "@vaadin-component-factory/vcf-pdf-viewer": "4.2.0",
       "@vaadin/aura": "25.2.7",
       "@vaadin/common-frontend": "0.0.24",
       "@vaadin/react-components": "25.2.7",
@@ -170,6 +170,6 @@
       "workbox-routing": "7.4.1",
       "workbox-strategies": "7.4.1"
     },
-    "hash": "eb8b7f1e66591b2c0fc69a4700dc1b4850abb4f72708a8e0a3e03561b7d12168"
+    "hash": "2adc405da12d9088ec2c112be6fe9797108328006ce07414eadb11a67cc5ab40"
   }
 }
