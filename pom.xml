@@ -17,11 +17,11 @@
 
     <properties>
         <java.version>25</java.version>
-        <vaadin.version>25.2.6</vaadin.version>
+        <vaadin.version>25.2.7</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
         <!-- spring boot is behind, older version does not support postgres 16.8 -->
-        <flyway.version>13.4.0</flyway.version>
-        <google-cloud-storage.version>2.72.0</google-cloud-storage.version>
+        <flyway.version>13.6.0</flyway.version>
+        <google-cloud-storage.version>2.73.0</google-cloud-storage.version>
         <firebase-admin.version>9.10.0</firebase-admin.version>
         <qrbill-generator.version>3.4.0</qrbill-generator.version>
         <qrcodegen.version>1.8.0</qrcodegen.version>
@@ -34,9 +34,9 @@
         <archunit.version>1.5.0</archunit.version>
 
         <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
-        <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
-        <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
-        <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
+        <sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
+        <versions-maven-plugin.version>2.22.0</versions-maven-plugin.version>
+        <maven-surefire-plugin.version>3.6.0</maven-surefire-plugin.version>
 
         <!-- start local DB using src/main/docker/postgres.yml  -->
         <db.url>jdbc:postgresql://localhost:5432/mvu</db.url>
