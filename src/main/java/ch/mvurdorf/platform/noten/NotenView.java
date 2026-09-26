@@ -141,6 +141,12 @@ public class NotenView extends VerticalLayout {
                     ShareableLinkDialog.show(shareableLinkService, platformProperties, new ArrayList<>(selected));
                 }
             }));
+
+            controls.add(new Button("Duplikate suchen", _ -> NotenDuplicatesDialog.show(notenService, storageService, deleted -> {
+                if (deleted) {
+                    dataProvider.refreshAll();
+                }
+            })));
         }
 
         var filter = new TextField(event -> dataProvider.setFilter(event.getValue()));

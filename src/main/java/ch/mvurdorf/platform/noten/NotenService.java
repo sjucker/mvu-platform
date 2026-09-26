@@ -14,6 +14,7 @@ import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Records;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import static ch.mvurdorf.platform.jooq.Tables.KOMPOSITION;
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF;
 import static ch.mvurdorf.platform.jooq.Tables.NOTEN_PDF_ASSIGNMENT;
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.pdfbox.io.IOUtils.createMemoryOnlyStreamCache;
 import static org.jooq.impl.DSL.multiset;
@@ -50,7 +52,43 @@ public class NotenService {
     }
 
     public List<NotenPdfDto> findByKomposition(Long kompositionId) {
+        return fetchNotenPdfs(NOTEN_PDF.FK_KOMPOSITION.eq(kompositionId))
+                .stream()
+                .map(NotenPdfWithKomposition::notenPdf)
+                .sorted()
+                .toList();
+    }
+
+    /**
+     * Finds all NotenPdfs which have the same Komposition, the same assignments (instrument & stimme), the same stimmlage and the same notenschluessel as at least one other
+     * NotenPdf. Each returned group contains at least two NotenPdfs, ordered by upload (id).
+     */
+    public List<NotenDuplicateGroupDto> findDuplicates() {
+        record DuplicateKey(Long kompositionId, Set<NotenAssignmentDto> assignments, Stimmlage stimmlage, Notenschluessel notenschluessel) {
+        }
+
+        return fetchNotenPdfs(trueCondition())
+                .stream()
+                .collect(groupingBy(it -> new DuplicateKey(it.kompositionId(),
+                                                           Set.copyOf(it.notenPdf().assignments()),
+                                                           it.notenPdf().stimmlage(),
+                                                           it.notenPdf().notenschluessel())))
+                .values()
+                .stream()
+                .filter(group -> group.size() > 1)
+                .map(group -> new NotenDuplicateGroupDto(group.getFirst().kompositionId(),
+                                                         group.stream()
+                                                              .map(NotenPdfWithKomposition::notenPdf)
+                                                              .sorted(comparing(NotenPdfDto::id))
+                                                              .toList()))
+                .sorted(comparing(NotenDuplicateGroupDto::kompositionTitel)
+                                .thenComparing(group -> group.notenPdfs().getFirst()))
+                .toList();
+    }
+
+    private List<NotenPdfWithKomposition> fetchNotenPdfs(Condition condition) {
         return jooqDsl.select(NOTEN_PDF.ID,
+                              NOTEN_PDF.FK_KOMPOSITION,
                               KOMPOSITION.TITEL,
                               NOTEN_PDF.STIMMLAGE,
                               NOTEN_PDF.NOTENSCHLUESSEL,
@@ -62,17 +100,18 @@ public class NotenService {
                               ).convertFrom(it -> it.map(Records.mapping(NotenAssignmentDto::of))))
                       .from(NOTEN_PDF)
                       .join(KOMPOSITION).on(KOMPOSITION.ID.eq(NOTEN_PDF.FK_KOMPOSITION))
-                      .where(NOTEN_PDF.FK_KOMPOSITION.eq(kompositionId))
-                      .fetch(it -> new NotenPdfDto(it.value1(),
-                                                   it.value2(),
-                                                   it.value5().stream()
-                                                     .sorted(comparing(NotenAssignmentDto::instrument))
-                                                     .toList(),
-                                                   Stimmlage.of(it.value3()).orElse(null),
-                                                   Notenschluessel.of(it.value4()).orElse(null)))
-                      .stream()
-                      .sorted()
-                      .toList();
+                      .where(condition)
+                      .fetch(it -> new NotenPdfWithKomposition(it.value2(),
+                                                               new NotenPdfDto(it.value1(),
+                                                                               it.value3(),
+                                                                               it.value6().stream()
+                                                                                 .sorted(comparing(NotenAssignmentDto::instrument))
+                                                                                 .toList(),
+                                                                               Stimmlage.of(it.value4()).orElse(null),
+                                                                               Notenschluessel.of(it.value5()).orElse(null))));
+    }
+
+    private record NotenPdfWithKomposition(Long kompositionId, NotenPdfDto notenPdf) {
     }
 
     public byte[] exportNotenToPdf(List<Long> kompositionIds, Instrument instrument, Set<Stimme> stimme, Set<Stimmlage> stimmlage, Set<Notenschluessel> noteneschluessel) {
