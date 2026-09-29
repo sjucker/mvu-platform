@@ -16,6 +16,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -60,7 +61,7 @@ public class NotenPdfAssignment extends TableImpl<NotenPdfAssignmentRecord> {
     /**
      * The column <code>public.noten_pdf_assignment.id</code>.
      */
-    public final TableField<NotenPdfAssignmentRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<NotenPdfAssignmentRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).generatedByDefaultAsIdentity(), this, "");
 
     /**
      * The column <code>public.noten_pdf_assignment.fk_noten_pdf</code>.
@@ -144,6 +145,11 @@ public class NotenPdfAssignment extends TableImpl<NotenPdfAssignmentRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<NotenPdfAssignmentRecord, Long> getIdentity() {
+        return (Identity<NotenPdfAssignmentRecord, Long>) super.getIdentity();
     }
 
     @Override

@@ -17,6 +17,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -61,7 +62,7 @@ public class KonzertEntry extends TableImpl<KonzertEntryRecord> {
     /**
      * The column <code>public.konzert_entry.id</code>.
      */
-    public final TableField<KonzertEntryRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<KonzertEntryRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).generatedByDefaultAsIdentity(), this, "");
 
     /**
      * The column <code>public.konzert_entry.fk_konzert</code>.
@@ -158,6 +159,11 @@ public class KonzertEntry extends TableImpl<KonzertEntryRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<KonzertEntryRecord, Long> getIdentity() {
+        return (Identity<KonzertEntryRecord, Long>) super.getIdentity();
     }
 
     @Override

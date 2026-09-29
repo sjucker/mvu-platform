@@ -7,7 +7,6 @@ package ch.mvurdorf.platform.jooq.tables;
 import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.AbsenzStatus.AbsenzStatusPath;
-import ch.mvurdorf.platform.jooq.tables.Event.EventPath;
 import ch.mvurdorf.platform.jooq.tables.Login.LoginPath;
 import ch.mvurdorf.platform.jooq.tables.records.EventRecord;
 
@@ -21,6 +20,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -65,7 +65,7 @@ public class Event extends TableImpl<EventRecord> {
     /**
      * The column <code>public.event.id</code>.
      */
-    public final TableField<EventRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<EventRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).generatedByDefaultAsIdentity(), this, "");
 
     /**
      * The column <code>public.event.from_date</code>.
@@ -232,6 +232,11 @@ public class Event extends TableImpl<EventRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<EventRecord, Long> getIdentity() {
+        return (Identity<EventRecord, Long>) super.getIdentity();
     }
 
     @Override

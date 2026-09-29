@@ -17,6 +17,7 @@ import java.util.Collection;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -61,7 +62,7 @@ public class Komposition extends TableImpl<KompositionRecord> {
     /**
      * The column <code>public.komposition.id</code>.
      */
-    public final TableField<KompositionRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<KompositionRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).generatedByDefaultAsIdentity(), this, "");
 
     /**
      * The column <code>public.komposition.titel</code>.
@@ -158,6 +159,11 @@ public class Komposition extends TableImpl<KompositionRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<KompositionRecord, Long> getIdentity() {
+        return (Identity<KompositionRecord, Long>) super.getIdentity();
     }
 
     @Override

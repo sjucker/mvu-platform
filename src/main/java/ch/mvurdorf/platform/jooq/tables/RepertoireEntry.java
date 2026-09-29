@@ -18,6 +18,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -62,7 +63,7 @@ public class RepertoireEntry extends TableImpl<RepertoireEntryRecord> {
     /**
      * The column <code>public.repertoire_entry.id</code>.
      */
-    public final TableField<RepertoireEntryRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<RepertoireEntryRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).generatedByDefaultAsIdentity(), this, "");
 
     /**
      * The column <code>public.repertoire_entry.fk_repertoire</code>.
@@ -144,6 +145,11 @@ public class RepertoireEntry extends TableImpl<RepertoireEntryRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<RepertoireEntryRecord, Long> getIdentity() {
+        return (Identity<RepertoireEntryRecord, Long>) super.getIdentity();
     }
 
     @Override

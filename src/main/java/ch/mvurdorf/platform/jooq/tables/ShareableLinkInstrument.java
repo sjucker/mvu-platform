@@ -16,6 +16,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -60,7 +61,7 @@ public class ShareableLinkInstrument extends TableImpl<ShareableLinkInstrumentRe
     /**
      * The column <code>public.shareable_link_instrument.id</code>.
      */
-    public final TableField<ShareableLinkInstrumentRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<ShareableLinkInstrumentRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).generatedByDefaultAsIdentity(), this, "");
 
     /**
      * The column
@@ -140,6 +141,11 @@ public class ShareableLinkInstrument extends TableImpl<ShareableLinkInstrumentRe
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<ShareableLinkInstrumentRecord, Long> getIdentity() {
+        return (Identity<ShareableLinkInstrumentRecord, Long>) super.getIdentity();
     }
 
     @Override

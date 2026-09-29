@@ -13,6 +13,7 @@ import java.util.Collection;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
@@ -54,7 +55,7 @@ public class Voucher extends TableImpl<VoucherRecord> {
     /**
      * The column <code>public.voucher.id</code>.
      */
-    public final TableField<VoucherRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<VoucherRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).generatedByDefaultAsIdentity(), this, "");
 
     /**
      * The column <code>public.voucher.code_prefix</code>.
@@ -108,6 +109,11 @@ public class Voucher extends TableImpl<VoucherRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<VoucherRecord, Long> getIdentity() {
+        return (Identity<VoucherRecord, Long>) super.getIdentity();
     }
 
     @Override

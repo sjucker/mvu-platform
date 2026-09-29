@@ -18,6 +18,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -62,7 +63,7 @@ public class Supporter extends TableImpl<SupporterRecord> {
     /**
      * The column <code>public.supporter.id</code>.
      */
-    public final TableField<SupporterRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<SupporterRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).generatedByDefaultAsIdentity(), this, "");
 
     /**
      * The column <code>public.supporter.vorname</code>.
@@ -209,6 +210,11 @@ public class Supporter extends TableImpl<SupporterRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
+    }
+
+    @Override
+    public Identity<SupporterRecord, Long> getIdentity() {
+        return (Identity<SupporterRecord, Long>) super.getIdentity();
     }
 
     @Override
