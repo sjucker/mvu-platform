@@ -1,12 +1,15 @@
 package ch.mvurdorf.platform.home;
 
 import ch.mvurdorf.platform.konzerte.KonzertEntryDto;
+import ch.mvurdorf.platform.konzerte.KonzertSetlistPdfService;
 import ch.mvurdorf.platform.konzerte.KonzerteService;
 import ch.mvurdorf.platform.noten.NotenService;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.service.StorageService;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
@@ -15,13 +18,19 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
 import jakarta.annotation.security.PermitAll;
+
+import java.io.ByteArrayInputStream;
 
 import static ch.mvurdorf.platform.konzerte.KonzerteService.getNumber;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
 import static ch.mvurdorf.platform.ui.RendererUtil.iconPopover;
 import static ch.mvurdorf.platform.ui.RendererUtil.repertoireNumber;
+import static com.vaadin.flow.component.html.AttachmentType.DOWNLOAD;
+import static com.vaadin.flow.component.icon.VaadinIcon.DOWNLOAD_ALT;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.INFO_CIRCLE;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
@@ -34,12 +43,18 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class KonzertView extends VerticalLayout implements HasUrlParameter<Long> {
 
     private final KonzerteService konzerteService;
+    private final KonzertSetlistPdfService konzertSetlistPdfService;
     private final NotenService notenService;
     private final StorageService storageService;
     private final AuthenticatedUser authenticatedUser;
 
-    public KonzertView(KonzerteService konzerteService, NotenService notenService, StorageService storageService, AuthenticatedUser authenticatedUser) {
+    public KonzertView(KonzerteService konzerteService,
+                       KonzertSetlistPdfService konzertSetlistPdfService,
+                       NotenService notenService,
+                       StorageService storageService,
+                       AuthenticatedUser authenticatedUser) {
         this.konzerteService = konzerteService;
+        this.konzertSetlistPdfService = konzertSetlistPdfService;
         this.notenService = notenService;
         this.storageService = storageService;
         this.authenticatedUser = authenticatedUser;
@@ -63,6 +78,14 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                         tenu.addClassName(PRE_WRAP);
                         add(tenu);
                     }
+                    if (!konzertDto.entries().isEmpty()) {
+                        var setlistDownload = new Anchor(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(konzertSetlistPdfService.exportSetlist(konzertDto)),
+                                                                                                                   "Setlist %s.pdf".formatted(konzertDto.name()), "application/pdf", -1)),
+                                                         DOWNLOAD, "");
+                        setlistDownload.add(new Button("Setlist als PDF", DOWNLOAD_ALT.create()));
+                        add(setlistDownload);
+                    }
+
                     var entries = new Grid<KonzertEntryDto>();
                     entries.setSelectionMode(SelectionMode.NONE);
 
