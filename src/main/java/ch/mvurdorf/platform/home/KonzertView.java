@@ -6,6 +6,8 @@ import ch.mvurdorf.platform.konzerte.KonzerteService;
 import ch.mvurdorf.platform.noten.NotenService;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.service.StorageService;
+import com.vaadin.flow.component.badge.Badge;
+import com.vaadin.flow.component.badge.BadgeVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
@@ -13,18 +15,22 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
+import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
+import com.vaadin.flow.theme.lumo.LumoUtility.Display;
+import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import jakarta.annotation.security.PermitAll;
 
 import java.io.ByteArrayInputStream;
 
-import static ch.mvurdorf.platform.konzerte.KonzerteService.getNumber;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
 import static ch.mvurdorf.platform.ui.RendererUtil.iconPopover;
@@ -89,12 +95,7 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                     var entries = new Grid<KonzertEntryDto>();
                     entries.setSelectionMode(SelectionMode.NONE);
 
-                    entries.addColumn(dto -> getNumber(dto, konzertDto.entries()))
-                           .setHeader("#")
-                           .setWidth("60px").setFlexGrow(0);
-
-                    // for now, disable this column
-                    if (konzertDto.hasMarschbuchEntry() && false) {
+                    if (konzertDto.hasMarschbuchEntry()) {
                         entries.addColumn(repertoireNumber(KonzertEntryDto::getMarschbuchNumber))
                                .setHeader("Marschbuch")
                                .setWidth("120px").setFlexGrow(0);
@@ -103,7 +104,16 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                     entries.addColumn(iconPopover(INFO_CIRCLE, KonzertEntryDto::getAdditionalInfo))
                            .setWidth("60px").setFlexGrow(0);
 
-                    entries.addColumn(KonzertEntryDto::titel)
+                    entries.addColumn(new ComponentRenderer<>(dto -> {
+                               var titel = new Span(dto.titel());
+                               if (dto.isZugabe()) {
+                                   var zugabe = new Badge("Zugabe");
+                                   zugabe.addThemeVariants(BadgeVariant.SMALL);
+                                   titel.add(zugabe);
+                                   titel.addClassNames(Display.FLEX, AlignItems.CENTER, Gap.SMALL);
+                               }
+                               return titel;
+                           }))
                            .setHeader("Titel")
                            .setFlexGrow(1);
 

@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -166,30 +165,6 @@ public class KonzerteService {
 
     public Optional<KonzertDto> findById(Long id) {
         return fetch(KONZERT.ID.eq(id), 0, 1).stream().findFirst();
-    }
-
-    public static String getNumber(KonzertEntryDto dto, List<KonzertEntryDto> entries) {
-        if (dto.isPlaceholderEntry()) {
-            return null;
-        }
-
-        int number = 1;
-        for (var entry : entries) {
-            if (Objects.equals(entry.getIndex(), dto.getIndex())) {
-                break;
-            }
-            if (!entry.isPlaceholderEntry()) {
-                if (dto.isZugabe()) {
-                    if (entry.isZugabe()) {
-                        number++;
-                    }
-                } else {
-                    number++;
-                }
-            }
-        }
-
-        return (dto.isZugabe() ? "Z%d" : "%d").formatted(number);
     }
 
     @Data

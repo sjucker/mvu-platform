@@ -14,7 +14,7 @@ import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.mvurdorf.platform.konzerte.KonzerteService.getNumber;
+import static ch.mvurdorf.platform.utils.BigDecimalUtil.formatBigDecimal;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.pdfbox.pdmodel.common.PDRectangle.A4;
 import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
@@ -25,7 +25,7 @@ import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA_
 public class KonzertSetlistPdfService {
 
     private static final float MARGIN = 50;
-    private static final float NUMBER_WIDTH = 40;
+    private static final float NUMBER_WIDTH = 50;
     private static final Color GREY = new Color(100, 100, 100);
 
     private static final PDFont REGULAR = new PDType1Font(HELVETICA);
@@ -40,6 +40,8 @@ public class KonzertSetlistPdfService {
                 writer.text(konzert.dateTimeAndLocation(), REGULAR, 12, MARGIN, GREY);
                 writer.space(20);
 
+                // only reserve space for the Marschbuch number if at least one entry has one
+                var textX = konzert.hasMarschbuchEntry() ? MARGIN + NUMBER_WIDTH : MARGIN;
                 var zugabeHeaderWritten = false;
                 for (var entry : konzert.entries()) {
                     if (entry.isZugabe() && !zugabeHeaderWritten) {
@@ -48,7 +50,7 @@ public class KonzertSetlistPdfService {
                         writer.space(4);
                         zugabeHeaderWritten = true;
                     }
-                    writeEntry(writer, entry, konzert.entries());
+                    writeEntry(writer, entry, textX);
                 }
             }
             document.save(out);
@@ -58,17 +60,16 @@ public class KonzertSetlistPdfService {
         }
     }
 
-    private void writeEntry(Writer writer, KonzertEntryDto entry, List<KonzertEntryDto> entries) throws IOException {
+    private void writeEntry(Writer writer, KonzertEntryDto entry, float textX) throws IOException {
         if (entry.isPlaceholderEntry()) {
             writer.space(4);
-            writer.text("– %s –".formatted(entry.getPlaceholder()), ITALIC, 12, MARGIN + NUMBER_WIDTH, GREY);
+            writer.text("– %s –".formatted(entry.getPlaceholder()), ITALIC, 12, textX, GREY);
             writer.space(8);
             return;
         }
 
-        var textX = MARGIN + NUMBER_WIDTH;
         writer.ensureSpace(14 * 1.4f + 10 * 1.4f);
-        writer.textAtCurrentLine(getNumber(entry, entries), BOLD, 14, MARGIN);
+        writer.textAtCurrentLine(formatBigDecimal(entry.getMarschbuchNumber()), BOLD, 14, MARGIN);
         writer.text(entry.getKompositionTitel(), BOLD, 14, textX, Color.BLACK);
 
         var details = new ArrayList<String>();
