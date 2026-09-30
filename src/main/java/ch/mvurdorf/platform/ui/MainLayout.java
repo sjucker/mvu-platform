@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.info.BuildProperties;
 
 import static com.vaadin.flow.component.button.ButtonVariant.LUMO_SMALL;
-import static com.vaadin.flow.component.icon.VaadinIcon.EXIT_O;
+import static com.vaadin.flow.component.icon.VaadinIcon.EXIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.KEY;
 
 @Slf4j
@@ -104,7 +104,7 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
             var logoutButton = new Button("Logout %s".formatted(user.getName()),
                                           _ -> authenticatedUser.logout());
             logoutButton.addThemeVariants(LUMO_SMALL);
-            logoutButton.setIcon(EXIT_O.create());
+            logoutButton.setIcon(EXIT.create());
             logoutButton.setWidthFull();
 
             layout.add(passwordChangeButton, logoutButton);

@@ -26,7 +26,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDate;
 import static com.vaadin.flow.component.grid.ColumnTextAlign.CENTER;
-import static com.vaadin.flow.component.icon.VaadinIcon.CHECK_SQUARE_O;
+import static com.vaadin.flow.component.icon.VaadinIcon.CHECK_SQUARE;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.BASELINE;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode.BETWEEN;
 import static com.vaadin.flow.data.value.ValueChangeMode.TIMEOUT;
@@ -69,7 +69,7 @@ public class AbsenzenView extends VerticalLayout {
         dataProvider = absenzenService.dataProvider();
         grid.setDataProvider(dataProvider);
 
-        grid.addColumn(clickableIcon(CHECK_SQUARE_O, this::detail, "Details")).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
+        grid.addColumn(clickableIcon(CHECK_SQUARE, this::detail, "Details")).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);
         grid.addColumn(dateRenderer(EventAbsenzSummaryDto::fromDate)).setWidth("150px").setFlexGrow(0);
         grid.addColumn(EventAbsenzSummaryDto::title).setWidth("300px").setFlexGrow(0).setResizable(true);
         grid.addColumn(EventAbsenzSummaryDto::totalPositive).setHeader("Total anwesend").setWidth("140px").setFlexGrow(0);
