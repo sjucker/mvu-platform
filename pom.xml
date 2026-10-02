@@ -20,8 +20,8 @@
         <vaadin.version>25.3.0</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
         <!-- spring boot is behind, older version does not support postgres 16.13 -->
-        <flyway.version>13.8.1</flyway.version>
-        <google-cloud-storage.version>2.74.0</google-cloud-storage.version>
+        <flyway.version>13.9.0</flyway.version>
+        <google-cloud-storage.version>2.75.0</google-cloud-storage.version>
         <firebase-admin.version>9.11.0</firebase-admin.version>
         <qrbill-generator.version>3.4.0</qrbill-generator.version>
         <qrcodegen.version>1.8.0</qrcodegen.version>
