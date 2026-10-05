@@ -189,9 +189,14 @@ public class EventsService {
     @Transactional
     public void delete(EventDto event, boolean permanent) {
         if (permanent) {
-            // all previous versions reference their successor via next_version, so the whole chain has to be deleted
+            // all previous versions reference their successor via next_version, so the whole chain has to be deleted.
+            // start at the latest version, in case the given event has been updated in the meantime
+            var latestId = event.id();
+            for (var next = nextVersionId(latestId); next != null; next = nextVersionId(next)) {
+                latestId = next;
+            }
             var ids = new ArrayList<Long>();
-            for (var id = event.id(); id != null; id = previousVersionId(id)) {
+            for (var id = latestId; id != null; id = previousVersionId(id)) {
                 ids.add(id);
             }
             log.info("deleting event {} permanently ({} versions)", event, ids.size());
@@ -208,6 +213,14 @@ public class EventsService {
             pojo.setDeletedAt(now());
             eventDao.update(pojo);
         }
+    }
+
+    @Nullable
+    private Long nextVersionId(Long id) {
+        return jooqDsl.select(EVENT.NEXT_VERSION)
+                      .from(EVENT)
+                      .where(EVENT.ID.eq(id))
+                      .fetchOne(EVENT.NEXT_VERSION);
     }
 
     @Nullable

@@ -65,6 +65,21 @@ class EventsServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void deletePermanentlyWithOutdatedVersion() {
+        eventsService.insert(event("Probe"), "test");
+        var outdatedEvent = currentEvent();
+        updateWithTrackChanges("Probe 2");
+        updateWithTrackChanges("Probe 3");
+        eventsService.updateEventAbsenzenForUser(loginId, currentEvent().id(), AbsenzState.POSITIVE, null);
+        assertThat(jooqDsl.fetchCount(EVENT)).isEqualTo(3);
+
+        eventsService.delete(outdatedEvent, true);
+
+        assertThat(jooqDsl.fetchCount(EVENT)).isZero();
+        assertThat(jooqDsl.fetchCount(ABSENZ_STATUS)).isZero();
+    }
+
+    @Test
     void deletePermanentlyKeepsOtherEvents() {
         eventsService.insert(event("Andere Probe"), "test");
         var otherEvent = currentEvent();
