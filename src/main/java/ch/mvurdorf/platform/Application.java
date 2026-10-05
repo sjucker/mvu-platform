@@ -1,12 +1,12 @@
 package ch.mvurdorf.platform;
 
+import ch.mvurdorf.platform.config.PlatformProperties;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -24,18 +24,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @StyleSheet("styles.css")
 @EnableAsync
 @EnableScheduling
-@EnableConfigurationProperties(Application.PlatformProperties.class)
+@EnableConfigurationProperties(PlatformProperties.class)
 public class Application implements AppShellConfigurator {
 
     static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-    }
-
-    @ConfigurationProperties(prefix = "platform")
-    public record PlatformProperties(String url,
-                                     String supportUrl,
-                                     boolean overrideRecipients,
-                                     String bccMail) {
     }
 
 }

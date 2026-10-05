@@ -1,6 +1,6 @@
 package ch.mvurdorf.platform.noten;
 
-import ch.mvurdorf.platform.Application.PlatformProperties;
+import ch.mvurdorf.platform.config.PlatformProperties;
 import ch.mvurdorf.platform.home.NotenDownloadDialog;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.service.StorageService;

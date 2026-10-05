@@ -1,6 +1,6 @@
 package ch.mvurdorf.platform.service;
 
-import ch.mvurdorf.platform.Application.PlatformProperties;
+import ch.mvurdorf.platform.config.PlatformProperties;
 import ch.mvurdorf.platform.jooq.tables.pojos.Supporter;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

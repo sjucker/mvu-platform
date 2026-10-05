@@ -29,6 +29,25 @@ public class AuthenticatedUser {
 
     @Transactional
     public Optional<Login> get() {
+        return currentLogin();
+    }
+
+    @Transactional
+    public Long getId() {
+        return currentId();
+    }
+
+    @Transactional
+    public String getName() {
+        return currentLogin().map(Login::getName).orElse("?");
+    }
+
+    @Transactional
+    public String getEmail() {
+        return currentLogin().map(Login::getEmail).orElse("?");
+    }
+
+    private Optional<Login> currentLogin() {
         return authenticationContext.getAuthenticatedUser(Object.class)
                                     .flatMap(o -> {
                                         if (o instanceof Jwt jwt) {
@@ -41,19 +60,8 @@ public class AuthenticatedUser {
                                     .map(loginDao::fetchOneByEmail);
     }
 
-    @Transactional
-    public Long getId() {
-        return get().map(Login::getId).orElse(0L);
-    }
-
-    @Transactional
-    public String getName() {
-        return get().map(Login::getName).orElse("?");
-    }
-
-    @Transactional
-    public String getEmail() {
-        return get().map(Login::getEmail).orElse("?");
+    private Long currentId() {
+        return currentLogin().map(Login::getId).orElse(0L);
     }
 
     public boolean hasWritePermission(String group) {
@@ -74,7 +82,7 @@ public class AuthenticatedUser {
 
     @Transactional
     public Set<Instrument> getInstrumentPermissions() {
-        return instrumentPermissionDao.fetchByFkLogin(getId()).stream()
+        return instrumentPermissionDao.fetchByFkLogin(currentId()).stream()
                                       .map(permission -> Instrument.valueOf(permission.getInstrument()))
                                       .collect(toSet());
     }

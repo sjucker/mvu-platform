@@ -3,8 +3,12 @@ package ch.mvurdorf.platform;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.library.DependencyRules;
 import com.tngtech.archunit.library.GeneralCodingRules;
+import com.tngtech.archunit.library.ProxyRules;
 import org.jooq.ResultQuery;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,5 +54,20 @@ public class ArchUnitTest {
     public static final ArchRule assertions_should_have_detail_message = GeneralCodingRules.ASSERTIONS_SHOULD_HAVE_DETAIL_MESSAGE;
     @ArchTest
     public static final ArchRule deprecated_api_should_not_be_used = GeneralCodingRules.DEPRECATED_API_SHOULD_NOT_BE_USED;
+
+    // generated jOOQ code is excluded from the following rules
+    private static final String JOOQ_PACKAGE = "ch.mvurdorf.platform.jooq..";
+
+    @ArchTest
+    public static final ArchRule no_classes_should_depend_upper_packages = noClasses().that().resideOutsideOfPackage(JOOQ_PACKAGE)
+                                                                                      .should(DependencyRules.dependOnUpperPackages());
+
+    // self-invocation bypasses the Spring proxy, so the annotation would have no effect
+    @ArchTest
+    public static final ArchRule no_self_invocation_of_transactional = noClasses().that().resideOutsideOfPackage(JOOQ_PACKAGE)
+                                                                                  .should(ProxyRules.directly_call_other_methods_declared_in_the_same_class_that_are_annotated_with(Transactional.class));
+    @ArchTest
+    public static final ArchRule no_self_invocation_of_async = noClasses().that().resideOutsideOfPackage(JOOQ_PACKAGE)
+                                                                          .should(ProxyRules.directly_call_other_methods_declared_in_the_same_class_that_are_annotated_with(Async.class));
 
 }

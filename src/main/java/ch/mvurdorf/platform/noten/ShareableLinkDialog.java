@@ -1,7 +1,7 @@
 package ch.mvurdorf.platform.noten;
 
-import ch.mvurdorf.platform.Application.PlatformProperties;
 import ch.mvurdorf.platform.common.Instrument;
+import ch.mvurdorf.platform.config.PlatformProperties;
 import ch.mvurdorf.platform.ui.ComponentUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
