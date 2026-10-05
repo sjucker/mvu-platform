@@ -20,10 +20,12 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -184,19 +186,36 @@ public class EventsService {
         }
     }
 
+    @Transactional
     public void delete(EventDto event, boolean permanent) {
         if (permanent) {
-            log.info("deleting event {} permanently", event);
+            // all previous versions reference their successor via next_version, so the whole chain has to be deleted
+            var ids = new ArrayList<Long>();
+            for (var id = event.id(); id != null; id = previousVersionId(id)) {
+                ids.add(id);
+            }
+            log.info("deleting event {} permanently ({} versions)", event, ids.size());
             jooqDsl.deleteFrom(ABSENZ_STATUS)
-                   .where(ABSENZ_STATUS.FK_EVENT.eq(event.id()))
+                   .where(ABSENZ_STATUS.FK_EVENT.in(ids))
                    .execute();
-            eventDao.deleteById(event.id());
+            // single statement, so the self-referencing foreign key is only checked once all versions are gone
+            jooqDsl.deleteFrom(EVENT)
+                   .where(EVENT.ID.in(ids))
+                   .execute();
         } else {
             log.info("mark event {} as deleted", event);
             var pojo = eventDao.findOptionalById(event.id()).orElseThrow();
             pojo.setDeletedAt(now());
             eventDao.update(pojo);
         }
+    }
+
+    @Nullable
+    private Long previousVersionId(Long id) {
+        return jooqDsl.select(EVENT.ID)
+                      .from(EVENT)
+                      .where(EVENT.NEXT_VERSION.eq(id))
+                      .fetchOne(EVENT.ID);
     }
 
     public List<EventAbsenzStatusDto> findEventAbsenzenForUser(String email) {
