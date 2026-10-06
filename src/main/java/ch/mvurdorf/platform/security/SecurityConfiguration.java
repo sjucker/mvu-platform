@@ -38,7 +38,16 @@ public class SecurityConfiguration {
     public SecurityConfiguration(@Value("${remember-me.key}") String rememberMeKey,
                                  @Value("${platform.url:http://localhost:8080}") String platformUrl) {
         this.rememberMeKey = rememberMeKey;
-        this.platformUrl = URI.create(platformUrl);
+        this.platformUrl = toUri(platformUrl);
+    }
+
+    static URI toUri(String url) {
+        if (url.contains("://")) {
+            return URI.create(url);
+        }
+        // e.g. "localhost:8080" would otherwise be parsed as scheme "localhost"
+        var scheme = url.startsWith("localhost") ? "http" : "https";
+        return URI.create(scheme + "://" + url);
     }
 
     @Bean
