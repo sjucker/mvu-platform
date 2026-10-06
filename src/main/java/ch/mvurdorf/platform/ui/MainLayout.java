@@ -1,6 +1,7 @@
 package ch.mvurdorf.platform.ui;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import ch.mvurdorf.platform.users.PasskeyView;
 import ch.mvurdorf.platform.users.PasswordChangeView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -30,6 +31,7 @@ import org.springframework.boot.info.BuildProperties;
 import static com.vaadin.flow.component.button.ButtonVariant.LUMO_SMALL;
 import static com.vaadin.flow.component.icon.VaadinIcon.EXIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.KEY;
+import static org.vaadin.lineawesome.LineAwesomeIconUrl.FINGERPRINT_SOLID;
 
 @Slf4j
 @Layout
@@ -101,13 +103,19 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
             passwordChangeButton.setIcon(KEY.create());
             passwordChangeButton.setWidthFull();
 
+            var passkeysButton = new Button("Passkeys",
+                                            _ -> getUI().ifPresent(ui -> ui.navigate(PasskeyView.class)));
+            passkeysButton.addThemeVariants(LUMO_SMALL);
+            passkeysButton.setIcon(new SvgIcon(FINGERPRINT_SOLID));
+            passkeysButton.setWidthFull();
+
             var logoutButton = new Button("Logout %s".formatted(user.getName()),
                                           _ -> authenticatedUser.logout());
             logoutButton.addThemeVariants(LUMO_SMALL);
             logoutButton.setIcon(EXIT.create());
             logoutButton.setWidthFull();
 
-            layout.add(passwordChangeButton, logoutButton);
+            layout.add(passwordChangeButton, passkeysButton, logoutButton);
         }
 
         if (buildProperties != null) {

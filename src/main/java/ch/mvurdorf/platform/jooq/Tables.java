@@ -21,6 +21,8 @@ import ch.mvurdorf.platform.jooq.tables.ShareableLinkKomposition;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
+import ch.mvurdorf.platform.jooq.tables.UserCredentials;
+import ch.mvurdorf.platform.jooq.tables.UserEntities;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
 
 
@@ -114,6 +116,16 @@ public class Tables {
      * The table <code>public.supporter_voucher</code>.
      */
     public static final SupporterVoucher SUPPORTER_VOUCHER = SupporterVoucher.SUPPORTER_VOUCHER;
+
+    /**
+     * The table <code>public.user_credentials</code>.
+     */
+    public static final UserCredentials USER_CREDENTIALS = UserCredentials.USER_CREDENTIALS;
+
+    /**
+     * The table <code>public.user_entities</code>.
+     */
+    public static final UserEntities USER_ENTITIES = UserEntities.USER_ENTITIES;
 
     /**
      * The table <code>public.voucher</code>.

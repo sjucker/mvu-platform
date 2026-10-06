@@ -9,6 +9,7 @@ import com.vaadin.flow.spring.security.AuthenticationContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.web.webauthn.api.PublicKeyCredentialUserEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +55,8 @@ public class AuthenticatedUser {
                                             return Optional.ofNullable(jwt.getClaimAsString("email"));
                                         } else if (o instanceof UserDetails userDetails) {
                                             return Optional.of(userDetails.getUsername());
+                                        } else if (o instanceof PublicKeyCredentialUserEntity userEntity) {
+                                            return Optional.of(userEntity.getName());
                                         }
                                         return Optional.empty();
                                     })
@@ -74,10 +77,8 @@ public class AuthenticatedUser {
 
     private boolean hasRole(String group, Permission permission) {
         var role = Permission.getRole(group, permission);
-        return authenticationContext.getAuthenticatedUser(UserDetails.class)
-                                    .map(userDetails -> userDetails.getAuthorities().stream()
-                                                                   .anyMatch(auth -> role.equalsIgnoreCase(auth.getAuthority())))
-                                    .orElse(false);
+        return authenticationContext.getGrantedAuthorities().stream()
+                                    .anyMatch(auth -> role.equalsIgnoreCase(auth.getAuthority()));
     }
 
     @Transactional
