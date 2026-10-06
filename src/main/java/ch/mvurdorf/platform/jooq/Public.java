@@ -21,6 +21,8 @@ import ch.mvurdorf.platform.jooq.tables.ShareableLinkKomposition;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
+import ch.mvurdorf.platform.jooq.tables.UserCredentials;
+import ch.mvurdorf.platform.jooq.tables.UserEntities;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
 
 import java.util.Arrays;
@@ -132,6 +134,16 @@ public class Public extends SchemaImpl {
     public final SupporterVoucher SUPPORTER_VOUCHER = SupporterVoucher.SUPPORTER_VOUCHER;
 
     /**
+     * The table <code>public.user_credentials</code>.
+     */
+    public final UserCredentials USER_CREDENTIALS = UserCredentials.USER_CREDENTIALS;
+
+    /**
+     * The table <code>public.user_entities</code>.
+     */
+    public final UserEntities USER_ENTITIES = UserEntities.USER_ENTITIES;
+
+    /**
      * The table <code>public.voucher</code>.
      */
     public final Voucher VOUCHER = Voucher.VOUCHER;
@@ -179,6 +191,8 @@ public class Public extends SchemaImpl {
             Supporter.SUPPORTER,
             SupporterPayment.SUPPORTER_PAYMENT,
             SupporterVoucher.SUPPORTER_VOUCHER,
+            UserCredentials.USER_CREDENTIALS,
+            UserEntities.USER_ENTITIES,
             Voucher.VOUCHER
         );
     }

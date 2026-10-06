@@ -8,6 +8,7 @@ import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.AbsenzStatus.AbsenzStatusPath;
 import ch.mvurdorf.platform.jooq.tables.Event.EventPath;
+import ch.mvurdorf.platform.jooq.tables.UserEntities.UserEntitiesPath;
 import ch.mvurdorf.platform.jooq.tables.records.LoginRecord;
 
 import java.time.LocalDateTime;
@@ -233,6 +234,19 @@ public class Login extends TableImpl<LoginRecord> {
             _absenzStatus = new AbsenzStatusPath(this, null, Keys.ABSENZ_STATUS__FK__ABSENZ_STATUS_LOGIN.getInverseKey());
 
         return _absenzStatus;
+    }
+
+    private transient UserEntitiesPath _userEntities;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.user_entities</code> table
+     */
+    public UserEntitiesPath userEntities() {
+        if (_userEntities == null)
+            _userEntities = new UserEntitiesPath(this, null, Keys.USER_ENTITIES__FK__USER_ENTITIES__LOGIN.getInverseKey());
+
+        return _userEntities;
     }
 
     /**
