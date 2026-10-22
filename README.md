@@ -15,6 +15,7 @@
 ## Build
 
 * `mvn clean package`
+* `mvn test -Dtest=ArchUnitTest`
 * `mvn dependency:resolve-sources`
 
 ## Updates
