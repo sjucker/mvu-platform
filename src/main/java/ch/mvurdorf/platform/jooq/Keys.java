@@ -19,6 +19,8 @@ import ch.mvurdorf.platform.jooq.tables.ShareableLink;
 import ch.mvurdorf.platform.jooq.tables.ShareableLinkInstrument;
 import ch.mvurdorf.platform.jooq.tables.ShareableLinkKomposition;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
+import ch.mvurdorf.platform.jooq.tables.SupporterMailing;
+import ch.mvurdorf.platform.jooq.tables.SupporterMailingRecipient;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
@@ -36,6 +38,8 @@ import ch.mvurdorf.platform.jooq.tables.records.RepertoireRecord;
 import ch.mvurdorf.platform.jooq.tables.records.ShareableLinkInstrumentRecord;
 import ch.mvurdorf.platform.jooq.tables.records.ShareableLinkKompositionRecord;
 import ch.mvurdorf.platform.jooq.tables.records.ShareableLinkRecord;
+import ch.mvurdorf.platform.jooq.tables.records.SupporterMailingRecipientRecord;
+import ch.mvurdorf.platform.jooq.tables.records.SupporterMailingRecord;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterPaymentRecord;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterRecord;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterVoucherRecord;
@@ -79,6 +83,8 @@ public class Keys {
     public static final UniqueKey<ShareableLinkKompositionRecord> PK__SHAREABLE_LINK_NOTEN = Internal.createUniqueKey(ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION, DSL.name("pk__shareable_link_noten"), new TableField[] { ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION.ID }, true);
     public static final UniqueKey<SupporterRecord> PASSIVMITGLIED_EMAIL_KEY = Internal.createUniqueKey(Supporter.SUPPORTER, DSL.name("passivmitglied_email_key"), new TableField[] { Supporter.SUPPORTER.EMAIL }, true);
     public static final UniqueKey<SupporterRecord> PK__PASSIVMITGLIED = Internal.createUniqueKey(Supporter.SUPPORTER, DSL.name("pk__passivmitglied"), new TableField[] { Supporter.SUPPORTER.ID }, true);
+    public static final UniqueKey<SupporterMailingRecord> PK__SUPPORTER_MAILING = Internal.createUniqueKey(SupporterMailing.SUPPORTER_MAILING, DSL.name("pk__supporter_mailing"), new TableField[] { SupporterMailing.SUPPORTER_MAILING.ID }, true);
+    public static final UniqueKey<SupporterMailingRecipientRecord> PK__SUPPORTER_MAILING_RECIPIENT = Internal.createUniqueKey(SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT, DSL.name("pk__supporter_mailing_recipient"), new TableField[] { SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT.ID }, true);
     public static final UniqueKey<SupporterPaymentRecord> PK__PASSIVMITGLIED_PAYMENT = Internal.createUniqueKey(SupporterPayment.SUPPORTER_PAYMENT, DSL.name("pk__passivmitglied_payment"), new TableField[] { SupporterPayment.SUPPORTER_PAYMENT.ID }, true);
     public static final UniqueKey<SupporterVoucherRecord> PK__PASSIVMITGLIED_VOUCHER = Internal.createUniqueKey(SupporterVoucher.SUPPORTER_VOUCHER, DSL.name("pk__passivmitglied_voucher"), new TableField[] { SupporterVoucher.SUPPORTER_VOUCHER.ID }, true);
     public static final UniqueKey<VoucherRecord> PK__VOUCHER = Internal.createUniqueKey(Voucher.VOUCHER, DSL.name("pk__voucher"), new TableField[] { Voucher.VOUCHER.ID }, true);
@@ -99,6 +105,8 @@ public class Keys {
     public static final ForeignKey<ShareableLinkInstrumentRecord, ShareableLinkRecord> SHAREABLE_LINK_INSTRUMENT__FK__SHAREABLE_LINK_INSTRUMENT_LINK = Internal.createForeignKey(ShareableLinkInstrument.SHAREABLE_LINK_INSTRUMENT, DSL.name("fk__shareable_link_instrument_link"), new TableField[] { ShareableLinkInstrument.SHAREABLE_LINK_INSTRUMENT.SHAREABLE_LINK_ID }, Keys.PK__SHAREABLE_LINK, new TableField[] { ShareableLink.SHAREABLE_LINK.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<ShareableLinkKompositionRecord, KompositionRecord> SHAREABLE_LINK_KOMPOSITION__FK__SHAREABLE_LINK_KOMPOSITION_KOMP = Internal.createForeignKey(ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION, DSL.name("fk__shareable_link_komposition_komp"), new TableField[] { ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION.KOMPOSITION_ID }, Keys.PK__KOMPOSITION, new TableField[] { Komposition.KOMPOSITION.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<ShareableLinkKompositionRecord, ShareableLinkRecord> SHAREABLE_LINK_KOMPOSITION__FK__SHAREABLE_LINK_KOMPOSITION_LINK = Internal.createForeignKey(ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION, DSL.name("fk__shareable_link_komposition_link"), new TableField[] { ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION.SHAREABLE_LINK_ID }, Keys.PK__SHAREABLE_LINK, new TableField[] { ShareableLink.SHAREABLE_LINK.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
+    public static final ForeignKey<SupporterMailingRecipientRecord, SupporterRecord> SUPPORTER_MAILING_RECIPIENT__SUPPORTER_MAILING_RECIPIENT_FK_SUPPORTER_FKEY = Internal.createForeignKey(SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT, DSL.name("supporter_mailing_recipient_fk_supporter_fkey"), new TableField[] { SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT.FK_SUPPORTER }, Keys.PK__PASSIVMITGLIED, new TableField[] { Supporter.SUPPORTER.ID }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.NO_ACTION);
+    public static final ForeignKey<SupporterMailingRecipientRecord, SupporterMailingRecord> SUPPORTER_MAILING_RECIPIENT__SUPPORTER_MAILING_RECIPIENT_FK_SUPPORTER_MAILING_FKEY = Internal.createForeignKey(SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT, DSL.name("supporter_mailing_recipient_fk_supporter_mailing_fkey"), new TableField[] { SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT.FK_SUPPORTER_MAILING }, Keys.PK__SUPPORTER_MAILING, new TableField[] { SupporterMailing.SUPPORTER_MAILING.ID }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<SupporterPaymentRecord, SupporterRecord> SUPPORTER_PAYMENT__PASSIVMITGLIED_PAYMENT_FK_PASSIVMITGLIED_FKEY = Internal.createForeignKey(SupporterPayment.SUPPORTER_PAYMENT, DSL.name("passivmitglied_payment_fk_passivmitglied_fkey"), new TableField[] { SupporterPayment.SUPPORTER_PAYMENT.FK_SUPPORTER }, Keys.PK__PASSIVMITGLIED, new TableField[] { Supporter.SUPPORTER.ID }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<SupporterVoucherRecord, SupporterRecord> SUPPORTER_VOUCHER__PASSIVMITGLIED_VOUCHER_FK_PASSIVMITGLIED_FKEY = Internal.createForeignKey(SupporterVoucher.SUPPORTER_VOUCHER, DSL.name("passivmitglied_voucher_fk_passivmitglied_fkey"), new TableField[] { SupporterVoucher.SUPPORTER_VOUCHER.FK_SUPPORTER }, Keys.PK__PASSIVMITGLIED, new TableField[] { Supporter.SUPPORTER.ID }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.NO_ACTION);
 }

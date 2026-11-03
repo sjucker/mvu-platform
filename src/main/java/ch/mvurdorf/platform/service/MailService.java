@@ -39,12 +39,12 @@ public class MailService {
             var variables = new HashMap<String, Object>();
             variables.put("anrede", supporter.getAnrede());
             variables.put("vorname", supporter.getVorname());
-            variables.put("link", "%s/portal/%s".formatted(platformProperties.supportUrl(), supporter.getUuid()));
+            variables.put("link", platformProperties.supporterPortalLink(supporter.getUuid()));
 
             var mjml = templateEngine.process("supporter-registration", new Context(GERMAN, variables));
 
             var mimeMessage = mailSender.createMimeMessage();
-            var helper = setSenderReceiverMetadata(mimeMessage, supporter.getEmail());
+            var helper = setSenderReceiverMetadata(mimeMessage, supporter.getEmail(), true);
             helper.setSubject("%s%s".formatted(getSubjectPrefix(), "Support Musikverein Harmonie Urdorf"));
             helper.setText(mjmlService.render(mjml), true);
 
@@ -64,7 +64,7 @@ public class MailService {
             var mjml = templateEngine.process("reminder-absenzen", new Context(GERMAN, variables));
 
             var mimeMessage = mailSender.createMimeMessage();
-            var helper = setSenderReceiverMetadata(mimeMessage, email);
+            var helper = setSenderReceiverMetadata(mimeMessage, email, true);
             helper.setSubject("%s%s".formatted(getSubjectPrefix(), "[MVU] Erinnerung Absenzen"));
             helper.setText(mjmlService.render(mjml), true);
 
@@ -74,7 +74,21 @@ public class MailService {
         }
     }
 
-    private MimeMessageHelper setSenderReceiverMetadata(MimeMessage mimeMessage, String email) throws MessagingException {
+    /**
+     * Sends an already rendered supporter mailing synchronously (no BCC, since mailings go to many recipients).
+     *
+     * @throws MessagingException if the mail could not be sent
+     */
+    public void sendSupporterMailing(String email, String subject, String html) throws MessagingException {
+        log.info("sending supporter mailing to {}", email);
+        var mimeMessage = mailSender.createMimeMessage();
+        var helper = setSenderReceiverMetadata(mimeMessage, email, false);
+        helper.setSubject("%s%s".formatted(getSubjectPrefix(), subject));
+        helper.setText(html, true);
+        mailSender.send(mimeMessage);
+    }
+
+    private MimeMessageHelper setSenderReceiverMetadata(MimeMessage mimeMessage, String email, boolean bcc) throws MessagingException {
         var helper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
         var from = environment.getRequiredProperty("spring.mail.username");
         helper.setFrom(from);
@@ -84,7 +98,9 @@ public class MailService {
             log.info("override recipient: {}", email);
         } else {
             helper.setTo(email);
-            helper.setBcc(platformProperties.bccMail());
+            if (bcc) {
+                helper.setBcc(platformProperties.bccMail());
+            }
         }
         return helper;
     }

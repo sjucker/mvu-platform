@@ -1,11 +1,15 @@
 package ch.mvurdorf.platform.supporter;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.joining;
 
 public record SupporterDto(Long id,
                            SupporterType type,
@@ -59,10 +63,16 @@ public record SupporterDto(Long id,
     }
 
     public String getStrasseWithNr() {
-        return "%s %s".formatted(strasse, strasseNr);
+        return joinNonBlank(strasse, strasseNr);
     }
 
     public String getPlzOrt() {
-        return "%s %s".formatted(plz, ort);
+        return joinNonBlank(plz, ort);
+    }
+
+    private static String joinNonBlank(String... values) {
+        return Stream.of(values)
+                     .filter(StringUtils::isNotBlank)
+                     .collect(joining(" "));
     }
 }

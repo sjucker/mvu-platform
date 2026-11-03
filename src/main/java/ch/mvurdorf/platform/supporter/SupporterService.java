@@ -64,7 +64,11 @@ public class SupporterService {
     }
 
     public List<SupporterDto> fetchAll() {
-        return fetch(DSL.trueCondition(), 0, MAX_VALUE);
+        return fetchAll(DSL.trueCondition());
+    }
+
+    public List<SupporterDto> fetchAll(Condition condition) {
+        return fetch(condition, 0, MAX_VALUE);
     }
 
     private Stream<SupporterDto> fetch(String filter, int offset, int limit) {

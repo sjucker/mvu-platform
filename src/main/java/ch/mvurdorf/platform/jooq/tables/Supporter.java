@@ -6,6 +6,7 @@ package ch.mvurdorf.platform.jooq.tables;
 
 import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
+import ch.mvurdorf.platform.jooq.tables.SupporterMailingRecipient.SupporterMailingRecipientPath;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment.SupporterPaymentPath;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher.SupporterVoucherPath;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterRecord;
@@ -251,6 +252,19 @@ public class Supporter extends TableImpl<SupporterRecord> {
             _supporterVoucher = new SupporterVoucherPath(this, null, Keys.SUPPORTER_VOUCHER__PASSIVMITGLIED_VOUCHER_FK_PASSIVMITGLIED_FKEY.getInverseKey());
 
         return _supporterVoucher;
+    }
+
+    private transient SupporterMailingRecipientPath _supporterMailingRecipient;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.supporter_mailing_recipient</code> table
+     */
+    public SupporterMailingRecipientPath supporterMailingRecipient() {
+        if (_supporterMailingRecipient == null)
+            _supporterMailingRecipient = new SupporterMailingRecipientPath(this, null, Keys.SUPPORTER_MAILING_RECIPIENT__SUPPORTER_MAILING_RECIPIENT_FK_SUPPORTER_FKEY.getInverseKey());
+
+        return _supporterMailingRecipient;
     }
 
     @Override
