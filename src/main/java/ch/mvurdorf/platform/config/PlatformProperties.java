@@ -7,4 +7,8 @@ public record PlatformProperties(String url,
                                  String supportUrl,
                                  boolean overrideRecipients,
                                  String bccMail) {
+
+    public String supporterPortalLink(String uuid) {
+        return "%s/portal/%s".formatted(supportUrl, uuid);
+    }
 }

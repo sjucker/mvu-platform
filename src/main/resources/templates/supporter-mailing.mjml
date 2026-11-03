@@ -1,0 +1,48 @@
+<mjml>
+    <mj-head>
+        <mj-attributes>
+            <mj-all padding="0"/>
+            <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto"/>
+            <mj-section background-color="white"/>
+        </mj-attributes>
+    </mj-head>
+    <mj-body>
+        <!-- static header, TODO content -->
+        <mj-section css-class="mailing-header" padding="0 0 20px 0">
+            <mj-column>
+                <mj-text color="#d60323">
+                    <h1>Musikverein Harmonie Urdorf</h1>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <th:block th:utext="${content}"/>
+
+        <!-- link to the supporter-portal, replaced by a QR code in the PDF letter -->
+        <mj-section css-class="mailing-portal" padding="20px 0 0 0">
+            <mj-column>
+                <mj-text>
+                    <p>In deinem persönlichen Supporter-Portal kannst du deine Angaben jederzeit anpassen:</p>
+                </mj-text>
+                <mj-button background-color="#d60323"
+                           color="white"
+                           href="{{portalLink}}"
+                           padding="10px 0">
+                    Zum Supporter-Portal
+                </mj-button>
+                <mj-text font-size="11px">
+                    <p>{{portalLink}}</p>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <!-- static footer, TODO content -->
+        <mj-section css-class="mailing-footer" padding="20px 0 0 0">
+            <mj-column>
+                <mj-text font-size="11px" color="#666666">
+                    <p>Musikverein Harmonie Urdorf</p>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

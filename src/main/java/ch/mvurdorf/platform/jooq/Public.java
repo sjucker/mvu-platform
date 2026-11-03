@@ -19,6 +19,8 @@ import ch.mvurdorf.platform.jooq.tables.ShareableLink;
 import ch.mvurdorf.platform.jooq.tables.ShareableLinkInstrument;
 import ch.mvurdorf.platform.jooq.tables.ShareableLinkKomposition;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
+import ch.mvurdorf.platform.jooq.tables.SupporterMailing;
+import ch.mvurdorf.platform.jooq.tables.SupporterMailingRecipient;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
@@ -122,6 +124,16 @@ public class Public extends SchemaImpl {
     public final Supporter SUPPORTER = Supporter.SUPPORTER;
 
     /**
+     * The table <code>public.supporter_mailing</code>.
+     */
+    public final SupporterMailing SUPPORTER_MAILING = SupporterMailing.SUPPORTER_MAILING;
+
+    /**
+     * The table <code>public.supporter_mailing_recipient</code>.
+     */
+    public final SupporterMailingRecipient SUPPORTER_MAILING_RECIPIENT = SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT;
+
+    /**
      * The table <code>public.supporter_payment</code>.
      */
     public final SupporterPayment SUPPORTER_PAYMENT = SupporterPayment.SUPPORTER_PAYMENT;
@@ -177,6 +189,8 @@ public class Public extends SchemaImpl {
             ShareableLinkInstrument.SHAREABLE_LINK_INSTRUMENT,
             ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION,
             Supporter.SUPPORTER,
+            SupporterMailing.SUPPORTER_MAILING,
+            SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT,
             SupporterPayment.SUPPORTER_PAYMENT,
             SupporterVoucher.SUPPORTER_VOUCHER,
             Voucher.VOUCHER
