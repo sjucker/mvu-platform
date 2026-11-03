@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 
 @Slf4j
@@ -26,6 +28,9 @@ public class SupporterEndpoint {
     @PostMapping
     public ResponseEntity<Long> createSupporter(@RequestBody SupporterDto supporter) {
         log.info("POST /api/supporter {}", supporter);
+        if (isBlank(supporter.email())) {
+            return ResponseEntity.status(BAD_REQUEST).build();
+        }
         if (supporterService.exists(supporter.email())) {
             return ResponseEntity.status(CONFLICT).build();
         }
