@@ -88,7 +88,7 @@ public class Supporter extends TableImpl<SupporterRecord> {
     /**
      * The column <code>public.supporter.email</code>.
      */
-    public final TableField<SupporterRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<SupporterRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>public.supporter.bemerkung</code>.

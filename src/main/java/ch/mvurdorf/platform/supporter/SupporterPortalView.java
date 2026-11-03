@@ -36,6 +36,7 @@ import java.io.ByteArrayInputStream;
 import static ch.mvurdorf.platform.ui.ComponentUtil.image;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @PageTitle("Supporter")
 @Route(value = "portal", autoLayout = false)
@@ -161,8 +162,9 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
 
         var email = new TextField();
         binder.forField(email)
-              .withValidator(new EmailValidator("Valide E-Mail eingeben"))
-              .withValidator(new StringLengthValidator("E-Mail muss zwischen 1 und 255 Zeichen haben", 1, 255))
+              .withNullRepresentation("")
+              .withValidator(new EmailValidator("Valide E-Mail eingeben", true))
+              .withValidator(new StringLengthValidator("E-Mail darf maximal 255 Zeichen haben", 0, 255))
               .bind(SupporterEditDto::getEmail, SupporterEditDto::setEmail);
         formLayout.setColspan(formLayout.addFormItem(email, "E-Mail"), 2);
 
@@ -171,7 +173,10 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
         formLayout.addFormItem(kommunikationPost, "Kommunikation per Post");
 
         var kommunikationEmail = new Checkbox();
-        binder.bind(kommunikationEmail, SupporterEditDto::isKommunikationEmail, SupporterEditDto::setKommunikationEmail);
+        binder.forField(kommunikationEmail)
+              .withValidator(checked -> !checked || isNotBlank(email.getValue()),
+                             "Für Kommunikation per E-Mail muss eine E-Mail angegeben werden")
+              .bind(SupporterEditDto::isKommunikationEmail, SupporterEditDto::setKommunikationEmail);
         formLayout.addFormItem(kommunikationEmail, "Kommunikation per E-Mail");
 
         var edit = supporter.edit();
