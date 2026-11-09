@@ -1,0 +1,16 @@
+{
+  "extraKnownMarketplaces": {
+    "vaadin-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "vaadin/agent-marketplace"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "vaadin-skills@vaadin-marketplace": true
+  },
+  "env": {
+    "VAADIN_DEV_DAEMON_OPTS": "-Dspring.profiles.active=local"
+  }
+}

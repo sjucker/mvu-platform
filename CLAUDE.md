@@ -8,35 +8,48 @@ MVU Platform is a web application for Musikverein Harmonie Urdorf (a Swiss music
 
 ## Tech Stack
 
-- **Backend**: Spring Boot 3.5 / Java 25
-- **Frontend**: Vaadin Flow 24 with React components
+- **Backend**: Spring Boot 4 / Java 25
+- **Frontend**: Vaadin Flow 25 with React components
 - **Database**: PostgreSQL via jOOQ (code generation) + Flyway migrations
 - **Build**: Maven (use `./mvnw`)
 
 ## Development Setup
 
 **Start the database:**
+
 ```
 docker compose -p mvu -f src/main/docker/postgres.yml down && docker compose -p mvu -f src/main/docker/postgres.yml up --build
 ```
 
 **Run the app** (uses `local` Spring profile):
+
 ```
 ./mvnw spring-boot:run
 ```
+
 Or use the IntelliJ run configuration `Application`.
 
+**Agentic development (Claude Code):** use the Vaadin Dev Loop instead of `spring-boot:run` /
+`mvn compile` to run the app and verify edits — see the `vaadin-devloop` skill
+(`.claude/skills/vaadin-devloop/`). `.vaadin/vaadin-dev start` launches the app, and
+`.vaadin/vaadin-dev apply` hot-swaps saved edits. `VAADIN_DEV_DAEMON_OPTS` in `.claude/settings.json`
+makes the daemon start with the `local` profile. Don't run it alongside IntelliJ/`spring-boot:run`
+(port conflict). After a Vaadin upgrade, re-run `./mvnw vaadin:install-dev-cli` and commit the
+regenerated `.vaadin/`, `.agents/` and `.claude/skills/` files. Vaadin API questions go to the
+`vaadin` MCP server (from the `vaadin-skills` plugin), and add-on lookups go to `vaadin-directory` (`.mcp.json`).
+
 **Regenerate jOOQ code** (run after DB schema changes, requires Docker):
+
 ```
 mvn clean test-compile -Djooq-codegen-skip=false
 ```
 
 ## Build & Test Commands
 
-| Task | Command |
-|------|---------|
-| Production build | `mvn clean package` |
-| Run all tests | `./mvnw clean verify` |
+| Task                     | Command                                    |
+|--------------------------|--------------------------------------------|
+| Production build         | `mvn clean package`                        |
+| Run all tests            | `./mvnw clean verify`                      |
 | Check dependency updates | `mvn -U versions:display-property-updates` |
 
 ## Architecture
@@ -71,6 +84,7 @@ jooq/         – **auto-generated** jOOQ classes (do not edit manually)
 ### Within Each Feature Module
 
 Each feature package typically contains:
+
 - `*View.java` — Vaadin `@Route`-annotated view (the UI)
 - `*Service.java` — business logic, uses jOOQ DSLContext directly
 - `*Dto.java` / `*Endpoint.java` — data transfer and REST endpoints where needed
