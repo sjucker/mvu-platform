@@ -6,7 +6,7 @@
     <groupId>ch.mvurdorf</groupId>
     <artifactId>platform</artifactId>
     <name>Musikverein Harmonie Urdorf Platform</name>
-    <version>2.2.3</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <parent>
