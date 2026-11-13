@@ -312,7 +312,7 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
         previewErrors.addClassNames(TextColor.ERROR, FontSize.SMALL, Whitespace.PRE_LINE);
 
         // the preview must not run any scripts
-        emailPreview.setSandbox();
+        emailPreview.setSandbox(IFrame.SandboxType.RESTRICT_ALL);
         emailPreview.setWidthFull();
         emailPreview.setHeight("600px");
         emailPreview.getStyle().set("border", "1px solid var(--lumo-contrast-20pct)");

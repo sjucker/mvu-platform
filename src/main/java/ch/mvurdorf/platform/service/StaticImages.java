@@ -36,6 +36,10 @@ public final class StaticImages {
      * @param path the path of the image, e.g. {@code /images/mailing/letterhead.png}
      */
     public static Optional<Image> load(String path) {
+        if (!path.startsWith("/images/") || path.contains("..")) {
+            // never resolve anything outside the images folder
+            return Optional.empty();
+        }
         var resource = new ClassPathResource(STATIC_RESOURCES + path);
         if (!resource.exists()) {
             return Optional.empty();
