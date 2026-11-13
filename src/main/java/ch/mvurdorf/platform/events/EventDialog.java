@@ -70,13 +70,20 @@ public class EventDialog extends Dialog {
         formLayout.add(fromTime);
 
         var toDate = datePicker("Datum bis");
-        binder.forField(toDate).bind(EventDataDto::getToDate, EventDataDto::setToDate);
         formLayout.add(toDate);
 
         var toTime = timePicker("Uhrzeit bis");
         toTime.setStep(Duration.ofMinutes(15));
         binder.forField(toTime).bind(EventDataDto::getToTime, EventDataDto::setToTime);
         formLayout.add(toTime);
+
+        var toDateBinding = binder.forField(toDate)
+                                  .withValidator(date -> EventDateValidator.isToDateValid(fromDate.getValue(), fromTime.getValue(), date, toTime.getValue()),
+                                                 EventDateValidator.TO_DATE_REQUIRED_MESSAGE)
+                                  .bind(EventDataDto::getToDate, EventDataDto::setToDate);
+        fromDate.addValueChangeListener(_ -> toDateBinding.validate());
+        fromTime.addValueChangeListener(_ -> toDateBinding.validate());
+        toTime.addValueChangeListener(_ -> toDateBinding.validate());
 
         var approximately = new Checkbox("Zeit ca.");
         binder.forField(approximately).bind(EventDataDto::isApproximately, EventDataDto::setApproximately);
