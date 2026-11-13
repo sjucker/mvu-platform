@@ -150,7 +150,8 @@ public class SupporterMailingService {
      * Wraps the given content with the static header/footer and renders it to HTML (placeholders not yet replaced).
      */
     public MjmlResult render(String mjmlContent) {
-        var mjml = templateEngine.process("supporter-mailing", new Context(GERMAN, Map.of("content", mjmlContent)));
+        var mjml = templateEngine.process("supporter-mailing", new Context(GERMAN, Map.of("content", mjmlContent,
+                                                                                          "baseUrl", platformProperties.url())));
         return mjmlService.renderWithErrors(mjml);
     }
 

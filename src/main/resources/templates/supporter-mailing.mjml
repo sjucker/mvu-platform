@@ -1,46 +1,88 @@
 <mjml>
     <mj-head>
         <mj-attributes>
-            <mj-all padding="0"/>
-            <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto"/>
-            <mj-section background-color="white"/>
+            <mj-all padding="0" font-family="Arial, Helvetica, sans-serif"/>
+            <mj-text font-size="14px" line-height="1.4" color="#000000"/>
+            <mj-section background-color="white" padding="0 25px"/>
         </mj-attributes>
+        <mj-style>
+            .mailing-footer a { color: #666666; text-decoration: none; }
+        </mj-style>
     </mj-head>
-    <mj-body>
-        <!-- static header, TODO content -->
-        <mj-section css-class="mailing-header" padding="0 0 20px 0">
+    <mj-body background-color="white">
+        <!-- letterhead, replaced by a full-width letterhead in the PDF letter -->
+        <mj-section css-class="mailing-header" padding="20px 10px 30px 10px">
             <mj-column>
-                <mj-text color="#d60323">
-                    <h1>Musikverein Harmonie Urdorf</h1>
-                </mj-text>
+                <mj-image th:src="${baseUrl + '/images/mailing/letterhead.png'}"
+                          alt="Musikverein Harmonie Urdorf - Zunftspiel der Zunft zur Zimmerleuten"
+                          width="580px"/>
             </mj-column>
         </mj-section>
 
         <th:block th:utext="${content}"/>
 
-        <!-- link to the supporter-portal, replaced by a QR code in the PDF letter -->
-        <mj-section css-class="mailing-portal" padding="20px 0 0 0">
+        <mj-section css-class="mailing-closing" padding="20px 25px 0 25px">
             <mj-column>
                 <mj-text>
-                    <p>In deinem persönlichen Supporter-Portal kannst du deine Angaben jederzeit anpassen:</p>
+                    <p style="margin: 0;">Mit musikalischen Grüssen</p>
                 </mj-text>
-                <mj-button background-color="#d60323"
-                           color="white"
-                           href="{{portalLink}}"
-                           padding="10px 0">
-                    Zum Supporter-Portal
-                </mj-button>
-                <mj-text font-size="11px">
-                    <p>{{portalLink}}</p>
+            </mj-column>
+        </mj-section>
+        <mj-section css-class="mailing-signatures">
+            <mj-column>
+                <mj-image th:src="${baseUrl + '/images/mailing/signature-praesidentin.png'}"
+                          alt="Unterschrift Christine Schwab"
+                          align="left"
+                          width="84px"
+                          height="60px"
+                          padding="5px 0 0 0"/>
+                <mj-text>
+                    <p style="margin: 0;">Christine Schwab<br/>Präsidentin</p>
+                </mj-text>
+            </mj-column>
+            <mj-column>
+                <mj-image th:src="${baseUrl + '/images/mailing/signature-event-manager.png'}"
+                          alt="Unterschrift Urs Dannenmann"
+                          align="left"
+                          width="97px"
+                          height="60px"
+                          padding="5px 0 0 0"/>
+                <mj-text>
+                    <p style="margin: 0;">Urs Dannenmann<br/>Event Manager</p>
                 </mj-text>
             </mj-column>
         </mj-section>
 
-        <!-- static footer, TODO content -->
-        <mj-section css-class="mailing-footer" padding="20px 0 0 0">
+        <!-- link to the supporter-portal, replaced by a QR code in the PDF letter -->
+        <mj-section css-class="mailing-portal" padding="30px 25px 0 25px">
             <mj-column>
+                <mj-text>
+                    <p style="margin: 0;">In deinem persönlichen Supporter-Portal kannst du deine Angaben jederzeit anpassen:</p>
+                </mj-text>
+                <mj-button background-color="#d60323"
+                           color="white"
+                           font-size="14px"
+                           href="{{portalLink}}"
+                           padding="10px 0">
+                    Zum Supporter-Portal
+                </mj-button>
                 <mj-text font-size="11px" color="#666666">
-                    <p>Musikverein Harmonie Urdorf</p>
+                    <p style="margin: 0;">{{portalLink}}</p>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <!-- contact details, used as page footer in the PDF letter -->
+        <mj-section css-class="mailing-footer" padding="30px 25px 20px 25px">
+            <mj-column>
+                <mj-divider border-color="#d60323" border-width="1px" padding="0 0 10px 0"/>
+                <mj-text font-size="11px" line-height="1.5" color="#666666">
+                    <p style="margin: 0;">Musikverein Harmonie Urdorf, In der Rebhalden 22, 8902 Urdorf</p>
+                    <p style="margin: 0;">
+                        <a href="mailto:praesidentin@mvurdorf.ch">praesidentin@mvurdorf.ch</a>
+                        &#183;
+                        <a href="https://www.mvurdorf.ch">www.mvurdorf.ch</a>
+                    </p>
                 </mj-text>
             </mj-column>
         </mj-section>
