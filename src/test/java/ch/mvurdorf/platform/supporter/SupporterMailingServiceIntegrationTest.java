@@ -2,12 +2,14 @@ package ch.mvurdorf.platform.supporter;
 
 import ch.mvurdorf.platform.config.PlatformProperties;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterDao;
+import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingAttachmentDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingRecipientDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterPaymentDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterVoucherDao;
 import ch.mvurdorf.platform.jooq.tables.daos.VoucherDao;
 import ch.mvurdorf.platform.service.HtmlPdfService;
+import ch.mvurdorf.platform.service.MailAttachment;
 import ch.mvurdorf.platform.service.MjmlService;
 import ch.mvurdorf.platform.service.QRCodeService;
 import ch.mvurdorf.platform.testing.AbstractIntegrationTest;
@@ -63,7 +65,7 @@ class SupporterMailingServiceIntegrationTest extends AbstractIntegrationTest {
                 return new MjmlResult("<html><body><div class=\"mailing-header\">Header</div><p>{{anrede}} {{vorname}}</p></body></html>", List.of());
             }
         };
-        var dispatcher = new SupporterMailingDispatcher(null, null, null, null, null) {
+        var dispatcher = new SupporterMailingDispatcher(null, null, null, null, null, null) {
             @Override
             public void dispatch(Long mailingId) {
                 dispatchedMailings.add(mailingId);
@@ -72,6 +74,7 @@ class SupporterMailingServiceIntegrationTest extends AbstractIntegrationTest {
 
         service = new SupporterMailingService(jooqDsl,
                                               new SupporterMailingDao(configuration),
+                                              new SupporterMailingAttachmentDao(configuration),
                                               new SupporterMailingRecipientDao(configuration),
                                               supporterService,
                                               new SupporterLetterService(new HtmlPdfService(), new QRCodeService(), platformProperties),
@@ -132,6 +135,31 @@ class SupporterMailingServiceIntegrationTest extends AbstractIntegrationTest {
         assertThatThrownBy(() -> service.save(id, "x", "x", SupporterMailingFilter.defaultFilter(), "tester")).isInstanceOf(IllegalStateException.class);
         service.delete(id);
         assertThat(service.find(id)).as("sent mailings are not deleted").isPresent();
+    }
+
+    @Test
+    void attachment() {
+        var id = service.save(null, "Betreff", "<mj-section/>", SupporterMailingFilter.defaultFilter(), "tester");
+        assertThat(service.find(id).orElseThrow().attachmentName()).isNull();
+        assertThat(service.attachment(id)).isEmpty();
+
+        service.updateAttachment(id, new MailAttachment("alt.pdf", "application/pdf", new byte[]{1}));
+        service.updateAttachment(id, new MailAttachment("flyer.pdf", "application/pdf", new byte[]{1, 2, 3}));
+        assertThat(service.find(id).orElseThrow().attachmentName()).as("the attachment is replaced").isEqualTo("flyer.pdf");
+        assertThat(service.findAll()).as("one row per mailing").hasSize(1);
+        assertThat(service.attachment(id)).hasValueSatisfying(attachment -> {
+            assertThat(attachment.fileName()).isEqualTo("flyer.pdf");
+            assertThat(attachment.contentType()).isEqualTo("application/pdf");
+            assertThat(attachment.data()).containsExactly(1, 2, 3);
+        });
+
+        service.updateAttachment(id, null);
+        assertThat(service.attachment(id)).as("the attachment is removed").isEmpty();
+
+        service.updateAttachment(id, new MailAttachment("flyer.pdf", "application/pdf", new byte[]{1}));
+        service.send(id, "tester");
+        assertThatThrownBy(() -> service.updateAttachment(id, null)).as("sent mailings cannot be changed").isInstanceOf(IllegalStateException.class);
+        assertThat(service.attachment(id)).isPresent();
     }
 
     @Test

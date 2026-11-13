@@ -1,11 +1,14 @@
 package ch.mvurdorf.platform.supporter;
 
 import ch.mvurdorf.platform.config.PlatformProperties;
+import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingAttachmentDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingRecipientDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.SupporterMailing;
+import ch.mvurdorf.platform.jooq.tables.pojos.SupporterMailingAttachment;
 import ch.mvurdorf.platform.jooq.tables.pojos.SupporterMailingRecipient;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterMailingRecord;
+import ch.mvurdorf.platform.service.MailAttachment;
 import ch.mvurdorf.platform.service.MjmlService;
 import ch.mvurdorf.platform.service.MjmlService.MjmlResult;
 import ch.mvurdorf.platform.utils.DateUtil;
@@ -25,6 +28,7 @@ import java.util.Set;
 
 import static ch.mvurdorf.platform.jooq.Tables.SUPPORTER;
 import static ch.mvurdorf.platform.jooq.Tables.SUPPORTER_MAILING;
+import static ch.mvurdorf.platform.jooq.Tables.SUPPORTER_MAILING_ATTACHMENT;
 import static ch.mvurdorf.platform.jooq.Tables.SUPPORTER_MAILING_RECIPIENT;
 import static ch.mvurdorf.platform.supporter.SupporterMailingChannel.EMAIL;
 import static ch.mvurdorf.platform.supporter.SupporterMailingChannel.POST;
@@ -43,6 +47,7 @@ public class SupporterMailingService {
 
     private final DSLContext jooqDsl;
     private final SupporterMailingDao supporterMailingDao;
+    private final SupporterMailingAttachmentDao supporterMailingAttachmentDao;
     private final SupporterMailingRecipientDao supporterMailingRecipientDao;
     private final SupporterService supporterService;
     private final SupporterLetterService supporterLetterService;
@@ -62,11 +67,12 @@ public class SupporterMailingService {
     private List<SupporterMailingDto> fetch(Condition condition) {
         var emailCount = recipientCount(EMAIL);
         var postCount = recipientCount(POST);
-        return jooqDsl.select(SUPPORTER_MAILING, emailCount, postCount)
+        return jooqDsl.select(SUPPORTER_MAILING, emailCount, postCount, SUPPORTER_MAILING_ATTACHMENT.FILE_NAME)
                       .from(SUPPORTER_MAILING)
+                      .leftJoin(SUPPORTER_MAILING_ATTACHMENT).on(SUPPORTER_MAILING_ATTACHMENT.FK_SUPPORTER_MAILING.eq(SUPPORTER_MAILING.ID))
                       .where(condition)
                       .orderBy(SUPPORTER_MAILING.CREATED_AT.desc())
-                      .fetch(it -> toDto(it.value1(), it.value2(), it.value3()));
+                      .fetch(it -> toDto(it.value1(), it.value2(), it.value3(), it.value4()));
     }
 
     private static Field<Integer> recipientCount(SupporterMailingChannel channel) {
@@ -75,7 +81,7 @@ public class SupporterMailingService {
                                   .and(SUPPORTER_MAILING_RECIPIENT.CHANNEL.eq(channel.name())));
     }
 
-    private static SupporterMailingDto toDto(SupporterMailingRecord mailing, int emailCount, int postCount) {
+    private static SupporterMailingDto toDto(SupporterMailingRecord mailing, int emailCount, int postCount, String attachmentName) {
         return new SupporterMailingDto(mailing.getId(),
                                        mailing.getSubject(),
                                        mailing.getMjml(),
@@ -90,7 +96,8 @@ public class SupporterMailingService {
                                        mailing.getSentAt(),
                                        mailing.getSentBy(),
                                        emailCount,
-                                       postCount);
+                                       postCount,
+                                       attachmentName);
     }
 
     /**
@@ -126,6 +133,30 @@ public class SupporterMailingService {
         mailing.setFilterPaidWithinMonths(filter.paidWithinMonths());
         mailing.setFilterEmail(filter.email());
         mailing.setFilterPost(filter.post());
+    }
+
+    /**
+     * Sets (or removes, if null) the attachment of a draft. The attachment is only sent by email, not added to letters.
+     */
+    public void updateAttachment(Long id, MailAttachment attachment) {
+        var mailing = supporterMailingDao.findOptionalById(id).orElseThrow();
+        if (mailing.getSentAt() != null) {
+            throw new IllegalStateException("mailing %s has already been sent".formatted(id));
+        }
+        jooqDsl.transaction(_ -> {
+            supporterMailingAttachmentDao.deleteById(id);
+            if (attachment != null) {
+                supporterMailingAttachmentDao.insert(new SupporterMailingAttachment(id,
+                                                                                   attachment.fileName(),
+                                                                                   attachment.contentType(),
+                                                                                   attachment.data()));
+            }
+        });
+    }
+
+    public Optional<MailAttachment> attachment(Long id) {
+        return supporterMailingAttachmentDao.findOptionalById(id)
+                                            .map(it -> new MailAttachment(it.getFileName(), it.getContentType(), it.getData()));
     }
 
     public void delete(Long id) {

@@ -13,7 +13,8 @@ public record SupporterMailingDto(Long id,
                                   LocalDateTime sentAt,
                                   String sentBy,
                                   int emailCount,
-                                  int postCount) {
+                                  int postCount,
+                                  String attachmentName) {
 
     public boolean isSent() {
         return sentAt != null;

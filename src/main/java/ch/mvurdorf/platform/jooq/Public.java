@@ -20,6 +20,7 @@ import ch.mvurdorf.platform.jooq.tables.ShareableLinkInstrument;
 import ch.mvurdorf.platform.jooq.tables.ShareableLinkKomposition;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
 import ch.mvurdorf.platform.jooq.tables.SupporterMailing;
+import ch.mvurdorf.platform.jooq.tables.SupporterMailingAttachment;
 import ch.mvurdorf.platform.jooq.tables.SupporterMailingRecipient;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
@@ -129,6 +130,11 @@ public class Public extends SchemaImpl {
     public final SupporterMailing SUPPORTER_MAILING = SupporterMailing.SUPPORTER_MAILING;
 
     /**
+     * The table <code>public.supporter_mailing_attachment</code>.
+     */
+    public final SupporterMailingAttachment SUPPORTER_MAILING_ATTACHMENT = SupporterMailingAttachment.SUPPORTER_MAILING_ATTACHMENT;
+
+    /**
      * The table <code>public.supporter_mailing_recipient</code>.
      */
     public final SupporterMailingRecipient SUPPORTER_MAILING_RECIPIENT = SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT;
@@ -190,6 +196,7 @@ public class Public extends SchemaImpl {
             ShareableLinkKomposition.SHAREABLE_LINK_KOMPOSITION,
             Supporter.SUPPORTER,
             SupporterMailing.SUPPORTER_MAILING,
+            SupporterMailingAttachment.SUPPORTER_MAILING_ATTACHMENT,
             SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT,
             SupporterPayment.SUPPORTER_PAYMENT,
             SupporterVoucher.SUPPORTER_VOUCHER,

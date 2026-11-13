@@ -1,11 +1,18 @@
 package ch.mvurdorf.platform.supporter;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import ch.mvurdorf.platform.service.MailAttachment;
 import ch.mvurdorf.platform.supporter.SupporterMailingService.Recipient;
 import ch.mvurdorf.platform.ui.LocalizedEnumRenderer;
+import ch.mvurdorf.platform.ui.i18n.UploadGermanI18N;
 import ch.mvurdorf.platform.utils.DateUtil;
 import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.server.streams.UploadHandler;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
@@ -49,10 +56,12 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateTimeRenderer;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
+import static com.vaadin.flow.component.html.AttachmentType.DOWNLOAD;
 import static com.vaadin.flow.component.icon.VaadinIcon.ARROW_LEFT;
 import static com.vaadin.flow.component.icon.VaadinIcon.DOWNLOAD_ALT;
 import static com.vaadin.flow.component.icon.VaadinIcon.ENVELOPE;
 import static com.vaadin.flow.component.icon.VaadinIcon.EYE;
+import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
@@ -60,6 +69,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Route("supporter/mailing")
 @RolesAllowed({SUPPORTER_GROUP})
 public class SupporterMailingEditView extends VerticalLayout implements HasUrlParameter<Long> {
+
+    // larger attachments are often rejected by mail servers (the size grows by a third due to the encoding)
+    private static final int MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024;
 
     private final SupporterMailingService supporterMailingService;
     private final AuthenticatedUser authenticatedUser;
@@ -79,7 +91,13 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
     private final TabSheet preview = new TabSheet();
     private final VerticalLayout previewLayout = new VerticalLayout(previewRecipient, previewErrors, preview);
 
+    private final HorizontalLayout attachmentInfo = new HorizontalLayout();
+
     private Long mailingId;
+    // the attachment is only stored when the mailing is saved
+    private String savedAttachmentName;
+    private MailAttachment pendingAttachment;
+    private boolean attachmentChanged;
     private List<Recipient> recipients = List.of();
     private String previewHtml;
     private boolean loading;
@@ -211,9 +229,65 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
         mjml.setValue(mailing != null ? mailing.mjml() : SupporterMailingTemplate.EXAMPLE_CONTENT);
         mjml.setReadOnly(readOnly);
 
-        var content = new VerticalLayout(subject, mjml);
+        var content = new VerticalLayout(subject, mjml, createAttachment(mailing, readOnly));
         content.setPadding(false);
         return content;
+    }
+
+    private VerticalLayout createAttachment(SupporterMailingDto mailing, boolean readOnly) {
+        savedAttachmentName = mailing != null ? mailing.attachmentName() : null;
+        pendingAttachment = null;
+        attachmentChanged = false;
+
+        var label = new Span("Anhang (nur E-Mail)");
+        label.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+        var attachment = new VerticalLayout(label, attachmentInfo);
+        attachment.setPadding(false);
+        attachment.setSpacing(false);
+
+        if (!readOnly) {
+            var upload = new Upload(UploadHandler.inMemory((metadata, data) -> {
+                pendingAttachment = new MailAttachment(metadata.fileName(),
+                                                       isBlank(metadata.contentType()) ? "application/octet-stream" : metadata.contentType(),
+                                                       data);
+                attachmentChanged = true;
+                updateAttachmentInfo(false);
+            }));
+            upload.setI18n(new UploadGermanI18N());
+            upload.setMaxFiles(1);
+            upload.setMaxFileSize(MAX_ATTACHMENT_SIZE);
+            upload.addFileRejectedListener(event -> Notification.show(event.getErrorMessage()));
+            upload.addAllFinishedListener(_ -> upload.clearFileList());
+            attachment.add(upload);
+        }
+        updateAttachmentInfo(readOnly);
+        return attachment;
+    }
+
+    private void updateAttachmentInfo(boolean readOnly) {
+        attachmentInfo.removeAll();
+        var name = attachmentChanged ? (pendingAttachment != null ? pendingAttachment.fileName() : null) : savedAttachmentName;
+        if (name == null) {
+            attachmentInfo.add(new Span("Kein Anhang"));
+            return;
+        }
+
+        var pending = attachmentChanged ? pendingAttachment : null;
+        var id = mailingId;
+        attachmentInfo.add(new Anchor(DownloadHandler.fromInputStream(_ -> {
+            var file = pending != null ? pending : supporterMailingService.attachment(id).orElseThrow();
+            return new DownloadResponse(new ByteArrayInputStream(file.data()), file.fileName(), file.contentType(), file.data().length);
+        }), DOWNLOAD, name));
+        if (!readOnly) {
+            var remove = new Button(TRASH.create(), _ -> {
+                pendingAttachment = null;
+                attachmentChanged = true;
+                updateAttachmentInfo(false);
+            });
+            remove.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE, ButtonVariant.LUMO_ERROR);
+            remove.setTooltipText("Anhang entfernen");
+            attachmentInfo.add(remove);
+        }
     }
 
     private Grid<SupporterMailingRecipientDto> createSentRecipients(SupporterMailingDto mailing) {
@@ -310,6 +384,12 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
         }
         var isNew = mailingId == null;
         mailingId = supporterMailingService.save(mailingId, subject.getValue(), mjml.getValue(), currentFilter(), authenticatedUser.getName());
+        if (attachmentChanged) {
+            supporterMailingService.updateAttachment(mailingId, pendingAttachment);
+            savedAttachmentName = pendingAttachment != null ? pendingAttachment.fileName() : null;
+            pendingAttachment = null;
+            attachmentChanged = false;
+        }
         if (isNew) {
             UI.getCurrent().getPage().getHistory().replaceState(null, "supporter/mailing/%d".formatted(mailingId));
         }

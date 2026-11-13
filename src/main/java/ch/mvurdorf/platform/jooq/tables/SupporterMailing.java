@@ -6,6 +6,7 @@ package ch.mvurdorf.platform.jooq.tables;
 
 import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
+import ch.mvurdorf.platform.jooq.tables.SupporterMailingAttachment.SupporterMailingAttachmentPath;
 import ch.mvurdorf.platform.jooq.tables.SupporterMailingRecipient.SupporterMailingRecipientPath;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterMailingRecord;
 
@@ -203,6 +204,19 @@ public class SupporterMailing extends TableImpl<SupporterMailingRecord> {
     @Override
     public UniqueKey<SupporterMailingRecord> getPrimaryKey() {
         return Keys.PK__SUPPORTER_MAILING;
+    }
+
+    private transient SupporterMailingAttachmentPath _supporterMailingAttachment;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.supporter_mailing_attachment</code> table
+     */
+    public SupporterMailingAttachmentPath supporterMailingAttachment() {
+        if (_supporterMailingAttachment == null)
+            _supporterMailingAttachment = new SupporterMailingAttachmentPath(this, null, Keys.SUPPORTER_MAILING_ATTACHMENT__SUPPORTER_MAILING_ATTACHMENT_FK_SUPPORTER_MAILING_FKEY.getInverseKey());
+
+        return _supporterMailingAttachment;
     }
 
     private transient SupporterMailingRecipientPath _supporterMailingRecipient;

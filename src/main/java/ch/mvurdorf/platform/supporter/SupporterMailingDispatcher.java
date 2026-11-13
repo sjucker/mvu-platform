@@ -1,9 +1,11 @@
 package ch.mvurdorf.platform.supporter;
 
 import ch.mvurdorf.platform.config.PlatformProperties;
+import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingAttachmentDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingRecipientDao;
 import ch.mvurdorf.platform.jooq.tables.pojos.SupporterMailingRecipient;
+import ch.mvurdorf.platform.service.MailAttachment;
 import ch.mvurdorf.platform.service.MailService;
 import ch.mvurdorf.platform.utils.DateUtil;
 import jakarta.mail.MessagingException;
@@ -28,6 +30,7 @@ import static ch.mvurdorf.platform.supporter.SupporterMailingChannel.EMAIL;
 public class SupporterMailingDispatcher {
 
     private final SupporterMailingDao supporterMailingDao;
+    private final SupporterMailingAttachmentDao supporterMailingAttachmentDao;
     private final SupporterMailingRecipientDao supporterMailingRecipientDao;
     private final SupporterService supporterService;
     private final MailService mailService;
@@ -44,6 +47,10 @@ public class SupporterMailingDispatcher {
                                          .stream()
                                          .collect(Collectors.toMap(SupporterDto::id, Function.identity()));
 
+        var attachment = supporterMailingAttachmentDao.findOptionalById(mailingId)
+                                                      .map(it -> new MailAttachment(it.getFileName(), it.getContentType(), it.getData()))
+                                                      .orElse(null);
+
         log.info("sending mailing {} to {} recipients", mailingId, recipients.size());
         for (var recipient : recipients) {
             var supporter = supporters.get(recipient.getFkSupporter());
@@ -51,7 +58,7 @@ public class SupporterMailingDispatcher {
                 var html = SupporterMailingTemplate.personalize(mailing.getHtml(),
                                                                 supporter,
                                                                 platformProperties.supporterPortalLink(supporter.uuid()));
-                mailService.sendSupporterMailing(supporter.email(), mailing.getSubject(), html);
+                mailService.sendSupporterMailing(supporter.email(), mailing.getSubject(), html, attachment);
                 recipient.setSentAt(DateUtil.now());
                 recipient.setError(null);
             } catch (MessagingException | RuntimeException e) {
