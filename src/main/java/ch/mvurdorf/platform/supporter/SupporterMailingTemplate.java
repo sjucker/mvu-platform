@@ -23,7 +23,7 @@ public final class SupporterMailingTemplate {
             <mj-section>
                 <mj-column>
                     <mj-text>
-                        <h2>{{anrede}} {{vorname}}</h2>
+                        <p>{{anrede}} {{vorname}}</p>
                         <p>Vielen Dank für deine Unterstützung!</p>
                     </mj-text>
                 </mj-column>

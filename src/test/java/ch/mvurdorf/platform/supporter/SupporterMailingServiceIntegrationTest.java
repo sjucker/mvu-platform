@@ -113,7 +113,8 @@ class SupporterMailingServiceIntegrationTest extends AbstractIntegrationTest {
         service.send(id, "tester");
 
         assertThat(renderedMjml.getLast()).as("content is embedded into the static template")
-                                          .contains("<mj-section>Neuer Inhalt</mj-section>", "mailing-header", "mailing-footer", "{{portalLink}}");
+                                          .contains("<mj-section>Neuer Inhalt</mj-section>", "mailing-header", "mailing-footer", "{{portalLink}}",
+                                                    "https://platform/images/mailing/letterhead.png");
         assertThat(dispatchedMailings).containsExactly(id);
 
         var mailing = service.find(id).orElseThrow();

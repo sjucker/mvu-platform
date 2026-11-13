@@ -200,7 +200,7 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
         mjml.setWidthFull();
         mjml.setMinHeight("300px");
         mjml.getStyle().set("font-family", "monospace");
-        mjml.setHelperText("MJML-Elemente innerhalb von <mj-body> (z.B. <mj-section>), Header, Footer und der Link zum Supporter-Portal werden automatisch ergänzt. "
+        mjml.setHelperText("MJML-Elemente innerhalb von <mj-body> (z.B. <mj-section>), Briefkopf, Grussformel mit Unterschriften, Link zum Supporter-Portal und Fusszeile werden automatisch ergänzt. "
                            + "Platzhalter: %s, %s, %s, %s".formatted(SupporterMailingTemplate.ANREDE, SupporterMailingTemplate.VORNAME,
                                                                      SupporterMailingTemplate.NACHNAME, SupporterMailingTemplate.PORTAL_LINK));
     }
