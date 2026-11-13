@@ -52,7 +52,7 @@ public class SupporterLetterService {
             .letter-footer { position: running(letterfooter); width: 165mm; }
             .letter-footer .mailing-footer { max-width: none !important; padding: 0 !important; }
             .letter-footer .mailing-footer td { padding: 0 !important; }
-            .letter-head { position: relative; height: 50mm; }
+            .letter-head { position: relative; height: 40mm; }
             .letter-address { position: absolute; top: 5mm; left: 93mm; width: 70mm; font-size: 11pt; line-height: 1.35; }
             .letter-portal { margin-top: 10mm; font-size: 9pt; color: #666666; }
             .letter-portal img { width: 22mm; height: 22mm; float: left; margin-right: 4mm; }
