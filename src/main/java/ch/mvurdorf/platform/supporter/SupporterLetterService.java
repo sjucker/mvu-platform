@@ -1,9 +1,9 @@
 package ch.mvurdorf.platform.supporter;
 
 import ch.mvurdorf.platform.config.PlatformProperties;
-import ch.mvurdorf.platform.service.HtmlPdfService;
 import ch.mvurdorf.platform.service.QRCodeService;
 import ch.mvurdorf.platform.service.StaticImages;
+import ch.mvurdorf.platform.utils.HtmlPdfUtil;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,7 +58,6 @@ public class SupporterLetterService {
             .letter-portal p { margin: 2mm 0 0 0; }
             """;
 
-    private final HtmlPdfService htmlPdfService;
     private final QRCodeService qrCodeService;
     private final PlatformProperties platformProperties;
 
@@ -66,7 +65,7 @@ public class SupporterLetterService {
      * @param html the rendered HTML of the mailing (placeholders not yet replaced)
      */
     public byte[] letter(String html, SupporterDto supporter) {
-        return htmlPdfService.toPdf(letterDocument(html, supporter));
+        return HtmlPdfUtil.toPdf(letterDocument(html, supporter));
     }
 
     /**
@@ -74,9 +73,9 @@ public class SupporterLetterService {
      * @return all letters merged into one PDF, each letter starting on a new page
      */
     public byte[] letters(String html, List<SupporterDto> supporters) {
-        return htmlPdfService.merge(supporters.stream()
-                                              .map(supporter -> letter(html, supporter))
-                                              .toList());
+        return HtmlPdfUtil.merge(supporters.stream()
+                                           .map(supporter -> letter(html, supporter))
+                                           .toList());
     }
 
     Document letterDocument(String html, SupporterDto supporter) {

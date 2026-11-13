@@ -8,7 +8,6 @@ import ch.mvurdorf.platform.jooq.tables.daos.SupporterMailingRecipientDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterPaymentDao;
 import ch.mvurdorf.platform.jooq.tables.daos.SupporterVoucherDao;
 import ch.mvurdorf.platform.jooq.tables.daos.VoucherDao;
-import ch.mvurdorf.platform.service.HtmlPdfService;
 import ch.mvurdorf.platform.service.MailAttachment;
 import ch.mvurdorf.platform.service.MjmlService;
 import ch.mvurdorf.platform.service.QRCodeService;
@@ -77,7 +76,7 @@ class SupporterMailingServiceIntegrationTest extends AbstractIntegrationTest {
                                               new SupporterMailingAttachmentDao(configuration),
                                               new SupporterMailingRecipientDao(configuration),
                                               supporterService,
-                                              new SupporterLetterService(new HtmlPdfService(), new QRCodeService(), platformProperties),
+                                              new SupporterLetterService(new QRCodeService(), platformProperties),
                                               dispatcher,
                                               mjmlService,
                                               templateEngine,
