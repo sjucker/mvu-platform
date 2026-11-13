@@ -20,6 +20,7 @@ import ch.mvurdorf.platform.jooq.tables.ShareableLinkInstrument;
 import ch.mvurdorf.platform.jooq.tables.ShareableLinkKomposition;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
 import ch.mvurdorf.platform.jooq.tables.SupporterMailing;
+import ch.mvurdorf.platform.jooq.tables.SupporterMailingAttachment;
 import ch.mvurdorf.platform.jooq.tables.SupporterMailingRecipient;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
@@ -111,6 +112,11 @@ public class Tables {
      * The table <code>public.supporter_mailing</code>.
      */
     public static final SupporterMailing SUPPORTER_MAILING = SupporterMailing.SUPPORTER_MAILING;
+
+    /**
+     * The table <code>public.supporter_mailing_attachment</code>.
+     */
+    public static final SupporterMailingAttachment SUPPORTER_MAILING_ATTACHMENT = SupporterMailingAttachment.SUPPORTER_MAILING_ATTACHMENT;
 
     /**
      * The table <code>public.supporter_mailing_recipient</code>.

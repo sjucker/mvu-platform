@@ -7,6 +7,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -77,14 +78,18 @@ public class MailService {
     /**
      * Sends an already rendered supporter mailing synchronously (no BCC, since mailings go to many recipients).
      *
+     * @param attachment optional attachment (null = none)
      * @throws MessagingException if the mail could not be sent
      */
-    public void sendSupporterMailing(String email, String subject, String html) throws MessagingException {
+    public void sendSupporterMailing(String email, String subject, String html, MailAttachment attachment) throws MessagingException {
         log.info("sending supporter mailing to {}", email);
         var mimeMessage = mailSender.createMimeMessage();
         var helper = setSenderReceiverMetadata(mimeMessage, email, false);
         helper.setSubject("%s%s".formatted(getSubjectPrefix(), subject));
         helper.setText(html, true);
+        if (attachment != null) {
+            helper.addAttachment(attachment.fileName(), new ByteArrayResource(attachment.data()), attachment.contentType());
+        }
         mailSender.send(mimeMessage);
     }
 
