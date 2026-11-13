@@ -3,11 +3,11 @@ package ch.mvurdorf.platform.supporter;
 import ch.mvurdorf.platform.config.PlatformProperties;
 import ch.mvurdorf.platform.service.HtmlPdfService;
 import ch.mvurdorf.platform.service.QRCodeService;
+import ch.mvurdorf.platform.service.StaticImages;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.stream.MemoryCacheImageOutputStream;
@@ -30,7 +30,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @RequiredArgsConstructor
 public class SupporterLetterService {
 
-    private static final String STATIC_RESOURCES = "META-INF/resources";
     private static final String LETTERHEAD = "/images/mailing/letterhead.png";
 
     // only CSS 2.1 (plus paged media) is supported by the PDF renderer; MJML renders inline styles, hence the !important
@@ -133,21 +132,16 @@ public class SupporterLetterService {
      * Replaces links to static images of the platform (e.g., the signatures) by data URIs.
      */
     private void embedImages(Document document) {
-        var baseUrl = platformProperties.url();
-        document.select("img").forEach(img -> {
-            var src = img.attr("src");
-            if (src.startsWith(baseUrl + "/images/") && new ClassPathResource(STATIC_RESOURCES + src.substring(baseUrl.length())).exists()) {
-                img.attr("src", staticImageDataUri(src.substring(baseUrl.length())));
-            }
-        });
+        document.select("img").forEach(img -> StaticImages.find(img.attr("src"), platformProperties.url())
+                                                          .ifPresent(image -> img.attr("src", dataUri(image))));
     }
 
     private static String staticImageDataUri(String path) {
-        try (var in = new ClassPathResource(STATIC_RESOURCES + path).getInputStream()) {
-            return "data:image/png;base64," + Base64.getEncoder().encodeToString(in.readAllBytes());
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return dataUri(StaticImages.load(path).orElseThrow(() -> new IllegalStateException("image not found: " + path)));
+    }
+
+    private static String dataUri(StaticImages.Image image) {
+        return "data:%s;base64,%s".formatted(image.contentType(), Base64.getEncoder().encodeToString(image.data()));
     }
 
     private String qrCodeDataUri(String text) {

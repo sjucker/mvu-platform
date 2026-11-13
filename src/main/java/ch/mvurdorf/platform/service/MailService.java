@@ -17,6 +17,9 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Locale.GERMAN;
@@ -26,6 +29,8 @@ import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE
 @Service
 @RequiredArgsConstructor
 public class MailService {
+
+    private static final Pattern IMAGE_SRC = Pattern.compile("(<img\\b[^>]*?\\bsrc=\")([^\"]*)(\")", Pattern.CASE_INSENSITIVE);
 
     private final SpringTemplateEngine templateEngine;
     private final Environment environment;
@@ -86,11 +91,43 @@ public class MailService {
         var mimeMessage = mailSender.createMimeMessage();
         var helper = setSenderReceiverMetadata(mimeMessage, email, false);
         helper.setSubject("%s%s".formatted(getSubjectPrefix(), subject));
-        helper.setText(html, true);
+        setHtmlWithInlineImages(helper, html);
         if (attachment != null) {
             helper.addAttachment(attachment.fileName(), new ByteArrayResource(attachment.data()), attachment.contentType());
         }
         mailSender.send(mimeMessage);
+    }
+
+    /**
+     * Embeds the static images of the platform (e.g., letterhead and signatures) as inline parts referenced by
+     * {@code cid:}, so they are shown without loading them from the server (data URIs are blocked by most mail clients).
+     */
+    private void setHtmlWithInlineImages(MimeMessageHelper helper, String html) throws MessagingException {
+        var contentIds = new HashMap<String, String>();
+        var images = new LinkedHashMap<String, StaticImages.Image>();
+        var matcher = IMAGE_SRC.matcher(html);
+        var result = new StringBuilder();
+        while (matcher.find()) {
+            var src = matcher.group(2);
+            var contentId = contentIds.get(src);
+            if (contentId == null) {
+                var image = StaticImages.find(src, platformProperties.url());
+                if (image.isPresent()) {
+                    contentId = "image%d@mvurdorf.ch".formatted(images.size() + 1);
+                    contentIds.put(src, contentId);
+                    images.put(contentId, image.get());
+                }
+            }
+            var newSrc = contentId != null ? "cid:" + contentId : src;
+            matcher.appendReplacement(result, Matcher.quoteReplacement(matcher.group(1) + newSrc + matcher.group(3)));
+        }
+        matcher.appendTail(result);
+
+        // the text must be set before the inline parts are added
+        helper.setText(result.toString(), true);
+        for (var image : images.entrySet()) {
+            helper.addInline(image.getKey(), new ByteArrayResource(image.getValue().data()), image.getValue().contentType());
+        }
     }
 
     private MimeMessageHelper setSenderReceiverMetadata(MimeMessage mimeMessage, String email, boolean bcc) throws MessagingException {
