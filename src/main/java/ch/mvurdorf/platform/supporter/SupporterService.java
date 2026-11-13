@@ -97,7 +97,8 @@ public class SupporterService {
                                              SUPPORTER_VOUCHER.DESCRIPTION,
                                              SUPPORTER_VOUCHER.VALID_UNTIL,
                                              SUPPORTER_VOUCHER.REDEEMED_AT,
-                                             SUPPORTER_VOUCHER.REDEEMED_BY)
+                                             SUPPORTER_VOUCHER.REDEEMED_BY,
+                                             SUPPORTER_VOUCHER.PAID_WITHIN_MONTHS)
                                               .from(SUPPORTER_VOUCHER)
                                               .where(SUPPORTER_VOUCHER.FK_SUPPORTER.eq(SUPPORTER.ID))
                                               .orderBy(SUPPORTER_VOUCHER.VALID_UNTIL.desc())
@@ -185,7 +186,8 @@ public class SupporterService {
                                                                                       voucher.getDescription(),
                                                                                       voucher.getValidUntil(),
                                                                                       null,
-                                                                                      null)));
+                                                                                      null,
+                                                                                      voucher.getPaidWithinMonths())));
 
         mailService.sendSupporterRegistrationEmail(newSupporter);
         return externalId;
@@ -243,21 +245,25 @@ public class SupporterService {
         }
     }
 
-    public void createVouchers(String prefix, String description, LocalDate validUntil, SupporterType type) {
+    /**
+     * @param paidWithinMonths the voucher is only accessible for supporters with a payment in the last n months
+     *                         (evaluated when the supporter views the voucher, null = no restriction)
+     */
+    public void createVouchers(String prefix, String description, LocalDate validUntil, SupporterType type, Integer paidWithinMonths) {
         // insert voucher-template for new registrations
-        voucherDao.insert(new Voucher(null, prefix, description, validUntil, type.name()));
+        voucherDao.insert(new Voucher(null, prefix, description, validUntil, type.name(), paidWithinMonths));
 
         // add for all existing ones
         supporterDao.findAll().stream()
                     .filter(supporter -> SupporterType.valueOf(supporter.getType()) == type)
-                    // TODO filter certain (e.g., not payed in last 12 months)?
                     .forEach(supporter -> supporterVoucherDao.insert(new SupporterVoucher(null,
                                                                                           supporter.getId(),
                                                                                           getCode(prefix),
                                                                                           description,
                                                                                           validUntil,
                                                                                           null,
-                                                                                          null)));
+                                                                                          null,
+                                                                                          paidWithinMonths)));
     }
 
     private static String getCode(String prefix) {

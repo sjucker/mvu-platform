@@ -119,6 +119,20 @@ public class SupporterVoucherRecord extends UpdatableRecordImpl<SupporterVoucher
         return (String) get(6);
     }
 
+    /**
+     * Setter for <code>public.supporter_voucher.paid_within_months</code>.
+     */
+    public void setPaidWithinMonths(Integer value) {
+        set(7, value);
+    }
+
+    /**
+     * Getter for <code>public.supporter_voucher.paid_within_months</code>.
+     */
+    public Integer getPaidWithinMonths() {
+        return (Integer) get(7);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -142,7 +156,7 @@ public class SupporterVoucherRecord extends UpdatableRecordImpl<SupporterVoucher
     /**
      * Create a detached, initialised SupporterVoucherRecord
      */
-    public SupporterVoucherRecord(Long id, Long fkSupporter, String code, String description, LocalDate validUntil, LocalDateTime redeemedAt, String redeemedBy) {
+    public SupporterVoucherRecord(Long id, Long fkSupporter, String code, String description, LocalDate validUntil, LocalDateTime redeemedAt, String redeemedBy, Integer paidWithinMonths) {
         super(SupporterVoucher.SUPPORTER_VOUCHER);
 
         setId(id);
@@ -152,6 +166,7 @@ public class SupporterVoucherRecord extends UpdatableRecordImpl<SupporterVoucher
         setValidUntil(validUntil);
         setRedeemedAt(redeemedAt);
         setRedeemedBy(redeemedBy);
+        setPaidWithinMonths(paidWithinMonths);
         resetTouchedOnNotNull();
     }
 
@@ -169,6 +184,7 @@ public class SupporterVoucherRecord extends UpdatableRecordImpl<SupporterVoucher
             setValidUntil(value.getValidUntil());
             setRedeemedAt(value.getRedeemedAt());
             setRedeemedBy(value.getRedeemedBy());
+            setPaidWithinMonths(value.getPaidWithinMonths());
             resetTouchedOnNotNull();
         }
     }

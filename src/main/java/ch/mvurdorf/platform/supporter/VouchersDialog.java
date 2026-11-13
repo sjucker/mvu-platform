@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import org.apache.commons.lang3.function.BooleanConsumer;
 
@@ -45,10 +46,20 @@ public class VouchersDialog extends Dialog {
         formLayout.add(description);
         var validUntil = datePicker("Gültig bis");
         formLayout.add(validUntil);
+        var paidWithinMonths = new IntegerField("Nur bei Bezahlung in den letzten Monaten");
+        paidWithinMonths.setMin(1);
+        paidWithinMonths.setClearButtonVisible(true);
+        paidWithinMonths.setPlaceholder("Alle");
+        paidWithinMonths.setHelperText("Optional, z.B. 12 = nur sichtbar, wer in den letzten 12 Monaten bezahlt hat");
+        formLayout.add(paidWithinMonths);
 
         getFooter().add(new Button("Abbrechen", _ -> close()));
         getFooter().add(primaryButton("Speichern", () -> {
-            service.createVouchers(prefix.getValue(), description.getValue(), validUntil.getValue(), type.getValue());
+            if (paidWithinMonths.isInvalid()) {
+                return;
+            }
+            service.createVouchers(prefix.getValue(), description.getValue(), validUntil.getValue(), type.getValue(),
+                                   paidWithinMonths.getValue());
             callback.accept(true);
             close();
         }));

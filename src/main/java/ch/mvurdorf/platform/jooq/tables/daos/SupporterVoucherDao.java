@@ -163,4 +163,19 @@ public class SupporterVoucherDao extends AbstractSpringDAOImpl<SupporterVoucherR
     public List<ch.mvurdorf.platform.jooq.tables.pojos.SupporterVoucher> fetchByRedeemedBy(String... values) {
         return fetch(SupporterVoucher.SUPPORTER_VOUCHER.REDEEMED_BY, values);
     }
+
+    /**
+     * Fetch records that have <code>paid_within_months BETWEEN lowerInclusive
+     * AND upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.SupporterVoucher> fetchRangeOfPaidWithinMonths(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(SupporterVoucher.SUPPORTER_VOUCHER.PAID_WITHIN_MONTHS, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>paid_within_months IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.SupporterVoucher> fetchByPaidWithinMonths(Integer... values) {
+        return fetch(SupporterVoucher.SUPPORTER_VOUCHER.PAID_WITHIN_MONTHS, values);
+    }
 }

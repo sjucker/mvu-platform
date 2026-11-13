@@ -24,6 +24,7 @@ public class SupporterVoucher implements Serializable {
     private LocalDate validUntil;
     private LocalDateTime redeemedAt;
     private String redeemedBy;
+    private Integer paidWithinMonths;
 
     public SupporterVoucher() {}
 
@@ -35,6 +36,7 @@ public class SupporterVoucher implements Serializable {
         this.validUntil = value.validUntil;
         this.redeemedAt = value.redeemedAt;
         this.redeemedBy = value.redeemedBy;
+        this.paidWithinMonths = value.paidWithinMonths;
     }
 
     public SupporterVoucher(
@@ -44,7 +46,8 @@ public class SupporterVoucher implements Serializable {
         String description,
         LocalDate validUntil,
         LocalDateTime redeemedAt,
-        String redeemedBy
+        String redeemedBy,
+        Integer paidWithinMonths
     ) {
         this.id = id;
         this.fkSupporter = fkSupporter;
@@ -53,6 +56,7 @@ public class SupporterVoucher implements Serializable {
         this.validUntil = validUntil;
         this.redeemedAt = redeemedAt;
         this.redeemedBy = redeemedBy;
+        this.paidWithinMonths = paidWithinMonths;
     }
 
     /**
@@ -153,6 +157,20 @@ public class SupporterVoucher implements Serializable {
         this.redeemedBy = redeemedBy;
     }
 
+    /**
+     * Getter for <code>public.supporter_voucher.paid_within_months</code>.
+     */
+    public Integer getPaidWithinMonths() {
+        return this.paidWithinMonths;
+    }
+
+    /**
+     * Setter for <code>public.supporter_voucher.paid_within_months</code>.
+     */
+    public void setPaidWithinMonths(Integer paidWithinMonths) {
+        this.paidWithinMonths = paidWithinMonths;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -204,6 +222,12 @@ public class SupporterVoucher implements Serializable {
         }
         else if (!this.redeemedBy.equals(other.redeemedBy))
             return false;
+        if (this.paidWithinMonths == null) {
+            if (other.paidWithinMonths != null)
+                return false;
+        }
+        else if (!this.paidWithinMonths.equals(other.paidWithinMonths))
+            return false;
         return true;
     }
 
@@ -218,6 +242,7 @@ public class SupporterVoucher implements Serializable {
         result = prime * result + ((this.validUntil == null) ? 0 : this.validUntil.hashCode());
         result = prime * result + ((this.redeemedAt == null) ? 0 : this.redeemedAt.hashCode());
         result = prime * result + ((this.redeemedBy == null) ? 0 : this.redeemedBy.hashCode());
+        result = prime * result + ((this.paidWithinMonths == null) ? 0 : this.paidWithinMonths.hashCode());
         return result;
     }
 
@@ -232,6 +257,7 @@ public class SupporterVoucher implements Serializable {
         sb.append(", ").append(validUntil);
         sb.append(", ").append(redeemedAt);
         sb.append(", ").append(redeemedBy);
+        sb.append(", ").append(paidWithinMonths);
 
         sb.append(")");
         return sb.toString();

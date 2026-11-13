@@ -132,4 +132,19 @@ public class VoucherDao extends AbstractSpringDAOImpl<VoucherRecord, ch.mvurdorf
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Voucher> fetchByType(String... values) {
         return fetch(Voucher.VOUCHER.TYPE, values);
     }
+
+    /**
+     * Fetch records that have <code>paid_within_months BETWEEN lowerInclusive
+     * AND upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Voucher> fetchRangeOfPaidWithinMonths(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(Voucher.VOUCHER.PAID_WITHIN_MONTHS, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>paid_within_months IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Voucher> fetchByPaidWithinMonths(Integer... values) {
+        return fetch(Voucher.VOUCHER.PAID_WITHIN_MONTHS, values);
+    }
 }

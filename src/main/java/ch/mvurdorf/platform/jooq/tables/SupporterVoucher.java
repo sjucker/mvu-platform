@@ -95,6 +95,11 @@ public class SupporterVoucher extends TableImpl<SupporterVoucherRecord> {
      */
     public final TableField<SupporterVoucherRecord, String> REDEEMED_BY = createField(DSL.name("redeemed_by"), SQLDataType.VARCHAR(255), this, "");
 
+    /**
+     * The column <code>public.supporter_voucher.paid_within_months</code>.
+     */
+    public final TableField<SupporterVoucherRecord, Integer> PAID_WITHIN_MONTHS = createField(DSL.name("paid_within_months"), SQLDataType.INTEGER, this, "");
+
     private SupporterVoucher(Name alias, Table<SupporterVoucherRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
