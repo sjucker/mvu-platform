@@ -1,7 +1,6 @@
 package ch.mvurdorf.platform.supporter;
 
 import ch.mvurdorf.platform.config.PlatformProperties;
-import ch.mvurdorf.platform.service.HtmlPdfService;
 import ch.mvurdorf.platform.service.QRCodeService;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -29,8 +28,7 @@ class SupporterLetterServiceTest {
             </div></body></html>
             """;
 
-    private final SupporterLetterService service = new SupporterLetterService(new HtmlPdfService(),
-                                                                              new QRCodeService(),
+    private final SupporterLetterService service = new SupporterLetterService(new QRCodeService(),
                                                                               new PlatformProperties("https://platform", "https://support", false, "bcc@test.ch"));
 
     @Test
