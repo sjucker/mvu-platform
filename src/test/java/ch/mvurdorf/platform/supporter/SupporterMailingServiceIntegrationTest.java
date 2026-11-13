@@ -41,6 +41,7 @@ class SupporterMailingServiceIntegrationTest extends AbstractIntegrationTest {
 
     private final List<String> renderedMjml = new ArrayList<>();
     private final List<Long> dispatchedMailings = new ArrayList<>();
+    private MjmlService.MjmlResult mjmlResult = new MjmlService.MjmlResult("<html><body><div class=\"mailing-header\">Header</div><p>{{anrede}} {{vorname}}</p></body></html>", List.of());
     private SupporterMailingService service;
 
     @BeforeEach
@@ -61,7 +62,7 @@ class SupporterMailingServiceIntegrationTest extends AbstractIntegrationTest {
             @Override
             public MjmlResult renderWithErrors(String mjml) {
                 renderedMjml.add(mjml);
-                return new MjmlResult("<html><body><div class=\"mailing-header\">Header</div><p>{{anrede}} {{vorname}}</p></body></html>", List.of());
+                return mjmlResult;
             }
         };
         var dispatcher = new SupporterMailingDispatcher(null, null, null, null, null, null) {
@@ -134,6 +135,41 @@ class SupporterMailingServiceIntegrationTest extends AbstractIntegrationTest {
         assertThatThrownBy(() -> service.save(id, "x", "x", SupporterMailingFilter.defaultFilter(), "tester")).isInstanceOf(IllegalStateException.class);
         service.delete(id);
         assertThat(service.find(id)).as("sent mailings are not deleted").isPresent();
+    }
+
+    @Test
+    void invalidContentIsNotSent() {
+        supporter(PASSIVMITGLIED, "Email", "email@test.ch", true, false);
+        var id = service.save(null, "Betreff", "<mj-foo/>", SupporterMailingFilter.defaultFilter(), "tester");
+        var valid = mjmlResult;
+
+        mjmlResult = new MjmlService.MjmlResult(valid.html(), List.of("Element mj-foo doesn't exist"));
+        assertThatThrownBy(() -> service.send(id, "tester"))
+                .isInstanceOfSatisfying(SupporterMailingService.InvalidMailingException.class,
+                                        e -> assertThat(e.errors()).containsExactly("Element mj-foo doesn't exist"));
+        mjmlResult = new MjmlService.MjmlResult(null, List.of());
+        assertThatThrownBy(() -> service.send(id, "tester")).isInstanceOf(SupporterMailingService.InvalidMailingException.class);
+
+        assertThat(service.find(id).orElseThrow().isSent()).as("the mailing can still be fixed").isFalse();
+        assertThat(dispatchedMailings).isEmpty();
+
+        mjmlResult = valid;
+        service.send(id, "tester");
+        assertThat(service.find(id).orElseThrow().isSent()).isTrue();
+    }
+
+    @Test
+    void sendUnsent() {
+        supporter(PASSIVMITGLIED, "Email", "email@test.ch", true, false);
+        supporter(PASSIVMITGLIED, "Letter", null, false, false);
+        var id = service.save(null, "Betreff", "<mj-section/>", SupporterMailingFilter.defaultFilter(), "tester");
+        assertThatThrownBy(() -> service.sendUnsent(id)).as("drafts are not dispatched").isInstanceOf(IllegalStateException.class);
+
+        service.send(id, "tester");
+        assertThat(service.unsentEmails(id)).as("letters are not counted").isEqualTo(1);
+
+        service.sendUnsent(id);
+        assertThat(dispatchedMailings).containsExactly(id, id);
     }
 
     @Test

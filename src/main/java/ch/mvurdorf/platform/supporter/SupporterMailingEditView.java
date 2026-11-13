@@ -168,6 +168,16 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
                 download.setIcon(DOWNLOAD_ALT.create());
                 header.add(download);
             }
+            var unsent = supporterMailingService.unsentEmails(mailing.id());
+            if (unsent > 0 && authenticatedUser.hasWritePermission(SUPPORTER_GROUP)) {
+                if (supporterMailingService.isSending(mailing.id())) {
+                    info.setText(info.getText() + " (%d E-Mails ausstehend, Versand läuft)".formatted(unsent));
+                } else {
+                    var retry = secondaryButton("%d ausstehende E-Mails senden".formatted(unsent), () -> sendUnsent(mailing.id()));
+                    retry.setIcon(ENVELOPE.create());
+                    header.add(retry);
+                }
+            }
         }
         return header;
     }
@@ -415,10 +425,20 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
             supporterMailingService.send(id, authenticatedUser.getName());
             Notification.show("Das Mailing wird versendet.");
             UI.getCurrent().getPage().reload();
+        } catch (SupporterMailingService.InvalidMailingException e) {
+            previewErrors.setText(String.join("\n", e.errors()));
+            previewLayout.setVisible(true);
+            Notification.show("Der Inhalt enthält MJML-Fehler, das Mailing wurde nicht versendet.");
         } catch (RuntimeException e) {
             log.error("could not send mailing %s".formatted(id), e);
             Notification.show("Das Mailing konnte nicht versendet werden.");
         }
+    }
+
+    private void sendUnsent(Long id) {
+        supporterMailingService.sendUnsent(id);
+        Notification.show("Die ausstehenden E-Mails werden versendet.");
+        UI.getCurrent().getPage().reload();
     }
 
     private void downloadLetters(SupporterMailingDto mailing) {

@@ -36,6 +36,7 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
 import static java.util.Locale.GERMAN;
 import static org.jooq.impl.DSL.field;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.jooq.impl.DSL.selectCount;
 
 @Service
@@ -196,10 +197,16 @@ public class SupporterMailingService {
 
     /**
      * Renders the mailing, stores its recipients, marks it as sent and sends the emails in the background.
+     *
+     * @throws InvalidMailingException if the content cannot be rendered without errors (nothing is sent)
      */
     public void send(Long id, String user) {
         var mailing = find(id).orElseThrow();
-        var html = render(mailing.mjml()).html();
+        var result = render(mailing.mjml());
+        if (isBlank(result.html()) || !result.errors().isEmpty()) {
+            throw new InvalidMailingException(result.errors());
+        }
+        var html = result.html();
         var recipients = recipients(mailing.filter());
 
         jooqDsl.transaction(_ -> {
@@ -224,6 +231,31 @@ public class SupporterMailingService {
                                                           .toList());
         });
 
+        supporterMailingDispatcher.dispatch(id);
+    }
+
+    /**
+     * @return the number of emails of a sent mailing that have not been sent (yet), e.g. because sending failed or was interrupted
+     */
+    public int unsentEmails(Long id) {
+        return jooqDsl.fetchCount(SUPPORTER_MAILING_RECIPIENT,
+                                  SUPPORTER_MAILING_RECIPIENT.FK_SUPPORTER_MAILING.eq(id),
+                                  SUPPORTER_MAILING_RECIPIENT.CHANNEL.eq(EMAIL.name()),
+                                  SUPPORTER_MAILING_RECIPIENT.SENT_AT.isNull());
+    }
+
+    public boolean isSending(Long id) {
+        return supporterMailingDispatcher.isRunning(id);
+    }
+
+    /**
+     * Sends a sent mailing again to the email recipients that have not received it yet.
+     */
+    public void sendUnsent(Long id) {
+        var mailing = supporterMailingDao.findOptionalById(id).orElseThrow();
+        if (mailing.getSentAt() == null) {
+            throw new IllegalStateException("mailing %s has not been sent yet".formatted(id));
+        }
         supporterMailingDispatcher.dispatch(id);
     }
 
@@ -264,5 +296,19 @@ public class SupporterMailingService {
     }
 
     public record Recipient(SupporterDto supporter, Set<SupporterMailingChannel> channels) {
+    }
+
+    public static class InvalidMailingException extends RuntimeException {
+
+        private final transient List<String> errors;
+
+        public InvalidMailingException(List<String> errors) {
+            super("mailing could not be rendered: " + errors);
+            this.errors = List.copyOf(errors);
+        }
+
+        public List<String> errors() {
+            return errors;
+        }
     }
 }
