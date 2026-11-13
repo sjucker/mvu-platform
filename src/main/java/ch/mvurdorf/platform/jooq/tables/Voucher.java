@@ -77,6 +77,11 @@ public class Voucher extends TableImpl<VoucherRecord> {
      */
     public final TableField<VoucherRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'PASSIVMITGLIED'::character varying"), SQLDataType.VARCHAR)), this, "");
 
+    /**
+     * The column <code>public.voucher.paid_within_months</code>.
+     */
+    public final TableField<VoucherRecord, Integer> PAID_WITHIN_MONTHS = createField(DSL.name("paid_within_months"), SQLDataType.INTEGER, this, "");
+
     private Voucher(Name alias, Table<VoucherRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

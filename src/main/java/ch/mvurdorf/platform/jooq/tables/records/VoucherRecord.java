@@ -90,6 +90,20 @@ public class VoucherRecord extends UpdatableRecordImpl<VoucherRecord> {
         return (String) get(4);
     }
 
+    /**
+     * Setter for <code>public.voucher.paid_within_months</code>.
+     */
+    public void setPaidWithinMonths(Integer value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>public.voucher.paid_within_months</code>.
+     */
+    public Integer getPaidWithinMonths() {
+        return (Integer) get(5);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -113,7 +127,7 @@ public class VoucherRecord extends UpdatableRecordImpl<VoucherRecord> {
     /**
      * Create a detached, initialised VoucherRecord
      */
-    public VoucherRecord(Long id, String codePrefix, String description, LocalDate validUntil, String type) {
+    public VoucherRecord(Long id, String codePrefix, String description, LocalDate validUntil, String type, Integer paidWithinMonths) {
         super(Voucher.VOUCHER);
 
         setId(id);
@@ -121,6 +135,7 @@ public class VoucherRecord extends UpdatableRecordImpl<VoucherRecord> {
         setDescription(description);
         setValidUntil(validUntil);
         setType(type);
+        setPaidWithinMonths(paidWithinMonths);
         resetTouchedOnNotNull();
     }
 
@@ -136,6 +151,7 @@ public class VoucherRecord extends UpdatableRecordImpl<VoucherRecord> {
             setDescription(value.getDescription());
             setValidUntil(value.getValidUntil());
             setType(value.getType());
+            setPaidWithinMonths(value.getPaidWithinMonths());
             resetTouchedOnNotNull();
         }
     }

@@ -21,6 +21,7 @@ public class Voucher implements Serializable {
     private String description;
     private LocalDate validUntil;
     private String type;
+    private Integer paidWithinMonths;
 
     public Voucher() {}
 
@@ -30,6 +31,7 @@ public class Voucher implements Serializable {
         this.description = value.description;
         this.validUntil = value.validUntil;
         this.type = value.type;
+        this.paidWithinMonths = value.paidWithinMonths;
     }
 
     public Voucher(
@@ -37,13 +39,15 @@ public class Voucher implements Serializable {
         String codePrefix,
         String description,
         LocalDate validUntil,
-        String type
+        String type,
+        Integer paidWithinMonths
     ) {
         this.id = id;
         this.codePrefix = codePrefix;
         this.description = description;
         this.validUntil = validUntil;
         this.type = type;
+        this.paidWithinMonths = paidWithinMonths;
     }
 
     /**
@@ -116,6 +120,20 @@ public class Voucher implements Serializable {
         this.type = type;
     }
 
+    /**
+     * Getter for <code>public.voucher.paid_within_months</code>.
+     */
+    public Integer getPaidWithinMonths() {
+        return this.paidWithinMonths;
+    }
+
+    /**
+     * Setter for <code>public.voucher.paid_within_months</code>.
+     */
+    public void setPaidWithinMonths(Integer paidWithinMonths) {
+        this.paidWithinMonths = paidWithinMonths;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -155,6 +173,12 @@ public class Voucher implements Serializable {
         }
         else if (!this.type.equals(other.type))
             return false;
+        if (this.paidWithinMonths == null) {
+            if (other.paidWithinMonths != null)
+                return false;
+        }
+        else if (!this.paidWithinMonths.equals(other.paidWithinMonths))
+            return false;
         return true;
     }
 
@@ -167,6 +191,7 @@ public class Voucher implements Serializable {
         result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
         result = prime * result + ((this.validUntil == null) ? 0 : this.validUntil.hashCode());
         result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
+        result = prime * result + ((this.paidWithinMonths == null) ? 0 : this.paidWithinMonths.hashCode());
         return result;
     }
 
@@ -179,6 +204,7 @@ public class Voucher implements Serializable {
         sb.append(", ").append(description);
         sb.append(", ").append(validUntil);
         sb.append(", ").append(type);
+        sb.append(", ").append(paidWithinMonths);
 
         sb.append(")");
         return sb.toString();

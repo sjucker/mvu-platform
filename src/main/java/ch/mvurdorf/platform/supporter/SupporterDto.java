@@ -48,8 +48,16 @@ public record SupporterDto(Long id,
                        .toList();
     }
 
-    public List<SupporterVoucherDto> vouchersNewestFirst() {
+    /**
+     * @return the vouchers the supporter can access at the given date (still valid and, if required by the voucher,
+     * with a payment in the last n months), newest first
+     */
+    public List<SupporterVoucherDto> accessibleVouchers(LocalDate today) {
         return vouchers.stream()
+                       .filter(voucher -> !today.isAfter(voucher.validUntil()))
+                       .filter(voucher -> voucher.paidWithinMonths() == null
+                                          || lastPayment().filter(payment -> !payment.isBefore(today.minusMonths(voucher.paidWithinMonths())))
+                                                          .isPresent())
                        .sorted(comparing(SupporterVoucherDto::validUntil).reversed())
                        .toList();
     }

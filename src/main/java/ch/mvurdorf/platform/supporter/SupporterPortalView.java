@@ -103,9 +103,7 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
         grid.addComponentColumn(image(SupporterVoucherDto::code, dto -> supporterService.qrCode(supporter.externalId(), dto)))
             .setHeader("QR-Code").setWidth("200px");
 
-        grid.setItems(supporter.vouchersNewestFirst().stream()
-                               .filter(v -> !DateUtil.today().isAfter(v.validUntil()))
-                               .toList());
+        grid.setItems(supporter.accessibleVouchers(DateUtil.today()));
 
         content.add(grid);
         return content;
