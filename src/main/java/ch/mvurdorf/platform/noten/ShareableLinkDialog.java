@@ -85,7 +85,7 @@ public class ShareableLinkDialog extends Dialog {
                                        instrumentSelect.getValue());
 
         var uuid = shareableLinkService.createShareableLink(dto);
-        var url = platformProperties.supportUrl() + "/" + RouteConfiguration.forSessionScope().getUrl(SharedNotenView.class, uuid);
+        var url = platformProperties.url() + "/" + RouteConfiguration.forSessionScope().getUrl(SharedNotenView.class, uuid);
 
         var resultDialog = new Dialog();
         resultDialog.setHeaderTitle("Link erstellt");
