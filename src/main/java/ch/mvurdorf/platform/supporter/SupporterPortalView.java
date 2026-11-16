@@ -117,6 +117,7 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
         var binder = new Binder<>(SupporterEditDto.class);
 
         var formLayout = new FormLayout();
+        formLayout.setMaxWidth("48em"); // keep the two columns close together on wide screens
 
         var anrede = new Select<String>();
         anrede.setItems("Liebe", "Lieber", "Hallo");
@@ -160,6 +161,7 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
         formLayout.addFormItem(ort, "Ort");
 
         var email = new TextField();
+        email.setWidthFull();
         binder.forField(email)
               .withNullRepresentation("")
               .withValidator(new EmailValidator("Valide E-Mail eingeben", true))
