@@ -24,6 +24,7 @@ public record SupporterDto(Long id,
                            String ort,
                            String countryCode,
                            String email,
+                           LocalDate birthday,
                            String bemerkung,
                            boolean kommunikationPost,
                            boolean kommunikationEmail,
@@ -67,7 +68,7 @@ public record SupporterDto(Long id,
     }
 
     public SupporterEditDto edit() {
-        return new SupporterEditDto(id, anrede, vorname, nachname, strasse, strasseNr, plz, ort, email, bemerkung, kommunikationPost, kommunikationEmail);
+        return new SupporterEditDto(id, anrede, vorname, nachname, strasse, strasseNr, plz, ort, email, birthday, bemerkung, kommunikationPost, kommunikationEmail);
     }
 
     public String getStrasseWithNr() {

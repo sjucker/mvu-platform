@@ -33,6 +33,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 
 import java.io.ByteArrayInputStream;
 
+import static ch.mvurdorf.platform.ui.ComponentUtil.datePicker;
 import static ch.mvurdorf.platform.ui.ComponentUtil.image;
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static ch.mvurdorf.platform.ui.RendererUtil.dateRenderer;
@@ -165,6 +166,12 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
               .withValidator(new StringLengthValidator("E-Mail darf maximal 255 Zeichen haben", 0, 255))
               .bind(SupporterEditDto::getEmail, SupporterEditDto::setEmail);
         formLayout.setColspan(formLayout.addFormItem(email, "E-Mail"), 2);
+
+        var birthday = datePicker();
+        birthday.setMax(DateUtil.today());
+        birthday.setClearButtonVisible(true);
+        binder.bind(birthday, SupporterEditDto::getBirthday, SupporterEditDto::setBirthday);
+        formLayout.setColspan(formLayout.addFormItem(birthday, "Geburtsdatum"), 2);
 
         var kommunikationPost = new Checkbox();
         binder.bind(kommunikationPost, SupporterEditDto::isKommunikationPost, SupporterEditDto::setKommunikationPost);

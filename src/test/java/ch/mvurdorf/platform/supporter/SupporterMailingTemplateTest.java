@@ -11,7 +11,7 @@ class SupporterMailingTemplateTest {
     @Test
     void personalize() {
         var supporter = new SupporterDto(1L, SupporterType.GOENNER, 1000001L, "uuid-1", null, "Anna & Co", "<Muster>",
-                                         null, null, null, null, null, null, null, false, false, null, List.of(), List.of());
+                                         null, null, null, null, null, null, null, null, false, false, null, List.of(), List.of());
 
         var html = SupporterMailingTemplate.personalize("<p>{{anrede}} {{vorname}} {{nachname}}</p><a href=\"{{portalLink}}\">{{portalLink}}</a>",
                                                         supporter,

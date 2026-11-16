@@ -5,6 +5,7 @@ package ch.mvurdorf.platform.jooq.tables.pojos;
 
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -33,6 +34,7 @@ public class Supporter implements Serializable {
     private String strasseNr;
     private String countryCode;
     private String type;
+    private LocalDate birthday;
 
     public Supporter() {}
 
@@ -54,6 +56,7 @@ public class Supporter implements Serializable {
         this.strasseNr = value.strasseNr;
         this.countryCode = value.countryCode;
         this.type = value.type;
+        this.birthday = value.birthday;
     }
 
     public Supporter(
@@ -73,7 +76,8 @@ public class Supporter implements Serializable {
         String plz,
         String strasseNr,
         String countryCode,
-        String type
+        String type,
+        LocalDate birthday
     ) {
         this.id = id;
         this.vorname = vorname;
@@ -92,6 +96,7 @@ public class Supporter implements Serializable {
         this.strasseNr = strasseNr;
         this.countryCode = countryCode;
         this.type = type;
+        this.birthday = birthday;
     }
 
     /**
@@ -332,6 +337,20 @@ public class Supporter implements Serializable {
         this.type = type;
     }
 
+    /**
+     * Getter for <code>public.supporter.birthday</code>.
+     */
+    public LocalDate getBirthday() {
+        return this.birthday;
+    }
+
+    /**
+     * Setter for <code>public.supporter.birthday</code>.
+     */
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -443,6 +462,12 @@ public class Supporter implements Serializable {
         }
         else if (!this.type.equals(other.type))
             return false;
+        if (this.birthday == null) {
+            if (other.birthday != null)
+                return false;
+        }
+        else if (!this.birthday.equals(other.birthday))
+            return false;
         return true;
     }
 
@@ -467,6 +492,7 @@ public class Supporter implements Serializable {
         result = prime * result + ((this.strasseNr == null) ? 0 : this.strasseNr.hashCode());
         result = prime * result + ((this.countryCode == null) ? 0 : this.countryCode.hashCode());
         result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
+        result = prime * result + ((this.birthday == null) ? 0 : this.birthday.hashCode());
         return result;
     }
 
@@ -491,6 +517,7 @@ public class Supporter implements Serializable {
         sb.append(", ").append(strasseNr);
         sb.append(", ").append(countryCode);
         sb.append(", ").append(type);
+        sb.append(", ").append(birthday);
 
         sb.append(")");
         return sb.toString();

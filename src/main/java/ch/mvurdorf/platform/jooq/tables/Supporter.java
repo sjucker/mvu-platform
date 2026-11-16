@@ -11,6 +11,7 @@ import ch.mvurdorf.platform.jooq.tables.SupporterPayment.SupporterPaymentPath;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher.SupporterVoucherPath;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterRecord;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -145,6 +146,11 @@ public class Supporter extends TableImpl<SupporterRecord> {
      * The column <code>public.supporter.type</code>.
      */
     public final TableField<SupporterRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field(DSL.raw("'PASSIVMITGLIED'::character varying"), SQLDataType.VARCHAR)), this, "");
+
+    /**
+     * The column <code>public.supporter.birthday</code>.
+     */
+    public final TableField<SupporterRecord, LocalDate> BIRTHDAY = createField(DSL.name("birthday"), SQLDataType.LOCALDATE, this, "");
 
     private Supporter(Name alias, Table<SupporterRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

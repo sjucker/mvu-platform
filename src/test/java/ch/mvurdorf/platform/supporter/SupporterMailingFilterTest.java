@@ -52,7 +52,7 @@ class SupporterMailingFilterTest {
 
     static SupporterDto supporter(String email, boolean kommunikationEmail, boolean kommunikationPost) {
         return new SupporterDto(1L, SupporterType.PASSIVMITGLIED, 1000001L, "uuid-1", "Lieber", "Max", "Muster",
-                                "Bahnhofstrasse", "1", "8902", "Urdorf", "CH", email, null,
+                                "Bahnhofstrasse", "1", "8902", "Urdorf", "CH", email, null, null,
                                 kommunikationPost, kommunikationEmail, null, List.of(), List.of());
     }
 }

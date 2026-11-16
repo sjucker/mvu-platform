@@ -43,7 +43,7 @@ class SupporterDtoTest {
 
     private static SupporterDto supporter(List<LocalDate> payments) {
         return new SupporterDto(1L, SupporterType.PASSIVMITGLIED, 1000001L, "uuid", "Lieber", "Max", "Muster",
-                                null, null, null, null, null, null, null, false, false, null,
+                                null, null, null, null, null, null, null, null, false, false, null,
                                 payments.stream().map(datum -> new SupporterPaymentDto(datum, BigDecimal.TEN, null, null, null)).toList(),
                                 VOUCHERS);
     }

@@ -4,6 +4,8 @@ import ch.mvurdorf.platform.jooq.tables.pojos.Supporter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 public class SupporterEditDto {
@@ -16,6 +18,7 @@ public class SupporterEditDto {
     private String plz;
     private String ort;
     private String email;
+    private LocalDate birthday;
     private String bemerkung;
     private boolean kommunikationPost;
     private boolean kommunikationEmail;
@@ -29,6 +32,7 @@ public class SupporterEditDto {
         existing.setPlz(plz);
         existing.setOrt(ort);
         existing.setEmail(email);
+        existing.setBirthday(birthday);
         existing.setBemerkung(bemerkung);
         existing.setKommunikationPost(kommunikationPost);
         existing.setKommunikationEmail(kommunikationEmail);

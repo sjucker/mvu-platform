@@ -8,6 +8,7 @@ import ch.mvurdorf.platform.jooq.AbstractSpringDAOImpl;
 import ch.mvurdorf.platform.jooq.tables.Supporter;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterRecord;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -325,5 +326,20 @@ public class SupporterDao extends AbstractSpringDAOImpl<SupporterRecord, ch.mvur
      */
     public List<ch.mvurdorf.platform.jooq.tables.pojos.Supporter> fetchByType(String... values) {
         return fetch(Supporter.SUPPORTER.TYPE, values);
+    }
+
+    /**
+     * Fetch records that have <code>birthday BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Supporter> fetchRangeOfBirthday(LocalDate lowerInclusive, LocalDate upperInclusive) {
+        return fetchRange(Supporter.SUPPORTER.BIRTHDAY, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>birthday IN (values)</code>
+     */
+    public List<ch.mvurdorf.platform.jooq.tables.pojos.Supporter> fetchByBirthday(LocalDate... values) {
+        return fetch(Supporter.SUPPORTER.BIRTHDAY, values);
     }
 }

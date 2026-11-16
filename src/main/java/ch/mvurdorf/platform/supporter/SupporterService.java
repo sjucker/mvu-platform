@@ -124,6 +124,7 @@ public class SupporterService {
                                   supporterRecord.getOrt(),
                                   supporterRecord.getCountryCode(),
                                   supporterRecord.getEmail(),
+                                  supporterRecord.getBirthday(),
                                   supporterRecord.getBemerkung(),
                                   supporterRecord.getKommunikationPost(),
                                   supporterRecord.getKommunikationEmail(),
@@ -175,7 +176,8 @@ public class SupporterService {
                                          supporter.plz(),
                                          supporter.strasseNr(),
                                          supporter.countryCode(),
-                                         supporter.type().name());
+                                         supporter.type().name(),
+                                         null); // birthday can only be set in the supporter portal
         supporterDao.insert(newSupporter);
 
         voucherDao.fetchRangeOfValidUntil(DateUtil.today(), DateUtil.MAX_DATE).stream()

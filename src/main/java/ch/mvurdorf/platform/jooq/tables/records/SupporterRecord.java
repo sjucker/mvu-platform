@@ -6,6 +6,7 @@ package ch.mvurdorf.platform.jooq.tables.records;
 
 import ch.mvurdorf.platform.jooq.tables.Supporter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.jooq.Record1;
@@ -258,6 +259,20 @@ public class SupporterRecord extends UpdatableRecordImpl<SupporterRecord> {
         return (String) get(16);
     }
 
+    /**
+     * Setter for <code>public.supporter.birthday</code>.
+     */
+    public void setBirthday(LocalDate value) {
+        set(17, value);
+    }
+
+    /**
+     * Getter for <code>public.supporter.birthday</code>.
+     */
+    public LocalDate getBirthday() {
+        return (LocalDate) get(17);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -281,7 +296,7 @@ public class SupporterRecord extends UpdatableRecordImpl<SupporterRecord> {
     /**
      * Create a detached, initialised SupporterRecord
      */
-    public SupporterRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail, LocalDateTime registeredAt, Long externalId, String anrede, String uuid, String plz, String strasseNr, String countryCode, String type) {
+    public SupporterRecord(Long id, String vorname, String nachname, String strasse, String ort, String email, String bemerkung, Boolean kommunikationPost, Boolean kommunikationEmail, LocalDateTime registeredAt, Long externalId, String anrede, String uuid, String plz, String strasseNr, String countryCode, String type, LocalDate birthday) {
         super(Supporter.SUPPORTER);
 
         setId(id);
@@ -301,6 +316,7 @@ public class SupporterRecord extends UpdatableRecordImpl<SupporterRecord> {
         setStrasseNr(strasseNr);
         setCountryCode(countryCode);
         setType(type);
+        setBirthday(birthday);
         resetTouchedOnNotNull();
     }
 
@@ -328,6 +344,7 @@ public class SupporterRecord extends UpdatableRecordImpl<SupporterRecord> {
             setStrasseNr(value.getStrasseNr());
             setCountryCode(value.getCountryCode());
             setType(value.getType());
+            setBirthday(value.getBirthday());
             resetTouchedOnNotNull();
         }
     }

@@ -62,7 +62,7 @@ class SupporterLetterServiceTest {
 
     private static SupporterDto supporter(String vorname, String nachname, String countryCode) {
         return new SupporterDto(1L, SupporterType.PASSIVMITGLIED, 1000001L, "uuid-" + vorname, "Lieber", vorname, nachname,
-                                "Bahnhofstrasse", "1", "8902", "Urdorf", countryCode, null, null,
+                                "Bahnhofstrasse", "1", "8902", "Urdorf", countryCode, null, null, null,
                                 true, false, null, List.of(), List.of());
     }
 }
