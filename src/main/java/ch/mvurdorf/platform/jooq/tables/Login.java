@@ -8,6 +8,8 @@ import ch.mvurdorf.platform.jooq.Keys;
 import ch.mvurdorf.platform.jooq.Public;
 import ch.mvurdorf.platform.jooq.tables.AbsenzStatus.AbsenzStatusPath;
 import ch.mvurdorf.platform.jooq.tables.Event.EventPath;
+import ch.mvurdorf.platform.jooq.tables.PasskeyChallenge.PasskeyChallengePath;
+import ch.mvurdorf.platform.jooq.tables.PasskeyCredential.PasskeyCredentialPath;
 import ch.mvurdorf.platform.jooq.tables.UserEntities.UserEntitiesPath;
 import ch.mvurdorf.platform.jooq.tables.records.LoginRecord;
 
@@ -247,6 +249,32 @@ public class Login extends TableImpl<LoginRecord> {
             _userEntities = new UserEntitiesPath(this, null, Keys.USER_ENTITIES__FK__USER_ENTITIES__LOGIN.getInverseKey());
 
         return _userEntities;
+    }
+
+    private transient PasskeyChallengePath _passkeyChallenge;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.passkey_challenge</code> table
+     */
+    public PasskeyChallengePath passkeyChallenge() {
+        if (_passkeyChallenge == null)
+            _passkeyChallenge = new PasskeyChallengePath(this, null, Keys.PASSKEY_CHALLENGE__PASSKEY_CHALLENGE_FK_LOGIN_FKEY.getInverseKey());
+
+        return _passkeyChallenge;
+    }
+
+    private transient PasskeyCredentialPath _passkeyCredential;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.passkey_credential</code> table
+     */
+    public PasskeyCredentialPath passkeyCredential() {
+        if (_passkeyCredential == null)
+            _passkeyCredential = new PasskeyCredentialPath(this, null, Keys.PASSKEY_CREDENTIAL__PASSKEY_CREDENTIAL_FK_LOGIN_FKEY.getInverseKey());
+
+        return _passkeyCredential;
     }
 
     /**

@@ -67,7 +67,9 @@ public class SecurityConfiguration {
                                                          // the WebAuthnRegistrationFilter runs after the AuthorizationFilter
                                                          // and Vaadin denies any non-Vaadin request by default;
                                                          // a remember-me login must not be enough to enroll a passkey
-                                                         .requestMatchers(POST, "/webauthn/register").fullyAuthenticated());
+                                                         .requestMatchers(POST, "/webauthn/register").fullyAuthenticated()
+                                                         // app/domain association for passkeys, fetched anonymously by Apple and Google
+                                                         .requestMatchers("/.well-known/**").permitAll());
         // the registration options filter runs before the AuthorizationFilter, so it needs its own check
         http.addFilterAfter(new RememberMePasskeyOptionsFilter(securityContextHolderStrategy), RememberMeAuthenticationFilter.class);
 

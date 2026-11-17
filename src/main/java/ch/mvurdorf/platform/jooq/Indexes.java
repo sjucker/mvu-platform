@@ -4,6 +4,7 @@
 package ch.mvurdorf.platform.jooq;
 
 
+import ch.mvurdorf.platform.jooq.tables.PasskeyCredential;
 import ch.mvurdorf.platform.jooq.tables.UserCredentials;
 
 import org.jooq.Index;
@@ -22,5 +23,7 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
+    public static final Index IX__PASSKEY_CREDENTIAL_FK_LOGIN = Internal.createIndex(DSL.name("ix__passkey_credential_fk_login"), PasskeyCredential.PASSKEY_CREDENTIAL, new OrderField[] { PasskeyCredential.PASSKEY_CREDENTIAL.FK_LOGIN }, false);
+    public static final Index IX__PASSKEY_CREDENTIAL_USER_HANDLE = Internal.createIndex(DSL.name("ix__passkey_credential_user_handle"), PasskeyCredential.PASSKEY_CREDENTIAL, new OrderField[] { PasskeyCredential.PASSKEY_CREDENTIAL.USER_HANDLE }, false);
     public static final Index IX__USER_CREDENTIALS__USER_ENTITY_USER_ID = Internal.createIndex(DSL.name("ix__user_credentials__user_entity_user_id"), UserCredentials.USER_CREDENTIALS, new OrderField[] { UserCredentials.USER_CREDENTIALS.USER_ENTITY_USER_ID }, false);
 }
