@@ -67,6 +67,12 @@ public class FirebaseService implements BaseFirebaseService {
     }
 
     @Override
+    public String createCustomToken(String email) throws FirebaseAuthException {
+        var userRecord = FirebaseAuth.getInstance().getUserByEmail(email);
+        return FirebaseAuth.getInstance().createCustomToken(userRecord.getUid());
+    }
+
+    @Override
     public void updateUser(String oldEmail, UserDto user) throws FirebaseAuthException {
         log.info("updating user {} to {}", oldEmail, user);
         var userRecord = FirebaseAuth.getInstance().getUserByEmail(oldEmail);

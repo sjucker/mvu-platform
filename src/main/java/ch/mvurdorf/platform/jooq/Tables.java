@@ -13,6 +13,8 @@ import ch.mvurdorf.platform.jooq.tables.KonzertEntry;
 import ch.mvurdorf.platform.jooq.tables.Login;
 import ch.mvurdorf.platform.jooq.tables.NotenPdf;
 import ch.mvurdorf.platform.jooq.tables.NotenPdfAssignment;
+import ch.mvurdorf.platform.jooq.tables.PasskeyChallenge;
+import ch.mvurdorf.platform.jooq.tables.PasskeyCredential;
 import ch.mvurdorf.platform.jooq.tables.Repertoire;
 import ch.mvurdorf.platform.jooq.tables.RepertoireEntry;
 import ch.mvurdorf.platform.jooq.tables.ShareableLink;
@@ -77,6 +79,16 @@ public class Tables {
      * The table <code>public.noten_pdf_assignment</code>.
      */
     public static final NotenPdfAssignment NOTEN_PDF_ASSIGNMENT = NotenPdfAssignment.NOTEN_PDF_ASSIGNMENT;
+
+    /**
+     * The table <code>public.passkey_challenge</code>.
+     */
+    public static final PasskeyChallenge PASSKEY_CHALLENGE = PasskeyChallenge.PASSKEY_CHALLENGE;
+
+    /**
+     * The table <code>public.passkey_credential</code>.
+     */
+    public static final PasskeyCredential PASSKEY_CREDENTIAL = PasskeyCredential.PASSKEY_CREDENTIAL;
 
     /**
      * The table <code>public.repertoire</code>.

@@ -30,4 +30,10 @@ public class MockFirebaseService implements BaseFirebaseService {
         log.info("Changing password for {}", email);
         return true;
     }
+
+    @Override
+    public String createCustomToken(String email) {
+        log.info("Creating custom token for {}", email);
+        return "mock-custom-token";
+    }
 }

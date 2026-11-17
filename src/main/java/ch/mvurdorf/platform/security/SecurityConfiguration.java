@@ -35,7 +35,8 @@ public class SecurityConfiguration {
                                                          .requestMatchers("/line-awesome/**").permitAll()
                                                          .requestMatchers(PathRequest.toStaticResources()
                                                                                      .atCommonLocations()).permitAll()
-                                                         .requestMatchers("/actuator/health/**", "/actuator/info").permitAll());
+                                                         .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
+                                                         .requestMatchers("/.well-known/**").permitAll());
 
         http.rememberMe(configurer -> configurer.key(rememberMeKey)
                                                 .tokenValiditySeconds((int) Duration.ofDays(365).toSeconds())

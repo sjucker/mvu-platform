@@ -23,6 +23,7 @@
         <flyway.version>13.12.2</flyway.version>
         <google-cloud-storage.version>2.78.0</google-cloud-storage.version>
         <firebase-admin.version>9.12.0</firebase-admin.version>
+        <webauthn-server-core.version>2.10.1</webauthn-server-core.version>
         <qrbill-generator.version>3.4.0</qrbill-generator.version>
         <qrcodegen.version>1.8.0</qrcodegen.version>
         <pdfbox.version>3.0.8</pdfbox.version>
@@ -151,6 +152,11 @@
             <groupId>com.google.firebase</groupId>
             <artifactId>firebase-admin</artifactId>
             <version>${firebase-admin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.yubico</groupId>
+            <artifactId>webauthn-server-core</artifactId>
+            <version>${webauthn-server-core.version}</version>
         </dependency>
 
         <dependency>
