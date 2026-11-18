@@ -16,7 +16,7 @@ import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static ch.mvurdorf.platform.ui.RendererUtil.externalLink;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
-import static com.vaadin.flow.theme.lumo.LumoUtility.TextColor.ERROR;
+import static ch.mvurdorf.platform.ui.StyleUtility.TextStyle.ERROR;
 
 @AnonymousAllowed
 @PageTitle("Noten-Download")

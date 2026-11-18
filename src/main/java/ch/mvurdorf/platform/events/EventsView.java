@@ -1,5 +1,6 @@
 package ch.mvurdorf.platform.events;
 
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
@@ -11,10 +12,7 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
+import ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle;
 import jakarta.annotation.security.RolesAllowed;
 
 import static ch.mvurdorf.platform.security.LoginService.EVENTS_GROUP;
@@ -75,7 +73,8 @@ public class EventsView extends VerticalLayout {
     private void createControls() {
         controls = new HorizontalLayout();
         controls.setWidthFull();
-        controls.addClassNames(Display.FLEX, FlexDirection.COLUMN, JustifyContent.BETWEEN, FlexDirection.Breakpoint.Medium.ROW, Gap.SMALL);
+        controls.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        controls.addClassNames(LayoutStyle.RESPONSIVE_ROW);
         if (authenticatedUser.hasWritePermission(EVENTS_GROUP)) {
             controls.add(new Button("Event hinzufügen", _ -> EventDialog.show(newEvent -> {
                 eventsService.insert(newEvent, authenticatedUser.getName());

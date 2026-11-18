@@ -1,5 +1,6 @@
 package ch.mvurdorf.platform.ui;
 
+import ch.mvurdorf.platform.ui.StyleUtility.TextStyle;
 import ch.mvurdorf.platform.ui.StyleUtility.IconStyle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -10,16 +11,14 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
-import com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.function.Function;
 
 import static ch.mvurdorf.platform.utils.FormatUtil.LOCALE;
-import static com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY;
-import static com.vaadin.flow.component.button.ButtonVariant.LUMO_TERTIARY;
-import static com.vaadin.flow.theme.lumo.LumoUtility.TextColor.PRIMARY;
+import static com.vaadin.flow.component.button.ButtonVariant.PRIMARY;
+import static com.vaadin.flow.component.button.ButtonVariant.TERTIARY;
 
 public final class ComponentUtil {
 
@@ -28,14 +27,14 @@ public final class ComponentUtil {
 
     public static Icon clickableIcon(VaadinIcon vaadinIcon, Runnable action) {
         var icon = new Icon(vaadinIcon);
-        icon.addClassNames(PRIMARY, IconSize.SMALL, IconStyle.CLICKABLE);
+        icon.addClassNames(TextStyle.ACCENT, IconStyle.SMALL, IconStyle.CLICKABLE);
         icon.addClickListener(_ -> action.run());
         return icon;
     }
 
     public static Button primaryButton(String label, Runnable action) {
         var button = new Button(label, _ -> action.run());
-        button.addThemeVariants(LUMO_PRIMARY);
+        button.addThemeVariants(PRIMARY);
         return button;
     }
 
@@ -45,7 +44,7 @@ public final class ComponentUtil {
 
     public static Button tertiaryButton(String label, Runnable action) {
         var button = new Button(label, _ -> action.run());
-        button.addThemeVariants(LUMO_TERTIARY);
+        button.addThemeVariants(TERTIARY);
         return button;
     }
 

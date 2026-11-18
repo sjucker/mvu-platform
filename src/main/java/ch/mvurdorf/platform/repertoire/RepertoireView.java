@@ -14,8 +14,8 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle;
+import ch.mvurdorf.platform.ui.StyleUtility.TextStyle;
 import jakarta.annotation.security.RolesAllowed;
 
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public class RepertoireView extends VerticalLayout {
 
         var controls = new HorizontalLayout();
         controls.setWidthFull();
-        controls.addClassName(Gap.LARGE);
+        controls.addClassName(LayoutStyle.GAP_LARGE);
         controls.setAlignItems(BASELINE);
         var add = primaryButton("Hinzufügen", () -> RepertoireEntryAddDialog.show(kompositionService, repertoireType, newEntry -> {
             entries.add(newEntry);
@@ -106,7 +106,7 @@ public class RepertoireView extends VerticalLayout {
         controls.add(add, save);
         repertoire.ifPresent(it -> {
             var info = new Span("Letzte Aktualisierung am: %s durch %s".formatted(formatDateTime(it.createdAt()), it.createdBy()));
-            info.addClassName(FontSize.XSMALL);
+            info.addClassName(TextStyle.XSMALL);
             controls.add(info);
         });
 

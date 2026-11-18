@@ -1,5 +1,7 @@
 package ch.mvurdorf.platform.ui;
 
+import ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import ch.mvurdorf.platform.common.AbsenzState;
 import ch.mvurdorf.platform.common.LocalizedEnum;
 import ch.mvurdorf.platform.events.EventAbsenzStatusDto;
@@ -11,9 +13,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 
 import static ch.mvurdorf.platform.common.AbsenzState.INACTIVE;
 import static ch.mvurdorf.platform.common.AbsenzState.NEGATIVE;
@@ -65,7 +64,9 @@ public class EventCard extends Card {
         popover.add(new Div(event.interna()));
 
         var flexLayout = new FlexLayout(new Div(event.subtitle()), icon);
-        flexLayout.addClassNames(FlexDirection.ROW, AlignItems.CENTER, Gap.MEDIUM);
+        flexLayout.setFlexDirection(FlexLayout.FlexDirection.ROW);
+        flexLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        flexLayout.addClassNames(LayoutStyle.GAP_MEDIUM);
 
         return flexLayout;
     }

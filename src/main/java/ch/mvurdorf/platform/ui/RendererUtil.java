@@ -16,7 +16,6 @@ import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
-import com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
@@ -69,7 +68,7 @@ public final class RendererUtil {
 
                 var icon = new Icon(vaadinIcon);
                 icon.setTooltipText(tooltipText);
-                icon.addClassNames(IconSize.SMALL, IconStyle.CLICKABLE);
+                icon.addClassNames(IconStyle.SMALL, IconStyle.CLICKABLE);
                 icon.addClickListener(event -> {
                     if (event.isFromClient()) {
                         clickHandler.accept(dto);
@@ -101,7 +100,7 @@ public final class RendererUtil {
         return new ComponentRenderer<>(dto -> {
             if (isNotBlank(urlGetter.apply(dto))) {
                 var icon = vaadinIcon.create();
-                icon.addClassNames(IconSize.SMALL, IconStyle.CLICKABLE);
+                icon.addClassNames(IconStyle.SMALL, IconStyle.CLICKABLE);
                 icon.setTooltipText(tooltipText);
                 var anchor = new Anchor(urlGetter.apply(dto), icon);
                 anchor.setTarget(BLANK);
@@ -119,7 +118,7 @@ public final class RendererUtil {
     public static <T> ComponentRenderer<Component, T> icon(VaadinIcon vaadinIcon) {
         return new ComponentRenderer<>(_ -> {
             var icon = new Icon(vaadinIcon);
-            icon.addClassNames(IconSize.SMALL);
+            icon.addClassNames(IconStyle.SMALL);
             return icon;
         });
     }
@@ -130,7 +129,7 @@ public final class RendererUtil {
             var text = getter.apply(dto);
             if (isNotBlank(text)) {
                 var icon = new Icon(vaadinIcon);
-                icon.addClassNames(IconSize.SMALL);
+                icon.addClassNames(IconStyle.SMALL);
 
                 var popover = new Popover();
                 popover.setTarget(icon);

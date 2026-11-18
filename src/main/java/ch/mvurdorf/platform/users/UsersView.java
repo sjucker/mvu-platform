@@ -21,8 +21,7 @@ import static ch.mvurdorf.platform.security.LoginService.USERS_GROUP;
 import static ch.mvurdorf.platform.ui.RendererUtil.checkboxRenderer;
 import static ch.mvurdorf.platform.ui.RendererUtil.clickableIcon;
 import static com.vaadin.flow.component.grid.ColumnTextAlign.CENTER;
-import static com.vaadin.flow.component.grid.GridVariant.LUMO_COLUMN_BORDERS;
-import static com.vaadin.flow.component.grid.GridVariant.LUMO_COMPACT;
+import static com.vaadin.flow.component.grid.GridVariant.COLUMN_BORDERS;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.USER;
@@ -77,7 +76,8 @@ class UsersView extends VerticalLayout {
 
     private void createGrid() {
         grid = new Grid<>();
-        grid.addThemeVariants(LUMO_COLUMN_BORDERS, LUMO_COMPACT);
+        grid.addThemeVariants(COLUMN_BORDERS);
+        grid.addThemeName("small");
         grid.setHeightFull();
 
         grid.addColumn(clickableIcon(EDIT, this::edit)).setWidth("60px").setTextAlign(CENTER).setFlexGrow(0);

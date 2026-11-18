@@ -38,9 +38,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
-import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
+import ch.mvurdorf.platform.ui.StyleUtility.TextStyle;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.extern.slf4j.Slf4j;
 
@@ -161,7 +159,7 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
 
         if (mailing != null && mailing.isSent()) {
             var info = new Span("Versendet am %s durch %s".formatted(formatDateTime(mailing.sentAt()), mailing.sentBy()));
-            info.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+            info.addClassNames(TextStyle.SMALL, TextStyle.SECONDARY);
             header.add(info);
             if (mailing.postCount() > 0) {
                 var download = secondaryButton("Briefe herunterladen (PDF)", () -> downloadLetters(mailing));
@@ -250,7 +248,7 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
         attachmentChanged = false;
 
         var label = new Span("Anhang (nur E-Mail)");
-        label.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+        label.addClassNames(TextStyle.SMALL, TextStyle.SECONDARY);
         var attachment = new VerticalLayout(label, attachmentInfo);
         attachment.setPadding(false);
         attachment.setSpacing(false);
@@ -294,7 +292,7 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
                 attachmentChanged = true;
                 updateAttachmentInfo(false);
             });
-            remove.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE, ButtonVariant.LUMO_ERROR);
+            remove.addThemeVariants(ButtonVariant.TERTIARY, ButtonVariant.ERROR);
             remove.setTooltipText("Anhang entfernen");
             attachmentInfo.add(remove);
         }
@@ -319,13 +317,13 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
                                                                                          .map(SupporterMailingChannel::getDescription)
                                                                                          .collect(Collectors.joining(", "))));
         previewRecipient.addValueChangeListener(_ -> updatePreview());
-        previewErrors.addClassNames(TextColor.ERROR, FontSize.SMALL, Whitespace.PRE_LINE);
+        previewErrors.addClassNames(TextStyle.ERROR, TextStyle.SMALL, TextStyle.PRE_LINE);
 
         // the preview must not run any scripts
         emailPreview.setSandbox(IFrame.SandboxType.RESTRICT_ALL);
         emailPreview.setWidthFull();
         emailPreview.setHeight("600px");
-        emailPreview.getStyle().set("border", "1px solid var(--lumo-contrast-20pct)");
+        emailPreview.getStyle().set("border", "1px solid var(--vaadin-border-color-secondary)");
         letterPreview.setWidthFull();
         letterPreview.setHeight("800px");
         letterPreview.setAddDownloadButton(false);
