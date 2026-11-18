@@ -17,7 +17,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
+import ch.mvurdorf.platform.ui.StyleUtility.TextStyle;
 import lombok.RequiredArgsConstructor;
 
 import java.io.ByteArrayInputStream;
@@ -70,7 +70,7 @@ public class ExportAllPdfDialog extends Dialog {
         formLayout.add(noteneschluessel, 2);
 
         var info = new Paragraph("Stimme, Stimmlage und Notenschlüssel kann leer gelassen werden.");
-        info.addClassName(FontSize.XSMALL);
+        info.addClassName(TextStyle.XSMALL);
         add(info, formLayout);
 
         getFooter().add(secondaryButton("Schliessen", this::close),

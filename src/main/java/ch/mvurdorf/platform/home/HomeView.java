@@ -1,5 +1,6 @@
 package ch.mvurdorf.platform.home;
 
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import ch.mvurdorf.platform.events.AllEventsView;
 import ch.mvurdorf.platform.events.EventsService;
 import ch.mvurdorf.platform.jooq.tables.pojos.Login;
@@ -30,17 +31,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
+import ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle;
 import jakarta.annotation.security.PermitAll;
 
 import static ch.mvurdorf.platform.repertoire.RepertoireType.KONZERTMAPPE;
 import static ch.mvurdorf.platform.repertoire.RepertoireType.MARSCHBUCH;
 import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static ch.mvurdorf.platform.utils.FormatUtil.formatDateTime;
-import static com.vaadin.flow.component.button.ButtonVariant.LUMO_TERTIARY;
-import static com.vaadin.flow.component.notification.NotificationVariant.LUMO_SUCCESS;
+import static com.vaadin.flow.component.button.ButtonVariant.TERTIARY;
+import static com.vaadin.flow.component.notification.NotificationVariant.SUCCESS;
 import static org.vaadin.lineawesome.LineAwesomeIconUrl.HOME_SOLID;
 
 @PageTitle("Home")
@@ -108,7 +107,8 @@ public class HomeView extends VerticalLayout {
         var ios = getAppDownloadButton("images/apple-store.png", "App Store", "https://apps.apple.com/app/musikverein-harmonie-urdorf/id6749552122");
 
         var appContainer = new FlexLayout(android, ios);
-        appContainer.addClassNames(FlexDirection.COLUMN, FlexDirection.Breakpoint.Medium.ROW, JustifyContent.CENTER, Gap.MEDIUM);
+        appContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        appContainer.addClassNames(LayoutStyle.RESPONSIVE_ROW, LayoutStyle.GAP_MEDIUM);
         add(appContainer);
     }
 
@@ -128,8 +128,8 @@ public class HomeView extends VerticalLayout {
 
         var copyButton = new Button(new Icon(VaadinIcon.CLIPBOARD), _ ->
                 Notification.show("URL kopiert!", 2000, Notification.Position.BOTTOM_CENTER)
-                            .addThemeVariants(LUMO_SUCCESS));
-        copyButton.addThemeVariants(LUMO_TERTIARY);
+                            .addThemeVariants(SUCCESS));
+        copyButton.addThemeVariants(TERTIARY);
         copyButton.setTooltipText("URL kopieren");
         // Copy synchronously inside the browser click gesture. Safari rejects clipboard
         // writes that happen after a server round-trip (lost transient activation).

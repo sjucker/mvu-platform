@@ -1,5 +1,7 @@
 package ch.mvurdorf.platform.home;
 
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import ch.mvurdorf.platform.noten.NotenService;
 import ch.mvurdorf.platform.repertoire.RepertoireEntryDto;
 import ch.mvurdorf.platform.repertoire.RepertoireService;
@@ -16,12 +18,8 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
-import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
+import ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle;
+import ch.mvurdorf.platform.ui.StyleUtility.TextStyle;
 import jakarta.annotation.security.PermitAll;
 
 import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
@@ -63,18 +61,19 @@ public class RepertoireDetailView extends VerticalLayout implements HasUrlParame
                                               add(new H2(type.getDescription()));
                                               if (isNotBlank(repertoire.details())) {
                                                   var details = new Paragraph(repertoire.details());
-                                                  details.addClassName(Whitespace.PRE_WRAP);
+                                                  details.addClassName(TextStyle.PRE_WRAP);
                                                   add(details);
                                               }
 
                                               var lastUpdated = new Span("Letzte Änderung am: %s durch %s".formatted(formatDateTime(repertoire.createdAt()), repertoire.createdBy()));
-                                              lastUpdated.addClassName(FontSize.XSMALL);
+                                              lastUpdated.addClassName(TextStyle.XSMALL);
 
                                               var controls = new HorizontalLayout(lastUpdated,
                                                                                   primaryButton("Alle PDFs herunterladen", () -> ExportAllPdfDialog.show(notenService, authenticatedUser, repertoire)));
                                               controls.setWidthFull();
-                                              controls.addClassNames(Display.FLEX, FlexDirection.COLUMN, FlexDirection.Breakpoint.Medium.ROW,
-                                                                     JustifyContent.BETWEEN, AlignItems.BASELINE);
+                                              controls.setJustifyContentMode(JustifyContentMode.BETWEEN);
+                                              controls.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
+                                              controls.addClassNames(LayoutStyle.RESPONSIVE_ROW);
                                               add(controls);
 
                                               var entries = new Grid<RepertoireEntryDto>();

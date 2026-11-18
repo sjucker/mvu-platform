@@ -30,8 +30,8 @@ import static ch.mvurdorf.platform.ui.RendererUtil.icon;
 import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.Unit.PIXELS;
 import static com.vaadin.flow.component.grid.ColumnTextAlign.CENTER;
-import static com.vaadin.flow.component.grid.GridVariant.LUMO_COLUMN_BORDERS;
-import static com.vaadin.flow.component.grid.GridVariant.LUMO_ROW_STRIPES;
+import static com.vaadin.flow.component.grid.GridVariant.COLUMN_BORDERS;
+import static com.vaadin.flow.component.grid.GridVariant.ROW_STRIPES;
 import static com.vaadin.flow.component.grid.dnd.GridDropLocation.BELOW;
 import static com.vaadin.flow.component.grid.dnd.GridDropMode.BETWEEN;
 import static com.vaadin.flow.component.icon.VaadinIcon.ARROWS_LONG_V;
@@ -125,7 +125,7 @@ public class KonzertDialog extends Dialog {
         var entriesGrid = new Grid<KonzertEntryDto>();
         var entriesDataView = entriesGrid.setItems(dto.entries());
         entriesGrid.setSizeFull();
-        entriesGrid.addThemeVariants(LUMO_COLUMN_BORDERS, LUMO_ROW_STRIPES);
+        entriesGrid.addThemeVariants(COLUMN_BORDERS, ROW_STRIPES);
 
         Binder<KonzertEntryDto> editorBinder = new Binder<>(KonzertEntryDto.class);
         entriesGrid.getEditor().setBinder(editorBinder);

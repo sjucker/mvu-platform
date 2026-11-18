@@ -1,5 +1,7 @@
 package ch.mvurdorf.platform.ui;
 
+import ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle;
+import ch.mvurdorf.platform.ui.StyleUtility.TextStyle;
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.users.PasswordChangeView;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -19,15 +21,11 @@ import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.server.menu.MenuConfiguration;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.info.BuildProperties;
 
-import static com.vaadin.flow.component.button.ButtonVariant.LUMO_SMALL;
+import static com.vaadin.flow.component.button.ButtonVariant.SMALL;
 import static com.vaadin.flow.component.icon.VaadinIcon.EXIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.KEY;
 
@@ -55,16 +53,16 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
         toggle.setAriaLabel("Menu");
 
         viewTitle = new H1();
-        viewTitle.addClassNames(FontSize.LARGE, Margin.NONE);
+        viewTitle.addClassNames(TextStyle.LARGE, LayoutStyle.NO_MARGIN);
 
         addToNavbar(true, toggle, viewTitle);
     }
 
     private void addDrawerContent() {
         var appName = new Span("MVU");
-        appName.addClassNames(FontWeight.SEMIBOLD, FontSize.LARGE);
+        appName.addClassNames(TextStyle.SEMIBOLD, TextStyle.LARGE);
         var header = new Header(appName);
-        header.addClassNames(Padding.SMALL);
+        header.addClassNames(LayoutStyle.PADDING_SMALL);
 
         var scroller = new Scroller(createNavigation());
 
@@ -97,13 +95,13 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
 
             var passwordChangeButton = new Button("Passwort ändern",
                                                   _ -> getUI().ifPresent(ui -> ui.navigate(PasswordChangeView.class)));
-            passwordChangeButton.addThemeVariants(LUMO_SMALL);
+            passwordChangeButton.addThemeVariants(SMALL);
             passwordChangeButton.setIcon(KEY.create());
             passwordChangeButton.setWidthFull();
 
             var logoutButton = new Button("Logout %s".formatted(user.getName()),
                                           _ -> authenticatedUser.logout());
-            logoutButton.addThemeVariants(LUMO_SMALL);
+            logoutButton.addThemeVariants(SMALL);
             logoutButton.setIcon(EXIT.create());
             logoutButton.setWidthFull();
 
@@ -113,7 +111,7 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
         if (buildProperties != null) {
             var version = new Span("Version: %s".formatted(buildProperties.getVersion()));
             version.addDoubleClickListener(_ -> log.error("testing error mail"));
-            version.addClassNames(FontSize.XXSMALL);
+            version.addClassNames(TextStyle.XSMALL);
             layout.add(version);
         }
         footer.add(layout);

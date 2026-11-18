@@ -21,8 +21,8 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.secondaryButton;
 import static ch.mvurdorf.platform.ui.ComponentUtil.tertiaryButton;
 import static com.vaadin.flow.component.icon.VaadinIcon.COPY;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.END;
-import static com.vaadin.flow.theme.lumo.LumoUtility.FontWeight.BOLD;
-import static com.vaadin.flow.theme.lumo.LumoUtility.TextColor.WARNING;
+import static ch.mvurdorf.platform.ui.StyleUtility.TextStyle.BOLD;
+import static ch.mvurdorf.platform.ui.StyleUtility.TextStyle.WARNING;
 
 public class ShareableLinkDialog extends Dialog {
 

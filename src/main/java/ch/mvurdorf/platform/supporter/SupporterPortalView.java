@@ -28,8 +28,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
-import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
+import ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle;
 
 import java.io.ByteArrayInputStream;
 
@@ -50,7 +49,7 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
         this.supporterService = supporterService;
 
         var title = new H3("Supporter");
-        title.addClassName(Padding.SMALL);
+        title.addClassName(LayoutStyle.PADDING_SMALL);
         addToNavbar(title);
     }
 
@@ -78,7 +77,7 @@ public class SupporterPortalView extends AppLayout implements HasUrlParameter<St
 
         var qrBillImage = new Image(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(supporterService.qrBill(supporter.externalId()).orElseThrow()),
                                                                                               "qr-bill.png", null, -1)), "QR-Rechnung");
-        qrBillImage.addClassName(MaxWidth.FULL);
+        qrBillImage.addClassName(LayoutStyle.MAX_WIDTH_FULL);
         content.add(qrBillImage);
 
         if (!supporter.payments().isEmpty()) {

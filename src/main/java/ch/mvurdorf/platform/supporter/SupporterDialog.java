@@ -24,7 +24,7 @@ import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.Unit.PERCENTAGE;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS_CIRCLE;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
-import static com.vaadin.flow.theme.lumo.LumoUtility.Gap.MEDIUM;
+import static ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle.GAP_MEDIUM;
 
 public class SupporterDialog extends Dialog {
 
@@ -73,7 +73,7 @@ public class SupporterDialog extends Dialog {
                                             newPayments.add(c);
                                         }));
             header.setWidthFull();
-            header.addClassNames(MEDIUM);
+            header.addClassNames(GAP_MEDIUM);
             header.setAlignItems(CENTER);
             content.add(header);
 

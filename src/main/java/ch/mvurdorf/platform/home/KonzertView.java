@@ -24,9 +24,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle;
 import jakarta.annotation.security.PermitAll;
 
 import java.io.ByteArrayInputStream;
@@ -40,7 +38,7 @@ import static com.vaadin.flow.component.icon.VaadinIcon.DOWNLOAD_ALT;
 import static com.vaadin.flow.component.icon.VaadinIcon.FILE_SOUND;
 import static com.vaadin.flow.component.icon.VaadinIcon.INFO_CIRCLE;
 import static com.vaadin.flow.component.icon.VaadinIcon.MUSIC;
-import static com.vaadin.flow.theme.lumo.LumoUtility.Whitespace.PRE_WRAP;
+import static ch.mvurdorf.platform.ui.StyleUtility.TextStyle.PRE_WRAP;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @PageTitle("Konzert")
@@ -110,7 +108,7 @@ public class KonzertView extends VerticalLayout implements HasUrlParameter<Long>
                                    var zugabe = new Badge("Zugabe");
                                    zugabe.addThemeVariants(BadgeVariant.SMALL);
                                    titel.add(zugabe);
-                                   titel.addClassNames(Display.FLEX, AlignItems.CENTER, Gap.SMALL);
+                                   titel.addClassNames(LayoutStyle.INLINE_CENTER);
                                }
                                return titel;
                            }))

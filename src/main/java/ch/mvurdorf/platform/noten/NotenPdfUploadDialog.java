@@ -23,7 +23,7 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
 import com.vaadin.flow.server.streams.UploadHandler;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import ch.mvurdorf.platform.ui.StyleUtility.LayoutStyle;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -44,8 +44,7 @@ import static ch.mvurdorf.platform.ui.ComponentUtil.primaryButton;
 import static com.vaadin.flow.component.ModalityMode.STRICT;
 import static com.vaadin.flow.component.ScrollIntoViewOption.Behavior.SMOOTH;
 import static com.vaadin.flow.component.Unit.PIXELS;
-import static com.vaadin.flow.component.button.ButtonVariant.LUMO_ICON;
-import static com.vaadin.flow.component.button.ButtonVariant.LUMO_TERTIARY;
+import static com.vaadin.flow.component.button.ButtonVariant.TERTIARY;
 import static com.vaadin.flow.component.icon.VaadinIcon.CHEVRON_CIRCLE_RIGHT;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.END;
@@ -400,13 +399,13 @@ public class NotenPdfUploadDialog extends Dialog {
                 }
             });
             jumpButton.setTooltipText("Zur Seite springen");
-            jumpButton.addThemeVariants(LUMO_TERTIARY, LUMO_ICON);
+            jumpButton.addThemeVariants(TERTIARY);
 
             getContent().setWidthFull();
             getContent().setMargin(false);
             getContent().setPadding(false);
             getContent().setWrap(true);
-            getContent().addClassNames(Gap.Row.XSMALL, Gap.Column.MEDIUM);
+            getContent().addClassNames(LayoutStyle.GAP_WRAP);
             getContent().add(notenschluessel, stimmlage, instrumente, stimmen, pages, jumpButton);
             getContent().setAlignSelf(END, jumpButton);
         }
