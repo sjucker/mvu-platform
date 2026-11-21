@@ -1,8 +1,13 @@
 package ch.mvurdorf.platform.ui;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
+import ch.mvurdorf.platform.security.PasskeyService;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.icon.SvgIcon;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -11,7 +16,11 @@ import com.vaadin.flow.router.internal.RouteUtil;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
+import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
+import static org.vaadin.lineawesome.LineAwesomeIconUrl.FINGERPRINT_SOLID;
+
 @AnonymousAllowed
+@JsModule("./passkey.ts")
 @PageTitle("Login")
 @Route(value = "login")
 public class LoginView extends LoginOverlay implements BeforeEnterObserver {
@@ -47,7 +56,19 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         setI18n(i18n);
 
         setForgotPasswordButtonVisible(false);
+        getFooter().add(createPasskeyButton());
         setOpened(true);
+    }
+
+    private Button createPasskeyButton() {
+        var button = new Button("Mit Passkey anmelden", new SvgIcon(FINGERPRINT_SOLID));
+        button.setWidthFull();
+        button.setVisible(false);
+        // on success the client redirects to the requested page
+        button.addClickListener(_ -> PasskeyService.login(this).then(_ -> {
+        }, _ -> Notification.show("Anmeldung mit Passkey fehlgeschlagen", 3000, TOP_CENTER)));
+        PasskeyService.isSupported(this).then(Boolean.class, button::setVisible);
+        return button;
     }
 
     @Override
