@@ -50,15 +50,11 @@ public class AuthenticatedUser {
 
     private Optional<Login> currentLogin() {
         return authenticationContext.getAuthenticatedUser(Object.class)
-                                    .flatMap(o -> {
-                                        if (o instanceof Jwt jwt) {
-                                            return Optional.ofNullable(jwt.getClaimAsString("email"));
-                                        } else if (o instanceof UserDetails userDetails) {
-                                            return Optional.of(userDetails.getUsername());
-                                        } else if (o instanceof PublicKeyCredentialUserEntity userEntity) {
-                                            return Optional.of(userEntity.getName());
-                                        }
-                                        return Optional.empty();
+                                    .flatMap(o -> switch (o) {
+                                        case Jwt jwt -> Optional.ofNullable(jwt.getClaimAsString("email"));
+                                        case UserDetails userDetails -> Optional.of(userDetails.getUsername());
+                                        case PublicKeyCredentialUserEntity userEntity -> Optional.of(userEntity.getName());
+                                        default -> Optional.empty();
                                     })
                                     .map(loginDao::fetchOneByEmail);
     }
