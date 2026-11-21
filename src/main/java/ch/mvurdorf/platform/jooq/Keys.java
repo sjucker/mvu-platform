@@ -24,6 +24,8 @@ import ch.mvurdorf.platform.jooq.tables.SupporterMailingAttachment;
 import ch.mvurdorf.platform.jooq.tables.SupporterMailingRecipient;
 import ch.mvurdorf.platform.jooq.tables.SupporterPayment;
 import ch.mvurdorf.platform.jooq.tables.SupporterVoucher;
+import ch.mvurdorf.platform.jooq.tables.UserCredentials;
+import ch.mvurdorf.platform.jooq.tables.UserEntities;
 import ch.mvurdorf.platform.jooq.tables.Voucher;
 import ch.mvurdorf.platform.jooq.tables.records.AbsenzStatusRecord;
 import ch.mvurdorf.platform.jooq.tables.records.EventRecord;
@@ -45,6 +47,8 @@ import ch.mvurdorf.platform.jooq.tables.records.SupporterMailingRecord;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterPaymentRecord;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterRecord;
 import ch.mvurdorf.platform.jooq.tables.records.SupporterVoucherRecord;
+import ch.mvurdorf.platform.jooq.tables.records.UserCredentialsRecord;
+import ch.mvurdorf.platform.jooq.tables.records.UserEntitiesRecord;
 import ch.mvurdorf.platform.jooq.tables.records.VoucherRecord;
 
 import org.jooq.ForeignKey;
@@ -90,6 +94,9 @@ public class Keys {
     public static final UniqueKey<SupporterMailingRecipientRecord> PK__SUPPORTER_MAILING_RECIPIENT = Internal.createUniqueKey(SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT, DSL.name("pk__supporter_mailing_recipient"), new TableField[] { SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT.ID }, true);
     public static final UniqueKey<SupporterPaymentRecord> PK__PASSIVMITGLIED_PAYMENT = Internal.createUniqueKey(SupporterPayment.SUPPORTER_PAYMENT, DSL.name("pk__passivmitglied_payment"), new TableField[] { SupporterPayment.SUPPORTER_PAYMENT.ID }, true);
     public static final UniqueKey<SupporterVoucherRecord> PK__PASSIVMITGLIED_VOUCHER = Internal.createUniqueKey(SupporterVoucher.SUPPORTER_VOUCHER, DSL.name("pk__passivmitglied_voucher"), new TableField[] { SupporterVoucher.SUPPORTER_VOUCHER.ID }, true);
+    public static final UniqueKey<UserCredentialsRecord> PK__USER_CREDENTIALS = Internal.createUniqueKey(UserCredentials.USER_CREDENTIALS, DSL.name("pk__user_credentials"), new TableField[] { UserCredentials.USER_CREDENTIALS.CREDENTIAL_ID }, true);
+    public static final UniqueKey<UserEntitiesRecord> PK__USER_ENTITIES = Internal.createUniqueKey(UserEntities.USER_ENTITIES, DSL.name("pk__user_entities"), new TableField[] { UserEntities.USER_ENTITIES.ID }, true);
+    public static final UniqueKey<UserEntitiesRecord> UQ__USER_ENTITIES__NAME = Internal.createUniqueKey(UserEntities.USER_ENTITIES, DSL.name("uq__user_entities__name"), new TableField[] { UserEntities.USER_ENTITIES.NAME }, true);
     public static final UniqueKey<VoucherRecord> PK__VOUCHER = Internal.createUniqueKey(Voucher.VOUCHER, DSL.name("pk__voucher"), new TableField[] { Voucher.VOUCHER.ID }, true);
 
     // -------------------------------------------------------------------------
@@ -113,4 +120,6 @@ public class Keys {
     public static final ForeignKey<SupporterMailingRecipientRecord, SupporterMailingRecord> SUPPORTER_MAILING_RECIPIENT__SUPPORTER_MAILING_RECIPIENT_FK_SUPPORTER_MAILING_FKEY = Internal.createForeignKey(SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT, DSL.name("supporter_mailing_recipient_fk_supporter_mailing_fkey"), new TableField[] { SupporterMailingRecipient.SUPPORTER_MAILING_RECIPIENT.FK_SUPPORTER_MAILING }, Keys.PK__SUPPORTER_MAILING, new TableField[] { SupporterMailing.SUPPORTER_MAILING.ID }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<SupporterPaymentRecord, SupporterRecord> SUPPORTER_PAYMENT__PASSIVMITGLIED_PAYMENT_FK_PASSIVMITGLIED_FKEY = Internal.createForeignKey(SupporterPayment.SUPPORTER_PAYMENT, DSL.name("passivmitglied_payment_fk_passivmitglied_fkey"), new TableField[] { SupporterPayment.SUPPORTER_PAYMENT.FK_SUPPORTER }, Keys.PK__PASSIVMITGLIED, new TableField[] { Supporter.SUPPORTER.ID }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<SupporterVoucherRecord, SupporterRecord> SUPPORTER_VOUCHER__PASSIVMITGLIED_VOUCHER_FK_PASSIVMITGLIED_FKEY = Internal.createForeignKey(SupporterVoucher.SUPPORTER_VOUCHER, DSL.name("passivmitglied_voucher_fk_passivmitglied_fkey"), new TableField[] { SupporterVoucher.SUPPORTER_VOUCHER.FK_SUPPORTER }, Keys.PK__PASSIVMITGLIED, new TableField[] { Supporter.SUPPORTER.ID }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.NO_ACTION);
+    public static final ForeignKey<UserCredentialsRecord, UserEntitiesRecord> USER_CREDENTIALS__FK__USER_CREDENTIALS__USER_ENTITIES = Internal.createForeignKey(UserCredentials.USER_CREDENTIALS, DSL.name("fk__user_credentials__user_entities"), new TableField[] { UserCredentials.USER_CREDENTIALS.USER_ENTITY_USER_ID }, Keys.PK__USER_ENTITIES, new TableField[] { UserEntities.USER_ENTITIES.ID }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.NO_ACTION);
+    public static final ForeignKey<UserEntitiesRecord, LoginRecord> USER_ENTITIES__FK__USER_ENTITIES__LOGIN = Internal.createForeignKey(UserEntities.USER_ENTITIES, DSL.name("fk__user_entities__login"), new TableField[] { UserEntities.USER_ENTITIES.NAME }, Keys.UQ__LOGIN_EMAIL, new TableField[] { Login.LOGIN.EMAIL }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.CASCADE);
 }
