@@ -20,6 +20,7 @@ import org.springframework.security.authentication.AccountStatusUserDetailsCheck
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.HttpMessageConverterAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.webauthn.authentication.WebAuthnAuthenticationFilter;
 import org.springframework.security.web.webauthn.management.JdbcPublicKeyCredentialUserEntityRepository;
@@ -41,18 +42,12 @@ public class SecurityConfiguration {
     private final URI platformUrl;
 
     public SecurityConfiguration(@Value("${remember-me.key}") String rememberMeKey,
-                                 @Value("${platform.url:http://localhost:8080}") String platformUrl) {
+                                 @Value("${platform.url}") String platformUrl) {
         this.rememberMeKey = rememberMeKey;
-        this.platformUrl = toUri(platformUrl);
-    }
-
-    static URI toUri(String url) {
-        if (url.contains("://")) {
-            return URI.create(url);
+        this.platformUrl = URI.create(platformUrl);
+        if (this.platformUrl.getScheme() == null || this.platformUrl.getHost() == null) {
+            throw new IllegalStateException("platform.url must be an absolute URL like https://example.com, but was: " + platformUrl);
         }
-        // e.g. "localhost:8080" would otherwise be parsed as scheme "localhost"
-        var scheme = url.startsWith("localhost") ? "http" : "https";
-        return URI.create(scheme + "://" + url);
     }
 
     @Bean
@@ -97,6 +92,10 @@ public class SecurityConfiguration {
                                                       // the filter is not wired by Spring Security like the form login filter is;
                                                       // use the same session strategy as form login (session fixation protection + CSRF token rotation)
                                                       filter.setRememberMeServices(rememberMeServices);
+                                                      // redirect to the view the user tried to open before the login (like form login does)
+                                                      var successHandler = new HttpMessageConverterAuthenticationSuccessHandler();
+                                                      successHandler.setRequestCache(new StoredNavigationRequestCache());
+                                                      filter.setAuthenticationSuccessHandler(successHandler);
                                                       filter.setSessionAuthenticationStrategy(http.getSharedObject(SessionAuthenticationStrategy.class));
                                                       return filter;
                                                   }

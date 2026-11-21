@@ -2,6 +2,7 @@ package ch.mvurdorf.platform.users;
 
 import ch.mvurdorf.platform.security.AuthenticatedUser;
 import ch.mvurdorf.platform.security.PasskeyService;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Paragraph;
@@ -86,9 +87,18 @@ public class PasskeyView extends VerticalLayout {
     }
 
     private void delete(CredentialRecord passkey) {
-        passkeyService.delete(authenticatedUser.getEmail(), passkey);
-        Notification.show("Passkey gelöscht", 3000, TOP_CENTER);
-        refresh();
+        new ConfirmDialog("Passkey '%s' löschen?".formatted(passkey.getLabel()),
+                          "Du kannst dich danach auf diesem Gerät nicht mehr mit dem Passkey anmelden.",
+                          "Löschen",
+                          _ -> {
+                              passkeyService.delete(authenticatedUser.getEmail(), passkey);
+                              Notification.show("Passkey gelöscht", 3000, TOP_CENTER);
+                              refresh();
+                          },
+                          "Abbrechen",
+                          _ -> {
+                          })
+                .open();
     }
 
     private void refresh() {
