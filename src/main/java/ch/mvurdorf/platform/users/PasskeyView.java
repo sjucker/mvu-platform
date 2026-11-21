@@ -58,6 +58,14 @@ public class PasskeyView extends VerticalLayout {
         var form = new HorizontalLayout(labelField, addButton);
         form.setDefaultVerticalComponentAlignment(BASELINE);
         add(form);
+
+        // Spring Security only allows a passkey registration after a login with password or passkey
+        if (authenticatedUser.isRememberMe()) {
+            labelField.setEnabled(false);
+            addButton.setEnabled(false);
+            add(new Paragraph("Um einen Passkey hinzuzufügen, musst du dich zuerst erneut anmelden."),
+                primaryButton("Abmelden", authenticatedUser::logout));
+        }
     }
 
     private void createGrid() {

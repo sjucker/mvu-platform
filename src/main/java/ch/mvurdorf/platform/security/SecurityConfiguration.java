@@ -1,5 +1,6 @@
 package ch.mvurdorf.platform.security;
 
+import ch.mvurdorf.platform.config.PlatformProperties;
 import ch.mvurdorf.platform.service.BaseFirebaseService;
 import ch.mvurdorf.platform.ui.LoginView;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.HttpMessageConverterAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.webauthn.authentication.WebAuthnAuthenticationFilter;
 import org.springframework.security.web.webauthn.management.JdbcPublicKeyCredentialUserEntityRepository;
@@ -42,20 +44,19 @@ public class SecurityConfiguration {
     private final URI platformUrl;
 
     public SecurityConfiguration(@Value("${remember-me.key}") String rememberMeKey,
-                                 @Value("${platform.url}") String platformUrl) {
+                                 PlatformProperties platformProperties) {
         this.rememberMeKey = rememberMeKey;
-        this.platformUrl = URI.create(platformUrl);
-        if (this.platformUrl.getScheme() == null || this.platformUrl.getHost() == null) {
-            throw new IllegalStateException("platform.url must be an absolute URL like https://example.com, but was: " + platformUrl);
-        }
+        this.platformUrl = platformProperties.uri();
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, LoginService loginService,
                                             SecurityContextHolderStrategy securityContextHolderStrategy) throws Exception {
         // Vaadin only installs its SecurityContextHolderStrategy globally after all singletons are created, but the
-        // WebAuthn filters capture the global strategy on construction (and do not all offer a setter). Without this
-        // they would not see the authentication of the logged-in user and the passkey registration fails with HTTP 400.
+        // WebAuthn filters capture the global strategy when they are constructed, and the registration filters are
+        // neither post-processed nor offer another way to set it. They are constructed by http.build() at the end of
+        // this method, so the global strategy must be installed here, before that call. Without it they would not see
+        // the authentication of the logged-in user and the passkey registration fails with HTTP 400.
         SecurityContextHolder.setContextHolderStrategy(securityContextHolderStrategy);
 
         http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/images/**").permitAll()
@@ -64,14 +65,17 @@ public class SecurityConfiguration {
                                                                                      .atCommonLocations()).permitAll()
                                                          .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
                                                          // the WebAuthnRegistrationFilter runs after the AuthorizationFilter
-                                                         // and Vaadin denies any non-Vaadin request by default
-                                                         .requestMatchers(POST, "/webauthn/register").authenticated());
+                                                         // and Vaadin denies any non-Vaadin request by default;
+                                                         // a remember-me login must not be enough to enroll a passkey
+                                                         .requestMatchers(POST, "/webauthn/register").fullyAuthenticated());
+        // the registration options filter runs before the AuthorizationFilter, so it needs its own check
+        http.addFilterAfter(new RememberMePasskeyOptionsFilter(securityContextHolderStrategy), RememberMeAuthenticationFilter.class);
 
         var rememberMeServices = new PasskeyAwareRememberMeServices(rememberMeKey, loginService);
         rememberMeServices.setTokenValiditySeconds((int) Duration.ofDays(365).toSeconds());
         rememberMeServices.setAlwaysRemember(true);
-        http.rememberMe(configurer -> configurer.key(rememberMeKey)
-                                                .rememberMeServices(rememberMeServices));
+        // the configurer takes the key from the remember-me services
+        http.rememberMe(configurer -> configurer.rememberMeServices(rememberMeServices));
 
         // WebAuthnAuthenticationProvider only copies the authorities and does not check the account status
         // (unlike DaoAuthenticationProvider), so make sure deactivated users cannot log in with a passkey

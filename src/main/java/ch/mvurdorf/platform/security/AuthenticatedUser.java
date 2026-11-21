@@ -7,6 +7,8 @@ import ch.mvurdorf.platform.jooq.tables.pojos.Login;
 import ch.mvurdorf.platform.security.LoginService.Permission;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.web.webauthn.api.PublicKeyCredentialUserEntity;
@@ -82,6 +84,13 @@ public class AuthenticatedUser {
         return instrumentPermissionDao.fetchByFkLogin(currentId()).stream()
                                       .map(permission -> Instrument.valueOf(permission.getInstrument()))
                                       .collect(toSet());
+    }
+
+    /**
+     * Whether the user is only logged in through the remember-me cookie and not with password or passkey.
+     */
+    public boolean isRememberMe() {
+        return new AuthenticationTrustResolverImpl().isRememberMe(SecurityContextHolder.getContext().getAuthentication());
     }
 
     public void logout() {
