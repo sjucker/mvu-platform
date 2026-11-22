@@ -12,4 +12,9 @@ public interface BaseFirebaseService {
     boolean verifyUsernamePassword(String email, String password);
 
     boolean changePassword(String email, String currentPassword, String newPassword);
+
+    /**
+     * @return a custom token the app can sign in with (used after a passkey login)
+     */
+    String createCustomToken(String email) throws FirebaseAuthException;
 }
