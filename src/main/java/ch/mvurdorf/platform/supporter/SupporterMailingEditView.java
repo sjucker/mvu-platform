@@ -10,14 +10,12 @@ import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.server.streams.UploadHandler;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.IFrame;
@@ -30,6 +28,7 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -38,6 +37,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
+import com.vaadin.flow.server.streams.UploadHandler;
 import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
 import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
@@ -229,8 +229,8 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
         mjml.setMinHeight("300px");
         mjml.getStyle().set("font-family", "monospace");
         mjml.setHelperText("MJML-Elemente innerhalb von <mj-body> (z.B. <mj-section>), Briefkopf, Grussformel mit Unterschriften, Link zum Supporter-Portal und Fusszeile werden automatisch ergänzt. "
-                           + "Platzhalter: %s, %s, %s, %s".formatted(SupporterMailingTemplate.ANREDE, SupporterMailingTemplate.VORNAME,
-                                                                     SupporterMailingTemplate.NACHNAME, SupporterMailingTemplate.PORTAL_LINK));
+                                   + "Platzhalter: %s, %s, %s, %s".formatted(SupporterMailingTemplate.ANREDE, SupporterMailingTemplate.VORNAME,
+                                                                             SupporterMailingTemplate.NACHNAME, SupporterMailingTemplate.PORTAL_LINK));
     }
 
     private VerticalLayout createContent(SupporterMailingDto mailing, boolean readOnly) {
@@ -328,7 +328,6 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
         emailPreview.getStyle().set("border", "1px solid var(--lumo-contrast-20pct)");
         letterPreview.setWidthFull();
         letterPreview.setHeight("800px");
-        letterPreview.setAddDownloadButton(false);
 
         preview.setWidthFull();
         preview.add("E-Mail", emailPreview);
@@ -384,7 +383,7 @@ public class SupporterMailingEditView extends VerticalLayout implements HasUrlPa
         emailPreview.setSrcdoc(supporterMailingService.emailPreview(previewHtml, recipient.supporter()));
         var pdf = supporterMailingService.letterPreview(previewHtml, recipient.supporter());
         letterPreview.setSrc(DownloadHandler.fromInputStream(_ -> new DownloadResponse(new ByteArrayInputStream(pdf),
-                                                                                         "brief.pdf", "application/pdf", pdf.length)));
+                                                                                       "brief.pdf", "application/pdf", pdf.length)));
     }
 
     private Optional<Long> save() {

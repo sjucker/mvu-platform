@@ -35,8 +35,8 @@ import static ch.mvurdorf.platform.supporter.SupporterMailingChannel.POST;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
 import static java.util.Locale.GERMAN;
-import static org.jooq.impl.DSL.field;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.selectCount;
 
 @Service
@@ -148,9 +148,9 @@ public class SupporterMailingService {
             supporterMailingAttachmentDao.deleteById(id);
             if (attachment != null) {
                 supporterMailingAttachmentDao.insert(new SupporterMailingAttachment(id,
-                                                                                   attachment.fileName(),
-                                                                                   attachment.contentType(),
-                                                                                   attachment.data()));
+                                                                                    attachment.fileName(),
+                                                                                    attachment.contentType(),
+                                                                                    attachment.data()));
             }
         });
     }

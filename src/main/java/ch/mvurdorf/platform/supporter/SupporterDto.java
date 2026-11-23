@@ -57,8 +57,8 @@ public record SupporterDto(Long id,
         return vouchers.stream()
                        .filter(voucher -> !today.isAfter(voucher.validUntil()))
                        .filter(voucher -> voucher.paidWithinMonths() == null
-                                          || lastPayment().filter(payment -> !payment.isBefore(today.minusMonths(voucher.paidWithinMonths())))
-                                                          .isPresent())
+                               || lastPayment().filter(payment -> !payment.isBefore(today.minusMonths(voucher.paidWithinMonths())))
+                                               .isPresent())
                        .sorted(comparing(SupporterVoucherDto::validUntil).reversed())
                        .toList();
     }

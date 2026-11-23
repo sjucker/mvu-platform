@@ -41,8 +41,8 @@ public class MjmlService {
 
         if (response != null) {
             var errors = response.errors() == null ? List.<String>of() : response.errors().stream()
-                                                                                .map(MjmlService::errorMessage)
-                                                                                .toList();
+                                                                                 .map(MjmlService::errorMessage)
+                                                                                 .toList();
             return new MjmlResult(response.html(), errors);
         } else {
             throw new IllegalStateException("received empty result from MJML API");

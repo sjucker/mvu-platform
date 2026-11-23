@@ -34,9 +34,9 @@ public final class SupporterMailingTemplate {
         return StringUtils.replaceEach(html,
                                        new String[]{ANREDE, VORNAME, NACHNAME, PORTAL_LINK},
                                        new String[]{escape(supporter.anrede()),
-                                                    escape(supporter.vorname()),
-                                                    escape(supporter.nachname()),
-                                                    escape(portalLink)});
+                                               escape(supporter.vorname()),
+                                               escape(supporter.nachname()),
+                                               escape(portalLink)});
     }
 
     private static String escape(String value) {

@@ -38,7 +38,7 @@ class RememberMePasskeyOptionsFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         if (REGISTER_OPTIONS.matches(request)
-            && trustResolver.isRememberMe(securityContextHolderStrategy.getContext().getAuthentication())) {
+                && trustResolver.isRememberMe(securityContextHolderStrategy.getContext().getAuthentication())) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
